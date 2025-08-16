@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "check": "biome check --write .",
-    "dev": "turbo dev",
+    "dev": "turbo -F server -F web -F browser-extension dev",
     "build": "turbo build",
     "check-types": "turbo check-types",
     "dev:native": "turbo -F native dev",
