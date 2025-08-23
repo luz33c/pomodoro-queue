@@ -50,7 +50,7 @@ export function PomodoroTimer() {
 
         <div className="flex gap-2">
           {!running && (
-            <Button onClick={() => start("focus")} aria-label="开始番茄钟">
+            <Button onClick={() => setOpen(true)} aria-label="开始番茄钟">
               开始
             </Button>
           )}
@@ -65,8 +65,8 @@ export function PomodoroTimer() {
             </Button>
           )}
           {running && (
-            <Button variant="destructive" onClick={() => stop()} aria-label="终止">
-              终止
+            <Button variant="destructive" onClick={() => stop()} aria-label="终止队列">
+              终止队列
             </Button>
           )}
           {running && (

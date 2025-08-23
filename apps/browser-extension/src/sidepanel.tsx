@@ -42,7 +42,7 @@ export function PageControls({
             <Button onClick={() => setPage('sign-up')}>Sign-Up</Button>
             <Button
               onClick={() => {
-                authClient.signOut().then(({ data, error }) => {
+                authClient.signOut().then(({ error }) => {
                   if (error) {
                     toast.error(error.message);
                   } else {
