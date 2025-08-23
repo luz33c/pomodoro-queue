@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Toaster, toast } from 'sonner';
 import { authClient } from './auth/auth-client';
 import { Home } from './components/Home';
+import { PomodoroTimer } from './components/PomodoroTimer';
 import { SignIn } from './components/SignIn';
 import { SignUp } from './components/SignUp';
 import { Button } from './components/ui/button';
@@ -15,7 +16,14 @@ function IndexPopup() {
   return (
     <div className="dark h-fit min-h-[500px] w-fit min-w-[400px] overflow-hidden bg-background text-foreground">
       <Toaster />
-      {page === 'home' && <Home setPage={setPage} />}
+      {page === 'home' && (
+        <>
+          <div className="flex w-full justify-center">
+            <PomodoroTimer />
+          </div>
+          <Home setPage={setPage} />
+        </>
+      )}
       {page === 'sign-in' && <SignIn setPage={setPage} />}
       {page === 'sign-up' && <SignUp setPage={setPage} />}
       <PageControls page={page} setPage={setPage} />
