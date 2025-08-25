@@ -1,7 +1,7 @@
 import type { PlasmoMessaging } from "@plasmohq/messaging"
-import { getNextStateAfterPhase } from "~background/index"
+import { getNextStateAfterPhase, schedulePhaseEndAlarm, notifyPhase } from "~background/index"
 import { Storage } from "@plasmohq/storage"
-import { STORAGE_KEY, type PomodoroState } from "~pomodoro/types"
+import { STORAGE_KEY, HISTORY_KEY, type PomodoroState, type PomodoroHistoryEntry } from "~pomodoro/types"
 
 const storage = new Storage({ area: "local" })
 
@@ -12,13 +12,25 @@ const handler: PlasmoMessaging.MessageHandler<never, ResponseBody> = async (
   res
 ) => {
   const s = await storage.get<PomodoroState>(STORAGE_KEY)
-  if (s && s.running) {
-    const next = getNextStateAfterPhase(s)
-    await storage.set(STORAGE_KEY, next)
-    await chrome.alarms.clear("pomodoro-phase-end")
-    if (next.endsAt) {
-      await chrome.alarms.create("pomodoro-phase-end", { when: next.endsAt })
+  if (s?.running) {
+    // 将当前段记入历史
+    if (s.startedAt && s.phase !== "idle") {
+      const endedAt = Date.now()
+      const title = s.phase === "focus" ? "专注时段" : s.phase === "short" ? "短休息" : "长休息"
+      const list = (await storage.get<PomodoroHistoryEntry[]>(HISTORY_KEY)) ?? []
+      list.push({ id: `${Date.now()}`, phase: s.phase, title, startedAt: s.startedAt, endedAt, durationMs: Math.max(0, endedAt - s.startedAt) })
+      await storage.set(HISTORY_KEY, list)
     }
+
+    let next = getNextStateAfterPhase(s)
+    // 跳过 0 分钟休息
+    if ((next.phase === "short" || next.phase === "long") && !next.endsAt) {
+      next = getNextStateAfterPhase(next)
+    }
+
+    await storage.set(STORAGE_KEY, next)
+    await schedulePhaseEndAlarm(next)
+    await notifyPhase(next.phase)
   }
   res.send({ ok: true })
 }

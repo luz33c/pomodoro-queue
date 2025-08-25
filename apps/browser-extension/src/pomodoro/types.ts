@@ -19,6 +19,15 @@ export type PomodoroState = {
   config: PomodoroConfig;
 };
 
+export type PomodoroHistoryEntry = {
+  id: string;
+  phase: Exclude<PomodoroPhase, "idle">;
+  title: string;
+  startedAt: number;
+  endedAt: number;
+  durationMs: number;
+};
+
 export const DEFAULT_CONFIG: PomodoroConfig = {
   focusMin: 25,
   shortMin: 5,
@@ -27,3 +36,4 @@ export const DEFAULT_CONFIG: PomodoroConfig = {
 };
 
 export const STORAGE_KEY = "pomodoroState" as const;
+export const HISTORY_KEY = "pomodoroHistory" as const;

@@ -24,18 +24,31 @@ export function usePomodoro() {
   })
 
   const [now, setNow] = useState(() => Date.now())
-  const raf = useRef<number | null>(null)
+  const frameRef = useRef<number | null>(null)
+  const tickRef = useRef<number | null>(null)
 
   useEffect(() => {
-    const loop = () => {
-      setNow(Date.now())
-      raf.current = requestAnimationFrame(loop)
+    const tick = () => setNow(Date.now())
+    const startRaf = () => {
+      const loop = () => {
+        tick()
+        frameRef.current = requestAnimationFrame(loop)
+      }
+      frameRef.current = requestAnimationFrame(loop)
     }
-    raf.current = requestAnimationFrame(loop)
+    const startInterval = () => {
+      tickRef.current = window.setInterval(tick, 1000)
+    }
+
+    // 运行且未暂停时使用 rAF，否则 1s 刷新
+    if (state?.running && !state.paused) startRaf()
+    else startInterval()
+
     return () => {
-      if (raf.current) cancelAnimationFrame(raf.current)
+      if (frameRef.current) cancelAnimationFrame(frameRef.current)
+      if (tickRef.current) clearInterval(tickRef.current)
     }
-  }, [])
+  }, [state?.running, state?.paused])
 
   const remainMs = useMemo(() => {
     if (!state?.running || !state?.endsAt) return 0

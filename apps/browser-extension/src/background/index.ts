@@ -1,10 +1,20 @@
 import { Storage } from "@plasmohq/storage"
-import type { PomodoroPhase, PomodoroState } from "~pomodoro/types"
-import { DEFAULT_CONFIG, STORAGE_KEY } from "~pomodoro/types"
+import type { PomodoroPhase, PomodoroState, PomodoroHistoryEntry } from "~pomodoro/types"
+import { DEFAULT_CONFIG, STORAGE_KEY, HISTORY_KEY } from "~pomodoro/types"
 
 const storage = new Storage({ area: "local" })
 
 const PHASE_ALARM = "pomodoro-phase-end"
+
+function genId() {
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
+}
+
+async function pushHistory(entry: PomodoroHistoryEntry) {
+  const list = (await storage.get<PomodoroHistoryEntry[]>(HISTORY_KEY)) ?? []
+  list.push(entry)
+  await storage.set(HISTORY_KEY, list)
+}
 
 async function ensureInitialState() {
   const state = await storage.get<PomodoroState>(STORAGE_KEY)
@@ -34,7 +44,21 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
     return
   }
 
-  const next = getNextStateAfterPhase(state)
+  // 记录刚完成的阶段（state）
+  if (state.phase !== "idle" && state.startedAt) {
+    const endedAt = Date.now()
+    const durationMs = Math.max(0, endedAt - state.startedAt)
+    const title = state.phase === "focus" ? "专注时段" : state.phase === "short" ? "短休息" : "长休息"
+    await pushHistory({ id: genId(), phase: state.phase, title, startedAt: state.startedAt, endedAt, durationMs })
+  }
+
+  let next = getNextStateAfterPhase(state)
+
+  // 若下一阶段为 0 分钟休息，直接跳过进入专注
+  if ((next.phase === "short" || next.phase === "long") && !next.endsAt) {
+    next = getNextStateAfterPhase(next)
+  }
+
   await storage.set(STORAGE_KEY, next)
   await schedulePhaseEndAlarm(next)
   notifyPhase(next.phase).catch(() => {})
@@ -90,14 +114,14 @@ export function getNextStateAfterPhase(s: PomodoroState): PomodoroState {
   return s
 }
 
-async function schedulePhaseEndAlarm(s: PomodoroState) {
+export async function schedulePhaseEndAlarm(s: PomodoroState) {
   await chrome.alarms.clear(PHASE_ALARM)
   if (s.running && !s.paused && s.endsAt) {
     await chrome.alarms.create(PHASE_ALARM, { when: s.endsAt })
   }
 }
 
-async function notifyPhase(phase: PomodoroPhase) {
+export async function notifyPhase(phase: PomodoroPhase) {
   try {
     const content = getNotificationContent(phase)
     await chrome.notifications.create({
@@ -152,10 +176,17 @@ export async function startPhase(phase: PomodoroPhase) {
 
 export async function stopAll() {
   const s = (await storage.get<PomodoroState>(STORAGE_KEY)) as PomodoroState
+  // 终止时将当前段记入历史
+  if (s?.running && s.phase !== "idle" && s.startedAt) {
+    const endedAt = Date.now()
+    const title = s.phase === "focus" ? "专注时段" : s.phase === "short" ? "短休息" : "长休息"
+    await pushHistory({ id: genId(), phase: s.phase, title, startedAt: s.startedAt, endedAt, durationMs: Math.max(0, endedAt - s.startedAt) })
+  }
   const next: PomodoroState = {
     ...s,
     phase: "idle",
     running: false,
+    cycleCount: 0,
     startedAt: undefined,
     endsAt: undefined,
     paused: false,
