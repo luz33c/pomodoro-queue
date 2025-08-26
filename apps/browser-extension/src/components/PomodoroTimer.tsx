@@ -6,31 +6,38 @@ import { usePomodoro } from '@/hooks/usePomodoro';
 import { PomodoroSettings } from './PomodoroSettings';
 
 function phaseLabel(phase: string) {
-  if (phase === 'focus') return '专注时段';
-  if (phase === 'short') return '短休息';
-  if (phase === 'long') return '长休息';
+  if (phase === 'focus') {
+    return '专注时段';
+  }
+  if (phase === 'short') {
+    return '短休息';
+  }
+  if (phase === 'long') {
+    return '长休息';
+  }
   return '未开始';
 }
 
+const FULL_CIRCLE_DEGREES = 360;
+
 export function PomodoroTimer() {
-  const { state, progress, mmss, start, pause, resume, stop, skip } =
-    usePomodoro();
+  const { state, progress, mmss, pause, resume, stop, skip } = usePomodoro();
   const [open, setOpen] = useState(false);
 
   const ringStyle = useMemo(() => {
     const p = Math.max(0, Math.min(1, progress));
-    const deg = p * 360;
+    const deg = p * FULL_CIRCLE_DEGREES;
     return {
       background: `conic-gradient(hsl(var(--primary)) ${deg}deg, hsl(var(--muted)) ${deg}deg)`,
     } as const;
   }, [progress]);
 
   const running = state?.running;
-  const paused = !!state?.paused;
+  const paused = Boolean(state?.paused);
   const phase = state?.phase ?? 'idle';
 
   return (
-    <Card className="mx-auto w-[360px] max-w-full p-6">
+    <Card className="mx-auto mb-4 w-[360px] max-w-full p-6">
       <div className="flex items-center justify-between">
         <h2 className="font-semibold text-lg">番茄钟</h2>
         <Button

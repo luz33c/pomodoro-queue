@@ -18,8 +18,23 @@ function formatTime(ts: number) {
   return `${hh}:${mm}`;
 }
 
+const MS_PER_MINUTE = 60_000;
+
 function minutes(ms: number) {
-  return Math.round(ms / 60_000);
+  return Math.round(ms / MS_PER_MINUTE);
+}
+
+function phaseLabel(phase: string) {
+  if (phase === 'focus') {
+    return '专注时段';
+  }
+  if (phase === 'short') {
+    return '短休息';
+  }
+  if (phase === 'long') {
+    return '长休息';
+  }
+  return '未开始';
 }
 
 export function HistoryList() {
@@ -42,26 +57,19 @@ export function HistoryList() {
     : [];
 
   return (
-    <div className="mx-auto mb-8 w-[360px] max-w-full">
+    <div className="mx-auto flex h-full w-[360px] max-w-full flex-col px-6 pb-6">
       <h3 className="mb-2 font-medium text-muted-foreground text-sm">
         历史记录
       </h3>
       {state?.running && (
         <Card className="mb-3 p-3">
           <div className="flex items-center justify-between">
-            <div className="font-medium">
-              当前 ·{' '}
-              {state.phase === 'focus'
-                ? '专注时段'
-                : state.phase === 'short'
-                  ? '短休息'
-                  : '长休息'}
-            </div>
+            <div className="font-medium">当前 · {phaseLabel(state.phase)}</div>
             <div className="text-muted-foreground text-sm">进行中</div>
           </div>
         </Card>
       )}
-      <div className="max-h-64 space-y-2 overflow-y-auto pr-1">
+      <div className="scrollbar-hide flex-1 space-y-2 overflow-y-auto">
         {list.map((h) => (
           <Card className="p-3" key={h.id}>
             <div className="flex items-center justify-between">
