@@ -1,7 +1,7 @@
 import type { PlasmoMessaging } from "@plasmohq/messaging"
 import { getNextStateAfterPhase, schedulePhaseEndAlarm, notifyPhase } from "~background/index"
 import { Storage } from "@plasmohq/storage"
-import { STORAGE_KEY, HISTORY_KEY, type PomodoroState, type PomodoroHistoryEntry } from "~pomodoro/types"
+import { STORAGE_KEY, HISTORY_KEY, CURRENT_QUEUE_KEY, type PomodoroState, type PomodoroHistoryEntry, type CurrentQueue } from "~pomodoro/types"
 
 const storage = new Storage({ area: "local" })
 
@@ -18,7 +18,8 @@ const handler: PlasmoMessaging.MessageHandler<never, ResponseBody> = async (
       const endedAt = Date.now()
       const title = s.phase === "focus" ? "专注时段" : s.phase === "short" ? "短休息" : "长休息"
       const list = (await storage.get<PomodoroHistoryEntry[]>(HISTORY_KEY)) ?? []
-      list.push({ id: `${Date.now()}`, phase: s.phase, title, startedAt: s.startedAt, endedAt, durationMs: Math.max(0, endedAt - s.startedAt) })
+      const q = (await storage.get<CurrentQueue>(CURRENT_QUEUE_KEY)) ?? null
+      list.push({ id: `${Date.now()}`, phase: s.phase, title, startedAt: s.startedAt, endedAt, durationMs: Math.max(0, endedAt - s.startedAt), queueId: q?.id })
       await storage.set(HISTORY_KEY, list)
     }
 

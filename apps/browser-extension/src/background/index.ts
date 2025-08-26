@@ -4,7 +4,7 @@ import type {
   PomodoroPhase,
   PomodoroState,
 } from '~pomodoro/types';
-import { DEFAULT_CONFIG, HISTORY_KEY, STORAGE_KEY } from '~pomodoro/types';
+import { DEFAULT_CONFIG, HISTORY_KEY, STORAGE_KEY, CURRENT_QUEUE_KEY, type CurrentQueue } from '~pomodoro/types';
 
 const storage = new Storage({ area: 'local' });
 
@@ -14,9 +14,26 @@ function genId() {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
+async function getCurrentQueue(): Promise<CurrentQueue | null> {
+  return (await storage.get<CurrentQueue>(CURRENT_QUEUE_KEY)) ?? null;
+}
+
+async function ensureCurrentQueue(now: number): Promise<CurrentQueue> {
+  const existing = await getCurrentQueue();
+  if (existing) return existing;
+  const q: CurrentQueue = { id: genId(), startedAt: now };
+  await storage.set(CURRENT_QUEUE_KEY, q);
+  return q;
+}
+
+async function clearCurrentQueue() {
+  await storage.set(CURRENT_QUEUE_KEY, null as unknown as undefined);
+}
+
 async function pushHistory(entry: PomodoroHistoryEntry) {
   const list = (await storage.get<PomodoroHistoryEntry[]>(HISTORY_KEY)) ?? [];
-  list.push(entry);
+  const q = await getCurrentQueue();
+  list.push({ ...entry, queueId: q?.id });
   await storage.set(HISTORY_KEY, list);
 }
 
@@ -180,6 +197,12 @@ export async function startPhase(phase: PomodoroPhase) {
     config: DEFAULT_CONFIG,
   };
   const now = Date.now();
+
+  // If starting from idle/not running, create a new current queue
+  if (!s.running || s.phase === 'idle') {
+    await ensureCurrentQueue(now);
+  }
+
   const next: PomodoroState = {
     ...s,
     phase,
@@ -228,8 +251,9 @@ export async function stopAll() {
   };
   await storage.set(STORAGE_KEY, next);
   await chrome.alarms.clear(PHASE_ALARM);
+  await clearCurrentQueue();
 }
-
+ 
 export async function pauseTimer() {
   const s = (await storage.get<PomodoroState>(STORAGE_KEY)) as PomodoroState;
   if (!s?.running || s.paused) {

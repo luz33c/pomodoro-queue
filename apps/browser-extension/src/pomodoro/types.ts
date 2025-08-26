@@ -26,6 +26,13 @@ export type PomodoroHistoryEntry = {
   startedAt: number;
   endedAt: number;
   durationMs: number;
+  // The queue that this history entry belongs to. Optional for backward compatibility.
+  queueId?: string;
+};
+
+export type CurrentQueue = {
+  id: string;
+  startedAt: number;
 };
 
 export const DEFAULT_CONFIG: PomodoroConfig = {
@@ -37,3 +44,4 @@ export const DEFAULT_CONFIG: PomodoroConfig = {
 
 export const STORAGE_KEY = "pomodoroState" as const;
 export const HISTORY_KEY = "pomodoroHistory" as const;
+export const CURRENT_QUEUE_KEY = "pomodoroCurrentQueue" as const;

@@ -1,12 +1,12 @@
-import '@/style.css'
+import '@/style.css';
 
 import { Toaster } from 'sonner';
-import { PomodoroTimer } from './components/PomodoroTimer';
 import { HistoryList } from './components/HistoryList';
+import { PomodoroTimer } from './components/PomodoroTimer';
 
 function IndexPopup() {
   return (
-    <div className="dark min-h-[560px] w-[420px] overflow-hidden bg-background text-foreground">
+    <div className="dark flex h-[560px] w-[420px] flex-col overflow-hidden bg-background text-foreground">
       <Toaster />
       <div className="flex w-full justify-center">
         <PomodoroTimer />
