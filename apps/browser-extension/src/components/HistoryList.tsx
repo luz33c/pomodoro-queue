@@ -77,7 +77,7 @@ export function HistoryList() {
             </div>
           </Card>
         ))}
-        {list.length === 0 && (
+        {list.length === 0 && !state?.running && (
           <Card className="p-6 text-center text-muted-foreground text-sm">
             还没有完成的番茄钟，开始你的第一个专注时段吧！
           </Card>
