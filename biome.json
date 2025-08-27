@@ -22,5 +22,27 @@
   },
   "extends": [
     "ultracite"
-  ]
+  ],
+  "linter": {
+    "rules": {
+      "a11y": {
+        "useValidAnchor": "off",
+        "noLabelWithoutControl": "off"
+      },
+      "suspicious": {
+        "useAwait": "off"
+      },
+      "style": {
+        "useBlockStatements": "off",
+        "noNestedTernary": "off"
+      },
+      "performance": {
+        "noNamespaceImport": "off"
+      },
+      "nursery": {
+        "useSortedClasses": "off",
+        "useSortedAttributes": "off"
+      }
+    }
+  }
 }
