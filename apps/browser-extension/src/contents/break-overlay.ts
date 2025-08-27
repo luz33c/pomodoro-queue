@@ -10,6 +10,7 @@ export const config: PlasmoCSConfig = {
 
 let prevOverflow = '';
 let prevUserSelect = '';
+let stylesRecorded = false;
 const blockers: Array<{ type: string; handler: EventListener }> = [];
 const storage = new Storage({ area: 'local' });
 
@@ -40,16 +41,25 @@ function createOverlay() {
 
 const overlay = createOverlay();
 
+function recordInitialStyles() {
+  if (!stylesRecorded) {
+    prevOverflow = document.documentElement.style.overflow || '';
+    prevUserSelect = (document.documentElement.style as CSSStyleDeclaration)
+      .userSelect || '';
+    stylesRecorded = true;
+  }
+}
+
 function preventAll(e: Event) {
   e.preventDefault();
   e.stopImmediatePropagation();
 }
 
 function enableBlock() {
-  // 记录并禁用滚动与选中
-  prevOverflow = document.documentElement.style.overflow;
-  prevUserSelect = (document.documentElement.style as CSSStyleDeclaration)
-    .userSelect;
+  // 记录初始样式（只记录一次）
+  recordInitialStyles();
+
+  // 禁用滚动与选中
   document.documentElement.style.overflow = 'hidden';
   (document.documentElement.style as CSSStyleDeclaration).userSelect = 'none';
 
@@ -80,9 +90,21 @@ function enableBlock() {
 }
 
 function disableBlock() {
-  document.documentElement.style.overflow = prevOverflow;
-  (document.documentElement.style as CSSStyleDeclaration).userSelect =
-    prevUserSelect;
+  // 只有在记录了初始样式后才恢复
+  if (stylesRecorded) {
+    if (prevOverflow) {
+      document.documentElement.style.overflow = prevOverflow;
+    } else {
+      document.documentElement.style.removeProperty('overflow');
+    }
+
+    if (prevUserSelect) {
+      (document.documentElement.style as CSSStyleDeclaration).userSelect =
+        prevUserSelect;
+    } else {
+      document.documentElement.style.removeProperty('user-select');
+    }
+  }
 
   for (const { type, handler } of blockers) {
     window.removeEventListener(type, handler, {
