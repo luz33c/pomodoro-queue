@@ -1,84 +1,106 @@
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
 import { Separator } from "@/components/ui/separator"
 import { usePomodoro } from "@/hooks/usePomodoro"
-import type { PomodoroConfig } from "@/pomodoro/types"
-import { DEFAULT_CONFIG } from "@/pomodoro/types"
+import { Settings } from "lucide-react"
 
-export function PomodoroSettings({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
-  const { state, updateConfig, start } = usePomodoro()
-  const [form, setForm] = useState<PomodoroConfig>(state?.config ?? DEFAULT_CONFIG)
-  const [errors, setErrors] = useState<Record<string, string>>({})
+export function PomodoroSettings() {
+  const { state, updateConfig } = usePomodoro()
+  const [strictMode, setStrictMode] = useState(state?.config?.strictMode ?? false)
+  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    if (state?.config) setForm(state.config)
+    if (state?.config?.strictMode !== undefined) {
+      setStrictMode(state.config.strictMode)
+    }
   }, [state?.config])
 
-  const setField = (k: keyof PomodoroConfig, allowZero = false, min = 1) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value.replace(/[^\d]/g, "")
-    const v = raw === "" ? NaN : Number(raw)
-    setForm((prev) => ({ ...prev, [k]: Number.isFinite(v) ? Math.max(allowZero ? 0 : 1, v) : (allowZero ? 0 : min) }))
+  const handleSave = async () => {
+    if (!state?.config) return
+    await updateConfig({
+      ...state.config,
+      strictMode
+    })
+    setIsOpen(false)
   }
 
-  const isValid = useMemo(() => {
-    const errs: Record<string, string> = {}
-    if (!(form.focusMin >= 1)) errs.focusMin = "专注时长需 ≥ 1"
-    if (!(form.shortMin >= 0)) errs.shortMin = "短休息需 ≥ 0"
-    if (!(form.longMin >= 0)) errs.longMin = "长休息需 ≥ 0"
-    if (!(form.longEvery >= 2)) errs.longEvery = "长休间隔需 ≥ 2"
-    setErrors(errs)
-    return Object.keys(errs).length === 0
-  }, [form])
-
-  if (!open) return null
+  if (!isOpen) {
+    return (
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => setIsOpen(true)}
+        title="番茄钟设置"
+        aria-label="打开设置"
+      >
+        <Settings className="h-4 w-4" />
+      </Button>
+    )
+  }
 
   return (
-      <div className="fixed inset-0 z-50 grid place-items-center bg-black/30" role="dialog" aria-modal="true">
-        <div className="w-[380px] rounded-md bg-background p-6 shadow-lg">
-          <div className="mb-4 flex items-center justify-between">
-            <div className="text-lg font-semibold">番茄钟设置</div>
-            <Button variant="ghost" onClick={() => onOpenChange(false)} aria-label="关闭设置">关闭</Button>
-          </div>
-          <p className="text-sm text-muted-foreground">自定义专注与休息时长，创建适合自己的节奏。</p>
-          <Separator className="my-4" />
-          <div className="grid gap-4">
-            <label className="grid gap-2">
-              <span>专注时长（分钟）</span>
-              <Input inputMode="numeric" value={form.focusMin} onChange={setField("focusMin", false, 1)} aria-invalid={!!errors.focusMin} />
-              {errors.focusMin && <span className="text-sm text-destructive">{errors.focusMin}</span>}
-            </label>
-            <label className="grid gap-2">
-              <span>短休息时长（分钟）</span>
-              <Input inputMode="numeric" value={form.shortMin} onChange={setField("shortMin", true, 0)} aria-invalid={!!errors.shortMin} />
-              {errors.shortMin && <span className="text-sm text-destructive">{errors.shortMin}</span>}
-            </label>
-            <label className="grid gap-2">
-              <span>长休息时长（分钟）</span>
-              <Input inputMode="numeric" value={form.longMin} onChange={setField("longMin", true, 0)} aria-invalid={!!errors.longMin} />
-              {errors.longMin && <span className="text-sm text-destructive">{errors.longMin}</span>}
-            </label>
-            <label className="grid gap-2">
-              <span>长休息间隔（完成多少个专注后）</span>
-              <Input inputMode="numeric" value={form.longEvery} onChange={setField("longEvery", false, 2)} aria-invalid={!!errors.longEvery} />
-              {errors.longEvery && <span className="text-sm text-destructive">{errors.longEvery}</span>}
-            </label>
-          </div>
-          <div className="mt-6 flex justify-end gap-2">
-            <Button variant="outline" onClick={() => onOpenChange(false)}>取消</Button>
-            <Button
-              disabled={!isValid}
-              onClick={async () => {
-                if (!isValid) return
-                await updateConfig(form)
-                onOpenChange(false)
-                if (!state?.running) await start("focus")
-              }}
-            >
-              生成并开始
-            </Button>
+    <div className="fixed inset-0 z-50 grid place-items-center bg-black/30" role="dialog" aria-modal="true">
+      <div className="w-[380px] rounded-md bg-background p-6 shadow-lg">
+        <div className="mb-4 flex items-center justify-between">
+          <div className="text-lg font-semibold">番茄钟设置</div>
+          <Button variant="ghost" size="sm" onClick={() => setIsOpen(false)} aria-label="关闭">
+            关闭
+          </Button>
+        </div>
+        
+        <Separator className="my-4" />
+        
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <h3 className="text-sm font-medium">休息行为设置</h3>
+            
+            <div className="flex items-start justify-between space-x-3">
+              <div className="space-y-1">
+                <Label htmlFor="strict-mode" className="text-sm font-medium">
+                  严格休息模式
+                </Label>
+                <p className="text-xs text-muted-foreground">
+                  启用后，休息期间将强制停留在休息页面，无法浏览其他标签页
+                </p>
+              </div>
+              <Switch
+                id="strict-mode"
+                checked={strictMode}
+                onCheckedChange={setStrictMode}
+                aria-label="严格休息模式开关"
+              />
+            </div>
+            
+            {!strictMode && (
+              <div className="rounded-md bg-muted/50 p-3 text-xs text-muted-foreground">
+                <p>普通模式：休息时会在当前页面显示遮罩层提醒</p>
+              </div>
+            )}
+            
+            {strictMode && (
+              <div className="rounded-md bg-primary/10 p-3 text-xs">
+                <p className="font-medium text-primary">严格模式已启用</p>
+                <p className="mt-1 text-muted-foreground">
+                  休息时会打开专属休息页面，切换标签会被自动拉回
+                </p>
+              </div>
+            )}
           </div>
         </div>
+        
+        <Separator className="my-4" />
+        
+        <div className="flex justify-end gap-2">
+          <Button variant="outline" onClick={() => setIsOpen(false)}>
+            取消
+          </Button>
+          <Button onClick={handleSave}>
+            保存设置
+          </Button>
+        </div>
       </div>
+    </div>
   )
 }

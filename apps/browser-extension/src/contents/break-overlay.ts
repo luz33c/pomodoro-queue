@@ -129,11 +129,16 @@ function isBreakPhase(phase?: string) {
   return phase === 'short' || phase === 'long';
 }
 
+function shouldShowOverlay(state?: PomodoroState): boolean {
+  // 只有在非严格模式且处于休息阶段时才显示遮罩层
+  return !!(state && isBreakPhase(state.phase) && !state.config?.strictMode);
+}
+
 // 初始检查
 storage
   .get<PomodoroState>(STORAGE_KEY)
   .then((state) => {
-    setOverlayVisible(isBreakPhase(state?.phase));
+    setOverlayVisible(shouldShowOverlay(state));
   })
   .catch(() => {
     // 忽略错误
@@ -143,6 +148,6 @@ storage
 storage.watch({
   [STORAGE_KEY]: (change) => {
     const newState = change.newValue as PomodoroState;
-    setOverlayVisible(isBreakPhase(newState?.phase));
+    setOverlayVisible(shouldShowOverlay(newState));
   },
 });

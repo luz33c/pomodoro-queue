@@ -5,6 +5,7 @@ export type PomodoroConfig = {
   shortMin: number; // minutes
   longMin: number; // minutes
   longEvery: number; // take long break after N focus sessions
+  strictMode: boolean; // strict break mode (tab control)
 };
 
 export type PomodoroState = {
@@ -40,6 +41,7 @@ export const DEFAULT_CONFIG: PomodoroConfig = {
   shortMin: 5,
   longMin: 20,
   longEvery: 4,
+  strictMode: false,
 };
 
 export const STORAGE_KEY = "pomodoroState" as const;

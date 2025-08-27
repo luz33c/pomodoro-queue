@@ -5,10 +5,14 @@ import type {
   PomodoroState,
 } from '~pomodoro/types';
 import { DEFAULT_CONFIG, HISTORY_KEY, STORAGE_KEY, CURRENT_QUEUE_KEY, type CurrentQueue } from '~pomodoro/types';
+import { beginStrictBreak, endStrictBreak, initStrictBreakKernel } from './strict-break';
 
 const storage = new Storage({ area: 'local' });
 
 const PHASE_ALARM = 'pomodoro-phase-end';
+
+// Initialize strict break kernel
+initStrictBreakKernel();
 
 function genId() {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
@@ -56,6 +60,16 @@ chrome.runtime.onInstalled.addListener(() => {
   ensureInitialState();
 });
 
+// Check strict mode on startup
+chrome.runtime.onStartup.addListener(async () => {
+  const s = await storage.get<PomodoroState>(STORAGE_KEY);
+  if (s?.config?.strictMode && (s.phase === 'short' || s.phase === 'long')) {
+    await beginStrictBreak();
+  } else {
+    await endStrictBreak();
+  }
+});
+
 chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (alarm.name !== PHASE_ALARM) {
     return;
@@ -95,6 +109,13 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   await storage.set(STORAGE_KEY, next);
   await schedulePhaseEndAlarm(next);
   notifyPhase(next.phase).catch(() => {});
+  
+  // Handle strict mode transitions
+  if (next.config?.strictMode && (next.phase === 'short' || next.phase === 'long')) {
+    await beginStrictBreak();
+  } else {
+    await endStrictBreak();
+  }
 });
 
 function minutesToMs(m: number) {
@@ -216,6 +237,13 @@ export async function startPhase(phase: PomodoroPhase) {
   await storage.set(STORAGE_KEY, next);
   await schedulePhaseEndAlarm(next);
   notifyPhase(phase).catch(() => {});
+  
+  // Handle strict mode when starting a phase
+  if (next.config?.strictMode && (phase === 'short' || phase === 'long')) {
+    await beginStrictBreak();
+  } else {
+    await endStrictBreak();
+  }
 }
 
 export async function stopAll() {
@@ -252,6 +280,8 @@ export async function stopAll() {
   await storage.set(STORAGE_KEY, next);
   await chrome.alarms.clear(PHASE_ALARM);
   await clearCurrentQueue();
+  // End strict mode when stopping
+  await endStrictBreak();
 }
  
 export async function pauseTimer() {
@@ -297,5 +327,14 @@ export async function applyConfig(cfg: PomodoroState['config']) {
   await storage.set(STORAGE_KEY, next);
   if (next.running && !next.paused) {
     await schedulePhaseEndAlarm(next);
+  }
+  
+  // Handle strict mode toggle in config
+  if (s && s.running && (s.phase === 'short' || s.phase === 'long')) {
+    if (cfg.strictMode && !s.config?.strictMode) {
+      await beginStrictBreak();
+    } else if (!cfg.strictMode && s.config?.strictMode) {
+      await endStrictBreak();
+    }
   }
 }

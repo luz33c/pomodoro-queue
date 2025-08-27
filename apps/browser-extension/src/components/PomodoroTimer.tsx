@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { usePomodoro } from '@/hooks/usePomodoro';
 import { PomodoroSettings } from './PomodoroSettings';
+import { CreateQueueModal } from './CreateQueueModal';
 
 function phaseLabel(phase: string) {
   if (phase === 'focus') {
@@ -22,7 +23,7 @@ const FULL_CIRCLE_DEGREES = 360;
 
 export function PomodoroTimer() {
   const { state, progress, mmss, pause, resume, stop, skip } = usePomodoro();
-  const [open, setOpen] = useState(false);
+  const [createModalOpen, setCreateModalOpen] = useState(false);
 
   const ringStyle = useMemo(() => {
     const p = Math.max(0, Math.min(1, progress));
@@ -40,14 +41,7 @@ export function PomodoroTimer() {
     <Card className="mx-auto mb-4 w-[360px] max-w-full p-6">
       <div className="flex items-center justify-between">
         <h2 className="font-semibold text-lg">番茄钟</h2>
-        <Button
-          aria-label="设置"
-          onClick={() => setOpen(true)}
-          size="icon"
-          variant="ghost"
-        >
-          <Settings className="h-4 w-4" />
-        </Button>
+        <PomodoroSettings />
       </div>
 
       <div className="flex flex-col items-center gap-4">
@@ -68,7 +62,7 @@ export function PomodoroTimer() {
 
         <div className="flex gap-2">
           {!running && (
-            <Button aria-label="开始番茄钟" onClick={() => setOpen(true)}>
+            <Button aria-label="开始番茄钟" onClick={() => setCreateModalOpen(true)}>
               开始
             </Button>
           )}
@@ -107,7 +101,7 @@ export function PomodoroTimer() {
         </div>
       </div>
 
-      <PomodoroSettings onOpenChange={setOpen} open={open} />
+      <CreateQueueModal onOpenChange={setCreateModalOpen} open={createModalOpen} />
     </Card>
   );
 }
