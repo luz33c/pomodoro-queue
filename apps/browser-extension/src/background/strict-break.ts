@@ -1,132 +1,133 @@
 import { Storage } from "@plasmohq/storage"
 import type { PomodoroState } from "~pomodoro/types"
+import { STORAGE_KEY } from "~pomodoro/types"
+
+type Phase = "idle" | "focus" | "short" | "long"
 
 const storage = new Storage({ area: "local" })
-const STORAGE_KEY = "pomodoroState"
-const BREAK_FORCED_AT = "breakLastForcedAt"
+const BREAK_URL = chrome.runtime.getURL("tabs/break.html")
 
-const breakTabIdsByWindow: Record<number, number> = {}
-let enforcing = false
-const breakUrl = chrome.runtime.getURL("tabs/break.html")
+let kernelInited = false
+const breakTabIdsByWindow = new Map<number, number>()
 
-async function shouldEnforce(): Promise<boolean> {
-  const s = (await storage.get<PomodoroState>(STORAGE_KEY)) as PomodoroState
-  return !!(s?.config?.strictMode && (s.phase === "short" || s.phase === "long"))
+// ---------------- 工具判定 ----------------
+function isSystemOrExtPage(url?: string) {
+  if (!url) return false
+  return (
+    url.startsWith("chrome://") ||
+    url.startsWith("edge://") ||
+    url.startsWith("devtools://") ||
+    url.startsWith(chrome.runtime.getURL(""))
+  )
 }
 
-async function nudgeForcedHint() {
-  await storage.set(BREAK_FORCED_AT, Date.now())
+function isBreakPage(url?: string) {
+  return !!url && url.startsWith(BREAK_URL)
 }
 
-async function ensureBreakTabInWindow(windowId: number, nudge = false) {
-  const tabId = breakTabIdsByWindow[windowId]
-  try {
-    if (tabId) {
-      // 检查标签是否仍然存在
-      const tab = await chrome.tabs.get(tabId)
-      if (tab && tab.windowId === windowId) {
-        await chrome.windows.update(windowId, { focused: true })
-        await chrome.tabs.update(tabId, { active: true })
-        if (nudge) await nudgeForcedHint()
-        return
-      } else {
-        // 标签不存在，从记录中删除
-        delete breakTabIdsByWindow[windowId]
-      }
+async function shouldEnforce() {
+  const s = (await storage.get<PomodoroState>(STORAGE_KEY)) as PomodoroState | undefined
+  return Boolean(s?.config?.strictMode && (s?.phase === "short" || s?.phase === "long"))
+}
+
+// ---------------- 公开：初始化监听器（常驻） ----------------
+export function initStrictBreakKernel() {
+  if (kernelInited) return
+  kernelInited = true
+
+  // 标签被激活 => 立即拉回休息页
+  chrome.tabs.onActivated.addListener(async ({ windowId }) => {
+    if (!(await shouldEnforce())) return
+    await focusBreakTab(windowId)
+  })
+
+  // 窗口焦点变更 => 拉回休息页
+  chrome.windows.onFocusChanged.addListener(async (windowId) => {
+    if (windowId === chrome.windows.WINDOW_ID_NONE) return
+    if (!(await shouldEnforce())) return
+    await focusBreakTab(windowId)
+  })
+
+  // 页面地址/加载变化 => 如果跳向非休息页，立刻拉回
+  chrome.tabs.onUpdated.addListener(async (_tabId, _change, tab) => {
+    if (!(await shouldEnforce())) return
+    if (isSystemOrExtPage(tab.url) || isBreakPage(tab.url)) return
+    await focusBreakTab(tab.windowId!)
+  })
+
+  // 标签关闭 => 清理本地映射（防止保存无效 id）
+  chrome.tabs.onRemoved.addListener((tabId) => {
+    for (const [winId, bId] of breakTabIdsByWindow) {
+      if (bId === tabId) breakTabIdsByWindow.delete(winId)
     }
-    
-    // 创建新的休息标签
-    const tab = await chrome.tabs.create({ windowId, url: breakUrl, active: true })
-    if (tab.id) {
-      breakTabIdsByWindow[windowId] = tab.id
-    }
-    if (nudge) await nudgeForcedHint()
-  } catch (error) {
-    console.error('Error ensuring break tab:', error)
+  })
+}
+
+// ---------------- 严格模式：打开/聚焦 休息页 ----------------
+async function focusBreakTab(windowId?: number) {
+  const wid = windowId ?? (await chrome.windows.getCurrent()).id!
+
+  // 如果我们记录的休息页还在，直接聚焦
+  const recorded = breakTabIdsByWindow.get(wid)
+  if (recorded) {
     try {
-      // 如果出错，尝试创建新标签
-      const tab = await chrome.tabs.create({ windowId, url: breakUrl, active: true })
-      if (tab.id) {
-        breakTabIdsByWindow[windowId] = tab.id
-      }
-      if (nudge) await nudgeForcedHint()
-    } catch (fallbackError) {
-      console.error('Fallback tab creation failed:', fallbackError)
+      await chrome.tabs.update(recorded, { active: true })
+      return
+    } catch {
+      breakTabIdsByWindow.delete(wid)
     }
   }
-}
 
-async function onTabActivated({ tabId, windowId }: chrome.tabs.TabActiveInfo) {
-  if (!await shouldEnforce()) return
-  
-  const breakTabId = breakTabIdsByWindow[windowId]
-  
-  // 如果激活的不是休息页面，强制切回
-  if (tabId !== breakTabId) {
-    await ensureBreakTabInWindow(windowId, true)
+  // 查找窗口里是否已有休息页（避免重复创建）
+  const tabs = await chrome.tabs.query({ windowId: wid })
+  const exist = tabs.find((t) => isBreakPage(t.url))
+  let tabId = exist?.id
+
+  if (!tabId) {
+    const created = await chrome.tabs.create({ url: BREAK_URL, windowId: wid, active: true })
+    tabId = created.id!
   }
+
+  breakTabIdsByWindow.set(wid, tabId!)
 }
 
-async function onWindowFocusChanged(windowId: number) {
-  if (!await shouldEnforce()) return
-  if (windowId === chrome.windows.WINDOW_ID_NONE) return
-  await ensureBreakTabInWindow(windowId, true)
-}
-
-async function onTabRemoved(tabId: number, removeInfo: chrome.tabs.TabRemoveInfo) {
-  if (!await shouldEnforce()) return
-  for (const [winStr, bid] of Object.entries(breakTabIdsByWindow)) {
-    if (bid === tabId) {
-      delete breakTabIdsByWindow[Number(winStr)]
-      const winId = removeInfo.windowId
-      if (winId && winId !== chrome.windows.WINDOW_ID_NONE) {
-        await ensureBreakTabInWindow(winId, true)
-      }
-    }
-  }
-}
-
-async function onTabUpdated(tabId: number, info: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab) {
-  if (!await shouldEnforce()) return
-  if (Object.values(breakTabIdsByWindow).includes(tabId) && info.url && info.url !== breakUrl) {
-    try { await chrome.tabs.update(tabId, { url: breakUrl }) } catch {}
-  }
-}
-
+// ---------------- 公开：进入/退出 严格休息 ----------------
 export async function beginStrictBreak() {
-  enforcing = true
-  
-  try {
-    // 为所有窗口创建休息页面
-    const windows = await chrome.windows.getAll({ windowTypes: ['normal'] })
-    for (const window of windows) {
-      if (window.id && window.id !== chrome.windows.WINDOW_ID_NONE) {
-        await ensureBreakTabInWindow(window.id, false)
-      }
-    }
-    
-    // 确保最近聚焦的窗口是活跃的
-    const lastFocused = await chrome.windows.getLastFocused({})
-    if (lastFocused?.id && lastFocused.id !== chrome.windows.WINDOW_ID_NONE) {
-      await chrome.windows.update(lastFocused.id, { focused: true })
-    }
-  } catch (error) {
-    console.error('Failed to begin strict break:', error)
+  if (!(await shouldEnforce())) return
+  const windows = await chrome.windows.getAll()
+  for (const w of windows) {
+    if (w.id != null) await focusBreakTab(w.id)
   }
 }
 
 export async function endStrictBreak() {
-  enforcing = false
-  const ids = Object.values(breakTabIdsByWindow)
-  for (const id of ids) {
-    try { await chrome.tabs.remove(id) } catch {}
-  }
-  for (const k of Object.keys(breakTabIdsByWindow)) delete breakTabIdsByWindow[Number(k)]
+  // 关闭所有休息页（用户自己开的同名页也会被关掉；如不希望，改为仅关闭映射中的）
+  const tabs = await chrome.tabs.query({})
+  const toClose = tabs.filter((t) => isBreakPage(t.url)).map((t) => t.id!).filter(Boolean)
+  if (toClose.length) await chrome.tabs.remove(toClose as number[])
+  breakTabIdsByWindow.clear()
 }
 
-export function initStrictBreakKernel() {
-  chrome.tabs.onActivated.addListener(onTabActivated)
-  chrome.windows.onFocusChanged.addListener(onWindowFocusChanged)
-  chrome.tabs.onRemoved.addListener(onTabRemoved)
-  chrome.tabs.onUpdated.addListener(onTabUpdated)
+// ---------------- 普通模式：对已打开页面注入遮罩 ----------------
+export async function showOverlayOnAllOpenTabs() {
+  const tabs = await chrome.tabs.query({ url: ["http://*/*", "https://*/*"] })
+  for (const t of tabs) {
+    if (!t.id) continue
+    try {
+      // 从manifest获取content script文件名
+      const manifest = chrome.runtime.getManifest()
+      const overlayScript = manifest.content_scripts?.find(cs => 
+        cs.matches?.includes('<all_urls>')
+      )?.js?.[0]
+      
+      if (overlayScript) {
+        await chrome.scripting.executeScript({
+          target: { tabId: t.id },
+          files: [overlayScript]
+        })
+      }
+    } catch (e) {
+      console.warn("Inject overlay failed for tab", t.id, e)
+    }
+  }
 }

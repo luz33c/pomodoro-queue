@@ -5,7 +5,7 @@ import type {
   PomodoroState,
 } from '~pomodoro/types';
 import { DEFAULT_CONFIG, HISTORY_KEY, STORAGE_KEY, CURRENT_QUEUE_KEY, type CurrentQueue } from '~pomodoro/types';
-import { beginStrictBreak, endStrictBreak, initStrictBreakKernel } from './strict-break';
+import { beginStrictBreak, endStrictBreak, initStrictBreakKernel, showOverlayOnAllOpenTabs } from './strict-break';
 
 const storage = new Storage({ area: 'local' });
 
@@ -63,8 +63,11 @@ chrome.runtime.onInstalled.addListener(() => {
 // Check strict mode on startup
 chrome.runtime.onStartup.addListener(async () => {
   const s = await storage.get<PomodoroState>(STORAGE_KEY);
-  if (s?.config?.strictMode && (s.phase === 'short' || s.phase === 'long')) {
+  const inBreak = s?.phase === "short" || s?.phase === "long"
+  if (inBreak && s?.config?.strictMode) {
     await beginStrictBreak();
+  } else if (inBreak && !s?.config?.strictMode) {
+    await showOverlayOnAllOpenTabs();
   } else {
     await endStrictBreak();
   }
@@ -113,6 +116,10 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   // Handle strict mode transitions
   if (next.config?.strictMode && (next.phase === 'short' || next.phase === 'long')) {
     await beginStrictBreak();
+  } else if (!next.config?.strictMode && (next.phase === 'short' || next.phase === 'long')) {
+    // 普通模式：覆盖遮罩
+    await showOverlayOnAllOpenTabs();
+    await endStrictBreak(); // 确保不存在遗留的严格模式状态
   } else {
     await endStrictBreak();
   }
@@ -241,6 +248,10 @@ export async function startPhase(phase: PomodoroPhase) {
   // Handle strict mode when starting a phase
   if (next.config?.strictMode && (phase === 'short' || phase === 'long')) {
     await beginStrictBreak();
+  } else if (!next.config?.strictMode && (phase === 'short' || phase === 'long')) {
+    // 普通模式：覆盖遮罩
+    await showOverlayOnAllOpenTabs();
+    await endStrictBreak(); // 确保不存在遗留的严格模式状态
   } else {
     await endStrictBreak();
   }
@@ -334,6 +345,7 @@ export async function applyConfig(cfg: PomodoroState['config']) {
     if (cfg.strictMode && !s.config?.strictMode) {
       await beginStrictBreak();
     } else if (!cfg.strictMode && s.config?.strictMode) {
+      await showOverlayOnAllOpenTabs(); // 切换到普通模式时注入遮罩
       await endStrictBreak();
     }
   }
