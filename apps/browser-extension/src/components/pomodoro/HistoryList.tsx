@@ -7,7 +7,11 @@ import type {
   PomodoroHistoryEntry,
   PomodoroState,
 } from '@/model/pomodoro/types';
-import { CURRENT_QUEUE_KEY, HISTORY_KEY, STORAGE_KEY } from '@/model/pomodoro/types';
+import {
+  CURRENT_QUEUE_KEY,
+  HISTORY_KEY,
+  STORAGE_KEY,
+} from '@/model/pomodoro/types';
 
 const localInstance = new Storage({ area: 'local' });
 
@@ -57,21 +61,21 @@ export function HistoryList() {
     : [];
 
   return (
-    <div className="mx-auto flex h-full w-[360px] max-w-full flex-col px-6 pb-6">
-      <h3 className="mb-2 font-medium text-muted-foreground text-sm">
+    <div className="mx-auto box-border flex h-full w-[360px] max-w-full flex-col overflow-hidden px-6 pb-6">
+      <h3 className="mb-3 font-medium text-muted-foreground text-sm">
         历史记录
       </h3>
       {state?.running && (
-        <Card className="mb-3 p-3">
+        <Card className="mb-3 p-3 flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="font-medium">当前 · {phaseLabel(state.phase)}</div>
             <div className="text-muted-foreground text-sm">进行中</div>
           </div>
         </Card>
       )}
-      <div className="scrollbar-hide flex-1 space-y-2 overflow-y-auto">
+      <div className="scrollbar-hide flex-1 space-y-2 overflow-y-auto pr-1">
         {list.map((h) => (
-          <Card className="p-3" key={h.id}>
+          <Card className="p-3 flex-shrink-0" key={h.id}>
             <div className="flex items-center justify-between">
               <div>
                 <div className="font-medium">{h.title}</div>
@@ -86,12 +90,12 @@ export function HistoryList() {
           </Card>
         ))}
         {list.length === 0 && !state?.running && (
-          <Card className="p-6 text-center text-muted-foreground text-sm">
+          <Card className="p-6 text-center text-muted-foreground text-sm flex-shrink-0">
             还没有完成的番茄钟，开始你的第一个专注时段吧！
           </Card>
         )}
       </div>
-      <Separator className="mt-4" />
+      <Separator className="mt-4 flex-shrink-0" />
     </div>
   );
 }

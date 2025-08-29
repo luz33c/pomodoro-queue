@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "plasmo dev",
     "build": "plasmo build",
-    "clear": "git clean -xdf build out dist .plasmo .tsbuildinfo",
+    "clear": "git clean -xdf build .plasmo .turbo",
     "package": "plasmo package"
   },
   "dependencies": {
@@ -46,6 +46,7 @@
       "alarms",
       "storage",
       "notifications",
+      "webNavigation",
       "tabs",
       "windows",
       "scripting"

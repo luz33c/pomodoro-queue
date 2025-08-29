@@ -3,7 +3,6 @@ import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { usePomodoro } from '@/hooks/pomodoro/usePomodoro';
-import { PomodoroSettings } from './PomodoroSettings';
 import { CreateQueueModal } from './CreateQueueModal';
 
 function phaseLabel(phase: string) {
@@ -21,7 +20,11 @@ function phaseLabel(phase: string) {
 
 const FULL_CIRCLE_DEGREES = 360;
 
-export function PomodoroTimer() {
+interface PomodoroTimerProps {
+  onOpenSettings?: () => void;
+}
+
+export function PomodoroTimer({ onOpenSettings }: PomodoroTimerProps) {
   const { state, progress, mmss, pause, resume, stop, skip } = usePomodoro();
   const [createModalOpen, setCreateModalOpen] = useState(false);
 
@@ -38,10 +41,18 @@ export function PomodoroTimer() {
   const phase = state?.phase ?? 'idle';
 
   return (
-    <Card className="mx-auto mb-4 w-[360px] max-w-full p-6">
+    <Card className="mb-4 w-full">
       <div className="flex items-center justify-between">
         <h2 className="font-semibold text-lg">番茄钟</h2>
-        <PomodoroSettings />
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onOpenSettings}
+          title="番茄钟设置"
+          aria-label="打开设置"
+        >
+          <Settings className="h-4 w-4" />
+        </Button>
       </div>
 
       <div className="flex flex-col items-center gap-4">
@@ -62,7 +73,10 @@ export function PomodoroTimer() {
 
         <div className="flex gap-2">
           {!running && (
-            <Button aria-label="开始番茄钟" onClick={() => setCreateModalOpen(true)}>
+            <Button
+              aria-label="开始番茄钟"
+              onClick={() => setCreateModalOpen(true)}
+            >
               开始
             </Button>
           )}
@@ -101,7 +115,10 @@ export function PomodoroTimer() {
         </div>
       </div>
 
-      <CreateQueueModal onOpenChange={setCreateModalOpen} open={createModalOpen} />
+      <CreateQueueModal
+        onOpenChange={setCreateModalOpen}
+        open={createModalOpen}
+      />
     </Card>
   );
 }

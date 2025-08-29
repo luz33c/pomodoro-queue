@@ -20,9 +20,14 @@
       "!**/.source"
     ]
   },
-  "extends": [
-    "ultracite"
-  ],
+  "extends": ["ultracite"],
+  "assist": {
+    "actions": {
+      "source": {
+        "useSortedAttributes": "off"
+      }
+    }
+  },
   "linter": {
     "rules": {
       "a11y": {
@@ -41,6 +46,12 @@
       },
       "nursery": {
         "useSortedClasses": "off"
+      },
+      "correctness": {
+        "noUnusedImports": "off"
+      },
+      "complexity": {
+        "noUselessInterface": "off"
       }
     }
   }
