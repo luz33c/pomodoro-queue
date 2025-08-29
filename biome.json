@@ -25,6 +25,10 @@
   ],
   "linter": {
     "rules": {
+      "source": {
+        "organizeImports": "off",
+        "useSortedAttributes": "off"
+      },
       "a11y": {
         "useValidAnchor": "off",
         "noLabelWithoutControl": "off"
@@ -40,8 +44,7 @@
         "noNamespaceImport": "off"
       },
       "nursery": {
-        "useSortedClasses": "off",
-        "useSortedAttributes": "off"
+        "useSortedClasses": "off"
       }
     }
   }
