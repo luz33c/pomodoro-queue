@@ -25,10 +25,6 @@
   ],
   "linter": {
     "rules": {
-      "source": {
-        "organizeImports": "off",
-        "useSortedAttributes": "off"
-      },
       "a11y": {
         "useValidAnchor": "off",
         "noLabelWithoutControl": "off"
