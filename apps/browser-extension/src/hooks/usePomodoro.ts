@@ -9,11 +9,13 @@ import { DEFAULT_CONFIG, STORAGE_KEY } from "~pomodoro/types"
 const localStorageInstance = new Storage({ area: "local" })
 
 export function usePomodoro() {
-  const [state] = useStorage<PomodoroState>({
-    key: STORAGE_KEY,
-    instance: localStorageInstance,
-    // Persist default on first access
-    initialValue: {
+  const [state] = useStorage<PomodoroState>(
+    {
+      key: STORAGE_KEY,
+      instance: localStorageInstance
+    },
+    // Default value when storage is empty
+    {
       phase: "idle",
       running: false,
       cycleCount: 0,
@@ -21,7 +23,7 @@ export function usePomodoro() {
       pauseAccumMs: 0,
       config: DEFAULT_CONFIG
     } satisfies PomodoroState
-  })
+  )
 
   const [now, setNow] = useState(() => Date.now())
   const frameRef = useRef<number | null>(null)

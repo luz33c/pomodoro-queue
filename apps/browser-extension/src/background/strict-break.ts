@@ -36,8 +36,13 @@ export function initStrictBreakKernel() {
   kernelInited = true
 
   // 标签被激活 => 立即拉回休息页
-  chrome.tabs.onActivated.addListener(async ({ windowId }) => {
+  chrome.tabs.onActivated.addListener(async ({ tabId, windowId }) => {
     if (!(await shouldEnforce())) return
+    
+    // 如果激活的就是休息页，不需要再切换
+    const tab = await chrome.tabs.get(tabId)
+    if (isBreakPage(tab.url)) return
+    
     await focusBreakTab(windowId)
   })
 
@@ -49,10 +54,25 @@ export function initStrictBreakKernel() {
   })
 
   // 页面地址/加载变化 => 如果跳向非休息页，立刻拉回
-  chrome.tabs.onUpdated.addListener(async (_tabId, _change, tab) => {
+  chrome.tabs.onUpdated.addListener(async (tabId, change, tab) => {
     if (!(await shouldEnforce())) return
     if (isSystemOrExtPage(tab.url) || isBreakPage(tab.url)) return
-    await focusBreakTab(tab.windowId!)
+    
+    // 只在页面完全加载完成时才处理，避免加载过程中的误触发
+    if (change.status === 'complete' && tab.active) {
+      await focusBreakTab(tab.windowId!)
+    }
+  })
+
+  // 新标签创建时的检查
+  chrome.tabs.onCreated.addListener(async (tab) => {
+    if (!(await shouldEnforce())) return
+    if (isSystemOrExtPage(tab.url) || isBreakPage(tab.url)) return
+    
+    // 如果新标签是活动的，强制回到休息页
+    if (tab.active) {
+      await focusBreakTab(tab.windowId!)
+    }
   })
 
   // 标签关闭 => 清理本地映射（防止保存无效 id）
@@ -89,6 +109,10 @@ async function focusBreakTab(windowId?: number) {
   }
 
   breakTabIdsByWindow.set(wid, tabId!)
+  
+  // 激活休息页并记录强制拉回的时间戳
+  await chrome.tabs.update(tabId!, { active: true })
+  await storage.set("breakLastForcedAt", Date.now())
 }
 
 // ---------------- 公开：进入/退出 严格休息 ----------------

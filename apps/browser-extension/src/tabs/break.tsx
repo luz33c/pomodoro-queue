@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { Storage } from "@plasmohq/storage"
+import type { PomodoroState } from "~pomodoro/types"
 
 import "./style.css"
 
@@ -22,7 +23,7 @@ function BreakPage() {
   // 更新倒计时
   const updateTimer = async () => {
     try {
-      const state = await storage.get(STORAGE_KEY)
+      const state = await storage.get<PomodoroState>(STORAGE_KEY)
       if (state?.endsAt && (state.phase === 'short' || state.phase === 'long')) {
         const remaining = state.endsAt - Date.now()
         setTimeLeft(formatTime(Math.max(0, remaining)))
