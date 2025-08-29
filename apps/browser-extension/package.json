@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "plasmo dev",
     "build": "plasmo build",
+    "clear": "git clean -xdf build out dist .plasmo .tsbuildinfo",
     "package": "plasmo package"
   },
   "dependencies": {

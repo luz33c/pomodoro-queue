@@ -2,9 +2,9 @@ import { useState, useEffect, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import { usePomodoro } from "@/hooks/usePomodoro"
-import type { PomodoroConfig } from "@/pomodoro/types"
-import { DEFAULT_CONFIG } from "@/pomodoro/types"
+import { usePomodoro } from "@/hooks/pomodoro/usePomodoro"
+import type { PomodoroConfig } from "@/model/pomodoro/types"
+import { DEFAULT_CONFIG } from "@/model/pomodoro/types"
 
 export function CreateQueueModal({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
   const { state, updateConfig, start } = usePomodoro()

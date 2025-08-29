@@ -6,8 +6,8 @@ import type {
   CurrentQueue,
   PomodoroHistoryEntry,
   PomodoroState,
-} from '@/pomodoro/types';
-import { CURRENT_QUEUE_KEY, HISTORY_KEY, STORAGE_KEY } from '@/pomodoro/types';
+} from '@/model/pomodoro/types';
+import { CURRENT_QUEUE_KEY, HISTORY_KEY, STORAGE_KEY } from '@/model/pomodoro/types';
 
 const localInstance = new Storage({ area: 'local' });
 

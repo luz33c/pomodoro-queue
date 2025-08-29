@@ -1,7 +1,7 @@
 import type { PlasmoMessaging } from "@plasmohq/messaging"
 import { getNextStateAfterPhase, schedulePhaseEndAlarm, notifyPhase } from "~background/index"
 import { Storage } from "@plasmohq/storage"
-import { STORAGE_KEY, HISTORY_KEY, CURRENT_QUEUE_KEY, type PomodoroState, type PomodoroHistoryEntry, type CurrentQueue } from "~pomodoro/types"
+import { STORAGE_KEY, HISTORY_KEY, CURRENT_QUEUE_KEY, type PomodoroState, type PomodoroHistoryEntry, type CurrentQueue } from "~model/pomodoro/types"
 
 const storage = new Storage({ area: "local" })
 

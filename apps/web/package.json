@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack --port=3001",
     "build": "next build",
+    "clear": "git clean -xdf .next out build dist .wrangler .open-next dev-dist",
     "start": "next start",
     "lint": "next lint",
     "tauri": "tauri",

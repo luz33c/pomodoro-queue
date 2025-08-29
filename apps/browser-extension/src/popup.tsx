@@ -1,8 +1,8 @@
 import '@/style.css';
 
 import { Toaster } from 'sonner';
-import { HistoryList } from './components/HistoryList';
-import { PomodoroTimer } from './components/PomodoroTimer';
+import { HistoryList } from './components/pomodoro/HistoryList';
+import { PomodoroTimer } from './components/pomodoro/PomodoroTimer';
 
 function IndexPopup() {
   return (

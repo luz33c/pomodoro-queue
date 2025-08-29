@@ -5,6 +5,7 @@
   "scripts": {
     "build": "wrangler deploy --dry-run",
     "check-types": "tsc -b",
+    "clear": "git clean -xdf dist build out .wrangler .next",
     "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
     "dev": "wrangler dev --port=3000",
     "start": "wrangler dev",

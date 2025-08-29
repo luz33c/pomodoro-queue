@@ -2,7 +2,7 @@ import { Settings } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { usePomodoro } from '@/hooks/usePomodoro';
+import { usePomodoro } from '@/hooks/pomodoro/usePomodoro';
 import { PomodoroSettings } from './PomodoroSettings';
 import { CreateQueueModal } from './CreateQueueModal';
 

@@ -6,6 +6,7 @@
     "dev": "expo start --clear",
     "android": "expo run:android",
     "ios": "expo run:ios",
+    "clear": "git clean -xdf .expo dist web-build .cache",
     "prebuild": "expo prebuild",
     "web": "expo start --web"
   },

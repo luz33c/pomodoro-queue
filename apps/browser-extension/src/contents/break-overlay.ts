@@ -1,7 +1,7 @@
 import { Storage } from '@plasmohq/storage';
 import type { PlasmoCSConfig } from 'plasmo';
-import type { PomodoroState } from '~pomodoro/types';
-import { STORAGE_KEY } from '~pomodoro/types';
+import type { PomodoroState } from '~model/pomodoro/types';
+import { STORAGE_KEY } from '~model/pomodoro/types';
 
 export const config: PlasmoCSConfig = {
   matches: ['<all_urls>'],

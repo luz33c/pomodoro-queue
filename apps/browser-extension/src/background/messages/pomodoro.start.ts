@@ -1,6 +1,6 @@
 import type { PlasmoMessaging } from "@plasmohq/messaging"
 import { startPhase } from "~background/index"
-import type { PomodoroPhase } from "~pomodoro/types"
+import type { PomodoroPhase } from "~model/pomodoro/types"
 
 export type RequestBody = { phase?: PomodoroPhase }
 export type ResponseBody = { ok: true }

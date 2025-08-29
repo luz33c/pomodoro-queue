@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Separator } from "@/components/ui/separator"
-import { usePomodoro } from "@/hooks/usePomodoro"
+import { usePomodoro } from "@/hooks/pomodoro/usePomodoro"
 import { Settings } from "lucide-react"
 
 export function PomodoroSettings() {

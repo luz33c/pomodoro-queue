@@ -1,6 +1,6 @@
 import { Storage } from "@plasmohq/storage"
-import type { PomodoroState } from "~pomodoro/types"
-import { STORAGE_KEY } from "~pomodoro/types"
+import type { PomodoroState } from "~model/pomodoro/types"
+import { STORAGE_KEY } from "~model/pomodoro/types"
 
 type Phase = "idle" | "focus" | "short" | "long"
 

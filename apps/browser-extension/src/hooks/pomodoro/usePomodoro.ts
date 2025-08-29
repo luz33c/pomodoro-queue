@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { useStorage } from "@plasmohq/storage/hook"
 import { Storage } from "@plasmohq/storage"
 import { sendToBackground } from "@plasmohq/messaging"
-import type { PomodoroConfig, PomodoroPhase, PomodoroState } from "~pomodoro/types"
-import { DEFAULT_CONFIG, STORAGE_KEY } from "~pomodoro/types"
+import type { PomodoroConfig, PomodoroPhase, PomodoroState } from "~model/pomodoro/types"
+import { DEFAULT_CONFIG, STORAGE_KEY } from "~model/pomodoro/types"
 
 // Use the same storage area as background (local)
 const localStorageInstance = new Storage({ area: "local" })

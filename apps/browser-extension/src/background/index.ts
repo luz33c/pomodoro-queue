@@ -3,8 +3,8 @@ import type {
   PomodoroHistoryEntry,
   PomodoroPhase,
   PomodoroState,
-} from '~pomodoro/types';
-import { DEFAULT_CONFIG, HISTORY_KEY, STORAGE_KEY, CURRENT_QUEUE_KEY, type CurrentQueue } from '~pomodoro/types';
+} from '~model/pomodoro/types';
+import { DEFAULT_CONFIG, HISTORY_KEY, STORAGE_KEY, CURRENT_QUEUE_KEY, type CurrentQueue } from '~model/pomodoro/types';
 import { beginStrictBreak, endStrictBreak, initStrictBreakKernel, showOverlayOnAllOpenTabs } from './strict-break';
 
 const storage = new Storage({ area: 'local' });
