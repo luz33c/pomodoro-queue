@@ -39,11 +39,22 @@ export function initStrictBreakKernel() {
   chrome.tabs.onActivated.addListener(async ({ tabId, windowId }) => {
     if (!(await shouldEnforce())) return
     
-    // 如果激活的就是休息页，不需要再切换
-    const tab = await chrome.tabs.get(tabId)
-    if (isBreakPage(tab.url)) return
+    let tab: chrome.tabs.Tab
+    try {
+      tab = await chrome.tabs.get(tabId)
+    } catch {
+      return
+    }
     
+    if (isBreakPage(tab.url)) return           // 切到的本就是休息页，无需处理
+    if (isSystemOrExtPage(tab.url)) {
+      console.log("[Pomodoro] 激活的是系统/扩展页面，严格模式下允许浏览此页")
+      return  // 系统页面或扩展页面，允许访问，不强制跳转
+    }
+    
+    // 普通网页，立即拉回休息页
     await focusBreakTab(windowId)
+    console.log("[Pomodoro] 已激活非休息页标签，强制切回休息页")
   })
 
   // 窗口焦点变更 => 拉回休息页
@@ -56,11 +67,28 @@ export function initStrictBreakKernel() {
   // 页面地址/加载变化 => 如果跳向非休息页，立刻拉回
   chrome.tabs.onUpdated.addListener(async (tabId, change, tab) => {
     if (!(await shouldEnforce())) return
+    
+    // 先检测休息页标签是否跳转到其他页面（防止用户在休息页地址栏输入网址逃逸）
+    if (breakTabIdsByWindow.has(tab.windowId!) && breakTabIdsByWindow.get(tab.windowId!) === tabId) {
+      if (change.url && !isBreakPage(change.url)) {
+        // 休息页标签的URL变为非休息页，立刻拉回
+        try {
+          await chrome.tabs.update(tabId, { url: BREAK_URL })
+          console.log("[Pomodoro] 检测到休息页标签跳转，已拉回休息页")
+          return
+        } catch (e) {
+          console.warn("休息页标签跳转拦截失败:", e)
+        }
+      }
+      return
+    }
+    
     if (isSystemOrExtPage(tab.url) || isBreakPage(tab.url)) return
     
     // 只在页面完全加载完成时才处理，避免加载过程中的误触发
     if (change.status === 'complete' && tab.active) {
       await focusBreakTab(tab.windowId!)
+      console.log("[Pomodoro] 页面加载完成，强制切回休息页:", tab.url)
     }
   })
 
@@ -72,6 +100,24 @@ export function initStrictBreakKernel() {
     // 如果新标签是活动的，强制回到休息页
     if (tab.active) {
       await focusBreakTab(tab.windowId!)
+      console.log("[Pomodoro] 新建标签被激活，强制切回休息页")
+    }
+  })
+
+  // 监听 History API 导航（SPA 路由跳转等无刷新导航）
+  chrome.webNavigation.onHistoryStateUpdated.addListener(async ({tabId, frameId, url}) => {
+    if (frameId !== 0) return  // 只关心主框架导航
+    if (!(await shouldEnforce())) return
+    if (isSystemOrExtPage(url) || isBreakPage(url)) return
+    
+    try {
+      const tab = await chrome.tabs.get(tabId)
+      if (tab.active) {
+        await focusBreakTab(tab.windowId!)
+        console.log("[Pomodoro] 捕获History导航，强制切回休息页:", url)
+      }
+    } catch (e) {
+      console.warn("onHistoryStateUpdated: 获取标签信息失败", e)
     }
   })
 
@@ -110,8 +156,10 @@ async function focusBreakTab(windowId?: number) {
 
   breakTabIdsByWindow.set(wid, tabId!)
   
-  // 激活休息页并记录强制拉回的时间戳
+  // 激活休息页
   await chrome.tabs.update(tabId!, { active: true })
+  
+  // 记录强制拉回的时间戳（每次强制跳转都提示）
   await storage.set("breakLastForcedAt", Date.now())
 }
 
