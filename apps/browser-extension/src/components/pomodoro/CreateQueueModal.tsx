@@ -34,37 +34,38 @@ export function CreateQueueModal({ open, onOpenChange }: { open: boolean; onOpen
   if (!open) return null
 
   return (
-      <div className="fixed inset-0 z-50 grid place-items-center bg-black/30" role="dialog" aria-modal="true">
-        <div className="w-[380px] rounded-md bg-background p-6 shadow-lg">
+      <div className="absolute inset-0 z-50 flex flex-col bg-background" role="dialog" aria-modal="true">
+        <div className="flex h-full w-full flex-col p-4">
           <div className="mb-4 flex items-center justify-between">
             <div className="text-lg font-semibold">创建番茄钟队列</div>
-            <Button variant="ghost" onClick={() => onOpenChange(false)} aria-label="关闭">关闭</Button>
+            <Button variant="ghost" size="sm" onClick={() => onOpenChange(false)} aria-label="关闭">关闭</Button>
           </div>
-          <p className="text-sm text-muted-foreground">自定义专注与休息时长，创建适合自己的节奏。</p>
-          <Separator className="my-4" />
-          <div className="grid gap-4">
-            <label className="grid gap-2">
-              <span>专注时长（分钟）</span>
+          <p className="text-sm text-muted-foreground mb-4">自定义专注与休息时长，创建适合自己的节奏。</p>
+          <Separator className="mb-4" />
+          <div className="flex-1 space-y-4 overflow-y-auto">
+            <label className="block">
+              <span className="text-sm font-medium mb-2 block">专注时长（分钟）</span>
               <Input inputMode="numeric" value={form.focusMin} onChange={setField("focusMin", false, 1)} aria-invalid={!!errors.focusMin} />
-              {errors.focusMin && <span className="text-sm text-destructive">{errors.focusMin}</span>}
+              {errors.focusMin && <span className="text-xs text-destructive mt-1 block">{errors.focusMin}</span>}
             </label>
-            <label className="grid gap-2">
-              <span>短休息时长（分钟）</span>
+            <label className="block">
+              <span className="text-sm font-medium mb-2 block">短休息时长（分钟）</span>
               <Input inputMode="numeric" value={form.shortMin} onChange={setField("shortMin", true, 0)} aria-invalid={!!errors.shortMin} />
-              {errors.shortMin && <span className="text-sm text-destructive">{errors.shortMin}</span>}
+              {errors.shortMin && <span className="text-xs text-destructive mt-1 block">{errors.shortMin}</span>}
             </label>
-            <label className="grid gap-2">
-              <span>长休息时长（分钟）</span>
+            <label className="block">
+              <span className="text-sm font-medium mb-2 block">长休息时长（分钟）</span>
               <Input inputMode="numeric" value={form.longMin} onChange={setField("longMin", true, 0)} aria-invalid={!!errors.longMin} />
-              {errors.longMin && <span className="text-sm text-destructive">{errors.longMin}</span>}
+              {errors.longMin && <span className="text-xs text-destructive mt-1 block">{errors.longMin}</span>}
             </label>
-            <label className="grid gap-2">
-              <span>长休息间隔（完成多少个专注后）</span>
+            <label className="block">
+              <span className="text-sm font-medium mb-2 block">长休息间隔（完成多少个专注后）</span>
               <Input inputMode="numeric" value={form.longEvery} onChange={setField("longEvery", false, 2)} aria-invalid={!!errors.longEvery} />
-              {errors.longEvery && <span className="text-sm text-destructive">{errors.longEvery}</span>}
+              {errors.longEvery && <span className="text-xs text-destructive mt-1 block">{errors.longEvery}</span>}
             </label>
           </div>
-          <div className="mt-6 flex justify-end gap-2">
+          <Separator className="my-4" />
+          <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => onOpenChange(false)}>取消</Button>
             <Button
               disabled={!isValid}

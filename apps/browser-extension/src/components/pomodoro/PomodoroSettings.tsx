@@ -35,26 +35,26 @@ export function PomodoroSettings({ isOpen = true, onClose }: PomodoroSettingsPro
   }
 
   return (
-    <div className="flex h-full w-full flex-col bg-background p-6" role="dialog" aria-modal="true">
-      <div className="mb-6 flex items-center justify-between">
+    <div className="flex h-full w-full flex-col bg-background p-4" role="dialog" aria-modal="true">
+      <div className="mb-4 flex items-center justify-between">
         <div className="text-lg font-semibold">番茄钟设置</div>
         <Button variant="ghost" size="sm" onClick={onClose} aria-label="关闭">
           关闭
         </Button>
       </div>
       
-      <Separator className="mb-6" />
+      <Separator className="mb-4" />
       
-      <div className="flex-1 space-y-6">
-        <div className="space-y-4">
+      <div className="flex-1">
+        <div className="space-y-3">
           <h3 className="text-sm font-medium">休息行为设置</h3>
           
-          <div className="flex items-start justify-between space-x-3">
-            <div className="space-y-1">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex-1">
               <Label htmlFor="strict-mode" className="text-sm font-medium">
                 严格休息模式
               </Label>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-muted-foreground mt-1">
                 启用后，休息期间将强制停留在休息页面，无法浏览其他标签页
               </p>
             </div>
@@ -67,13 +67,13 @@ export function PomodoroSettings({ isOpen = true, onClose }: PomodoroSettingsPro
           </div>
           
           {!strictMode && (
-            <div className="rounded-md bg-muted/50 p-3 text-xs text-muted-foreground">
+            <div className="rounded-md bg-muted/50 p-2.5 text-xs text-muted-foreground">
               <p>普通模式：休息时会在当前页面显示遮罩层提醒</p>
             </div>
           )}
           
           {strictMode && (
-            <div className="rounded-md bg-primary/10 p-3 text-xs">
+            <div className="rounded-md bg-primary/10 p-2.5 text-xs">
               <p className="font-medium text-primary">严格模式已启用</p>
               <p className="mt-1 text-muted-foreground">
                 休息时会打开专属休息页面，切换标签会被自动拉回
@@ -83,13 +83,13 @@ export function PomodoroSettings({ isOpen = true, onClose }: PomodoroSettingsPro
         </div>
       </div>
       
-      <Separator className="mb-6" />
+      <Separator className="my-4" />
       
       <div className="flex justify-end gap-2">
-        <Button variant="outline" onClick={onClose}>
+        <Button variant="outline" size="sm" onClick={onClose}>
           取消
         </Button>
-        <Button onClick={handleSave}>
+        <Button size="sm" onClick={handleSave}>
           保存设置
         </Button>
       </div>

@@ -9,7 +9,7 @@ function IndexPopup() {
   const [showSettings, setShowSettings] = useState(false);
 
   return (
-    <div className="dark flex h-[640px] w-[360px] flex-col overflow-hidden bg-background text-foreground">
+    <div className="dark relative flex h-[600px] w-[380px] flex-col overflow-hidden overscroll-none bg-background text-foreground">
       <Toaster />
       {showSettings ? (
         <PomodoroSettings

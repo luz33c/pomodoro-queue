@@ -61,41 +61,42 @@ export function HistoryList() {
     : [];
 
   return (
-    <div className="mx-auto box-border flex h-full w-[360px] max-w-full flex-col overflow-hidden px-6 pb-6">
-      <h3 className="mb-3 font-medium text-muted-foreground text-sm">
+    <div className="flex h-full w-full flex-col overflow-hidden">
+      <h3 className="mb-2 font-medium text-muted-foreground text-sm">
         历史记录
       </h3>
-      {state?.running && (
-        <Card className="mb-3 p-3 flex-shrink-0">
-          <div className="flex items-center justify-between">
-            <div className="font-medium">当前 · {phaseLabel(state.phase)}</div>
-            <div className="text-muted-foreground text-sm">进行中</div>
-          </div>
-        </Card>
-      )}
-      <div className="scrollbar-hide flex-1 space-y-2 overflow-y-auto pr-1">
-        {list.map((h) => (
-          <Card className="p-3 flex-shrink-0" key={h.id}>
+      <div className="flex-1 overflow-hidden flex flex-col">
+        {state?.running && (
+          <Card className="mb-2 p-2.5 flex-shrink-0">
             <div className="flex items-center justify-between">
-              <div>
-                <div className="font-medium">{h.title}</div>
-                <div className="text-muted-foreground text-sm">
-                  {minutes(h.durationMs)} 分钟
-                </div>
-              </div>
-              <div className="text-muted-foreground text-sm">
-                {formatTime(h.endedAt)}
-              </div>
+              <div className="text-sm font-medium">当前 · {phaseLabel(state.phase)}</div>
+              <div className="text-muted-foreground text-xs">进行中</div>
             </div>
           </Card>
-        ))}
-        {list.length === 0 && !state?.running && (
-          <Card className="p-6 text-center text-muted-foreground text-sm flex-shrink-0">
-            还没有完成的番茄钟，开始你的第一个专注时段吧！
-          </Card>
         )}
+        <div className="scrollbar-hide flex-1 overflow-y-auto space-y-2 min-h-0">
+          {list.map((h) => (
+            <Card className="p-2.5" key={h.id}>
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-sm font-medium">{h.title}</div>
+                  <div className="text-muted-foreground text-xs">
+                    {minutes(h.durationMs)} 分钟
+                  </div>
+                </div>
+                <div className="text-muted-foreground text-xs">
+                  {formatTime(h.endedAt)}
+                </div>
+              </div>
+            </Card>
+          ))}
+          {list.length === 0 && !state?.running && (
+            <Card className="p-4 text-center text-muted-foreground text-xs">
+              还没有完成的番茄钟，开始你的第一个专注时段吧！
+            </Card>
+          )}
+        </div>
       </div>
-      <Separator className="mt-4 flex-shrink-0" />
     </div>
   );
 }

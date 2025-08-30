@@ -41,12 +41,13 @@ export function PomodoroTimer({ onOpenSettings }: PomodoroTimerProps) {
   const phase = state?.phase ?? 'idle';
 
   return (
-    <Card className="mb-4 w-full">
-      <div className="flex items-center justify-between">
-        <h2 className="font-semibold text-lg">番茄钟</h2>
+    <Card className="w-full p-4">
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="font-semibold text-base">番茄钟</h2>
         <Button
           variant="ghost"
           size="icon"
+          className="h-8 w-8"
           onClick={onOpenSettings}
           title="番茄钟设置"
           aria-label="打开设置"
@@ -55,25 +56,26 @@ export function PomodoroTimer({ onOpenSettings }: PomodoroTimerProps) {
         </Button>
       </div>
 
-      <div className="flex flex-col items-center gap-4">
-        <div className="relative h-44 w-44">
+      <div className="flex flex-col items-center gap-3">
+        <div className="relative h-32 w-32">
           <div
-            className="absolute inset-0 rounded-full p-[6px]"
+            className="absolute inset-0 rounded-full p-[5px]"
             style={ringStyle}
           >
             <div className="h-full w-full rounded-full bg-background" />
           </div>
-          <div className="absolute inset-0 grid place-items-center">
-            <div className="font-bold text-4xl tabular-nums">{mmss}</div>
-            <div className="mt-1 text-muted-foreground text-sm">
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <div className="font-bold text-3xl tabular-nums">{mmss}</div>
+            <div className="text-muted-foreground text-xs mt-0.5">
               {phaseLabel(phase)}
             </div>
           </div>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap justify-center gap-2">
           {!running && (
             <Button
+              size="sm"
               aria-label="开始番茄钟"
               onClick={() => setCreateModalOpen(true)}
             >
@@ -82,6 +84,7 @@ export function PomodoroTimer({ onOpenSettings }: PomodoroTimerProps) {
           )}
           {running && !paused && (
             <Button
+              size="sm"
               aria-label="暂停"
               onClick={() => pause()}
               variant="secondary"
@@ -90,12 +93,13 @@ export function PomodoroTimer({ onOpenSettings }: PomodoroTimerProps) {
             </Button>
           )}
           {running && paused && (
-            <Button aria-label="继续" onClick={() => resume()}>
+            <Button size="sm" aria-label="继续" onClick={() => resume()}>
               继续
             </Button>
           )}
           {running && (
             <Button
+              size="sm"
               aria-label="终止队列"
               onClick={() => stop()}
               variant="destructive"
@@ -105,6 +109,7 @@ export function PomodoroTimer({ onOpenSettings }: PomodoroTimerProps) {
           )}
           {running && (
             <Button
+              size="sm"
               aria-label="跳过阶段"
               onClick={() => skip()}
               variant="outline"
