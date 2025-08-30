@@ -21,6 +21,9 @@
     ]
   },
   "extends": ["ultracite"],
+  "javascript": {
+    "globals": ["chrome"]
+  },
   "assist": {
     "actions": {
       "source": {
@@ -35,24 +38,25 @@
         "noLabelWithoutControl": "off"
       },
       "suspicious": {
-        "useAwait": "off"
+        "useAwait": "off",
+        "noConsole": "off"
       },
       "style": {
         "useBlockStatements": "off",
-        "noNestedTernary": "off"
+        "noNestedTernary": "off",
+        "noNonNullAssertion": "off"
       },
       "performance": {
         "noNamespaceImport": "off"
       },
       "nursery": {
-        "useSortedClasses": "off"
+        "useSortedClasses": "off",
+        "noUnnecessaryConditions": "off"
       },
       "correctness": {
         "noUnusedImports": "off"
       },
-      "complexity": {
-        "noUselessInterface": "off"
-      }
+      "complexity": {}
     }
   }
 }
