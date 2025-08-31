@@ -1,5 +1,6 @@
 import type { PlasmoMessaging } from "@plasmohq/messaging"
 import { getNextStateAfterPhase, schedulePhaseEndAlarm, notifyPhase } from "~background/index"
+import { endStrictBreak } from "~background/strict-break"
 import { Storage } from "@plasmohq/storage"
 import { STORAGE_KEY, HISTORY_KEY, CURRENT_QUEUE_KEY, type PomodoroState, type PomodoroHistoryEntry, type CurrentQueue } from "~model/pomodoro/types"
 
@@ -13,6 +14,9 @@ const handler: PlasmoMessaging.MessageHandler<never, ResponseBody> = async (
 ) => {
   const s = await storage.get<PomodoroState>(STORAGE_KEY)
   if (s?.running) {
+    // 检查是否从休息状态跳过
+    const wasInBreak = s.phase === "short" || s.phase === "long"
+    
     // 将当前段记入历史
     if (s.startedAt && s.phase !== "idle") {
       const endedAt = Date.now()
@@ -32,6 +36,11 @@ const handler: PlasmoMessaging.MessageHandler<never, ResponseBody> = async (
     await storage.set(STORAGE_KEY, next)
     await schedulePhaseEndAlarm(next)
     await notifyPhase(next.phase)
+    
+    // 如果从休息状态跳过，关闭Break页面
+    if (wasInBreak) {
+      await endStrictBreak()
+    }
   }
   res.send({ ok: true })
 }

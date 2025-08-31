@@ -82,6 +82,9 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
     return;
   }
 
+  // 检查刚完成的阶段是否为休息状态
+  const wasInBreak = state.phase === 'short' || state.phase === 'long';
+
   // 记录刚完成的阶段（state）
   if (state.phase !== 'idle' && state.startedAt) {
     const endedAt = Date.now();
@@ -121,7 +124,14 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
     await showOverlayOnAllOpenTabs();
     await endStrictBreak(); // 确保不存在遗留的严格模式状态
   } else {
+    // 进入专注或idle状态，关闭Break页面
     await endStrictBreak();
+    
+    // 如果从休息状态自然结束，确保关闭Break页面
+    if (wasInBreak) {
+      // endStrictBreak已经处理了页面关闭，这里是额外确认
+      console.log('[Pomodoro] 休息阶段自然结束，已关闭Break页面');
+    }
   }
 });
 
