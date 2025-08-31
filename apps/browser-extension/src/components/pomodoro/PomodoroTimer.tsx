@@ -42,8 +42,8 @@ export function PomodoroTimer({ onOpenSettings }: PomodoroTimerProps) {
 
   return (
     <Card className="w-full p-4">
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="font-semibold text-base">番茄钟</h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="font-semibold text-lg">番茄钟</h2>
         <Button
           variant="ghost"
           size="icon"
@@ -56,17 +56,17 @@ export function PomodoroTimer({ onOpenSettings }: PomodoroTimerProps) {
         </Button>
       </div>
 
-      <div className="flex flex-col items-center gap-3">
-        <div className="relative h-32 w-32">
+      <div className="flex flex-col items-center gap-4">
+        <div className="relative h-48 w-48">
           <div
-            className="absolute inset-0 rounded-full p-[5px]"
+            className="absolute inset-0 rounded-full p-[10px]"
             style={ringStyle}
           >
             <div className="h-full w-full rounded-full bg-background" />
           </div>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="font-bold text-3xl tabular-nums">{mmss}</div>
-            <div className="text-muted-foreground text-xs mt-0.5">
+            <div className="font-bold text-5xl tabular-nums">{mmss}</div>
+            <div className="text-muted-foreground text-sm mt-1">
               {phaseLabel(phase)}
             </div>
           </div>
