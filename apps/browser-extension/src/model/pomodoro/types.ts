@@ -41,7 +41,7 @@ export const DEFAULT_CONFIG: PomodoroConfig = {
   shortMin: 5,
   longMin: 20,
   longEvery: 4,
-  strictMode: false,
+  strictMode: true,
 };
 
 export const STORAGE_KEY = "pomodoroState" as const;

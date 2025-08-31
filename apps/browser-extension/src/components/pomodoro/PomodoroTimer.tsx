@@ -3,19 +3,20 @@ import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { usePomodoro } from '@/hooks/pomodoro/usePomodoro';
+import { useI18n } from '@/hooks/useI18n';
 import { CreateQueueModal } from './CreateQueueModal';
 
-function phaseLabel(phase: string) {
+function phaseLabel(phase: string, t: (key: string) => string) {
   if (phase === 'focus') {
-    return '专注时段';
+    return t('phaseFocus');
   }
   if (phase === 'short') {
-    return '短休息';
+    return t('phaseShortBreak');
   }
   if (phase === 'long') {
-    return '长休息';
+    return t('phaseLongBreak');
   }
-  return '未开始';
+  return t('phaseIdle');
 }
 
 const FULL_CIRCLE_DEGREES = 360;
@@ -26,6 +27,7 @@ interface PomodoroTimerProps {
 
 export function PomodoroTimer({ onOpenSettings }: PomodoroTimerProps) {
   const { state, progress, mmss, pause, resume, stop, skip } = usePomodoro();
+  const { t } = useI18n();
   const [createModalOpen, setCreateModalOpen] = useState(false);
 
   const ringStyle = useMemo(() => {
@@ -43,14 +45,14 @@ export function PomodoroTimer({ onOpenSettings }: PomodoroTimerProps) {
   return (
     <Card className="w-full p-4">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="font-semibold text-lg">番茄钟</h2>
+        <h2 className="font-semibold text-lg">{t('pomodoroTimer')}</h2>
         <Button
           variant="ghost"
           size="icon"
           className="h-8 w-8"
           onClick={onOpenSettings}
-          title="番茄钟设置"
-          aria-label="打开设置"
+          title={t('settings')}
+          aria-label={t('tooltipOpenSettings')}
         >
           <Settings className="h-4 w-4" />
         </Button>
@@ -67,7 +69,7 @@ export function PomodoroTimer({ onOpenSettings }: PomodoroTimerProps) {
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <div className="font-bold text-5xl tabular-nums">{mmss}</div>
             <div className="text-muted-foreground text-sm mt-1">
-              {phaseLabel(phase)}
+              {phaseLabel(phase, t)}
             </div>
           </div>
         </div>
@@ -76,45 +78,45 @@ export function PomodoroTimer({ onOpenSettings }: PomodoroTimerProps) {
           {!running && (
             <Button
               size="sm"
-              aria-label="开始番茄钟"
+              aria-label={t('buttonStart')}
               onClick={() => setCreateModalOpen(true)}
             >
-              开始
+              {t('buttonStart')}
             </Button>
           )}
           {running && !paused && (
             <Button
               size="sm"
-              aria-label="暂停"
+              aria-label={t('buttonPause')}
               onClick={() => pause()}
               variant="secondary"
             >
-              暂停
+              {t('buttonPause')}
             </Button>
           )}
           {running && paused && (
-            <Button size="sm" aria-label="继续" onClick={() => resume()}>
-              继续
+            <Button size="sm" aria-label={t('buttonResume')} onClick={() => resume()}>
+              {t('buttonResume')}
             </Button>
           )}
           {running && (
             <Button
               size="sm"
-              aria-label="终止队列"
+              aria-label={t('buttonStop')}
               onClick={() => stop()}
               variant="destructive"
             >
-              终止队列
+              {t('buttonStop')}
             </Button>
           )}
           {running && (
             <Button
               size="sm"
-              aria-label="跳过阶段"
+              aria-label={t('buttonSkip')}
               onClick={() => skip()}
               variant="outline"
             >
-              跳过
+              {t('buttonSkip')}
             </Button>
           )}
         </div>

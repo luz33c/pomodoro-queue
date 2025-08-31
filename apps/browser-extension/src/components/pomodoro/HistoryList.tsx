@@ -2,6 +2,7 @@ import { Storage } from '@plasmohq/storage';
 import { useStorage } from '@plasmohq/storage/hook';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { useI18n } from '@/hooks/useI18n';
 import type {
   CurrentQueue,
   PomodoroHistoryEntry,
@@ -28,20 +29,21 @@ function minutes(ms: number) {
   return Math.round(ms / MS_PER_MINUTE);
 }
 
-function phaseLabel(phase: string) {
+function phaseLabel(phase: string, t: (key: string) => string) {
   if (phase === 'focus') {
-    return '专注时段';
+    return t('phaseFocus');
   }
   if (phase === 'short') {
-    return '短休息';
+    return t('phaseShortBreak');
   }
   if (phase === 'long') {
-    return '长休息';
+    return t('phaseLongBreak');
   }
-  return '未开始';
+  return t('phaseIdle');
 }
 
 export function HistoryList() {
+  const { t } = useI18n();
   const [history] = useStorage<PomodoroHistoryEntry[]>({
     key: HISTORY_KEY,
     instance: localInstance,
@@ -63,14 +65,14 @@ export function HistoryList() {
   return (
     <div className="flex h-full w-full flex-col overflow-hidden">
       <h3 className="mb-2 font-medium text-muted-foreground text-sm">
-        历史记录
+        {t('historyTitle')}
       </h3>
       <div className="flex-1 overflow-hidden flex flex-col">
         {state?.running && (
           <Card className="mb-2 p-2.5 flex-shrink-0">
             <div className="flex items-center justify-between">
-              <div className="text-sm font-medium">当前 · {phaseLabel(state.phase)}</div>
-              <div className="text-muted-foreground text-xs">进行中</div>
+              <div className="text-sm font-medium">{t('historyCurrent')} · {phaseLabel(state.phase, t)}</div>
+              <div className="text-muted-foreground text-xs">{t('historyInProgress')}</div>
             </div>
           </Card>
         )}
@@ -81,7 +83,7 @@ export function HistoryList() {
                 <div>
                   <div className="text-sm font-medium">{h.title}</div>
                   <div className="text-muted-foreground text-xs">
-                    {minutes(h.durationMs)} 分钟
+                    {minutes(h.durationMs)} {t('historyMinutes')}
                   </div>
                 </div>
                 <div className="text-muted-foreground text-xs">
@@ -92,7 +94,7 @@ export function HistoryList() {
           ))}
           {list.length === 0 && !state?.running && (
             <Card className="p-4 text-center text-muted-foreground text-xs">
-              还没有完成的番茄钟，开始你的第一个专注时段吧！
+              {t('historyEmpty')}
             </Card>
           )}
         </div>

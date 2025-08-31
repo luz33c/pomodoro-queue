@@ -1,0 +1,238 @@
+{
+  "extensionName": {
+    "message": "番茄钟队列",
+    "description": "扩展名称"
+  },
+  "extensionDescription": {
+    "message": "高效的番茄工作法时间管理工具",
+    "description": "扩展描述"
+  },
+  "pomodoroTimer": {
+    "message": "番茄钟",
+    "description": "番茄钟标题"
+  },
+  "phaseFocus": {
+    "message": "专注时段",
+    "description": "专注阶段标签"
+  },
+  "phaseShortBreak": {
+    "message": "短休息",
+    "description": "短休息阶段标签"
+  },
+  "phaseLongBreak": {
+    "message": "长休息",
+    "description": "长休息阶段标签"
+  },
+  "phaseIdle": {
+    "message": "未开始",
+    "description": "空闲状态标签"
+  },
+  "buttonStart": {
+    "message": "开始",
+    "description": "开始按钮"
+  },
+  "buttonPause": {
+    "message": "暂停",
+    "description": "暂停按钮"
+  },
+  "buttonResume": {
+    "message": "继续",
+    "description": "继续按钮"
+  },
+  "buttonStop": {
+    "message": "终止队列",
+    "description": "停止按钮"
+  },
+  "buttonSkip": {
+    "message": "跳过",
+    "description": "跳过按钮"
+  },
+  "buttonClose": {
+    "message": "关闭",
+    "description": "关闭按钮"
+  },
+  "buttonCancel": {
+    "message": "取消",
+    "description": "取消按钮"
+  },
+  "buttonSave": {
+    "message": "保存设置",
+    "description": "保存按钮"
+  },
+  "settings": {
+    "message": "番茄钟设置",
+    "description": "设置页面标题"
+  },
+  "settingsBreakBehavior": {
+    "message": "休息行为设置",
+    "description": "休息设置标题"
+  },
+  "settingsStrictMode": {
+    "message": "严格休息模式",
+    "description": "严格模式标签"
+  },
+  "settingsStrictModeDesc": {
+    "message": "启用后，休息期间将强制停留在休息页面，无法浏览其他标签页",
+    "description": "严格模式描述"
+  },
+  "settingsNormalMode": {
+    "message": "普通模式：休息时会在当前页面显示遮罩层提醒",
+    "description": "普通模式描述"
+  },
+  "settingsStrictModeEnabled": {
+    "message": "严格模式已启用",
+    "description": "严格模式已启用提示"
+  },
+  "settingsStrictModeEnabledDesc": {
+    "message": "休息时会打开专属休息页面，切换标签会被自动拉回",
+    "description": "严格模式启用描述"
+  },
+  "createQueueTitle": {
+    "message": "创建番茄钟队列",
+    "description": "创建队列标题"
+  },
+  "createQueueDesc": {
+    "message": "自定义专注与休息时长，创建适合自己的节奏。",
+    "description": "创建队列描述"
+  },
+  "createQueueGenerate": {
+    "message": "生成并开始",
+    "description": "生成并开始按钮"
+  },
+  "focusDuration": {
+    "message": "专注时长（分钟）",
+    "description": "专注时长标签"
+  },
+  "shortBreakDuration": {
+    "message": "短休息时长（分钟）",
+    "description": "短休息时长标签"
+  },
+  "longBreakDuration": {
+    "message": "长休息时长（分钟）",
+    "description": "长休息时长标签"
+  },
+  "longBreakInterval": {
+    "message": "长休息间隔（完成多少个专注后）",
+    "description": "长休息间隔标签"
+  },
+  "validationFocusMin": {
+    "message": "专注时长需 ≥ 1",
+    "description": "专注时长验证错误"
+  },
+  "validationShortMin": {
+    "message": "短休息需 ≥ 0",
+    "description": "短休息验证错误"
+  },
+  "validationLongMin": {
+    "message": "长休息需 ≥ 0",
+    "description": "长休息验证错误"
+  },
+  "validationLongEvery": {
+    "message": "长休间隔需 ≥ 2",
+    "description": "长休息间隔验证错误"
+  },
+  "historyTitle": {
+    "message": "历史记录",
+    "description": "历史记录标题"
+  },
+  "historyCurrent": {
+    "message": "当前",
+    "description": "当前状态标签"
+  },
+  "historyInProgress": {
+    "message": "进行中",
+    "description": "进行中状态"
+  },
+  "historyMinutes": {
+    "message": "分钟",
+    "description": "分钟单位"
+  },
+  "historyEmpty": {
+    "message": "还没有完成的番茄钟，开始你的第一个专注时段吧！",
+    "description": "历史记录为空提示"
+  },
+  "breakPageTitle": {
+    "message": "休息时间到了",
+    "description": "休息页面标题"
+  },
+  "breakPageHint": {
+    "message": "已为你切回休息页面，专注休息",
+    "description": "强制切回休息页面提示"
+  },
+  "breakPageTip1": {
+    "message": "离开屏幕，让眼睛休息",
+    "description": "休息提示1"
+  },
+  "breakPageTip2": {
+    "message": "做些伸展运动或深呼吸",
+    "description": "休息提示2"
+  },
+  "breakPageTip3": {
+    "message": "喝杯水，保持水分充足",
+    "description": "休息提示3"
+  },
+  "breakOverlayMessage": {
+    "message": "休息时间，请离开屏幕放松一下",
+    "description": "休息遮罩提示"
+  },
+  "tooltipPauseTimer": {
+    "message": "暂停计时",
+    "description": "暂停计时工具提示"
+  },
+  "tooltipResumeTimer": {
+    "message": "继续计时",
+    "description": "继续计时工具提示"
+  },
+  "tooltipSkipBreak": {
+    "message": "跳过休息",
+    "description": "跳过休息工具提示"
+  },
+  "tooltipOpenSettings": {
+    "message": "打开设置",
+    "description": "打开设置工具提示"
+  },
+  "notificationFocusTitle": {
+    "message": "开始专注",
+    "description": "专注通知标题"
+  },
+  "notificationFocusMessage": {
+    "message": "进入专注时段",
+    "description": "专注通知内容"
+  },
+  "notificationShortBreakTitle": {
+    "message": "短休息",
+    "description": "短休息通知标题"
+  },
+  "notificationShortBreakMessage": {
+    "message": "放松一下～",
+    "description": "短休息通知内容"
+  },
+  "notificationLongBreakTitle": {
+    "message": "长休息",
+    "description": "长休息通知标题"
+  },
+  "notificationLongBreakMessage": {
+    "message": "好好休息一下",
+    "description": "长休息通知内容"
+  },
+  "languageSettings": {
+    "message": "语言设置",
+    "description": "语言设置标题"
+  },
+  "languageSelectLabel": {
+    "message": "选择语言",
+    "description": "语言选择标签"
+  },
+  "languageChinese": {
+    "message": "中文",
+    "description": "中文语言选项"
+  },
+  "languageEnglish": {
+    "message": "English",
+    "description": "英文语言选项"
+  },
+  "languageJapanese": {
+    "message": "日本語",
+    "description": "日语语言选项"
+  }
+}

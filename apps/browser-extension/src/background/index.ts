@@ -91,10 +91,10 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
     const durationMs = Math.max(0, endedAt - state.startedAt);
     const title =
       state.phase === 'focus'
-        ? '专注时段'
+        ? chrome.i18n.getMessage('phaseFocus')
         : state.phase === 'short'
-          ? '短休息'
-          : '长休息';
+          ? chrome.i18n.getMessage('phaseShortBreak')
+          : chrome.i18n.getMessage('phaseLongBreak');
     await pushHistory({
       id: genId(),
       phase: state.phase,
@@ -214,15 +214,24 @@ export async function notifyPhase(phase: PomodoroPhase) {
 
 function getNotificationContent(phase: PomodoroPhase) {
   if (phase === 'focus') {
-    return { title: '开始专注', message: '进入专注时段' };
+    return { 
+      title: chrome.i18n.getMessage('notificationFocusTitle'), 
+      message: chrome.i18n.getMessage('notificationFocusMessage') 
+    };
   }
   if (phase === 'short') {
-    return { title: '短休息', message: '放松一下～' };
+    return { 
+      title: chrome.i18n.getMessage('notificationShortBreakTitle'), 
+      message: chrome.i18n.getMessage('notificationShortBreakMessage') 
+    };
   }
   if (phase === 'long') {
-    return { title: '长休息', message: '好好休息一下' };
+    return { 
+      title: chrome.i18n.getMessage('notificationLongBreakTitle'), 
+      message: chrome.i18n.getMessage('notificationLongBreakMessage') 
+    };
   }
-  return { title: '番茄钟', message: '' };
+  return { title: chrome.i18n.getMessage('pomodoroTimer'), message: '' };
 }
 
 export async function startPhase(phase: PomodoroPhase) {
@@ -274,10 +283,10 @@ export async function stopAll() {
     const endedAt = Date.now();
     const title =
       s.phase === 'focus'
-        ? '专注时段'
+        ? chrome.i18n.getMessage('phaseFocus')
         : s.phase === 'short'
-          ? '短休息'
-          : '长休息';
+          ? chrome.i18n.getMessage('phaseShortBreak')
+          : chrome.i18n.getMessage('phaseLongBreak');
     await pushHistory({
       id: genId(),
       phase: s.phase,

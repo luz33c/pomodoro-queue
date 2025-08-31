@@ -30,10 +30,11 @@ function createOverlay() {
   overlay.style.backdropFilter = 'blur(1px)';
   overlay.tabIndex = -1;
   overlay.setAttribute('role', 'dialog');
-  overlay.setAttribute('aria-label', '休息时间，请离开屏幕放松一下');
+  const breakMessage = chrome.i18n.getMessage('breakOverlayMessage');
+  overlay.setAttribute('aria-label', breakMessage);
   overlay.innerHTML = `
     <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:22px;text-align:center;line-height:1.7;">
-      ☕ 休息时间，请离开屏幕放松一下...
+      ☕ ${breakMessage}...
     </div>`;
   document.documentElement.appendChild(overlay);
   return overlay;

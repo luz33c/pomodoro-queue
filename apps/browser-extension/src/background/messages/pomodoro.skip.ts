@@ -20,7 +20,11 @@ const handler: PlasmoMessaging.MessageHandler<never, ResponseBody> = async (
     // 将当前段记入历史
     if (s.startedAt && s.phase !== "idle") {
       const endedAt = Date.now()
-      const title = s.phase === "focus" ? "专注时段" : s.phase === "short" ? "短休息" : "长休息"
+      const title = s.phase === "focus" 
+        ? chrome.i18n.getMessage('phaseFocus') 
+        : s.phase === "short" 
+          ? chrome.i18n.getMessage('phaseShortBreak') 
+          : chrome.i18n.getMessage('phaseLongBreak')
       const list = (await storage.get<PomodoroHistoryEntry[]>(HISTORY_KEY)) ?? []
       const q = (await storage.get<CurrentQueue>(CURRENT_QUEUE_KEY)) ?? null
       list.push({ id: `${Date.now()}`, phase: s.phase, title, startedAt: s.startedAt, endedAt, durationMs: Math.max(0, endedAt - s.startedAt), queueId: q?.id })

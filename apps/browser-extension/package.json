@@ -1,8 +1,8 @@
 {
   "name": "browser-extension",
-  "displayName": "pomodoro timer",
+  "displayName": "__MSG_extensionName__",
   "version": "0.0.2",
-  "description": "A basic Plasmo extension.",
+  "description": "__MSG_extensionDescription__",
   "author": "luz",
   "scripts": {
     "dev": "plasmo dev",
@@ -42,6 +42,7 @@
     "typescript": "5.3.3"
   },
   "manifest": {
+    "default_locale": "en",
     "permissions": [
       "alarms",
       "storage",

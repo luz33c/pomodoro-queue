@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Storage } from "@plasmohq/storage"
 import { usePomodoro } from "~hooks/pomodoro/usePomodoro"
+import { useI18n } from "~hooks/useI18n"
 import type { PomodoroState } from "~model/pomodoro/types"
 
 import "./style.css"
@@ -10,6 +11,7 @@ const BREAK_FORCED_AT = "breakLastForcedAt"
 
 function BreakPage() {
   const { state, mmss, pause, resume, skip } = usePomodoro()
+  const { t } = useI18n()
   const [showHint, setShowHint] = useState(false)
   
   // 检查是否应该关闭页面
@@ -65,18 +67,18 @@ function BreakPage() {
   return (
     <div className="break-container">
       <div className={`break-hint ${showHint ? 'show' : ''}`}>
-        已为你切回休息页面，专注休息
+        {t('breakPageHint')}
       </div>
       
       <div className="break-content">
         <div className="break-emoji">☕</div>
-        <div className="break-msg">休息时间到了</div>
+        <div className="break-msg">{t('breakPageTitle')}</div>
         <div className="breathing-circle"></div>
         <div className="break-timer">{mmss}</div>
         <div className="break-tips">
-          离开屏幕，让眼睛休息<br />
-          做些伸展运动或深呼吸<br />
-          喝杯水，保持水分充足
+          {t('breakPageTip1')}<br />
+          {t('breakPageTip2')}<br />
+          {t('breakPageTip3')}
         </div>
         
         {/* 低调的暂停控制按钮 */}
@@ -86,7 +88,7 @@ function BreakPage() {
               <button 
                 className="break-control-btn break-pause-btn" 
                 onClick={handlePause}
-                title="暂停计时"
+                title={t('tooltipPauseTimer')}
               >
                 ⏸
               </button>
@@ -94,18 +96,18 @@ function BreakPage() {
               <button 
                 className="break-control-btn break-resume-btn" 
                 onClick={handleResume}
-                title="继续计时"
+                title={t('tooltipResumeTimer')}
               >
                 ▶
               </button>
             )}
-            <button 
+            {/* <button 
               className="break-control-btn break-skip-btn" 
               onClick={handleSkip}
-              title="跳过休息"
+              title={t('tooltipSkipBreak')}
             >
               ⏭
-            </button>
+            </button> */}
           </div>
         )}
       </div>

@@ -1,0 +1,238 @@
+{
+  "extensionName": {
+    "message": "Pomodoro Queue",
+    "description": "Extension name"
+  },
+  "extensionDescription": {
+    "message": "Efficient Pomodoro Technique time management tool",
+    "description": "Extension description"
+  },
+  "pomodoroTimer": {
+    "message": "Pomodoro Timer",
+    "description": "Pomodoro timer title"
+  },
+  "phaseFocus": {
+    "message": "Focus Session",
+    "description": "Focus phase label"
+  },
+  "phaseShortBreak": {
+    "message": "Short Break",
+    "description": "Short break phase label"
+  },
+  "phaseLongBreak": {
+    "message": "Long Break",
+    "description": "Long break phase label"
+  },
+  "phaseIdle": {
+    "message": "Not Started",
+    "description": "Idle state label"
+  },
+  "buttonStart": {
+    "message": "Start",
+    "description": "Start button"
+  },
+  "buttonPause": {
+    "message": "Pause",
+    "description": "Pause button"
+  },
+  "buttonResume": {
+    "message": "Resume",
+    "description": "Resume button"
+  },
+  "buttonStop": {
+    "message": "Stop Queue",
+    "description": "Stop button"
+  },
+  "buttonSkip": {
+    "message": "Skip",
+    "description": "Skip button"
+  },
+  "buttonClose": {
+    "message": "Close",
+    "description": "Close button"
+  },
+  "buttonCancel": {
+    "message": "Cancel",
+    "description": "Cancel button"
+  },
+  "buttonSave": {
+    "message": "Save Settings",
+    "description": "Save button"
+  },
+  "settings": {
+    "message": "Pomodoro Settings",
+    "description": "Settings page title"
+  },
+  "settingsBreakBehavior": {
+    "message": "Break Behavior Settings",
+    "description": "Break settings title"
+  },
+  "settingsStrictMode": {
+    "message": "Strict Break Mode",
+    "description": "Strict mode label"
+  },
+  "settingsStrictModeDesc": {
+    "message": "When enabled, you'll be forced to stay on the break page during breaks and cannot browse other tabs",
+    "description": "Strict mode description"
+  },
+  "settingsNormalMode": {
+    "message": "Normal mode: Shows an overlay reminder on current page during breaks",
+    "description": "Normal mode description"
+  },
+  "settingsStrictModeEnabled": {
+    "message": "Strict mode enabled",
+    "description": "Strict mode enabled prompt"
+  },
+  "settingsStrictModeEnabledDesc": {
+    "message": "A dedicated break page will open during breaks, and switching tabs will automatically redirect you back",
+    "description": "Strict mode enabled description"
+  },
+  "createQueueTitle": {
+    "message": "Create Pomodoro Queue",
+    "description": "Create queue title"
+  },
+  "createQueueDesc": {
+    "message": "Customize focus and break durations to create your ideal rhythm.",
+    "description": "Create queue description"
+  },
+  "createQueueGenerate": {
+    "message": "Generate & Start",
+    "description": "Generate and start button"
+  },
+  "focusDuration": {
+    "message": "Focus Duration (minutes)",
+    "description": "Focus duration label"
+  },
+  "shortBreakDuration": {
+    "message": "Short Break Duration (minutes)",
+    "description": "Short break duration label"
+  },
+  "longBreakDuration": {
+    "message": "Long Break Duration (minutes)",
+    "description": "Long break duration label"
+  },
+  "longBreakInterval": {
+    "message": "Long Break Interval (after how many focus sessions)",
+    "description": "Long break interval label"
+  },
+  "validationFocusMin": {
+    "message": "Focus duration must be ≥ 1",
+    "description": "Focus duration validation error"
+  },
+  "validationShortMin": {
+    "message": "Short break must be ≥ 0",
+    "description": "Short break validation error"
+  },
+  "validationLongMin": {
+    "message": "Long break must be ≥ 0",
+    "description": "Long break validation error"
+  },
+  "validationLongEvery": {
+    "message": "Long break interval must be ≥ 2",
+    "description": "Long break interval validation error"
+  },
+  "historyTitle": {
+    "message": "History",
+    "description": "History title"
+  },
+  "historyCurrent": {
+    "message": "Current",
+    "description": "Current status label"
+  },
+  "historyInProgress": {
+    "message": "In Progress",
+    "description": "In progress status"
+  },
+  "historyMinutes": {
+    "message": "minutes",
+    "description": "Minutes unit"
+  },
+  "historyEmpty": {
+    "message": "No completed pomodoros yet, start your first focus session!",
+    "description": "Empty history message"
+  },
+  "breakPageTitle": {
+    "message": "Break Time",
+    "description": "Break page title"
+  },
+  "breakPageHint": {
+    "message": "Redirected to break page, focus on resting",
+    "description": "Force redirect to break page hint"
+  },
+  "breakPageTip1": {
+    "message": "Step away from screen, let your eyes rest",
+    "description": "Break tip 1"
+  },
+  "breakPageTip2": {
+    "message": "Do some stretching or deep breathing",
+    "description": "Break tip 2"
+  },
+  "breakPageTip3": {
+    "message": "Drink some water, stay hydrated",
+    "description": "Break tip 3"
+  },
+  "breakOverlayMessage": {
+    "message": "Break time, please step away from screen and relax",
+    "description": "Break overlay message"
+  },
+  "tooltipPauseTimer": {
+    "message": "Pause timer",
+    "description": "Pause timer tooltip"
+  },
+  "tooltipResumeTimer": {
+    "message": "Resume timer",
+    "description": "Resume timer tooltip"
+  },
+  "tooltipSkipBreak": {
+    "message": "Skip break",
+    "description": "Skip break tooltip"
+  },
+  "tooltipOpenSettings": {
+    "message": "Open settings",
+    "description": "Open settings tooltip"
+  },
+  "notificationFocusTitle": {
+    "message": "Start Focus",
+    "description": "Focus notification title"
+  },
+  "notificationFocusMessage": {
+    "message": "Entering focus session",
+    "description": "Focus notification message"
+  },
+  "notificationShortBreakTitle": {
+    "message": "Short Break",
+    "description": "Short break notification title"
+  },
+  "notificationShortBreakMessage": {
+    "message": "Time to relax~",
+    "description": "Short break notification message"
+  },
+  "notificationLongBreakTitle": {
+    "message": "Long Break",
+    "description": "Long break notification title"
+  },
+  "notificationLongBreakMessage": {
+    "message": "Take a good rest",
+    "description": "Long break notification message"
+  },
+  "languageSettings": {
+    "message": "Language Settings",
+    "description": "Language settings title"
+  },
+  "languageSelectLabel": {
+    "message": "Select Language",
+    "description": "Language selection label"
+  },
+  "languageChinese": {
+    "message": "中文",
+    "description": "Chinese language option"
+  },
+  "languageEnglish": {
+    "message": "English",
+    "description": "English language option"
+  },
+  "languageJapanese": {
+    "message": "日本語",
+    "description": "Japanese language option"
+  }
+}
