@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 
 export function useI18n() {
-  const t = useCallback((key: string, substitutions?: string[] | Record<string, string>) => {
+  const t = useCallback((key: string, substitutions?: string | string[]) => {
     try {
       return chrome.i18n.getMessage(key, substitutions)
     } catch (error) {
