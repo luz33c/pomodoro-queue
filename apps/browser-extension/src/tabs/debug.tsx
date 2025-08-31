@@ -22,6 +22,7 @@ function DebugTab() {
       ) : (
         <PomodoroHome onOpenSettings={() => setShowSettings(true)} />
       )}
+     
     </div>
   );
 }
