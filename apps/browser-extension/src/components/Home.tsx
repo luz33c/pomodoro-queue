@@ -1,23 +1,9 @@
-import { authClient } from '@/auth/auth-client';
-
-export const Home = ({
-  setPage,
-}: {
-  setPage: (page: 'home' | 'sign-in' | 'sign-up') => void;
-}) => {
-  const { data, error, isPending } = authClient.useSession();
-
+export const Home = () => {
   return (
     <>
-      <h1 className="py-10 text-center text-2xl">Better Auth Extension Demo</h1>
+      <h1 className="py-10 text-center text-2xl">Extension</h1>
       <h2 className="py-10 text-center text-secondary-foreground text-xl">
-        {isPending
-          ? 'Loading your session data...'
-          : error
-            ? error.message
-            : data
-              ? "You're Logged in 👍"
-              : "You're Not logged in 😢"}
+        Welcome
       </h2>
     </>
   );
