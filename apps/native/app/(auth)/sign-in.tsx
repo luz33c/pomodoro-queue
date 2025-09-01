@@ -2,6 +2,7 @@ import { useSignIn } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import React from "react";
+import GoogleOAuthButton from "../../components/google-oauth-button";
 
 export default function Page() {
 	const { signIn, setActive, isLoaded } = useSignIn();
@@ -39,27 +40,46 @@ export default function Page() {
 	};
 
 	return (
-		<View>
-			<Text>Sign in</Text>
+		<View className="flex-1 justify-center px-6 bg-white">
+			<Text className="text-2xl font-bold text-center mb-8">Sign in</Text>
+			
+			{/* Google OAuth Button */}
+			<View className="mb-6">
+				<GoogleOAuthButton />
+			</View>
+
+			{/* Divider */}
+			<View className="flex-row items-center mb-6">
+				<View className="flex-1 h-px bg-gray-300" />
+				<Text className="mx-4 text-gray-500">or</Text>
+				<View className="flex-1 h-px bg-gray-300" />
+			</View>
+
+			{/* Email/Password Form */}
 			<TextInput
+				className="border border-gray-300 rounded-lg px-4 py-3 mb-4 bg-white"
 				autoCapitalize="none"
 				value={emailAddress}
 				placeholder="Enter email"
 				onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
 			/>
 			<TextInput
+				className="border border-gray-300 rounded-lg px-4 py-3 mb-6 bg-white"
 				value={password}
 				placeholder="Enter password"
 				secureTextEntry={true}
 				onChangeText={(password) => setPassword(password)}
 			/>
-			<TouchableOpacity onPress={onSignInPress}>
-				<Text>Continue</Text>
+			<TouchableOpacity 
+				className="bg-blue-600 rounded-lg py-3 mb-4"
+				onPress={onSignInPress}
+			>
+				<Text className="text-white text-center font-medium">Continue</Text>
 			</TouchableOpacity>
-			<View style={{ display: "flex", flexDirection: "row", gap: 3 }}>
-				<Text>Don't have an account?</Text>
+			<View className="flex-row justify-center">
+				<Text className="text-gray-600">Don't have an account? </Text>
 				<Link href="/sign-up">
-					<Text>Sign up</Text>
+					<Text className="text-blue-600 font-medium">Sign up</Text>
 				</Link>
 			</View>
 		</View>

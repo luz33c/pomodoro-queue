@@ -15,7 +15,9 @@
 		"dev:server": "turbo -F @clerk-convex-rn/backend dev",
 		"dev:setup": "turbo -F @clerk-convex-rn/backend dev:setup"
 	},
-	"dependencies": {},
+	"dependencies": {
+		"expo-auth-session": "^6.2.1"
+	},
 	"devDependencies": {
 		"turbo": "^2.5.4",
 		"@biomejs/biome": "2.2.2",
