@@ -1,0 +1,238 @@
+{
+  "extensionName": {
+    "message": "ポモドーロキュー",
+    "description": "拡張機能名"
+  },
+  "extensionDescription": {
+    "message": "効率的なポモドーロテクニック時間管理ツール",
+    "description": "拡張機能の説明"
+  },
+  "pomodoroTimer": {
+    "message": "ポモドーロタイマー",
+    "description": "ポモドーロタイマーのタイトル"
+  },
+  "phaseFocus": {
+    "message": "集中セッション",
+    "description": "集中フェーズラベル"
+  },
+  "phaseShortBreak": {
+    "message": "短い休憩",
+    "description": "短い休憩フェーズラベル"
+  },
+  "phaseLongBreak": {
+    "message": "長い休憩",
+    "description": "長い休憩フェーズラベル"
+  },
+  "phaseIdle": {
+    "message": "未開始",
+    "description": "アイドル状態ラベル"
+  },
+  "buttonStart": {
+    "message": "開始",
+    "description": "開始ボタン"
+  },
+  "buttonPause": {
+    "message": "一時停止",
+    "description": "一時停止ボタン"
+  },
+  "buttonResume": {
+    "message": "再開",
+    "description": "再開ボタン"
+  },
+  "buttonStop": {
+    "message": "キューを停止",
+    "description": "停止ボタン"
+  },
+  "buttonSkip": {
+    "message": "スキップ",
+    "description": "スキップボタン"
+  },
+  "buttonClose": {
+    "message": "閉じる",
+    "description": "閉じるボタン"
+  },
+  "buttonCancel": {
+    "message": "キャンセル",
+    "description": "キャンセルボタン"
+  },
+  "buttonSave": {
+    "message": "設定を保存",
+    "description": "保存ボタン"
+  },
+  "settings": {
+    "message": "ポモドーロ設定",
+    "description": "設定ページタイトル"
+  },
+  "settingsBreakBehavior": {
+    "message": "休憩動作設定",
+    "description": "休憩設定タイトル"
+  },
+  "settingsStrictMode": {
+    "message": "厳格休憩モード",
+    "description": "厳格モードラベル"
+  },
+  "settingsStrictModeDesc": {
+    "message": "有効にすると、休憩中は休憩ページに強制的に留まり、他のタブを閲覧できません",
+    "description": "厳格モードの説明"
+  },
+  "settingsNormalMode": {
+    "message": "通常モード：休憩時に現在のページにオーバーレイリマインダーを表示",
+    "description": "通常モードの説明"
+  },
+  "settingsStrictModeEnabled": {
+    "message": "厳格モードが有効",
+    "description": "厳格モード有効プロンプト"
+  },
+  "settingsStrictModeEnabledDesc": {
+    "message": "休憩時に専用の休憩ページが開き、タブを切り替えると自動的に戻されます",
+    "description": "厳格モード有効説明"
+  },
+  "createQueueTitle": {
+    "message": "ポモドーロキューを作成",
+    "description": "キュー作成タイトル"
+  },
+  "createQueueDesc": {
+    "message": "集中時間と休憩時間をカスタマイズして、理想的なリズムを作成してください。",
+    "description": "キュー作成説明"
+  },
+  "createQueueGenerate": {
+    "message": "生成して開始",
+    "description": "生成して開始ボタン"
+  },
+  "focusDuration": {
+    "message": "集中時間（分）",
+    "description": "集中時間ラベル"
+  },
+  "shortBreakDuration": {
+    "message": "短い休憩時間（分）",
+    "description": "短い休憩時間ラベル"
+  },
+  "longBreakDuration": {
+    "message": "長い休憩時間（分）",
+    "description": "長い休憩時間ラベル"
+  },
+  "longBreakInterval": {
+    "message": "長い休憩間隔（何回の集中セッション後）",
+    "description": "長い休憩間隔ラベル"
+  },
+  "validationFocusMin": {
+    "message": "集中時間は ≥ 1 である必要があります",
+    "description": "集中時間検証エラー"
+  },
+  "validationShortMin": {
+    "message": "短い休憩は ≥ 0 である必要があります",
+    "description": "短い休憩検証エラー"
+  },
+  "validationLongMin": {
+    "message": "長い休憩は ≥ 0 である必要があります",
+    "description": "長い休憩検証エラー"
+  },
+  "validationLongEvery": {
+    "message": "長い休憩間隔は ≥ 2 である必要があります",
+    "description": "長い休憩間隔検証エラー"
+  },
+  "historyTitle": {
+    "message": "履歴",
+    "description": "履歴タイトル"
+  },
+  "historyCurrent": {
+    "message": "現在",
+    "description": "現在の状態ラベル"
+  },
+  "historyInProgress": {
+    "message": "進行中",
+    "description": "進行中状態"
+  },
+  "historyMinutes": {
+    "message": "分",
+    "description": "分の単位"
+  },
+  "historyEmpty": {
+    "message": "まだ完了したポモドーロがありません。最初の集中セッションを始めましょう！",
+    "description": "履歴が空の場合のメッセージ"
+  },
+  "breakPageTitle": {
+    "message": "休憩時間です",
+    "description": "休憩ページタイトル"
+  },
+  "breakPageHint": {
+    "message": "休憩ページに切り替えました。休憩に集中してください",
+    "description": "休憩ページへの強制切り替えヒント"
+  },
+  "breakPageTip1": {
+    "message": "画面から離れて、目を休ませてください",
+    "description": "休憩のヒント1"
+  },
+  "breakPageTip2": {
+    "message": "ストレッチや深呼吸をしてください",
+    "description": "休憩のヒント2"
+  },
+  "breakPageTip3": {
+    "message": "水を飲んで、水分補給をしてください",
+    "description": "休憩のヒント3"
+  },
+  "breakOverlayMessage": {
+    "message": "休憩時間です。画面から離れてリラックスしてください",
+    "description": "休憩オーバーレイメッセージ"
+  },
+  "tooltipPauseTimer": {
+    "message": "タイマーを一時停止",
+    "description": "タイマー一時停止ツールチップ"
+  },
+  "tooltipResumeTimer": {
+    "message": "タイマーを再開",
+    "description": "タイマー再開ツールチップ"
+  },
+  "tooltipSkipBreak": {
+    "message": "休憩をスキップ",
+    "description": "休憩スキップツールチップ"
+  },
+  "tooltipOpenSettings": {
+    "message": "設定を開く",
+    "description": "設定を開くツールチップ"
+  },
+  "notificationFocusTitle": {
+    "message": "集中開始",
+    "description": "集中通知タイトル"
+  },
+  "notificationFocusMessage": {
+    "message": "集中セッションに入ります",
+    "description": "集中通知メッセージ"
+  },
+  "notificationShortBreakTitle": {
+    "message": "短い休憩",
+    "description": "短い休憩通知タイトル"
+  },
+  "notificationShortBreakMessage": {
+    "message": "リラックスしてください〜",
+    "description": "短い休憩通知メッセージ"
+  },
+  "notificationLongBreakTitle": {
+    "message": "長い休憩",
+    "description": "長い休憩通知タイトル"
+  },
+  "notificationLongBreakMessage": {
+    "message": "しっかり休憩してください",
+    "description": "長い休憩通知メッセージ"
+  },
+  "languageSettings": {
+    "message": "言語設定",
+    "description": "言語設定タイトル"
+  },
+  "languageSelectLabel": {
+    "message": "言語を選択",
+    "description": "言語選択ラベル"
+  },
+  "languageChinese": {
+    "message": "中文",
+    "description": "中国語言語オプション"
+  },
+  "languageEnglish": {
+    "message": "English",
+    "description": "英語言語オプション"
+  },
+  "languageJapanese": {
+    "message": "日本語",
+    "description": "日本語言語オプション"
+  }
+}
