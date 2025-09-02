@@ -15,6 +15,7 @@ function IndexPopup() {
         <PomodoroSettings
           isOpen={showSettings}
           onClose={() => setShowSettings(false)}
+          showTaskSetting={false}
         />
       ) : (
         <PomodoroHome onOpenSettings={() => setShowSettings(true)} />
