@@ -7,6 +7,7 @@
 		"android": "expo run:android",
 		"ios": "expo run:ios",
 		"prebuild": "expo prebuild",
+		"clear": "git clean -xdf .expo dist web-build .cache",
 		"web": "expo start --web"
 	},
 	"dependencies": {

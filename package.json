@@ -7,6 +7,7 @@
 	],
 	"scripts": {
 		"check": "biome check --write .",
+		"clear": "turbo clear && git clean -xdf .turbo",
 		"dev": "turbo dev",
 		"build": "turbo build",
 		"check-types": "turbo check-types",
