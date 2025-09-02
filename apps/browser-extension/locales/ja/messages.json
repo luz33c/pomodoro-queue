@@ -234,5 +234,37 @@
   "languageJapanese": {
     "message": "日本語",
     "description": "日本語言語オプション"
+  },
+  "settingsTaskMode": {
+    "message": "タスクモード",
+    "description": "タスクモード設定ラベル"
+  },
+  "settingsTaskModeDesc": {
+    "message": "ポモドーロセッション中にタスクトラッキングを有効にする",
+    "description": "タスクモードの説明"
+  },
+  "settingsFloatingTimer": {
+    "message": "フローティングタイマーを表示",
+    "description": "フローティングタイマー設定ラベル"
+  },
+  "settingsFloatingTimerDesc": {
+    "message": "ウェブページにフローティングタイマーオーバーレイを表示して見やすくする",
+    "description": "フローティングタイマーの説明"
+  },
+  "settingsBreakNotifications": {
+    "message": "休憩通知",
+    "description": "休憩通知設定ラベル"
+  },
+  "settingsBreakNotificationsDesc": {
+    "message": "休憩期間中にリマインダー通知を有効にする",
+    "description": "休憩通知の説明"
+  },
+  "settingsGeneralFeatures": {
+    "message": "一般機能",
+    "description": "一般機能セクションタイトル"
+  },
+  "settingsDisplayOptions": {
+    "message": "表示オプション",
+    "description": "表示オプションセクションタイトル"
   }
 }

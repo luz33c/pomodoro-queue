@@ -234,5 +234,37 @@
   "languageJapanese": {
     "message": "日本語",
     "description": "日语语言选项"
+  },
+  "settingsTaskMode": {
+    "message": "任务模式",
+    "description": "任务模式设置标签"
+  },
+  "settingsTaskModeDesc": {
+    "message": "在番茄钟期间启用任务跟踪功能",
+    "description": "任务模式描述"
+  },
+  "settingsFloatingTimer": {
+    "message": "显示浮动计时器",
+    "description": "浮动计时器设置标签"
+  },
+  "settingsFloatingTimerDesc": {
+    "message": "在网页上显示浮动计时器，提高可见性",
+    "description": "浮动计时器描述"
+  },
+  "settingsBreakNotifications": {
+    "message": "休息提醒",
+    "description": "休息通知设置标签"
+  },
+  "settingsBreakNotificationsDesc": {
+    "message": "在休息期间启用提醒通知",
+    "description": "休息通知描述"
+  },
+  "settingsGeneralFeatures": {
+    "message": "通用功能",
+    "description": "通用功能部分标题"
+  },
+  "settingsDisplayOptions": {
+    "message": "显示选项",
+    "description": "显示选项部分标题"
   }
 }

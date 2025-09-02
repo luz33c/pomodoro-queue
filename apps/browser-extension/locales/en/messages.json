@@ -234,5 +234,37 @@
   "languageJapanese": {
     "message": "日本語",
     "description": "Japanese language option"
+  },
+  "settingsTaskMode": {
+    "message": "Task Mode",
+    "description": "Task mode setting label"
+  },
+  "settingsTaskModeDesc": {
+    "message": "Enable task tracking during pomodoro sessions",
+    "description": "Task mode description"
+  },
+  "settingsFloatingTimer": {
+    "message": "Show Floating Timer",
+    "description": "Floating timer setting label"
+  },
+  "settingsFloatingTimerDesc": {
+    "message": "Display a floating timer overlay on web pages for better visibility",
+    "description": "Floating timer description"
+  },
+  "settingsBreakNotifications": {
+    "message": "Break Notifications",
+    "description": "Break notifications setting label"
+  },
+  "settingsBreakNotificationsDesc": {
+    "message": "Enable reminder notifications during break periods",
+    "description": "Break notifications description"
+  },
+  "settingsGeneralFeatures": {
+    "message": "General Features",
+    "description": "General features section title"
+  },
+  "settingsDisplayOptions": {
+    "message": "Display Options",
+    "description": "Display options section title"
   }
 }

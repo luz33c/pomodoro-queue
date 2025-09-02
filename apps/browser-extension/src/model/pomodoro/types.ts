@@ -6,6 +6,9 @@ export type PomodoroConfig = {
   longMin: number; // minutes
   longEvery: number; // take long break after N focus sessions
   strictMode: boolean; // strict break mode (tab control)
+  enableTask: boolean; // enable task mode for pomodoro sessions
+  showFloatingTimer: boolean; // show floating timer in web pages
+  enableBreakNotifications: boolean; // enable break reminder notifications
 };
 
 export type PomodoroState = {
@@ -42,6 +45,9 @@ export const DEFAULT_CONFIG: PomodoroConfig = {
   longMin: 20,
   longEvery: 4,
   strictMode: true,
+  enableTask: false,
+  showFloatingTimer: true,
+  enableBreakNotifications: true,
 };
 
 export const STORAGE_KEY = "pomodoroState" as const;

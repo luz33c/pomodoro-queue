@@ -10,16 +10,31 @@ import { Settings } from "lucide-react"
 interface PomodoroSettingsProps {
   isOpen?: boolean;
   onClose?: () => void;
+  showTaskSetting?: boolean;
 }
 
-export function PomodoroSettings({ isOpen = true, onClose }: PomodoroSettingsProps) {
+export function PomodoroSettings({ isOpen = true, onClose, showTaskSetting = true }: PomodoroSettingsProps) {
   const { state, updateConfig } = usePomodoro()
   const { t } = useI18n()
   const [strictMode, setStrictMode] = useState(state?.config?.strictMode ?? false)
+  const [enableTask, setEnableTask] = useState(state?.config?.enableTask ?? false)
+  const [showFloatingTimer, setShowFloatingTimer] = useState(state?.config?.showFloatingTimer ?? true)
+  const [enableBreakNotifications, setEnableBreakNotifications] = useState(state?.config?.enableBreakNotifications ?? true)
 
   useEffect(() => {
-    if (state?.config?.strictMode !== undefined) {
-      setStrictMode(state.config.strictMode)
+    if (state?.config) {
+      if (state.config.strictMode !== undefined) {
+        setStrictMode(state.config.strictMode)
+      }
+      if (state.config.enableTask !== undefined) {
+        setEnableTask(state.config.enableTask)
+      }
+      if (state.config.showFloatingTimer !== undefined) {
+        setShowFloatingTimer(state.config.showFloatingTimer)
+      }
+      if (state.config.enableBreakNotifications !== undefined) {
+        setEnableBreakNotifications(state.config.enableBreakNotifications)
+      }
     }
   }, [state?.config])
 
@@ -27,7 +42,10 @@ export function PomodoroSettings({ isOpen = true, onClose }: PomodoroSettingsPro
     if (!state?.config) return
     await updateConfig({
       ...state.config,
-      strictMode
+      strictMode,
+      enableTask,
+      showFloatingTimer,
+      enableBreakNotifications
     })
     onClose?.()
   }
@@ -47,7 +65,71 @@ export function PomodoroSettings({ isOpen = true, onClose }: PomodoroSettingsPro
       
       <Separator className="mb-4" />
       
-      <div className="flex-1">
+      <div className="flex-1 space-y-6">
+        {/* General Features Section */}
+        {showTaskSetting && (
+          <div className="space-y-3">
+            <h3 className="text-sm font-medium">{t('settingsGeneralFeatures')}</h3>
+            
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex-1">
+                <Label htmlFor="enable-task" className="text-sm font-medium">
+                  {t('settingsTaskMode')}
+                </Label>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {t('settingsTaskModeDesc')}
+                </p>
+              </div>
+              <Switch
+                id="enable-task"
+                checked={enableTask}
+                onCheckedChange={setEnableTask}
+                aria-label={t('settingsTaskMode')}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Display Options Section */}
+        <div className="space-y-3">
+          <h3 className="text-sm font-medium">{t('settingsDisplayOptions')}</h3>
+          
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex-1">
+              <Label htmlFor="floating-timer" className="text-sm font-medium">
+                {t('settingsFloatingTimer')}
+              </Label>
+              <p className="text-xs text-muted-foreground mt-1">
+                {t('settingsFloatingTimerDesc')}
+              </p>
+            </div>
+            <Switch
+              id="floating-timer"
+              checked={showFloatingTimer}
+              onCheckedChange={setShowFloatingTimer}
+              aria-label={t('settingsFloatingTimer')}
+            />
+          </div>
+
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex-1">
+              <Label htmlFor="break-notifications" className="text-sm font-medium">
+                {t('settingsBreakNotifications')}
+              </Label>
+              <p className="text-xs text-muted-foreground mt-1">
+                {t('settingsBreakNotificationsDesc')}
+              </p>
+            </div>
+            <Switch
+              id="break-notifications"
+              checked={enableBreakNotifications}
+              onCheckedChange={setEnableBreakNotifications}
+              aria-label={t('settingsBreakNotifications')}
+            />
+          </div>
+        </div>
+
+        {/* Break Behavior Section */}
         <div className="space-y-3">
           <h3 className="text-sm font-medium">{t('settingsBreakBehavior')}</h3>
           
