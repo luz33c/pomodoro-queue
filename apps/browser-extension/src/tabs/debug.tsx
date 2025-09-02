@@ -5,6 +5,8 @@ import { Toaster } from 'sonner';
 import { PomodoroHome } from '../components/pomodoro/PomodoroHome';
 import { PomodoroSettings } from '../components/pomodoro/PomodoroSettings';
 import { usePomodoro } from '../hooks/pomodoro/usePomodoro';
+import { Button } from '../components/ui/button';
+import { sendToBackground } from '@plasmohq/messaging';
 
 function DebugTab() {
   const [showSettings, setShowSettings] = useState(false);
@@ -25,6 +27,32 @@ function DebugTab() {
     }
     return JSON.stringify(value);
   };
+
+  // 测试通知功能
+  const testNotification = async (phase: 'focus' | 'short' | 'long') => {
+    try {
+      const response = await sendToBackground({
+        name: "notifications",
+        body: { action: 'sendTest', testPhase: phase }
+      })
+      console.log('Test notification result:', response)
+    } catch (error) {
+      console.error('Failed to send test notification:', error)
+    }
+  }
+
+  // 检查通知权限
+  const checkPermission = async () => {
+    try {
+      const response = await sendToBackground({
+        name: "notifications",
+        body: { action: 'checkPermission' }
+      })
+      console.log('Permission check result:', response)
+    } catch (error) {
+      console.error('Failed to check permission:', error)
+    }
+  }
 
   return (
     <div className="dark flex h-screen w-full bg-background text-foreground">
@@ -50,6 +78,41 @@ function DebugTab() {
       <div className="flex-1 p-8">
         <div className="h-full border rounded-lg bg-muted/20 p-4 overflow-y-auto">
           <h2 className="text-lg font-semibold mb-4 text-primary">Debug Information</h2>
+          
+          {/* Notification Test Buttons */}
+          <div className="mb-4 p-3 border rounded-lg bg-muted/30">
+            <h3 className="text-sm font-medium mb-2 text-primary">Notification Tests</h3>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                size="sm" 
+                variant="outline"
+                onClick={checkPermission}
+              >
+                Check Permission
+              </Button>
+              <Button
+                size="sm" 
+                variant="outline"
+                onClick={() => testNotification('focus')}
+              >
+                Test Focus
+              </Button>
+              <Button
+                size="sm" 
+                variant="outline"
+                onClick={() => testNotification('short')}
+              >
+                Test Short Break
+              </Button>
+              <Button
+                size="sm" 
+                variant="outline"
+                onClick={() => testNotification('long')}
+              >
+                Test Long Break
+              </Button>
+            </div>
+          </div>
           
           {state ? (
             <div className="space-y-4 font-mono text-sm">

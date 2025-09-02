@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通知测试页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            background: #e7f3fe;
+            border-left: 4px solid #2196F3;
+        }
+        .error {
+            background: #ffebee;
+            border-left-color: #f44336;
+        }
+        .success {
+            background: #e8f5e8;
+            border-left-color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>番茄钟通知测试</h1>
+        <div id="status" class="status">准备测试通知功能...</div>
+        
+        <h2>权限检查</h2>
+        <button onclick="checkPermission()">检查通知权限</button>
+        
+        <h2>测试通知</h2>
+        <button onclick="testBasicNotification()">测试基本通知</button>
+        <button onclick="testFocusNotification()">测试专注通知</button>
+        <button onclick="testBreakNotification()">测试休息通知</button>
+        
+        <h2>通知管理</h2>
+        <button onclick="clearAllNotifications()">清除所有通知</button>
+        
+        <h2>调试信息</h2>
+        <button onclick="showDebugInfo()">显示调试信息</button>
+        
+        <div id="debug" style="margin-top: 20px; font-family: monospace; font-size: 12px; background: #f8f8f8; padding: 10px; border-radius: 4px;"></div>
+    </div>
+
+    <script>
+        const statusDiv = document.getElementById('status');
+        const debugDiv = document.getElementById('debug');
+        
+        function updateStatus(message, type = 'info') {
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+        }
+        
+        function logDebug(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            debugDiv.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+        }
+        
+        async function checkPermission() {
+            try {
+                const permission = await chrome.notifications.getPermissionLevel();
+                updateStatus(`通知权限: ${permission}`, permission === 'granted' ? 'success' : 'error');
+                logDebug(`权限检查结果: ${permission}`);
+            } catch (error) {
+                updateStatus(`权限检查失败: ${error.message}`, 'error');
+                logDebug(`权限检查错误: ${error.message}`);
+            }
+        }
+        
+        async function testBasicNotification() {
+            try {
+                await chrome.notifications.create('test-basic', {
+                    type: 'basic',
+                    iconUrl: 'icon48.plasmo.aced7582.png',
+                    title: '基本测试通知',
+                    message: '这是一个基本的通知测试',
+                    priority: 1
+                });
+                updateStatus('基本通知已发送', 'success');
+                logDebug('基本通知发送成功');
+                
+                setTimeout(() => {
+                    chrome.notifications.clear('test-basic');
+                    logDebug('基本通知已清除');
+                }, 3000);
+            } catch (error) {
+                updateStatus(`基本通知失败: ${error.message}`, 'error');
+                logDebug(`基本通知错误: ${error.message}`);
+            }
+        }
+        
+        async function testFocusNotification() {
+            try {
+                await chrome.notifications.create('test-focus', {
+                    type: 'basic',
+                    iconUrl: 'icon48.plasmo.aced7582.png',
+                    title: '专注时间开始',
+                    message: '该开始专注工作了！',
+                    priority: 2,
+                    buttons: [
+                        { title: '暂停' },
+                        { title: '停止' }
+                    ]
+                });
+                updateStatus('专注通知已发送', 'success');
+                logDebug('专注通知发送成功');
+                
+                setTimeout(() => {
+                    chrome.notifications.clear('test-focus');
+                    logDebug('专注通知已清除');
+                }, 5000);
+            } catch (error) {
+                updateStatus(`专注通知失败: ${error.message}`, 'error');
+                logDebug(`专注通知错误: ${error.message}`);
+            }
+        }
+        
+        async function testBreakNotification() {
+            try {
+                await chrome.notifications.create('test-break', {
+                    type: 'basic',
+                    iconUrl: 'icon48.plasmo.aced7582.png',
+                    title: '休息时间到！',
+                    message: '该休息一下了',
+                    priority: 2,
+                    buttons: [
+                        { title: '跳过' },
+                        { title: '停止' }
+                    ]
+                });
+                updateStatus('休息通知已发送', 'success');
+                logDebug('休息通知发送成功');
+                
+                setTimeout(() => {
+                    chrome.notifications.clear('test-break');
+                    logDebug('休息通知已清除');
+                }, 5000);
+            } catch (error) {
+                updateStatus(`休息通知失败: ${error.message}`, 'error');
+                logDebug(`休息通知错误: ${error.message}`);
+            }
+        }
+        
+        async function clearAllNotifications() {
+            try {
+                const notifications = await chrome.notifications.getAll();
+                const notificationIds = Object.keys(notifications);
+                
+                for (const id of notificationIds) {
+                    await chrome.notifications.clear(id);
+                }
+                
+                updateStatus(`已清除 ${notificationIds.length} 个通知`, 'success');
+                logDebug(`清除了 ${notificationIds.length} 个通知: ${notificationIds.join(', ')}`);
+            } catch (error) {
+                updateStatus(`清除通知失败: ${error.message}`, 'error');
+                logDebug(`清除通知错误: ${error.message}`);
+            }
+        }
+        
+        async function showDebugInfo() {
+            try {
+                const permission = await chrome.notifications.getPermissionLevel();
+                const notifications = await chrome.notifications.getAll();
+                
+                debugDiv.innerHTML = `
+                    <div><strong>通知权限:</strong> ${permission}</div>
+                    <div><strong>当前通知数量:</strong> ${Object.keys(notifications).length}</div>
+                    <div><strong>通知ID列表:</strong> ${Object.keys(notifications).join(', ') || '无'}</div>
+                    <div><strong>扩展ID:</strong> ${chrome.runtime.id}</div>
+                    <div><strong>扩展URL:</strong> ${chrome.runtime.getURL('')}</div>
+                    <div><strong>图标URL测试:</strong></div>
+                    <div>  - icon16: ${chrome.runtime.getURL('icon16.plasmo.6c567d50.png')}</div>
+                    <div>  - icon32: ${chrome.runtime.getURL('icon32.plasmo.76b92899.png')}</div>
+                    <div>  - icon48: ${chrome.runtime.getURL('icon48.plasmo.aced7582.png')}</div>
+                    <div>  - icon64: ${chrome.runtime.getURL('icon64.plasmo.8bb5e6e0.png')}</div>
+                    <div>  - icon128: ${chrome.runtime.getURL('icon128.plasmo.3c1ed2d2.png')}</div>
+                `;
+            } catch (error) {
+                debugDiv.innerHTML = `<div>调试信息获取失败: ${error.message}</div>`;
+            }
+        }
+        
+        // 页面加载时自动检查权限
+        window.addEventListener('load', () => {
+            logDebug('测试页面已加载');
+            checkPermission();
+        });
+    </script>
+</body>
+</html>

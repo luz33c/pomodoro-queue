@@ -266,5 +266,45 @@
   "settingsDisplayOptions": {
     "message": "Display Options",
     "description": "Display options section title"
+  },
+  "notificationPermissionTitle": {
+    "message": "Notification Permission",
+    "description": "Notification permission section title"
+  },
+  "notificationPermissionDesc": {
+    "message": "Allow sending break reminder notifications",
+    "description": "Notification permission description"
+  },
+  "notificationPermissionGranted": {
+    "message": "Granted",
+    "description": "Notification permission granted status"
+  },
+  "notificationPermissionDenied": {
+    "message": "Denied",
+    "description": "Notification permission denied status"
+  },
+  "notificationPermissionUnknown": {
+    "message": "Unknown",
+    "description": "Notification permission unknown status"
+  },
+  "buttonTestNotification": {
+    "message": "Test Notification",
+    "description": "Test notification button"
+  },
+  "buttonRequestPermission": {
+    "message": "Request Permission",
+    "description": "Request notification permission button"
+  },
+  "notificationTestTitle": {
+    "message": "Pomodoro Test Notification",
+    "description": "Test notification title"
+  },
+  "notificationTestMessage": {
+    "message": "This is a test notification. If you see this message, notifications are working properly.",
+    "description": "Test notification message"
+  },
+  "buttonOK": {
+    "message": "OK",
+    "description": "OK button"
   }
 }

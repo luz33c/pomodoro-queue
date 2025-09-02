@@ -266,5 +266,45 @@
   "settingsDisplayOptions": {
     "message": "显示选项",
     "description": "显示选项部分标题"
+  },
+  "notificationPermissionTitle": {
+    "message": "通知权限",
+    "description": "通知权限部分标题"
+  },
+  "notificationPermissionDesc": {
+    "message": "允许发送休息提醒通知",
+    "description": "通知权限描述"
+  },
+  "notificationPermissionGranted": {
+    "message": "已授予",
+    "description": "通知权限已授予状态"
+  },
+  "notificationPermissionDenied": {
+    "message": "已拒绝",
+    "description": "通知权限被拒绝状态"
+  },
+  "notificationPermissionUnknown": {
+    "message": "未知",
+    "description": "通知权限未知状态"
+  },
+  "buttonTestNotification": {
+    "message": "测试通知",
+    "description": "测试通知按钮"
+  },
+  "buttonRequestPermission": {
+    "message": "请求权限",
+    "description": "请求通知权限按钮"
+  },
+  "notificationTestTitle": {
+    "message": "番茄钟测试通知",
+    "description": "测试通知标题"
+  },
+  "notificationTestMessage": {
+    "message": "这是一个测试通知，如果您看到此消息，说明通知功能正常工作。",
+    "description": "测试通知内容"
+  },
+  "buttonOK": {
+    "message": "确定",
+    "description": "确定按钮"
   }
 }

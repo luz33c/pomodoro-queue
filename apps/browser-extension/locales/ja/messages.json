@@ -266,5 +266,45 @@
   "settingsDisplayOptions": {
     "message": "表示オプション",
     "description": "表示オプションセクションタイトル"
+  },
+  "notificationPermissionTitle": {
+    "message": "通知権限",
+    "description": "通知権限セクションタイトル"
+  },
+  "notificationPermissionDesc": {
+    "message": "休憩リマインダー通知の送信を許可する",
+    "description": "通知権限の説明"
+  },
+  "notificationPermissionGranted": {
+    "message": "許可済み",
+    "description": "通知権限許可済み状態"
+  },
+  "notificationPermissionDenied": {
+    "message": "拒否済み",
+    "description": "通知権限拒否済み状態"
+  },
+  "notificationPermissionUnknown": {
+    "message": "不明",
+    "description": "通知権限不明状態"
+  },
+  "buttonTestNotification": {
+    "message": "テスト通知",
+    "description": "テスト通知ボタン"
+  },
+  "buttonRequestPermission": {
+    "message": "権限をリクエスト",
+    "description": "通知権限リクエストボタン"
+  },
+  "notificationTestTitle": {
+    "message": "ポモドーロテスト通知",
+    "description": "テスト通知タイトル"
+  },
+  "notificationTestMessage": {
+    "message": "これはテスト通知です。このメッセージが表示されれば、通知機能が正常に動作しています。",
+    "description": "テスト通知メッセージ"
+  },
+  "buttonOK": {
+    "message": "OK",
+    "description": "OKボタン"
   }
 }

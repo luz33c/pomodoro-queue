@@ -5,7 +5,8 @@ import { Switch } from "@/components/ui/switch"
 import { Separator } from "@/components/ui/separator"
 import { usePomodoro } from "@/hooks/pomodoro/usePomodoro"
 import { useI18n } from "@/hooks/useI18n"
-import { Settings } from "lucide-react"
+import { sendToBackground } from "@plasmohq/messaging"
+import { Settings, Bell, BellOff, AlertTriangle } from "lucide-react"
 
 interface PomodoroSettingsProps {
   isOpen?: boolean;
@@ -20,6 +21,11 @@ export function PomodoroSettings({ isOpen = true, onClose, showTaskSetting = tru
   const [enableTask, setEnableTask] = useState(state?.config?.enableTask ?? false)
   const [showFloatingTimer, setShowFloatingTimer] = useState(state?.config?.showFloatingTimer ?? true)
   const [enableBreakNotifications, setEnableBreakNotifications] = useState(state?.config?.enableBreakNotifications ?? true)
+  
+  // 通知权限相关状态
+  const [notificationPermission, setNotificationPermission] = useState<'granted' | 'denied' | 'unknown'>('unknown')
+  const [isCheckingPermission, setIsCheckingPermission] = useState(false)
+  const [isTestingNotification, setIsTestingNotification] = useState(false)
 
   useEffect(() => {
     if (state?.config) {
@@ -37,6 +43,47 @@ export function PomodoroSettings({ isOpen = true, onClose, showTaskSetting = tru
       }
     }
   }, [state?.config])
+
+  // 检查通知权限
+  const checkNotificationPermission = async () => {
+    try {
+      setIsCheckingPermission(true)
+      const response = await sendToBackground({
+        name: "notifications",
+        body: { action: 'checkPermission' }
+      })
+      if (response.success && response.permission) {
+        setNotificationPermission(response.permission)
+      }
+    } catch (error) {
+      console.error('Failed to check notification permission:', error)
+    } finally {
+      setIsCheckingPermission(false)
+    }
+  }
+
+  // 发送测试通知
+  const handleTestNotification = async () => {
+    try {
+      setIsTestingNotification(true)
+      const response = await sendToBackground({
+        name: "notifications",
+        body: { action: 'sendTest', testPhase: 'short' }
+      })
+      console.log('Test notification result:', response)
+    } catch (error) {
+      console.error('Failed to send test notification:', error)
+    } finally {
+      setIsTestingNotification(false)
+    }
+  }
+
+  // 组件打开时检查通知权限
+  useEffect(() => {
+    if (isOpen) {
+      checkNotificationPermission()
+    }
+  }, [isOpen])
 
   const handleSave = async () => {
     if (!state?.config) return
@@ -126,6 +173,52 @@ export function PomodoroSettings({ isOpen = true, onClose, showTaskSetting = tru
               onCheckedChange={setEnableBreakNotifications}
               aria-label={t('settingsBreakNotifications')}
             />
+          </div>
+
+          {/* Notification Permission Status */}
+          <div className="rounded-md bg-muted/30 p-3">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                {notificationPermission === 'granted' ? (
+                  <Bell className="h-4 w-4 text-green-500" />
+                ) : notificationPermission === 'denied' ? (
+                  <BellOff className="h-4 w-4 text-red-500" />
+                ) : (
+                  <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                )}
+                <div>
+                  <p className="text-sm font-medium">
+                    {t('notificationPermissionTitle')}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {notificationPermission === 'granted' 
+                      ? t('notificationPermissionGranted')
+                      : notificationPermission === 'denied'
+                      ? t('notificationPermissionDenied')
+                      : t('notificationPermissionUnknown')
+                    }
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={checkNotificationPermission}
+                  disabled={isCheckingPermission}
+                >
+                  {isCheckingPermission ? '检查中...' : '检查权限'}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleTestNotification}
+                  disabled={isTestingNotification || notificationPermission !== 'granted'}
+                >
+                  {isTestingNotification ? '发送中...' : t('buttonTestNotification')}
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
 

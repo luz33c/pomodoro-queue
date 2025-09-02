@@ -6,6 +6,7 @@ import type {
 } from '~model/pomodoro/types';
 import { DEFAULT_CONFIG, HISTORY_KEY, STORAGE_KEY, CURRENT_QUEUE_KEY, type CurrentQueue } from '~model/pomodoro/types';
 import { beginStrictBreak, endStrictBreak, initStrictBreakKernel, showOverlayOnAllOpenTabs } from './strict-break';
+import { notificationManager } from './notifications';
 
 const storage = new Storage({ area: 'local' });
 
@@ -114,7 +115,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 
   await storage.set(STORAGE_KEY, next);
   await schedulePhaseEndAlarm(next);
-  notifyPhase(next.phase).catch(() => {});
+  notifyPhase(next.phase, next.config).catch(() => {});
   
   // Handle strict mode transitions
   if (next.config?.strictMode && (next.phase === 'short' || next.phase === 'long')) {
@@ -197,42 +198,11 @@ export async function schedulePhaseEndAlarm(s: PomodoroState) {
   }
 }
 
-export async function notifyPhase(phase: PomodoroPhase) {
-  try {
-    const content = getNotificationContent(phase);
-    await chrome.notifications.create({
-      type: 'basic',
-      iconUrl: 'icon.png',
-      title: content.title,
-      message: content.message,
-      priority: 2,
-    });
-  } catch {
-    // ignore
-  }
+export async function notifyPhase(phase: PomodoroPhase, config: PomodoroState['config']) {
+  // 使用通知管理器发送通知
+  await notificationManager.sendPhaseNotification(phase, config);
 }
 
-function getNotificationContent(phase: PomodoroPhase) {
-  if (phase === 'focus') {
-    return { 
-      title: chrome.i18n.getMessage('notificationFocusTitle'), 
-      message: chrome.i18n.getMessage('notificationFocusMessage') 
-    };
-  }
-  if (phase === 'short') {
-    return { 
-      title: chrome.i18n.getMessage('notificationShortBreakTitle'), 
-      message: chrome.i18n.getMessage('notificationShortBreakMessage') 
-    };
-  }
-  if (phase === 'long') {
-    return { 
-      title: chrome.i18n.getMessage('notificationLongBreakTitle'), 
-      message: chrome.i18n.getMessage('notificationLongBreakMessage') 
-    };
-  }
-  return { title: chrome.i18n.getMessage('pomodoroTimer'), message: '' };
-}
 
 export async function startPhase(phase: PomodoroPhase) {
   const s = (await storage.get<PomodoroState>(STORAGE_KEY)) ?? {
@@ -262,7 +232,7 @@ export async function startPhase(phase: PomodoroPhase) {
   };
   await storage.set(STORAGE_KEY, next);
   await schedulePhaseEndAlarm(next);
-  notifyPhase(phase).catch(() => {});
+  notifyPhase(phase, next.config).catch(() => {});
   
   // Handle strict mode when starting a phase
   if (next.config?.strictMode && (phase === 'short' || phase === 'long')) {

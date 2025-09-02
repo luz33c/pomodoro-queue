@@ -68,7 +68,7 @@ const handler: PlasmoMessaging.MessageHandler<never, ResponseBody> = async (
     // 更新状态并重新安排定时器
     await storage.set(STORAGE_KEY, next)
     await schedulePhaseEndAlarm(next)
-    await notifyPhase(next.phase)
+    await notifyPhase(next.phase, next.config)
     
     // 如果从休息状态跳过，关闭严格模式的Break页面
     if (wasInBreak) {
