@@ -11,6 +11,7 @@
 		"build": "turbo build",
 		"check-types": "turbo check-types",
 		"dev:native": "turbo -F native dev",
+		"dev:norn": "turbo -F web -F @clerk-convex-rn/backend -F browser-extension dev",
 		"dev:web": "turbo -F web dev",
 		"dev:vif": "turbo -F vif dev",
 		"dev:server": "turbo -F @clerk-convex-rn/backend dev",
