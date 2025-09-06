@@ -1,30 +1,30 @@
 {
-	"name": "clerk-convex-rn",
-	"private": true,
-	"workspaces": [
-		"apps/*",
-		"packages/*"
-	],
-	"scripts": {
-		"check": "biome check --write .",
-		"clear": "turbo clear && git clean -xdf .turbo",
-		"dev": "turbo dev",
-		"build": "turbo build",
-		"check-types": "turbo check-types",
-		"dev:native": "turbo -F native dev",
-		"dev:norn": "turbo -F web -F @clerk-convex-rn/backend -F browser-extension dev",
-		"dev:web": "turbo -F web dev",
-		"dev:vif": "turbo -F vif dev",
-		"dev:server": "turbo -F @clerk-convex-rn/backend dev",
-		"dev:setup": "turbo -F @clerk-convex-rn/backend dev:setup"
-	},
-	"dependencies": {
-		"expo-auth-session": "^6.2.1"
-	},
-	"devDependencies": {
-		"turbo": "^2.5.4",
-		"@biomejs/biome": "2.2.2",
-		"ultracite": "5.2.9"
-	},
-	"packageManager": "bun@1.2.2"
+  "name": "clerk-convex-rn",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "check": "biome check --write .",
+    "clear": "turbo clear && git clean -xdf .turbo",
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "check-types": "turbo check-types",
+    "dev:native": "turbo -F native dev",
+    "dev:norn": "turbo -F web -F @clerk-convex-rn/backend -F browser-extension dev",
+    "dev:web": "turbo -F web dev",
+    "dev:vif": "turbo -F vif dev",
+    "dev:server": "turbo -F @clerk-convex-rn/backend dev",
+    "dev:setup": "turbo -F @clerk-convex-rn/backend dev:setup"
+  },
+  "dependencies": {
+    "expo-auth-session": "^6.2.1"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.4",
+    "@biomejs/biome": "2.2.2",
+    "ultracite": "5.2.9"
+  },
+  "packageManager": "bun@1.2.2"
 }

@@ -15,6 +15,9 @@ Ultracite enforces strict type safety, accessibility standards, and consistent c
 
 ## Rules
 
+## 重要
+始终和用户用中文沟通
+
 ### Accessibility (a11y)
 - Don't use `accessKey` attribute on any HTML element.
 - Don't set `aria-hidden="true"` on focusable elements.
@@ -198,6 +201,8 @@ Ultracite enforces strict type safety, accessibility standards, and consistent c
 - Don't let variables evolve into any type through reassignments.
 - Don't use the any type.
 - Don't misuse the non-null assertion operator (!) in TypeScript files.
+
+
 - Don't use implicit any type on variable declarations.
 - Don't merge interfaces and classes unsafely.
 - Don't use overload signatures that aren't next to each other.
@@ -325,3 +330,19 @@ try {
   console.log(e);
 }
 ```
+
+## Online Search & Tool Priority
+
+- Primary: Codex built-in `web.run`. Use it whenever you need timely, niche, or verifiable information. Prefer small, targeted searches (1–4 queries per call) and add citations for the 3–5 most important facts.
+- Secondary: MCP supplemental search tools — use only to enrich or validate:
+  - `tavily` (news and broad search) for recency and cross-checking.
+  - `exa` (web search) for source text and details.
+  - `context7` Always use context7 when I need code generation, setup or configuration steps, or library/API documentation. This means you should automatically use the Context7 MCP tools to resolve library id and get library docs without me having to explicitly ask.
+  
+## Usage & Integration Guidelines
+
+- Source of truth: Favor `web.run` results; use MCP (Tavily/Exa) as supplemental validation. Resort to deep research only as a last step.
+- Citations: Attach sources after the relevant paragraph. Balance diversity and trustworthiness; accurately reflect each source. Cite up to 5 load‑bearing statements per answer when browsing.
+- OpenAI product docs: When the topic is OpenAI products (e.g., Codex CLI), run at least one `web.run` search and restrict to official OpenAI domains when possible.
+- Minimal necessary search: Start with small, focused queries. Escalate only if evidence is insufficient.
+- Safety & keys: Follow network/approval policies; never expose API keys in prompts, logs, or patches. Use only publicly accessible information.

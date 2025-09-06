@@ -19,7 +19,33 @@ export function PomodoroSettings({ isOpen = true, onClose, showTaskSetting = tru
   const [strictMode, setStrictMode] = useState(state?.config?.strictMode ?? false)
   const [enableTask, setEnableTask] = useState(state?.config?.enableTask ?? false)
   const [showFloatingTimer, setShowFloatingTimer] = useState(state?.config?.showFloatingTimer ?? true)
-  const [enableBreakNotifications, setEnableBreakNotifications] = useState(state?.config?.enableBreakNotifications ?? true)
+  const [enableBreakNotifications, setEnableBreakNotifications] = useState(state?.config?.enableBreakNotifications ?? false)
+
+  // 立即持久化休息提醒开关，避免用户只切换未保存导致未生效
+  const handleToggleBreakNotifications = async (checked: boolean) => {
+    setEnableBreakNotifications(checked)
+    // 开启时检查/请求权限（如未来改为可选权限）
+    if (checked && typeof chrome !== 'undefined' && chrome?.permissions) {
+      try {
+        const hasPerm = await chrome.permissions.contains({ permissions: ["notifications"] })
+        if (!hasPerm && chrome.permissions.request) {
+          const granted = await chrome.permissions.request({ permissions: ["notifications"] })
+          if (!granted) {
+            setEnableBreakNotifications(false)
+            return
+          }
+        }
+      } catch {
+        // 忽略权限探测错误
+      }
+    }
+    if (state?.config) {
+      await updateConfig({
+        ...state.config,
+        enableBreakNotifications: checked
+      })
+    }
+  }
 
   useEffect(() => {
     if (state?.config) {
@@ -40,6 +66,21 @@ export function PomodoroSettings({ isOpen = true, onClose, showTaskSetting = tru
 
   const handleSave = async () => {
     if (!state?.config) return
+    // 开启通知时（如有必要）检查/请求权限
+    if (enableBreakNotifications && typeof chrome !== 'undefined' && chrome?.permissions) {
+      try {
+        const hasPerm = await chrome.permissions.contains({ permissions: ["notifications"] })
+        if (!hasPerm && chrome.permissions.request) {
+          const granted = await chrome.permissions.request({ permissions: ["notifications"] })
+          if (!granted) {
+            // 权限未授予，保持关闭
+            setEnableBreakNotifications(false)
+          }
+        }
+      } catch {
+        // 忽略权限探测错误
+      }
+    }
     await updateConfig({
       ...state.config,
       strictMode,
@@ -123,7 +164,7 @@ export function PomodoroSettings({ isOpen = true, onClose, showTaskSetting = tru
             <Switch
               id="break-notifications"
               checked={enableBreakNotifications}
-              onCheckedChange={setEnableBreakNotifications}
+              onCheckedChange={handleToggleBreakNotifications}
               aria-label={t('settingsBreakNotifications')}
             />
           </div>

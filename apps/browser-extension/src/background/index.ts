@@ -197,18 +197,40 @@ export async function schedulePhaseEndAlarm(s: PomodoroState) {
   }
 }
 
+// 解析扩展内图标地址（适配 Plasmo dev/prod 路径），避免下载失败
+function getExtensionIconUrl(): string | null {
+  const manifest = chrome.runtime.getManifest()
+  const iconPath = (manifest.icons?.["128"]) || (manifest.icons?.["64"]) || (manifest.icons ? Object.values(manifest.icons)[0] : undefined)
+  if (!iconPath) return null
+  try {
+    return chrome.runtime.getURL(iconPath)
+  } catch {
+    return null
+  }
+}
+
 export async function notifyPhase(phase: PomodoroPhase) {
   try {
-    const content = getNotificationContent(phase);
+    // 仅在进入休息阶段，且开关为开启时发送通知
+    if (!(phase === 'short' || phase === 'long')) return
+    const s = await storage.get<PomodoroState>(STORAGE_KEY)
+    if (!s?.config?.enableBreakNotifications) return
+
+    const iconUrl = getExtensionIconUrl()
+    const content = getNotificationContent(phase)
+
+    // 严格校验必填参数，避免报错
+    if (!iconUrl || !content?.title || !content?.message) return
+
     await chrome.notifications.create({
       type: 'basic',
-      iconUrl: 'icon.png',
+      iconUrl,
       title: content.title,
       message: content.message,
-      priority: 2,
-    });
+      priority: 2
+    })
   } catch {
-    // ignore
+    // 忽略通知失败
   }
 }
 
