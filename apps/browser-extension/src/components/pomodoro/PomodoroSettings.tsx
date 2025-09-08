@@ -19,7 +19,7 @@ export function PomodoroSettings({
   onClose,
   showTaskSetting = true,
 }: PomodoroSettingsProps) {
-  const { state, updateConfig, hydrated } = usePomodoro();
+  const { state, updateConfig } = usePomodoro();
   const { t } = useI18n();
   const [strictMode, setStrictMode] = useState(
     state?.config?.strictMode ?? false
@@ -141,7 +141,7 @@ export function PomodoroSettings({
 
         <Separator className="mb-4" />
         {/* 在未完成状态获取前，不渲染各开关，避免初始值抖动 */}
-        {!hydrated ? (
+        {!state?.config ? (
           <div className="flex-1">
             <div className="animate-pulse space-y-4">
               <div className="h-5 w-40 rounded bg-muted/50" />

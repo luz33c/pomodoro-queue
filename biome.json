@@ -1,25 +1,58 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.2.2/schema.json",
-	"files": {
-		"ignoreUnknown": false,
-		"includes": [
-			"**",
-			"!**/.next",
-			"!**/dist",
-			"!**/.turbo",
-			"!**/dev-dist",
-			"!**/.zed",
-			"!**/.vscode",
-			"!**/routeTree.gen.ts",
-			"!**/src-tauri",
-			"!**/.nuxt",
-			"!bts.jsonc",
-			"!**/.expo",
-			"!**/.wrangler",
-			"!**/.alchemy",
-			"!**/wrangler.jsonc",
-			"!**/.source"
-		]
-	},
-	"extends": ["ultracite"]
+  "$schema": "https://biomejs.dev/schemas/2.2.2/schema.json",
+  "javascript": {
+    "globals": ["chrome"]
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "includes": [
+      "**",
+      "!**/.next",
+      "!**/dist",
+      "!**/.turbo",
+      "!**/dev-dist",
+      "!**/.zed",
+      "!**/.vscode",
+      "!**/routeTree.gen.ts",
+      "!**/src-tauri",
+      "!**/.nuxt",
+      "!bts.jsonc",
+      "!**/.expo",
+      "!**/.wrangler",
+      "!**/.alchemy",
+      "!**/wrangler.jsonc",
+      "!**/.source",
+      "!**/.conductor"
+    ]
+  },
+  "extends": ["ultracite"],
+  "linter": {
+    "rules": {
+      "nursery": {
+        "useConsistentTypeDefinitions": "off",
+        "useSortedClasses": "off"
+      },
+      "suspicious": {
+        "useAwait": "off",
+        "noConsole": "off"
+      },
+      "style": {
+        "useBlockStatements": "off",
+        "noMagicNumbers": "off",
+        "noNegationElse": "off",
+        "noNestedTernary": "off"
+      },
+      "correctness": {
+        "noUnusedImports": "warn"
+      },
+      "a11y": {
+        "useButtonType": "off"
+      },
+      "complexity": {
+        "useSimplifiedLogicExpression": "off",
+        "noExcessiveCognitiveComplexity": "off",
+        "useOptionalChain": "off"
+      }
+    }
+  }
 }

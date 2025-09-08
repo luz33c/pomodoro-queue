@@ -1,4 +1,4 @@
-export type PomodoroPhase = "idle" | "focus" | "short" | "long";
+export type PomodoroPhase = 'idle' | 'focus' | 'short' | 'long';
 
 export type PomodoroConfig = {
   focusMin: number; // minutes
@@ -25,7 +25,7 @@ export type PomodoroState = {
 
 export type PomodoroHistoryEntry = {
   id: string;
-  phase: Exclude<PomodoroPhase, "idle">;
+  phase: Exclude<PomodoroPhase, 'idle'>;
   title: string;
   startedAt: number;
   endedAt: number;
@@ -45,12 +45,12 @@ export const DEFAULT_CONFIG: PomodoroConfig = {
   longMin: 20,
   longEvery: 4,
   strictMode: true,
-  enableTask: false,
-  showFloatingTimer: true,
+  enableTask: true,
+  showFloatingTimer: false,
   // 默认关闭休息提醒通知，由用户在设置中开启
   enableBreakNotifications: false,
 };
 
-export const STORAGE_KEY = "pomodoroState" as const;
-export const HISTORY_KEY = "pomodoroHistory" as const;
-export const CURRENT_QUEUE_KEY = "pomodoroCurrentQueue" as const;
+export const STORAGE_KEY = 'pomodoroState' as const;
+export const HISTORY_KEY = 'pomodoroHistory' as const;
+export const CURRENT_QUEUE_KEY = 'pomodoroCurrentQueue' as const;

@@ -4,8 +4,19 @@ import type {
   PomodoroPhase,
   PomodoroState,
 } from '~model/pomodoro/types';
-import { DEFAULT_CONFIG, HISTORY_KEY, STORAGE_KEY, CURRENT_QUEUE_KEY, type CurrentQueue } from '~model/pomodoro/types';
-import { beginStrictBreak, endStrictBreak, initStrictBreakKernel, showOverlayOnAllOpenTabs } from './strict-break';
+import {
+  CURRENT_QUEUE_KEY,
+  type CurrentQueue,
+  DEFAULT_CONFIG,
+  HISTORY_KEY,
+  STORAGE_KEY,
+} from '~model/pomodoro/types';
+import {
+  beginStrictBreak,
+  endStrictBreak,
+  initStrictBreakKernel,
+  showOverlayOnAllOpenTabs,
+} from './strict-break';
 
 const storage = new Storage({ area: 'local' });
 
@@ -41,6 +52,7 @@ async function pushHistory(entry: PomodoroHistoryEntry) {
   await storage.set(HISTORY_KEY, list);
 }
 
+// 默认值设置
 async function ensureInitialState() {
   const state = await storage.get<PomodoroState>(STORAGE_KEY);
   if (!state) {
@@ -63,7 +75,7 @@ chrome.runtime.onInstalled.addListener(() => {
 // Check strict mode on startup
 chrome.runtime.onStartup.addListener(async () => {
   const s = await storage.get<PomodoroState>(STORAGE_KEY);
-  const inBreak = s?.phase === "short" || s?.phase === "long"
+  const inBreak = s?.phase === 'short' || s?.phase === 'long';
   if (inBreak && s?.config?.strictMode) {
     await beginStrictBreak();
   } else if (inBreak && !s?.config?.strictMode) {
@@ -115,18 +127,24 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   await storage.set(STORAGE_KEY, next);
   await schedulePhaseEndAlarm(next);
   notifyPhase(next.phase).catch(() => {});
-  
+
   // Handle strict mode transitions
-  if (next.config?.strictMode && (next.phase === 'short' || next.phase === 'long')) {
+  if (
+    next.config?.strictMode &&
+    (next.phase === 'short' || next.phase === 'long')
+  ) {
     await beginStrictBreak();
-  } else if (!next.config?.strictMode && (next.phase === 'short' || next.phase === 'long')) {
+  } else if (
+    !next.config?.strictMode &&
+    (next.phase === 'short' || next.phase === 'long')
+  ) {
     // 普通模式：覆盖遮罩
     await showOverlayOnAllOpenTabs();
     await endStrictBreak(); // 确保不存在遗留的严格模式状态
   } else {
     // 进入专注或idle状态，关闭Break页面
     await endStrictBreak();
-    
+
     // 如果从休息状态自然结束，确保关闭Break页面
     if (wasInBreak) {
       // endStrictBreak已经处理了页面关闭，这里是额外确认
@@ -199,36 +217,39 @@ export async function schedulePhaseEndAlarm(s: PomodoroState) {
 
 // 解析扩展内图标地址（适配 Plasmo dev/prod 路径），避免下载失败
 function getExtensionIconUrl(): string | null {
-  const manifest = chrome.runtime.getManifest()
-  const iconPath = (manifest.icons?.["128"]) || (manifest.icons?.["64"]) || (manifest.icons ? Object.values(manifest.icons)[0] : undefined)
-  if (!iconPath) return null
+  const manifest = chrome.runtime.getManifest();
+  const iconPath =
+    manifest.icons?.['128'] ||
+    manifest.icons?.['64'] ||
+    (manifest.icons ? Object.values(manifest.icons)[0] : undefined);
+  if (!iconPath) return null;
   try {
-    return chrome.runtime.getURL(iconPath)
+    return chrome.runtime.getURL(iconPath);
   } catch {
-    return null
+    return null;
   }
 }
 
 export async function notifyPhase(phase: PomodoroPhase) {
   try {
     // 仅在进入休息阶段，且开关为开启时发送通知
-    if (!(phase === 'short' || phase === 'long')) return
-    const s = await storage.get<PomodoroState>(STORAGE_KEY)
-    if (!s?.config?.enableBreakNotifications) return
+    if (!(phase === 'short' || phase === 'long')) return;
+    const s = await storage.get<PomodoroState>(STORAGE_KEY);
+    if (!s?.config?.enableBreakNotifications) return;
 
-    const iconUrl = getExtensionIconUrl()
-    const content = getNotificationContent(phase)
+    const iconUrl = getExtensionIconUrl();
+    const content = getNotificationContent(phase);
 
     // 严格校验必填参数，避免报错
-    if (!iconUrl || !content?.title || !content?.message) return
+    if (!iconUrl || !content?.title || !content?.message) return;
 
     await chrome.notifications.create({
       type: 'basic',
       iconUrl,
       title: content.title,
       message: content.message,
-      priority: 2
-    })
+      priority: 2,
+    });
   } catch {
     // 忽略通知失败
   }
@@ -236,21 +257,21 @@ export async function notifyPhase(phase: PomodoroPhase) {
 
 function getNotificationContent(phase: PomodoroPhase) {
   if (phase === 'focus') {
-    return { 
-      title: chrome.i18n.getMessage('notificationFocusTitle'), 
-      message: chrome.i18n.getMessage('notificationFocusMessage') 
+    return {
+      title: chrome.i18n.getMessage('notificationFocusTitle'),
+      message: chrome.i18n.getMessage('notificationFocusMessage'),
     };
   }
   if (phase === 'short') {
-    return { 
-      title: chrome.i18n.getMessage('notificationShortBreakTitle'), 
-      message: chrome.i18n.getMessage('notificationShortBreakMessage') 
+    return {
+      title: chrome.i18n.getMessage('notificationShortBreakTitle'),
+      message: chrome.i18n.getMessage('notificationShortBreakMessage'),
     };
   }
   if (phase === 'long') {
-    return { 
-      title: chrome.i18n.getMessage('notificationLongBreakTitle'), 
-      message: chrome.i18n.getMessage('notificationLongBreakMessage') 
+    return {
+      title: chrome.i18n.getMessage('notificationLongBreakTitle'),
+      message: chrome.i18n.getMessage('notificationLongBreakMessage'),
     };
   }
   return { title: chrome.i18n.getMessage('pomodoroTimer'), message: '' };
@@ -285,11 +306,14 @@ export async function startPhase(phase: PomodoroPhase) {
   await storage.set(STORAGE_KEY, next);
   await schedulePhaseEndAlarm(next);
   notifyPhase(phase).catch(() => {});
-  
+
   // Handle strict mode when starting a phase
   if (next.config?.strictMode && (phase === 'short' || phase === 'long')) {
     await beginStrictBreak();
-  } else if (!next.config?.strictMode && (phase === 'short' || phase === 'long')) {
+  } else if (
+    !next.config?.strictMode &&
+    (phase === 'short' || phase === 'long')
+  ) {
     // 普通模式：覆盖遮罩
     await showOverlayOnAllOpenTabs();
     await endStrictBreak(); // 确保不存在遗留的严格模式状态
@@ -335,7 +359,7 @@ export async function stopAll() {
   // End strict mode when stopping
   await endStrictBreak();
 }
- 
+
 export async function pauseTimer() {
   const s = (await storage.get<PomodoroState>(STORAGE_KEY)) as PomodoroState;
   if (!s?.running || s.paused) {
@@ -380,7 +404,7 @@ export async function applyConfig(cfg: PomodoroState['config']) {
   if (next.running && !next.paused) {
     await schedulePhaseEndAlarm(next);
   }
-  
+
   // Handle strict mode toggle in config
   if (s && s.running && (s.phase === 'short' || s.phase === 'long')) {
     if (cfg.strictMode && !s.config?.strictMode) {
