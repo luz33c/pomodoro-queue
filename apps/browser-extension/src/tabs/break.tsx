@@ -20,6 +20,8 @@ function BreakPage() {
   useEffect(() => {
     if (shouldClose) {
       // 延迟关闭，给用户时间看到状态变化
+      // Mark: break control
+      // 不再处于休息或计时已停止 → Break 页面自我关闭
       const timer = setTimeout(() => {
         window.close()
       }, 1000)

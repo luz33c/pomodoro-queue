@@ -77,10 +77,16 @@ chrome.runtime.onStartup.addListener(async () => {
   const s = await storage.get<PomodoroState>(STORAGE_KEY);
   const inBreak = s?.phase === 'short' || s?.phase === 'long';
   if (inBreak && s?.config?.strictMode) {
+    // Mark: break control
+    // 启动时检测到处于休息且为严格模式 → 打开/聚焦 Break 页面
     await beginStrictBreak();
   } else if (inBreak && !s?.config?.strictMode) {
+    // Mark: break control
+    // 启动时处于休息但非严格模式 → 为所有页面注入遮罩
     await showOverlayOnAllOpenTabs();
   } else {
+    // Mark: break control
+    // 启动时不在休息 → 确保关闭所有 Break 页面
     await endStrictBreak();
   }
 });
@@ -133,16 +139,24 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
     next.config?.strictMode &&
     (next.phase === 'short' || next.phase === 'long')
   ) {
+    // Mark: break control
+    // 阶段自然切换到休息（严格模式） → 打开/聚焦 Break 页面
     await beginStrictBreak();
   } else if (
     !next.config?.strictMode &&
     (next.phase === 'short' || next.phase === 'long')
   ) {
     // 普通模式：覆盖遮罩
+    // Mark: break control
+    // 阶段自然切换到休息（普通模式） → 注入遮罩并清理严格模式
     await showOverlayOnAllOpenTabs();
+    // Mark: break control
+    // 清理可能遗留的严格模式 Break 页面
     await endStrictBreak(); // 确保不存在遗留的严格模式状态
   } else {
     // 进入专注或idle状态，关闭Break页面
+    // Mark: break control
+    // 切换到专注或 idle → 关闭 Break 页面
     await endStrictBreak();
 
     // 如果从休息状态自然结束，确保关闭Break页面
@@ -309,15 +323,23 @@ export async function startPhase(phase: PomodoroPhase) {
 
   // Handle strict mode when starting a phase
   if (next.config?.strictMode && (phase === 'short' || phase === 'long')) {
+    // Mark: break control
+    // 用户开始短/长休息（严格模式） → 打开/聚焦 Break 页面
     await beginStrictBreak();
   } else if (
     !next.config?.strictMode &&
     (phase === 'short' || phase === 'long')
   ) {
     // 普通模式：覆盖遮罩
+    // Mark: break control
+    // 用户开始短/长休息（普通模式） → 注入遮罩并清理严格模式
     await showOverlayOnAllOpenTabs();
+    // Mark: break control
+    // 确保不存在遗留的严格模式 Break 页面
     await endStrictBreak(); // 确保不存在遗留的严格模式状态
   } else {
+    // Mark: break control
+    // 用户开始专注或 idle → 关闭 Break 页面
     await endStrictBreak();
   }
 }
@@ -357,6 +379,8 @@ export async function stopAll() {
   await chrome.alarms.clear(PHASE_ALARM);
   await clearCurrentQueue();
   // End strict mode when stopping
+  // Mark: break control
+  // 用户点击“停止” → 关闭 Break 页面并退出严格模式
   await endStrictBreak();
 }
 
@@ -408,9 +432,15 @@ export async function applyConfig(cfg: PomodoroState['config']) {
   // Handle strict mode toggle in config
   if (s && s.running && (s.phase === 'short' || s.phase === 'long')) {
     if (cfg.strictMode && !s.config?.strictMode) {
+      // Mark: break control
+      // 休息中将配置从“普通”切到“严格” → 打开/聚焦 Break 页面
       await beginStrictBreak();
     } else if (!cfg.strictMode && s.config?.strictMode) {
+      // Mark: break control
+      // 休息中将配置从“严格”切到“普通” → 为所有页面注入遮罩
       await showOverlayOnAllOpenTabs(); // 切换到普通模式时注入遮罩
+      // Mark: break control
+      // 切换到普通模式时关闭严格模式 Break 页面
       await endStrictBreak();
     }
   }

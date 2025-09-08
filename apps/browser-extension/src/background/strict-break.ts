@@ -98,7 +98,8 @@ export function initStrictBreakKernel() {
       return  // 系统页面或扩展页面，允许访问，不强制跳转
     }
     
-    // 普通网页，立即拉回休息页
+    // Mark: break control
+    // 标签激活为普通网页且严格模式+处于休息阶段 → 强制切回休息页
     try {
       await focusBreakTab(windowId)
       console.log("[Pomodoro] 已激活非休息页标签，强制切回休息页")
@@ -112,6 +113,8 @@ export function initStrictBreakKernel() {
   chrome.windows.onFocusChanged.addListener(async (windowId) => {
     if (windowId === chrome.windows.WINDOW_ID_NONE) return
     if (!(await shouldEnforce())) return
+    // Mark: break control
+    // 窗口焦点变更且严格模式+处于休息阶段 → 回拉至休息页
     try {
       await focusBreakTab(windowId)
     } catch (e) {
@@ -141,6 +144,8 @@ export function initStrictBreakKernel() {
     
     // 只在页面完全加载完成时才处理，避免加载过程中的误触发
     if (change.status === 'complete' && tab.active) {
+      // Mark: break control
+      // 活动页加载完成且为普通网页，严格模式+休息阶段 → 回拉至休息页
       try {
         await focusBreakTab(tab.windowId!)
         console.log("[Pomodoro] 页面加载完成，强制切回休息页:", tab.url)
@@ -155,7 +160,8 @@ export function initStrictBreakKernel() {
     if (!(await shouldEnforce())) return
     if (isSystemOrExtPage(tab.url) || isBreakPage(tab.url)) return
     
-    // 如果新标签是活动的，强制回到休息页
+    // Mark: break control
+    // 新建标签被激活且严格模式+处于休息阶段 → 回拉至休息页
     if (tab.active) {
       try {
         await focusBreakTab(tab.windowId!)
@@ -175,6 +181,8 @@ export function initStrictBreakKernel() {
     try {
       const tab = await chrome.tabs.get(tabId)
       if (tab.active) {
+        // Mark: break control
+        // 捕获 SPA 路由跳转且严格模式+休息阶段 → 回拉至休息页
         try {
           await focusBreakTab(tab.windowId!)
           console.log("[Pomodoro] 捕获History导航，强制切回休息页:", url)
@@ -213,16 +221,20 @@ async function focusBreakTab(windowId?: number) {
   let tabId = exist?.id
 
   if (!tabId) {
+    // Mark: break control
+    // 严格模式进入休息且不存在休息页 → 创建并激活 Break 页面
     const created = await createTabWithRetry({ url: BREAK_URL, windowId: wid, active: true })
     tabId = created.id!
   }
 
   breakTabIdsByWindow.set(wid, tabId!)
   
-  // 激活休息页
+  // Mark: break control
+  // 存在休息页时将其激活到前台
   await updateWithRetry(tabId!, { active: true })
   
-  // 记录强制拉回的时间戳（每次强制跳转都提示）
+  // Mark: break control
+  // 每次强制回拉时写入时间戳，供 Break 页面提示
   await storage.set("breakLastForcedAt", Date.now())
 }
 

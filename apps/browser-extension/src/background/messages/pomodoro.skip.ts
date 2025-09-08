@@ -72,6 +72,8 @@ const handler: PlasmoMessaging.MessageHandler<never, ResponseBody> = async (
     
     // 如果从休息状态跳过，关闭严格模式的Break页面
     if (wasInBreak) {
+      // Mark: break control
+      // 从休息阶段“跳过”到专注 → 关闭 Break 页面
       await endStrictBreak()
     }
   }

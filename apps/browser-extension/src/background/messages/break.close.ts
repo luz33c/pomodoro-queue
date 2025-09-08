@@ -16,6 +16,8 @@ const handler: PlasmoMessaging.MessageHandler<never, ResponseBody> = async (
   res
 ) => {
   // 结束严格模式的休息状态，关闭Break页面
+  // Mark: break control
+  // Break 页面发送“关闭”指令（严格模式下）→ 关闭所有 Break 标签
   await endStrictBreak()
   
   // 返回成功响应
