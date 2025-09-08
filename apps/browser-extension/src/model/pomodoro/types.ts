@@ -48,7 +48,7 @@ export const DEFAULT_CONFIG: PomodoroConfig = {
   enableTask: true,
   showFloatingTimer: false,
   // 默认关闭休息提醒通知，由用户在设置中开启
-  enableBreakNotifications: false,
+  enableBreakNotifications: true,
 };
 
 export const STORAGE_KEY = 'pomodoroState' as const;
