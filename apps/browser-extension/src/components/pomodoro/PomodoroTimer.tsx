@@ -1,88 +1,127 @@
-import { Button } from "@/components/ui/button"
-import { usePomodoro } from "@/hooks/pomodoro/usePomodoro"
-import { useI18n } from "@/hooks/useI18n"
-import { Settings } from "lucide-react"
-import { useState } from "react"
+import { Settings } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { usePomodoro } from '@/hooks/pomodoro/usePomodoro';
+import { useI18n } from '@/hooks/useI18n';
 
-import { CreateQueueModal } from "./CreateQueueModal"
+import { CreateQueueModal } from './CreateQueueModal';
 
 function phaseLabel(phase: string, t: (key: string) => string) {
-  if (phase === "focus") {
-    return t("phaseFocus")
+  if (phase === 'focus') {
+    return t('phaseFocus');
   }
-  if (phase === "short") {
-    return t("phaseShortBreak")
+  if (phase === 'short') {
+    return t('phaseShortBreak');
   }
-  if (phase === "long") {
-    return t("phaseLongBreak")
+  if (phase === 'long') {
+    return t('phaseLongBreak');
   }
-  return t("phaseIdle")
+  return t('phaseIdle');
 }
 
 interface PomodoroTimerProps {
-  onOpenSettings?: () => void
+  onOpenSettings?: () => void;
 }
 
 export function PomodoroTimer({ onOpenSettings }: PomodoroTimerProps) {
-  const { state, progress, mmss, pause, resume, stop, skip } = usePomodoro()
-  const { t } = useI18n()
-  const [createModalOpen, setCreateModalOpen] = useState(false)
+  const { state, progress, mmss, pause, resume, stop, skip } = usePomodoro();
+  const { t } = useI18n();
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  // 控制首次挂载时不要出现从0%跳到实际进度的过渡
+  const [enableAnim, setEnableAnim] = useState(false);
+
+  useEffect(() => {
+    // 当首次拿到 state 后，下一帧再开启动画，使首帧直接渲染在正确位置
+    if (state && !enableAnim) {
+      const id = requestAnimationFrame(() => setEnableAnim(true));
+      return () => cancelAnimationFrame(id);
+    }
+  }, [state, enableAnim]);
 
   // 先定义phase变量
-  const running = state?.running
-  const paused = Boolean(state?.paused)
-  const phase = state?.phase ?? "idle"
-
+  const running = state?.running;
+  const paused = Boolean(state?.paused);
+  const phase = state?.phase ?? 'idle';
 
   return (
     <div className="w-full text-white">
       <div className="flex items-center justify-between mb-2">
         <h2 className="font-semibold text-lg text-white">
-          {t("pomodoroTimer")}
+          {t('pomodoroTimer')}
         </h2>
         <Button
-          variant="ghost"
-          size="icon"
+          aria-label={t('tooltipOpenSettings')}
           className="h-10 w-10 text-white/80 hover:text-white hover:bg-white/15 rounded-full transition-all duration-200 backdrop-blur-sm"
           onClick={onOpenSettings}
-          title={t("settings")}
-          aria-label={t("tooltipOpenSettings")}>
+          size="icon"
+          title={t('settings')}
+          variant="ghost"
+        >
           <Settings className="h-5 w-5" />
         </Button>
       </div>
 
       <div className="flex flex-col items-center gap-4">
         <div className="relative h-52 w-52">
-          {/* 简化的SVG圆环实现 */}
-          <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100" role="img" aria-label={t("progressRingAriaLabel") ?? "progress"}>
-            <title>{t("progressRingTitle") ?? "Timer Progress"}</title>
+          {/* 简化的SVG圆环实现（修复CSS drop-shadow 导致的方框伪影） */}
+          <svg
+            aria-label={t('progressRingAriaLabel') ?? 'progress'}
+            className="absolute inset-0 w-full h-full -rotate-90"
+            role="img"
+            viewBox="0 0 100 100"
+          >
+            <title>{t('progressRingTitle') ?? 'Timer Progress'}</title>
+            <defs>
+              {/* 使用 SVG 原生滤镜制造柔光，避免 CSS filter 在 SVG 上的光栅化方框 */}
+              <filter
+                colorInterpolationFilters="sRGB"
+                filterUnits="userSpaceOnUse"
+                height="130"
+                id="ring-glow"
+                width="130"
+                x="-15"
+                y="-15"
+              >
+                <feGaussianBlur
+                  in="SourceGraphic"
+                  result="blur"
+                  stdDeviation="2.5"
+                />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
             {/* 背景圆环 */}
-            <circle 
-              cx="50" 
-              cy="50" 
-              r="42" 
-              fill="none" 
-              stroke="rgba(255, 255, 255, 0.15)" 
+            <circle
+              cx="50"
+              cy="50"
+              fill="none"
+              r="42"
+              stroke="rgba(255, 255, 255, 0.15)"
               strokeWidth="6"
             />
             {/* 进度圆环 */}
             <circle
+              className={
+                enableAnim
+                  ? 'transition-[stroke-dashoffset] duration-500 ease-out'
+                  : 'transition-none'
+              }
               cx="50"
               cy="50"
-              r="42"
               fill="none"
+              r="42"
               stroke="rgba(255, 255, 255, 0.9)"
-              strokeWidth="6"
-              strokeLinecap="round"
               strokeDasharray={`${2 * Math.PI * 42}`}
               strokeDashoffset={`${2 * Math.PI * 42 * (1 - progress)}`}
-              className="transition-all duration-500 ease-out"
-              style={{
-                filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.4))'
-              }}
+              strokeLinecap="round"
+              /* 首次渲染无过渡，之后仅为 dashoffset 添加过渡 */
+              strokeWidth="6"
             />
           </svg>
-          
+
           {/* 文字内容 */}
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <div className="font-bold text-5xl tabular-nums text-white drop-shadow-lg">
@@ -97,47 +136,52 @@ export function PomodoroTimer({ onOpenSettings }: PomodoroTimerProps) {
         <div className="flex flex-wrap justify-center gap-3 px-4">
           {!running && (
             <Button
-              size="sm"
-              aria-label={t("buttonStart")}
+              aria-label={t('buttonStart')}
+              className="bg-white text-black hover:bg-white/90 font-medium px-6 py-2 rounded-lg border-0 shadow-none transition-colors duration-200"
               onClick={() => setCreateModalOpen(true)}
-              className="bg-white text-black hover:bg-white/90 font-medium px-6 py-2 rounded-lg border-0 shadow-none transition-colors duration-200">
-              {t("buttonStart")}
+              size="sm"
+            >
+              {t('buttonStart')}
             </Button>
           )}
           {running && !paused && (
             <Button
-              size="sm"
-              aria-label={t("buttonPause")}
+              aria-label={t('buttonPause')}
+              className="bg-white/25 text-white hover:bg-white/35 px-5 py-2 rounded-lg border-0 shadow-none transition-colors duration-200"
               onClick={() => pause()}
-              className="bg-white/25 text-white hover:bg-white/35 px-5 py-2 rounded-lg border-0 shadow-none transition-colors duration-200">
-              {t("buttonPause")}
+              size="sm"
+            >
+              {t('buttonPause')}
             </Button>
           )}
           {running && paused && (
             <Button
-              size="sm"
-              aria-label={t("buttonResume")}
+              aria-label={t('buttonResume')}
+              className="bg-white text-black hover:bg-white/90 font-medium px-6 py-2 rounded-lg border-0 shadow-none transition-colors duration-200"
               onClick={() => resume()}
-              className="bg-white text-black hover:bg-white/90 font-medium px-6 py-2 rounded-lg border-0 shadow-none transition-colors duration-200">
-              {t("buttonResume")}
+              size="sm"
+            >
+              {t('buttonResume')}
             </Button>
           )}
           {running && (
             <Button
-              size="sm"
-              aria-label={t("buttonStop")}
+              aria-label={t('buttonStop')}
+              className="bg-red-500 text-white hover:bg-red-600 px-5 py-2 rounded-lg border-0 shadow-none transition-colors duration-200"
               onClick={() => stop()}
-              className="bg-red-500 text-white hover:bg-red-600 px-5 py-2 rounded-lg border-0 shadow-none transition-colors duration-200">
-              {t("buttonStop")}
+              size="sm"
+            >
+              {t('buttonStop')}
             </Button>
           )}
           {running && (
             <Button
-              size="sm"
-              aria-label={t("buttonSkip")}
+              aria-label={t('buttonSkip')}
+              className="bg-white/25 text-white hover:bg-white/35 px-5 py-2 rounded-lg border-0 shadow-none transition-colors duration-200"
               onClick={() => skip()}
-              className="bg-white/25 text-white hover:bg-white/35 px-5 py-2 rounded-lg border-0 shadow-none transition-colors duration-200">
-              {t("buttonSkip")}
+              size="sm"
+            >
+              {t('buttonSkip')}
             </Button>
           )}
         </div>
@@ -148,5 +192,5 @@ export function PomodoroTimer({ onOpenSettings }: PomodoroTimerProps) {
         open={createModalOpen}
       />
     </div>
-  )
+  );
 }

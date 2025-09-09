@@ -93,7 +93,7 @@ export function HistoryList() {
             </Card>
           ))}
           {list.length === 0 && !state?.running && (
-            <Card className="p-6 text-center text-white/60 text-sm bg-white/3 border-white/3 backdrop-blur-sm rounded-2xl shadow-md">
+            <Card className="p-6 text-center text-white/60 text-sm bg-white/3  backdrop-blur-sm  shadow-none ">
               {t('historyEmpty')}
             </Card>
           )}
