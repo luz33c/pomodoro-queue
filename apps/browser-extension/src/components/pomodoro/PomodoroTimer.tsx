@@ -1,122 +1,142 @@
-import { Settings } from 'lucide-react';
-import { useMemo, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { usePomodoro } from '@/hooks/pomodoro/usePomodoro';
-import { useI18n } from '@/hooks/useI18n';
-import { CreateQueueModal } from './CreateQueueModal';
+import { Button } from "@/components/ui/button"
+import { usePomodoro } from "@/hooks/pomodoro/usePomodoro"
+import { useI18n } from "@/hooks/useI18n"
+import { Settings } from "lucide-react"
+import { useState } from "react"
+
+import { CreateQueueModal } from "./CreateQueueModal"
 
 function phaseLabel(phase: string, t: (key: string) => string) {
-  if (phase === 'focus') {
-    return t('phaseFocus');
+  if (phase === "focus") {
+    return t("phaseFocus")
   }
-  if (phase === 'short') {
-    return t('phaseShortBreak');
+  if (phase === "short") {
+    return t("phaseShortBreak")
   }
-  if (phase === 'long') {
-    return t('phaseLongBreak');
+  if (phase === "long") {
+    return t("phaseLongBreak")
   }
-  return t('phaseIdle');
+  return t("phaseIdle")
 }
 
-const FULL_CIRCLE_DEGREES = 360;
-
 interface PomodoroTimerProps {
-  onOpenSettings?: () => void;
+  onOpenSettings?: () => void
 }
 
 export function PomodoroTimer({ onOpenSettings }: PomodoroTimerProps) {
-  const { state, progress, mmss, pause, resume, stop, skip } = usePomodoro();
-  const { t } = useI18n();
-  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const { state, progress, mmss, pause, resume, stop, skip } = usePomodoro()
+  const { t } = useI18n()
+  const [createModalOpen, setCreateModalOpen] = useState(false)
 
-  const ringStyle = useMemo(() => {
-    const p = Math.max(0, Math.min(1, progress));
-    const deg = p * FULL_CIRCLE_DEGREES;
-    return {
-      background: `conic-gradient(hsl(var(--primary)) ${deg}deg, hsl(var(--muted)) ${deg}deg)`,
-    } as const;
-  }, [progress]);
+  // 先定义phase变量
+  const running = state?.running
+  const paused = Boolean(state?.paused)
+  const phase = state?.phase ?? "idle"
 
-  const running = state?.running;
-  const paused = Boolean(state?.paused);
-  const phase = state?.phase ?? 'idle';
 
   return (
-    <Card className="w-full p-4">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="font-semibold text-lg">{t('pomodoroTimer')}</h2>
+    <div className="w-full text-white">
+      <div className="flex items-center justify-between mb-2">
+        <h2 className="font-semibold text-lg text-white">
+          {t("pomodoroTimer")}
+        </h2>
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8"
+          className="h-10 w-10 text-white/80 hover:text-white hover:bg-white/15 rounded-full transition-all duration-200 backdrop-blur-sm"
           onClick={onOpenSettings}
-          title={t('settings')}
-          aria-label={t('tooltipOpenSettings')}
-        >
-          <Settings className="h-4 w-4" />
+          title={t("settings")}
+          aria-label={t("tooltipOpenSettings")}>
+          <Settings className="h-5 w-5" />
         </Button>
       </div>
 
       <div className="flex flex-col items-center gap-4">
-        <div className="relative h-48 w-48">
-          <div
-            className="absolute inset-0 rounded-full p-[10px]"
-            style={ringStyle}
-          >
-            <div className="h-full w-full rounded-full bg-background" />
-          </div>
+        <div className="relative h-52 w-52">
+          {/* 简化的SVG圆环实现 */}
+          <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+            {/* 背景圆环 */}
+            <circle 
+              cx="50" 
+              cy="50" 
+              r="42" 
+              fill="none" 
+              stroke="rgba(255, 255, 255, 0.15)" 
+              strokeWidth="6"
+            />
+            {/* 进度圆环 */}
+            <circle
+              cx="50"
+              cy="50"
+              r="42"
+              fill="none"
+              stroke="rgba(255, 255, 255, 0.9)"
+              strokeWidth="6"
+              strokeLinecap="round"
+              strokeDasharray={`${2 * Math.PI * 42}`}
+              strokeDashoffset={`${2 * Math.PI * 42 * (1 - progress)}`}
+              className="transition-all duration-500 ease-out"
+              style={{
+                filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.4))'
+              }}
+            />
+          </svg>
+          
+          {/* 文字内容 */}
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="font-bold text-5xl tabular-nums">{mmss}</div>
-            <div className="text-muted-foreground text-sm mt-1">
+            <div className="font-bold text-5xl tabular-nums text-white drop-shadow-lg">
+              {mmss}
+            </div>
+            <div className="text-white/95 text-sm mt-2 font-medium drop-shadow-md">
               {phaseLabel(phase, t)}
             </div>
           </div>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-2">
+        <div className="flex flex-wrap justify-center gap-3 px-4">
           {!running && (
             <Button
               size="sm"
-              aria-label={t('buttonStart')}
+              aria-label={t("buttonStart")}
               onClick={() => setCreateModalOpen(true)}
-            >
-              {t('buttonStart')}
+              className="bg-white text-black hover:bg-white/90 font-medium px-6 py-2 rounded-lg border-0 shadow-none transition-colors duration-200">
+              {t("buttonStart")}
             </Button>
           )}
           {running && !paused && (
             <Button
               size="sm"
-              aria-label={t('buttonPause')}
+              aria-label={t("buttonPause")}
               onClick={() => pause()}
-              variant="secondary"
-            >
-              {t('buttonPause')}
+              className="bg-white/25 text-white hover:bg-white/35 px-5 py-2 rounded-lg border-0 shadow-none transition-colors duration-200">
+              {t("buttonPause")}
             </Button>
           )}
           {running && paused && (
-            <Button size="sm" aria-label={t('buttonResume')} onClick={() => resume()}>
-              {t('buttonResume')}
+            <Button
+              size="sm"
+              aria-label={t("buttonResume")}
+              onClick={() => resume()}
+              className="bg-white text-black hover:bg-white/90 font-medium px-6 py-2 rounded-lg border-0 shadow-none transition-colors duration-200">
+              {t("buttonResume")}
             </Button>
           )}
           {running && (
             <Button
               size="sm"
-              aria-label={t('buttonStop')}
+              aria-label={t("buttonStop")}
               onClick={() => stop()}
-              variant="destructive"
-            >
-              {t('buttonStop')}
+              className="bg-red-500 text-white hover:bg-red-600 px-5 py-2 rounded-lg border-0 shadow-none transition-colors duration-200">
+              {t("buttonStop")}
             </Button>
           )}
           {running && (
             <Button
               size="sm"
-              aria-label={t('buttonSkip')}
+              aria-label={t("buttonSkip")}
               onClick={() => skip()}
-              variant="outline"
-            >
-              {t('buttonSkip')}
+              className="bg-white/25 text-white hover:bg-white/35 px-5 py-2 rounded-lg border-0 shadow-none transition-colors duration-200">
+              {t("buttonSkip")}
             </Button>
           )}
         </div>
@@ -126,6 +146,6 @@ export function PomodoroTimer({ onOpenSettings }: PomodoroTimerProps) {
         onOpenChange={setCreateModalOpen}
         open={createModalOpen}
       />
-    </Card>
-  );
+    </div>
+  )
 }

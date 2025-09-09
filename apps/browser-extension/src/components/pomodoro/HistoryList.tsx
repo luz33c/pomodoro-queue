@@ -63,37 +63,37 @@ export function HistoryList() {
     : [];
 
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden">
-      <h3 className="mb-2 font-medium text-muted-foreground text-sm">
+    <div className="flex h-full w-full flex-col overflow-hidden px-1">
+      <h3 className="mb-3 font-medium text-white/90 text-sm drop-shadow-sm">
         {t('historyTitle')}
       </h3>
       <div className="flex-1 overflow-hidden flex flex-col">
         {state?.running && (
-          <Card className="mb-2 p-2.5 flex-shrink-0">
+          <Card className="mb-3 p-3 flex-shrink-0 bg-white/3 rounded-xl backdrop-blur-sm transition-all  duration-200 shadow-none">
             <div className="flex items-center justify-between">
-              <div className="text-sm font-medium">{t('historyCurrent')} · {phaseLabel(state.phase, t)}</div>
-              <div className="text-muted-foreground text-xs">{t('historyInProgress')}</div>
+              <div className="text-sm font-medium text-white drop-shadow-sm">{t('historyCurrent')} · {phaseLabel(state.phase, t)}</div>
+              <div className="text-white/80 text-xs">{t('historyInProgress')}</div>
             </div>
           </Card>
         )}
         <div className="scrollbar-hide flex-1 overflow-y-auto space-y-2 min-h-0">
           {list.map((h) => (
-            <Card className="p-2.5" key={h.id}>
+            <Card className="p-3 bg-white/3 backdrop-blur-sm rounded-xl hover:bg-white/6 transition-all duration-200 shadow-none" key={h.id}>
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-sm font-medium">{h.title}</div>
-                  <div className="text-muted-foreground text-xs">
+                  <div className="text-sm font-medium text-white drop-shadow-sm">{h.title}</div>
+                  <div className="text-white/75 text-xs mt-0.5">
                     {minutes(h.durationMs)} {t('historyMinutes')}
                   </div>
                 </div>
-                <div className="text-muted-foreground text-xs">
+                <div className="text-white/75 text-xs">
                   {formatTime(h.endedAt)}
                 </div>
               </div>
             </Card>
           ))}
           {list.length === 0 && !state?.running && (
-            <Card className="p-4 text-center text-muted-foreground text-xs">
+            <Card className="p-6 text-center text-white/60 text-sm bg-white/3 border-white/3 backdrop-blur-sm rounded-2xl shadow-md">
               {t('historyEmpty')}
             </Card>
           )}

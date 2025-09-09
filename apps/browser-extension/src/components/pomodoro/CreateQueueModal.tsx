@@ -36,7 +36,7 @@ export function CreateQueueModal({ open, onOpenChange }: { open: boolean; onOpen
   if (!open) return null
 
   return (
-      <div className="absolute inset-0 z-50 flex flex-col bg-background" role="dialog" aria-modal="true">
+      <div className="absolute inset-0 z-50 flex flex-col pomodoro-focus-bg" role="dialog" aria-modal="true">
         <div className="flex h-full w-full flex-col p-4">
           <div className="mb-4 flex items-center justify-between">
             <div className="text-lg font-semibold">{t('createQueueTitle')}</div>
