@@ -1,8 +1,9 @@
 import { Storage } from '@plasmohq/storage';
 import { useStorage } from '@plasmohq/storage/hook';
 import { Card } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
 import { useI18n } from '@/hooks/useI18n';
+import { usePomodoro } from '@/hooks/pomodoro/usePomodoro';
 import type {
   CurrentQueue,
   PomodoroHistoryEntry,
@@ -44,6 +45,7 @@ function phaseLabel(phase: string, t: (key: string) => string) {
 
 export function HistoryList() {
   const { t } = useI18n();
+  const { stop } = usePomodoro();
   const [history] = useStorage<PomodoroHistoryEntry[]>({
     key: HISTORY_KEY,
     instance: localInstance,
@@ -64,15 +66,30 @@ export function HistoryList() {
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden px-1">
-      <h3 className="mb-3 font-medium text-white/90 text-sm drop-shadow-sm">
-        {t('historyTitle')}
-      </h3>
+      <div className="mb-3 flex items-center justify-between">
+        <h3 className="font-medium text-white/90 text-sm drop-shadow-sm">
+          {t('historyTitle')}
+        </h3>
+        {state?.running && (
+          <Button
+            aria-label={t('buttonStop')}
+            className="bg-white/20 text-white hover:bg-white/30 px-2.5 py-1 rounded-md border-0 shadow-none transition-colors duration-200 text-xs"
+            onClick={() => stop()}
+            size="sm"
+            type="button"
+          >
+            {t('buttonStop')}
+          </Button>
+        )}
+      </div>
       <div className="flex-1 overflow-hidden flex flex-col">
         {state?.running && (
-          <Card className="mb-3 p-3 flex-shrink-0 bg-white/3 rounded-xl backdrop-blur-sm transition-all  duration-200 shadow-none">
+          <Card className="mb-3 p-3 flex-shrink-0 bg-white/3 rounded-xl backdrop-blur-sm transition-all duration-200 shadow-none">
             <div className="flex items-center justify-between">
-              <div className="text-sm font-medium text-white drop-shadow-sm">{t('historyCurrent')} · {phaseLabel(state.phase, t)}</div>
-              <div className="text-white/80 text-xs">{t('historyInProgress')}</div>
+              <div className="text-sm font-medium text-white drop-shadow-sm">
+                {t('historyCurrent')} · {phaseLabel(state.phase, t)}
+              </div>
+              <span className="text-white/80 text-xs">{t('historyInProgress')}</span>
             </div>
           </Card>
         )}

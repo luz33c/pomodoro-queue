@@ -54,5 +54,12 @@
         "useOptionalChain": "off"
       }
     }
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "useSortedAttributes": "off"
+      }
+    }
   }
 }

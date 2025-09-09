@@ -42,6 +42,7 @@
   },
   "manifest": {
     "default_locale": "en",
+    "name": "__MSG_extensionName__",
     "permissions": [
       "alarms",
       "storage",

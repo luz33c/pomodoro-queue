@@ -24,7 +24,7 @@ interface PomodoroTimerProps {
 }
 
 export function PomodoroTimer({ onOpenSettings }: PomodoroTimerProps) {
-  const { state, progress, mmss, pause, resume, stop, skip } = usePomodoro();
+  const { state, progress, mmss, pause, resume, skip } = usePomodoro();
   const { t } = useI18n();
   const [createModalOpen, setCreateModalOpen] = useState(false);
   // 控制首次挂载时不要出现从0%跳到实际进度的过渡
@@ -164,16 +164,7 @@ export function PomodoroTimer({ onOpenSettings }: PomodoroTimerProps) {
               {t('buttonResume')}
             </Button>
           )}
-          {running && (
-            <Button
-              aria-label={t('buttonStop')}
-              className="bg-red-500 text-white hover:bg-red-600 px-5 py-2 rounded-lg border-0 shadow-none transition-colors duration-200"
-              onClick={() => stop()}
-              size="sm"
-            >
-              {t('buttonStop')}
-            </Button>
-          )}
+          {/* 终止队列按钮移动到 HistoryList 顶部卡片的右侧，避免此处重复展示 */}
           {running && (
             <Button
               aria-label={t('buttonSkip')}
