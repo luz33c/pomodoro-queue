@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { usePomodoro } from "@/hooks/pomodoro/usePomodoro"
 import { useI18n } from "@/hooks/useI18n"
@@ -35,36 +36,117 @@ export function CreateQueueModal({ open, onOpenChange }: { open: boolean; onOpen
 
   if (!open) return null
 
+  // 统一输入框的观感：与设置页一致的白色系边界与焦点样式
+  const flatInputClass = [
+    "rounded-lg",
+    "border-white/35 bg-white/10",
+    "text-white placeholder:text-white/70",
+    "focus-visible:ring-1 focus-visible:ring-white/60",
+    "shadow-none"
+  ].join(" ")
+
   return (
       <div className="absolute inset-0 z-50 flex flex-col pomodoro-focus-bg" role="dialog" aria-modal="true">
         <div className="flex h-full w-full flex-col p-4">
           <div className="mb-4 flex items-center justify-between">
-            <div className="text-lg font-semibold">{t('createQueueTitle')}</div>
-            <Button variant="ghost" size="sm" onClick={() => onOpenChange(false)} aria-label={t('buttonClose')}>{t('buttonClose')}</Button>
+            <div className="text-lg font-semibold text-white">{t('createQueueTitle')}</div>
+            <Button
+              aria-label={t('buttonClose')}
+              className="text-white hover:bg-white/20"
+              onClick={() => onOpenChange(false)}
+              size="sm"
+              type="button"
+              variant="ghost"
+            >
+              {t('buttonClose')}
+            </Button>
           </div>
-          <p className="text-sm text-muted-foreground mb-4">{t('createQueueDesc')}</p>
-          <Separator className="mb-4" />
-          <div className="flex-1 space-y-4 overflow-y-auto">
-            <label className="block">
-              <span className="text-sm font-medium mb-2 block">{t('focusDuration')}</span>
-              <Input inputMode="numeric" value={form.focusMin} onChange={setField("focusMin", false, 1)} aria-invalid={!!errors.focusMin} />
-              {errors.focusMin && <span className="text-xs text-destructive mt-1 block">{errors.focusMin}</span>}
-            </label>
-            <label className="block">
-              <span className="text-sm font-medium mb-2 block">{t('shortBreakDuration')}</span>
-              <Input inputMode="numeric" value={form.shortMin} onChange={setField("shortMin", true, 0)} aria-invalid={!!errors.shortMin} />
-              {errors.shortMin && <span className="text-xs text-destructive mt-1 block">{errors.shortMin}</span>}
-            </label>
-            <label className="block">
-              <span className="text-sm font-medium mb-2 block">{t('longBreakDuration')}</span>
-              <Input inputMode="numeric" value={form.longMin} onChange={setField("longMin", true, 0)} aria-invalid={!!errors.longMin} />
-              {errors.longMin && <span className="text-xs text-destructive mt-1 block">{errors.longMin}</span>}
-            </label>
-            <label className="block">
-              <span className="text-sm font-medium mb-2 block">{t('longBreakInterval')}</span>
-              <Input inputMode="numeric" value={form.longEvery} onChange={setField("longEvery", false, 2)} aria-invalid={!!errors.longEvery} />
-              {errors.longEvery && <span className="text-xs text-destructive mt-1 block">{errors.longEvery}</span>}
-            </label>
+          <p className="mb-4 text-sm text-white/70">{t('createQueueDesc')}</p>
+          <Separator className="mb-4 bg-white/30" />
+          <div className="custom-scrollbar flex-1 space-y-5 overflow-y-auto pr-1">
+            {/* 专注时长 */}
+            <div>
+              <Label className="mb-2 block text-sm font-medium text-white" htmlFor="focus-min">
+                {t('focusDuration')}
+              </Label>
+              <Input
+                aria-describedby={errors.focusMin ? 'err-focus-min' : undefined}
+                aria-invalid={!!errors.focusMin}
+                className={flatInputClass}
+                id="focus-min"
+                inputMode="numeric"
+                onChange={setField("focusMin", false, 1)}
+                value={form.focusMin}
+              />
+              {errors.focusMin && (
+                <span className="mt-1 block text-xs text-yellow-200" id="err-focus-min">
+                  {errors.focusMin}
+                </span>
+              )}
+            </div>
+
+            {/* 短休息 */}
+            <div>
+              <Label className="mb-2 block text-sm font-medium text-white" htmlFor="short-min">
+                {t('shortBreakDuration')}
+              </Label>
+              <Input
+                aria-describedby={errors.shortMin ? 'err-short-min' : undefined}
+                aria-invalid={!!errors.shortMin}
+                className={flatInputClass}
+                id="short-min"
+                inputMode="numeric"
+                onChange={setField("shortMin", true, 0)}
+                value={form.shortMin}
+              />
+              {errors.shortMin && (
+                <span className="mt-1 block text-xs text-yellow-200" id="err-short-min">
+                  {errors.shortMin}
+                </span>
+              )}
+            </div>
+
+            {/* 长休息 */}
+            <div>
+              <Label className="mb-2 block text-sm font-medium text-white" htmlFor="long-min">
+                {t('longBreakDuration')}
+              </Label>
+              <Input
+                aria-describedby={errors.longMin ? 'err-long-min' : undefined}
+                aria-invalid={!!errors.longMin}
+                className={flatInputClass}
+                id="long-min"
+                inputMode="numeric"
+                onChange={setField("longMin", true, 0)}
+                value={form.longMin}
+              />
+              {errors.longMin && (
+                <span className="mt-1 block text-xs text-yellow-200" id="err-long-min">
+                  {errors.longMin}
+                </span>
+              )}
+            </div>
+
+            {/* 长休息间隔 */}
+            <div>
+              <Label className="mb-2 block text-sm font-medium text-white" htmlFor="long-every">
+                {t('longBreakInterval')}
+              </Label>
+              <Input
+                aria-describedby={errors.longEvery ? 'err-long-every' : undefined}
+                aria-invalid={!!errors.longEvery}
+                className={flatInputClass}
+                id="long-every"
+                inputMode="numeric"
+                onChange={setField("longEvery", false, 2)}
+                value={form.longEvery}
+              />
+              {errors.longEvery && (
+                <span className="mt-1 block text-xs text-yellow-200" id="err-long-every">
+                  {errors.longEvery}
+                </span>
+              )}
+            </div>
           </div>
           <Separator className="my-4 bg-white/30" />
           <div className="flex justify-end gap-2">
@@ -72,6 +154,7 @@ export function CreateQueueModal({ open, onOpenChange }: { open: boolean; onOpen
               variant="outline"
               className="rounded-lg border-0 shadow-none bg-white/20 text-white hover:bg-white/30"
               onClick={() => onOpenChange(false)}
+              type="button"
             >
               {t('buttonCancel')}
             </Button>
@@ -84,6 +167,7 @@ export function CreateQueueModal({ open, onOpenChange }: { open: boolean; onOpen
                 onOpenChange(false)
                 if (!state?.running) await start("focus")
               }}
+              type="button"
             >
               {t('createQueueGenerate')}
             </Button>
