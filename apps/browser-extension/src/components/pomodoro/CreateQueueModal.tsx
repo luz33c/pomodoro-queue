@@ -66,11 +66,18 @@ export function CreateQueueModal({ open, onOpenChange }: { open: boolean; onOpen
               {errors.longEvery && <span className="text-xs text-destructive mt-1 block">{errors.longEvery}</span>}
             </label>
           </div>
-          <Separator className="my-4" />
+          <Separator className="my-4 bg-white/30" />
           <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => onOpenChange(false)}>{t('buttonCancel')}</Button>
+            <Button
+              variant="outline"
+              className="rounded-lg border-0 shadow-none bg-white/20 text-white hover:bg-white/30"
+              onClick={() => onOpenChange(false)}
+            >
+              {t('buttonCancel')}
+            </Button>
             <Button
               disabled={!isValid}
+              className="rounded-lg border-0 shadow-none bg-white text-black hover:bg-white/90"
               onClick={async () => {
                 if (!isValid) return
                 await updateConfig(form)

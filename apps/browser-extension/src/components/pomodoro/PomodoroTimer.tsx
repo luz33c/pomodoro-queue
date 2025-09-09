@@ -54,7 +54,8 @@ export function PomodoroTimer({ onOpenSettings }: PomodoroTimerProps) {
       <div className="flex flex-col items-center gap-4">
         <div className="relative h-52 w-52">
           {/* 简化的SVG圆环实现 */}
-          <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+          <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100" role="img" aria-label={t("progressRingAriaLabel") ?? "progress"}>
+            <title>{t("progressRingTitle") ?? "Timer Progress"}</title>
             {/* 背景圆环 */}
             <circle 
               cx="50" 

@@ -1,11 +1,9 @@
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
 import { usePomodoro } from "@/hooks/pomodoro/usePomodoro"
 import { useI18n } from "@/hooks/useI18n"
-import { Settings } from "lucide-react"
 import { useEffect, useState } from "react"
 
 interface PomodoroSettingsProps {
@@ -33,6 +31,18 @@ export function PomodoroSettings({
   const [enableBreakNotifications, setEnableBreakNotifications] = useState(
     state?.config?.enableBreakNotifications ?? false
   )
+
+  // 扁平化 Switch：通过父组件传入类名覆盖 UI 组件默认样式
+  const flatSwitchClass =
+    [
+      // 轨道：去边框与阴影，使用白色系与主界面匹配
+      'border-0 shadow-none focus-visible:ring-white/60',
+      'data-[state=checked]:bg-white data-[state=unchecked]:bg-white/25',
+      // 圆点：移除阴影，未开=白色，开启=黑色
+      '![&_span]:shadow-none',
+      'data-[state=unchecked]:![&_span]:bg-white',
+      'data-[state=checked]:![&_span]:bg-black'
+    ].join(' ')
 
   // 立即持久化休息提醒开关，避免用户只切换未保存导致未生效
   const handleToggleBreakNotifications = async (checked: boolean) => {
@@ -140,7 +150,7 @@ export function PomodoroSettings({
           </Button>
         </div>
 
-        <Separator className="mb-4" />
+        <Separator className="mb-4 bg-white/30" />
         {/* 在未完成状态获取前，不渲染各开关，避免初始值抖动 */}
         {!state?.config ? (
           <div className="flex-1">
@@ -176,6 +186,7 @@ export function PomodoroSettings({
                     aria-label={t("settingsTaskMode")}
                     checked={enableTask}
                     id="enable-task"
+                    className={flatSwitchClass}
                     onCheckedChange={setEnableTask}
                   />
                 </div>
@@ -203,6 +214,7 @@ export function PomodoroSettings({
                   aria-label={t("settingsFloatingTimer")}
                   checked={showFloatingTimer}
                   id="floating-timer"
+                  className={flatSwitchClass}
                   onCheckedChange={setShowFloatingTimer}
                 />
               </div>
@@ -222,6 +234,7 @@ export function PomodoroSettings({
                   aria-label={t("settingsBreakNotifications")}
                   checked={enableBreakNotifications}
                   id="break-notifications"
+                  className={flatSwitchClass}
                   onCheckedChange={handleToggleBreakNotifications}
                 />
               </div>
@@ -248,6 +261,7 @@ export function PomodoroSettings({
                   aria-label={t("settingsStrictMode")}
                   checked={strictMode}
                   id="strict-mode"
+                  className={flatSwitchClass}
                   onCheckedChange={setStrictMode}
                 />
               </div>
@@ -272,20 +286,20 @@ export function PomodoroSettings({
           </div>
         )}
 
-        <Separator className="my-4" />
+        <Separator className="my-4 bg-white/30" />
 
         <div className="flex justify-end gap-2">
           <Button
             onClick={onClose}
             size="sm"
-            className="bg-white/20 text-white border-white/30 hover:bg-white/30"
+            className="rounded-lg border-0 shadow-none bg-white/20 text-white hover:bg-white/30"
             variant="outline">
             {t("buttonCancel")}
           </Button>
           <Button
             onClick={handleSave}
             size="sm"
-            className="bg-white text-black hover:bg-white/90">
+            className="rounded-lg border-0 shadow-none bg-white text-black hover:bg-white/90">
             {t("buttonSave")}
           </Button>
         </div>
