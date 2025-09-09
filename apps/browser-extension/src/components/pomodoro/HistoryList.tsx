@@ -76,7 +76,7 @@ export function HistoryList() {
             </div>
           </Card>
         )}
-        <div className="scrollbar-hide flex-1 overflow-y-auto space-y-2 min-h-0">
+        <div className="custom-scrollbar flex-1 overflow-y-auto space-y-2 min-h-0">
           {list.map((h) => (
             <Card className="p-3 bg-white/3 backdrop-blur-sm rounded-xl hover:bg-white/6 transition-all duration-200 shadow-none" key={h.id}>
               <div className="flex items-center justify-between">
