@@ -96,21 +96,24 @@
     display: none;
   }
 
-  /* 显示定制滚动条：细、圆角、半透明，兼容主流浏览器 */
+  /* 显示定制滚动条：默认隐藏拇指，仅鼠标悬停容器时显示 */
   .custom-scrollbar {
     /* Firefox */
     scrollbar-width: thin; /* auto | thin | none */
-    scrollbar-color: rgba(255, 255, 255, 0.75) transparent; /* thumb | track */
+    scrollbar-color: transparent transparent; /* 默认隐藏 */
     /* 去掉保留沟槽空间，避免出现一条实心白色槽位 */
     /* scrollbar-gutter: stable both-edges; */
-    /* cursor: grab; */
+  }
+
+  /* 悬停容器时在 Firefox 显示白色拇指 */
+  .custom-scrollbar:hover {
+    scrollbar-color: rgba(255, 255, 255, 0.85) transparent;
   }
 
   /* WebKit (Chrome, Edge, Safari) */
   .custom-scrollbar::-webkit-scrollbar {
     width: 10px;
     height: 10px;
-        cursor: grab;
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
@@ -118,20 +121,19 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: transparent; /* 默认隐藏 */
     border-radius: 9999px;
     border: 3px solid transparent; /* 留出与内容的间隙，保证易点按 */
     background-clip: padding-box;
     min-height: 32px; /* 稍微加长拇指长度 */
-    cursor: grab;
   }
 
   .custom-scrollbar:hover::-webkit-scrollbar-thumb {
     background-color: rgba(255, 255, 255, 0.9);
-    cursor: grab;
+    cursor: grab; /* 悬停时显示抓手 */
   }
 
-  .custom-scrollbar:active::-webkit-scrollbar-thumb {
+  .custom-scrollbar::-webkit-scrollbar-thumb:active {
     background-color: rgba(255, 255, 255, 1);
     cursor: grabbing;
   }
