@@ -27,12 +27,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={'antialiased'}>
+      <body suppressHydrationWarning className="antialiased">
         <ClerkProvider>
           <Providers>
             <div className="grid h-svh grid-rows-[auto_1fr]">
               <Header />
-              LUz: {process.env.LUZ}
+
               {children}
             </div>
           </Providers>
