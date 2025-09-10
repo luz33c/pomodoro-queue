@@ -1,6 +1,6 @@
-import { Skeleton } from "@/components/ui/skeleton";
-import { MagicWand } from "@phosphor-icons/react";
-import Image from "next/image";
+import { MagicWand } from '@phosphor-icons/react';
+import Image from 'next/image';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export function LoadingState() {
   return (

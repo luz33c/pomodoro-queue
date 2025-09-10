@@ -1,30 +1,30 @@
-import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Analytics } from "@vercel/analytics/react";
-import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import { InstallPrompt } from "@/components/install-prompt";
+import { Analytics } from '@vercel/analytics/react';
+import type { Metadata, Viewport } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import './globals.css';
+import { InstallPrompt } from '@/components/install-prompt';
+import { ThemeProvider } from '@/components/theme-provider';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://vif.today"),
-  title: "vif",
-  description: "vif is a natural language todo list you wish you had.",
+  metadataBase: new URL('https://vif.today'),
+  title: 'vif',
+  description: 'vif is a natural language todo list you wish you had.',
   openGraph: {
-    siteName: "vif",
-    url: "https://vif.today",
+    siteName: 'vif',
+    url: 'https://vif.today',
   },
-  keywords: ["vif", "todo", "list", "natural language", "todo list"],
-  authors: [{ name: "Zaid", url: "https://zaidmukaddam.com" }],
+  keywords: ['vif', 'todo', 'list', 'natural language', 'todo list'],
+  authors: [{ name: 'Zaid', url: 'https://zaidmukaddam.com' }],
   robots: {
     index: true,
     follow: true,
@@ -32,18 +32,18 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  width: "device-width",
+  width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
   themeColor: [
     {
-      color: "#0A0A0A",
-      media: "(prefers-color-scheme: dark)",
+      color: '#0A0A0A',
+      media: '(prefers-color-scheme: dark)',
     },
     {
-      color: "#ffffff",
-      media: "(prefers-color-scheme: light)",
+      color: '#ffffff',
+      media: '(prefers-color-scheme: light)',
     },
   ],
 };

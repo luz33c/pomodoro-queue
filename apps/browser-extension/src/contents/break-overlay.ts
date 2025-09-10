@@ -45,8 +45,8 @@ const overlay = createOverlay();
 function recordInitialStyles() {
   if (!stylesRecorded) {
     prevOverflow = document.documentElement.style.overflow || '';
-    prevUserSelect = (document.documentElement.style as CSSStyleDeclaration)
-      .userSelect || '';
+    prevUserSelect =
+      (document.documentElement.style as CSSStyleDeclaration).userSelect || '';
     stylesRecorded = true;
   }
 }

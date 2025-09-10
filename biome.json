@@ -1,15 +1,14 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.2.2/schema.json",
   "javascript": {
-    "globals": ["chrome"],
-    "formatter": {
-      "semicolons": "asNeeded"
-    }
+    "globals": ["chrome"]
   },
   "files": {
     "ignoreUnknown": false,
     "includes": [
       "**",
+      "!apps/vif",
+      "!apps/native",
       "!**/.next",
       "!**/dist",
       "!**/.turbo",
@@ -25,22 +24,40 @@
       "!**/.alchemy",
       "!**/wrangler.jsonc",
       "!**/.source",
-      "!**/.conductor"
+      "!**/.conductor",
+      "!packages/backend/convex/_generated"
     ]
   },
   "extends": ["ultracite"],
+  "json": {
+    "parser": {
+      "allowComments": true,
+      "allowTrailingCommas": true
+    }
+  },
   "linter": {
     "rules": {
       "nursery": {
         "useConsistentTypeDefinitions": "off",
         "useSortedClasses": "off",
-        "noUnnecessaryConditions": "off"
+        "noUnnecessaryConditions": "off",
+        "noShadow": "warn"
       },
       "suspicious": {
         "useAwait": "off",
-        "noConsole": "off"
+        "noConsole": "off",
+        "noUnknownAtRules": "off",
+        "noArrayIndexKey": "warn"
       },
       "style": {
+        "useFilenamingConvention": {
+          "level": "warn",
+          "options": {
+            "requireAscii": true,
+            "filenameCases": ["kebab-case", "PascalCase", "camelCase"]
+          }
+        },
+        "useConsistentBuiltinInstantiation": "warn",
         "useBlockStatements": "off",
         "noMagicNumbers": "off",
         "noNegationElse": "off",
@@ -48,8 +65,11 @@
         "noNestedTernary": "off"
       },
       "correctness": {
-        "noUnusedImports": "warn",
+        "noUnusedImports": "off",
         "noUnusedVariables": "off"
+      },
+      "performance": {
+        "noNamespaceImport": "off"
       },
       "a11y": {
         "useButtonType": "off"

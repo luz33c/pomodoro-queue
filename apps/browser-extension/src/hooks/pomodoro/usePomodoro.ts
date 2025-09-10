@@ -2,7 +2,11 @@ import { sendToBackground } from '@plasmohq/messaging';
 import { Storage } from '@plasmohq/storage';
 import { useStorage } from '@plasmohq/storage/hook';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { PomodoroConfig, PomodoroPhase, PomodoroState } from '~model/pomodoro/types';
+import type {
+  PomodoroConfig,
+  PomodoroPhase,
+  PomodoroState,
+} from '~model/pomodoro/types';
 import { STORAGE_KEY } from '~model/pomodoro/types';
 
 /**

@@ -7,7 +7,7 @@ export interface TodoItem {
   time?: string; // Optional time in HH:mm format
 }
 
-export type SortOption = "newest" | "oldest" | "alphabetical" | "completed";
+export type SortOption = 'newest' | 'oldest' | 'alphabetical' | 'completed';
 
 export interface CircularProgressProps {
   progress: number;
@@ -28,14 +28,12 @@ export interface TodoListProps {
   cancelEditing: () => void;
 }
 
-export interface FaqContentProps {
-  // Empty interface for now, can be extended if needed
-}
+export type FaqContentProps = {};
 
 export interface MicButtonProps {
   isRecording: boolean;
   isProcessingSpeech: boolean;
-  micPermission: "checking" | "granted" | "denied" | "prompt";
+  micPermission: 'checking' | 'granted' | 'denied' | 'prompt';
   startRecording: () => void;
   stopRecording: () => void;
   hasText: boolean;
@@ -46,4 +44,4 @@ export interface CircleCheckboxProps {
   checked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
   className?: string;
-} 
+}

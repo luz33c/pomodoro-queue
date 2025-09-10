@@ -1,9 +1,15 @@
 'use client';
 
+import { SignInButton } from '@clerk/nextjs';
 import { api } from '@clerk-convex-rn/backend/convex/_generated/api';
 import type { Id } from '@clerk-convex-rn/backend/convex/_generated/dataModel';
-import { Authenticated, AuthLoading, Unauthenticated, useMutation, useQuery } from 'convex/react';
-import { SignInButton } from '@clerk/nextjs';
+import {
+  Authenticated,
+  AuthLoading,
+  Unauthenticated,
+  useMutation,
+  useQuery,
+} from 'convex/react';
 import { Loader2, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -120,7 +126,9 @@ export default function TodosPage() {
           <Card>
             <CardHeader>
               <CardTitle>Todo List</CardTitle>
-              <CardDescription>Please sign in to manage your tasks</CardDescription>
+              <CardDescription>
+                Please sign in to manage your tasks
+              </CardDescription>
             </CardHeader>
             <CardContent className="flex justify-center">
               <SignInButton mode="modal">

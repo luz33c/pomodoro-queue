@@ -1,8 +1,8 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   experimental: {
-    optimizePackageImports: ["@phosphor-icons/react"],
+    optimizePackageImports: ['@phosphor-icons/react'],
     serverActions: {
       bodySizeLimit: '2mb',
     },
@@ -26,7 +26,7 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-    ]
+    ];
   },
 };
 

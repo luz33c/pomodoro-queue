@@ -13,5 +13,3 @@ function IndexSidePanel() {
 }
 
 export default IndexSidePanel;
-
-export {};

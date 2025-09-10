@@ -1,4 +1,4 @@
-import { FaqContentProps } from "@/types";
+import type { FaqContentProps } from '@/types';
 
 export function FaqContent({}: FaqContentProps) {
   return (
@@ -38,7 +38,7 @@ export function FaqContent({}: FaqContentProps) {
               Where can I find the source code?
             </h4>
             <p className="text-sm text-muted-foreground">
-              Vif is an open source project. You can find the source code on{" "}
+              Vif is an open source project. You can find the source code on{' '}
               <a
                 href="https://github.com/zaidmukaddam/vif"
                 target="_blank"

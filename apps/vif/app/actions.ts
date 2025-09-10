@@ -1,59 +1,69 @@
-"use server";
+'use server';
 
-import { generateObject, experimental_transcribe as transcribe } from "ai";
-import { z } from "zod";
-import { vif } from "@/lib/models";
 import { elevenlabs } from '@ai-sdk/elevenlabs';
-import { DetermineActionFn } from "@/types/actions";
+import { generateObject, experimental_transcribe as transcribe } from 'ai';
+import { z } from 'zod';
+import { vif } from '@/lib/models';
+import type { DetermineActionFn } from '@/types/actions';
 
-export const determineAction: DetermineActionFn = async (text, emoji, todos, model = "vif-default", timezone = "UTC") => {
-    console.log("Determining action...");
-    console.log(text, emoji, todos);
-    console.log("Model:", model);
-    console.log("Timezone:", timezone);
+export const determineAction: DetermineActionFn = async (
+  text,
+  emoji,
+  todos,
+  model = 'vif-default',
+  timezone = 'UTC'
+) => {
+  console.log('Determining action...');
+  console.log(text, emoji, todos);
+  console.log('Model:', model);
+  console.log('Timezone:', timezone);
 
-    // Create dates in the user's timezone using a more reliable method
-    function getDateInTimezone(timezone: string) {
-        // Get current date/time string in the user's timezone
-        const now = new Date();
-        const options: Intl.DateTimeFormatOptions = {
-            timeZone: timezone,
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false
-        };
+  // Create dates in the user's timezone using a more reliable method
+  function getDateInTimezone(timezone: string) {
+    // Get current date/time string in the user's timezone
+    const now = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+      timeZone: timezone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    };
 
-        // Format date in timezone
-        const dateTimeString = new Intl.DateTimeFormat('en-US', options).format(now);
+    // Format date in timezone
+    const dateTimeString = new Intl.DateTimeFormat('en-US', options).format(
+      now
+    );
 
-        // Parse components from formatted string (formats like "04/10/2024, 00:30:00")
-        const [datePart] = dateTimeString.split(', ');
-        const [month, day, year] = datePart.split('/').map(num => parseInt(num, 10));
+    // Parse components from formatted string (formats like "04/10/2024, 00:30:00")
+    const [datePart] = dateTimeString.split(', ');
+    const [month, day, year] = datePart
+      .split('/')
+      .map((num) => Number.parseInt(num, 10));
 
-        // Create a date string in YYYY-MM-DD format
-        return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-    }
+    // Create a date string in YYYY-MM-DD format
+    return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+  }
 
-    // Get today and tomorrow in timezone
-    const todayStr = getDateInTimezone(timezone);
+  // Get today and tomorrow in timezone
+  const todayStr = getDateInTimezone(timezone);
 
-    // For tomorrow, we need to add one day
-    const todayDate = new Date(todayStr);
-    const tomorrowDate = new Date(todayDate);
-    tomorrowDate.setDate(tomorrowDate.getDate() + 1);
-    const tomorrowStr = tomorrowDate.toISOString().split('T')[0];
+  // For tomorrow, we need to add one day
+  const todayDate = new Date(todayStr);
+  const tomorrowDate = new Date(todayDate);
+  tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+  const tomorrowStr = tomorrowDate.toISOString().split('T')[0];
 
-    console.log("Today in timezone:", todayStr);
-    console.log("Tomorrow in timezone:", tomorrowStr);
+  console.log('Today in timezone:', todayStr);
+  console.log('Tomorrow in timezone:', tomorrowStr);
 
-    const prompt = `
+  const prompt = `
         Today's date is: ${todayStr} (Timezone: ${timezone})
         The user has entered the following text: ${text}
-        ${emoji ? `The user has also entered the following emoji: ${emoji}` : ""}
+        ${emoji ? `The user has also entered the following emoji: ${emoji}` : ''}
         Determine the action or multiple actions to take based on the given context.
         Return an array of actions.
 
@@ -101,11 +111,15 @@ export const determineAction: DetermineActionFn = async (text, emoji, todos, mod
         Always extract the actual task text separately from the time and date information.
         Keep emojis relevant to both the task and time (e.g., ⏰, 🕐, or 📅 for time-sensitive tasks).
 
-${todos ? `<todo_list>
-${todos?.map(todo => `- ${todo.id}: ${todo.text} (${todo.emoji})`).join("\n")}
-</todo_list>` : ""}
+${
+  todos
+    ? `<todo_list>
+${todos?.map((todo) => `- ${todo.id}: ${todo.text} (${todo.emoji})`).join('\n')}
+</todo_list>`
+    : ''
+}
 
-        The action should be one of the following: ${["add", "delete", "mark", "sort", "edit", "clear"].join(", ")}
+        The action should be one of the following: ${['add', 'delete', 'mark', 'sort', 'edit', 'clear'].join(', ')}
         - If the action is "add", the text, emoji, and targetDate should be included.
         - If the action is "delete", the todoId should be included.
         - If the action is "mark", the todoId should be included and the status should be "complete" or "incomplete".
@@ -114,7 +128,7 @@ ${todos?.map(todo => `- ${todo.id}: ${todo.text} (${todo.emoji})`).join("\n")}
         - If the action is "clear", the user wants to clear the list of todos with the given listToClear(all, completed, incomplete).
         
         For the add action, the text should be in the future tense. like "buy groceries", "make a post with @theo", "go for violin lesson"
-        ${emoji ? `Change the emoji to a more appropriate based on the text. The current emoji is: ${emoji}` : ""}
+        ${emoji ? `Change the emoji to a more appropriate based on the text. The current emoji is: ${emoji}` : ''}
      
         Some queries will be ambiguous stating the tense of the text, which will allow you to infer the correct action to take on the todo list. 
         The add requests will mostly likey to be in the future tense, while the complete requests will be in the past tense.
@@ -144,59 +158,81 @@ ${todos?.map(todo => `- ${todo.id}: ${todo.text} (${todo.emoji})`).join("\n")}
         "user request: 'clean up my list', action: 'clear', listToClear: 'all'"
     `;
 
-    console.log("prompt", prompt);
-    const startTime = Date.now();
-    const { object: action, usage } = await generateObject({
-        model: vif.languageModel(model),
-        temperature: 0,
-        providerOptions: {
-            groq: {
-                "service_tier": "auto",
-            }
-        },
-        schema: z.object({
-            actions: z.array(z.object({
-                action: z.enum(["add", "delete", "mark", "sort", "edit", "clear",]).describe("The action to take"),
-                text: z.string().describe("The text of the todo item.").optional(),
-                todoId: z.string().describe("The id of the todo item to act upon").optional(),
-                emoji: z.string().describe("The emoji of the todo item").optional(),
-                targetDate: z.string().describe("The target date for the todo item in YYYY-MM-DD format").optional(),
-                time: z.string().describe("The time for the todo item in HH:mm format (24-hour)").optional(),
-                sortBy: z.enum(
-                    ["newest", "oldest", "alphabetical", "completed"]
-                ).describe("The sort order").optional(),
-                status: z.enum(["complete", "incomplete"]).describe("The status of the todo item. to be used for the mark action").optional(),
-                listToClear: z.enum(["all", "completed", "incomplete"]).describe("The list to clear").optional(),
-            })),
-        }),
-        prompt,
-    });
-    const endTime = Date.now();
-    const duration = endTime - startTime;
-    console.log(`Time taken: ${duration}ms`);
-    console.log(action);
-    console.log("usage", usage);
-    return action;
-}
+  console.log('prompt', prompt);
+  const startTime = Date.now();
+  const { object: action, usage } = await generateObject({
+    model: vif.languageModel(model),
+    temperature: 0,
+    providerOptions: {
+      groq: {
+        service_tier: 'auto',
+      },
+    },
+    schema: z.object({
+      actions: z.array(
+        z.object({
+          action: z
+            .enum(['add', 'delete', 'mark', 'sort', 'edit', 'clear'])
+            .describe('The action to take'),
+          text: z.string().describe('The text of the todo item.').optional(),
+          todoId: z
+            .string()
+            .describe('The id of the todo item to act upon')
+            .optional(),
+          emoji: z.string().describe('The emoji of the todo item').optional(),
+          targetDate: z
+            .string()
+            .describe('The target date for the todo item in YYYY-MM-DD format')
+            .optional(),
+          time: z
+            .string()
+            .describe('The time for the todo item in HH:mm format (24-hour)')
+            .optional(),
+          sortBy: z
+            .enum(['newest', 'oldest', 'alphabetical', 'completed'])
+            .describe('The sort order')
+            .optional(),
+          status: z
+            .enum(['complete', 'incomplete'])
+            .describe(
+              'The status of the todo item. to be used for the mark action'
+            )
+            .optional(),
+          listToClear: z
+            .enum(['all', 'completed', 'incomplete'])
+            .describe('The list to clear')
+            .optional(),
+        })
+      ),
+    }),
+    prompt,
+  });
+  const endTime = Date.now();
+  const duration = endTime - startTime;
+  console.log(`Time taken: ${duration}ms`);
+  console.log(action);
+  console.log('usage', usage);
+  return action;
+};
 
 export async function convertSpeechToText(audioFile: any) {
-    "use server";
+  'use server';
 
-    if (!audioFile) {
-        throw new Error("No audio file provided");
-    }
+  if (!audioFile) {
+    throw new Error('No audio file provided');
+  }
 
-    console.log("Processing audio file:", {
-        type: audioFile.type,
-        size: audioFile.size,
-        name: audioFile.name || "unnamed"
-    });
+  console.log('Processing audio file:', {
+    type: audioFile.type,
+    size: audioFile.size,
+    name: audioFile.name || 'unnamed',
+  });
 
-    const { text } = await transcribe({
-        model: elevenlabs.transcription("scribe_v1"),
-        audio: await audioFile.arrayBuffer(),
-    });
+  const { text } = await transcribe({
+    model: elevenlabs.transcription('scribe_v1'),
+    audio: await audioFile.arrayBuffer(),
+  });
 
-    console.log("Transcribed text:", text);
-    return text;
+  console.log('Transcribed text:', text);
+  return text;
 }

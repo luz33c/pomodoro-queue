@@ -132,7 +132,9 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 
   await storage.set(STORAGE_KEY, next);
   await schedulePhaseEndAlarm(next);
-  notifyPhase(next.phase).catch(() => {});
+  notifyPhase(next.phase).catch(() => {
+    /* ignore notify errors */
+  });
 
   // Handle strict mode transitions
   if (
@@ -319,7 +321,9 @@ export async function startPhase(phase: PomodoroPhase) {
   };
   await storage.set(STORAGE_KEY, next);
   await schedulePhaseEndAlarm(next);
-  notifyPhase(phase).catch(() => {});
+  notifyPhase(phase).catch(() => {
+    /* ignore notify errors */
+  });
 
   // Handle strict mode when starting a phase
   if (next.config?.strictMode && (phase === 'short' || phase === 'long')) {

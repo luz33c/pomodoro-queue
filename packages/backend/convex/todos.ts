@@ -1,7 +1,6 @@
 import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
 
-
 export const getAll = query({
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();

@@ -1,7 +1,7 @@
-import { format } from "date-fns";
-import { Sparkle } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import { Sparkle } from '@phosphor-icons/react';
+import { format } from 'date-fns';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
 
 interface EmptyStateProps {
   selectedDate: Date;
@@ -29,7 +29,7 @@ export function EmptyState({ selectedDate, focusInput }: EmptyStateProps) {
         Vif is all clear!
       </h3>
       <p className="text-sm text-muted-foreground text-center max-w-[260px]">
-        Your {format(selectedDate, "EEEE")} is looking empty. Add your first
+        Your {format(selectedDate, 'EEEE')} is looking empty. Add your first
         task to get started with Vif!
       </p>
       <Button

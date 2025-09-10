@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from "react";
-import { TodoItem } from "@/types";
-import { serializeTodo } from "@/lib/utils/todo";
+import { useCallback, useEffect, useState } from 'react';
+import { serializeTodo } from '@/lib/utils/todo';
+import type { TodoItem } from '@/types';
 
 // Custom hook for localStorage sync
 export function useLocalStorage<T>(key: string, initialValue: T) {
@@ -20,41 +20,50 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
       if (!item) return;
 
       const parsed = JSON.parse(item, (key, value) => {
-        if (key === "date") return new Date(value);
+        if (key === 'date') return new Date(value);
         return value;
       });
 
       // Handle specific case for TodoItem array
-      if (Array.isArray(parsed) && key === "todos") {
-        setStoredValue(parsed.map((item: any) => serializeTodo(item as TodoItem)) as T);
+      if (Array.isArray(parsed) && key === 'todos') {
+        setStoredValue(
+          parsed.map((item: any) => serializeTodo(item as TodoItem)) as T
+        );
       } else {
         setStoredValue(parsed as T);
       }
     } catch (error) {
-      console.error("Failed to parse localStorage:", error);
+      console.error('Failed to parse localStorage:', error);
     }
   }, [key]);
 
   // Return wrapped version of useState's setter function
-  const setValue = useCallback((value: T | ((val: T) => T)) => {
-    try {
-      // Allow value to be a function
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
-      setStoredValue(valueToStore);
+  const setValue = useCallback(
+    (value: T | ((val: T) => T)) => {
+      try {
+        // Allow value to be a function
+        const valueToStore =
+          value instanceof Function ? value(storedValue) : value;
+        setStoredValue(valueToStore);
 
-      // Only update localStorage if we're on the client and component is mounted
-      if (isMounted) {
-        localStorage.setItem(key, JSON.stringify(valueToStore, (key, value) => {
-          if (key === "date" && value instanceof Date) {
-            return value.toISOString();
-          }
-          return value;
-        }));
+        // Only update localStorage if we're on the client and component is mounted
+        if (isMounted) {
+          localStorage.setItem(
+            key,
+            JSON.stringify(valueToStore, (key, value) => {
+              if (key === 'date' && value instanceof Date) {
+                return value.toISOString();
+              }
+              return value;
+            })
+          );
+        }
+      } catch (error) {
+        console.error('Failed to save to localStorage:', error);
       }
-    } catch (error) {
-      console.error("Failed to save to localStorage:", error);
-    }
-  }, [key, storedValue, isMounted]);
+    },
+    [key, storedValue, isMounted]
+  );
 
   return [storedValue, setValue] as const;
-} 
+}

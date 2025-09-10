@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils";
-import { CircularProgressProps } from "@/types";
+import { cn } from '@/lib/utils';
+import type { CircularProgressProps } from '@/types';
 
 export function CircularProgress({
   progress,
@@ -11,30 +11,30 @@ export function CircularProgress({
   const strokeDashoffset = circumference - (progress / 100) * circumference;
 
   const getProgressColor = () => {
-    if (progress === 100) return "text-green-500";
-    if (progress > 0) return "text-blue-500";
-    return "text-muted-foreground";
+    if (progress === 100) return 'text-green-500';
+    if (progress > 0) return 'text-blue-500';
+    return 'text-muted-foreground';
   };
 
   // Get color values for conic gradient
   const getColorValue = () => {
-    if (progress === 100) return "#22c55e"; // green-500
-    if (progress > 0) return "#3b82f6"; // blue-500
-    return "#a1a1aa"; // muted foreground default
+    if (progress === 100) return '#22c55e'; // green-500
+    if (progress > 0) return '#3b82f6'; // blue-500
+    return '#a1a1aa'; // muted foreground default
   };
 
   // Get emoji based on progress
   const getEmoji = () => {
-    if (progress === 100) return "🎉";
-    if (progress >= 75) return "🚀";
-    if (progress >= 50) return "💪";
-    if (progress >= 25) return "👊";
-    if (progress > 0) return "💫";
-    return "🎯";
+    if (progress === 100) return '🎉';
+    if (progress >= 75) return '🚀';
+    if (progress >= 50) return '💪';
+    if (progress >= 25) return '👊';
+    if (progress > 0) return '💫';
+    return '🎯';
   };
 
   // Use consistent transition for both elements
-  const transitionTiming = "transition-all duration-200 ease-out";
+  const transitionTiming = 'transition-all duration-200 ease-out';
 
   return (
     <div className="flex items-center gap-2">
@@ -45,7 +45,7 @@ export function CircularProgress({
       <div className="relative" style={{ width: size, height: size }}>
         {/* Pie background using conic-gradient for smooth transitions */}
         <div
-          className={cn("absolute inset-0 rounded-full", transitionTiming)}
+          className={cn('absolute inset-0 rounded-full', transitionTiming)}
           style={{
             background: `conic-gradient(${getColorValue()} ${progress}%, transparent ${progress}%)`,
             opacity: progress > 0 ? 0.25 : 0,

@@ -1,9 +1,9 @@
 import { Storage } from '@plasmohq/storage';
 import { useStorage } from '@plasmohq/storage/hook';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useI18n } from '@/hooks/useI18n';
+import { Card } from '@/components/ui/card';
 import { usePomodoro } from '@/hooks/pomodoro/usePomodoro';
+import { useI18n } from '@/hooks/useI18n';
 import type {
   CurrentQueue,
   PomodoroHistoryEntry,
@@ -89,16 +89,23 @@ export function HistoryList() {
               <div className="text-sm font-medium text-white drop-shadow-sm">
                 {t('historyCurrent')} · {phaseLabel(state.phase, t)}
               </div>
-              <span className="text-white/80 text-xs">{t('historyInProgress')}</span>
+              <span className="text-white/80 text-xs">
+                {t('historyInProgress')}
+              </span>
             </div>
           </Card>
         )}
         <div className="custom-scrollbar flex-1 overflow-y-auto space-y-2 min-h-0">
           {list.map((h) => (
-            <Card className="p-3 bg-white/3 backdrop-blur-sm rounded-xl hover:bg-white/6 transition-all duration-200 shadow-none" key={h.id}>
+            <Card
+              className="p-3 bg-white/3 backdrop-blur-sm rounded-xl hover:bg-white/6 transition-all duration-200 shadow-none"
+              key={h.id}
+            >
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-sm font-medium text-white drop-shadow-sm">{h.title}</div>
+                  <div className="text-sm font-medium text-white drop-shadow-sm">
+                    {h.title}
+                  </div>
                   <div className="text-white/75 text-xs mt-0.5">
                     {minutes(h.durationMs)} {t('historyMinutes')}
                   </div>

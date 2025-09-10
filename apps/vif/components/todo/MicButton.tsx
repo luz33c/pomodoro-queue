@@ -1,13 +1,13 @@
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
 import {
+  ArrowUp,
   Microphone,
   MicrophoneSlash,
   Warning,
-  ArrowUp,
-} from "@phosphor-icons/react";
-import { cn } from "@/lib/utils";
-import { MicButtonProps } from "@/types";
+} from '@phosphor-icons/react';
+import { Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import type { MicButtonProps } from '@/types';
 
 export function MicButton({
   isRecording,
@@ -19,7 +19,7 @@ export function MicButton({
   onSend,
 }: MicButtonProps) {
   // If checking permissions
-  if (micPermission === "checking") {
+  if (micPermission === 'checking') {
     return (
       <Button
         variant="ghost"
@@ -33,7 +33,7 @@ export function MicButton({
   }
 
   // If permission is denied and no text
-  if (micPermission === "denied" && !hasText) {
+  if (micPermission === 'denied' && !hasText) {
     return (
       <Button
         variant="ghost"
@@ -93,13 +93,13 @@ export function MicButton({
       variant="ghost"
       size="icon"
       className={cn(
-        "h-9 w-9 shrink-0 rounded-none hover:bg-muted-foreground/10",
-        micPermission === "granted" && "text-green-500 hover:text-green-600"
+        'h-9 w-9 shrink-0 rounded-none hover:bg-muted-foreground/10',
+        micPermission === 'granted' && 'text-green-500 hover:text-green-600'
       )}
       onClick={startRecording}
       disabled={isProcessingSpeech}
       title={
-        isProcessingSpeech ? "Processing speech..." : "Start voice recording"
+        isProcessingSpeech ? 'Processing speech...' : 'Start voice recording'
       }
     >
       <Microphone className="w-5 h-5" weight="fill" />

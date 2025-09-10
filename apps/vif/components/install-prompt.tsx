@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Share } from "lucide-react";
-import { useLocalStorage } from "@/hooks/use-local-storage";
+import { AnimatePresence, motion } from 'framer-motion';
+import { Share } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useLocalStorage } from '@/hooks/use-local-storage';
 
 export function InstallPrompt() {
   const [showPrompt, setShowPrompt] = useState(false);
   const [isDismissed, setIsDismissed] = useLocalStorage(
-    "installPromptDismissed",
+    'installPromptDismissed',
     false
   );
 
@@ -18,10 +18,10 @@ export function InstallPrompt() {
     const isIOS =
       /iPad|iPhone|iPod/.test(navigator.userAgent) &&
       !(navigator as any).standalone &&
-      !("MSStream" in window);
+      !('MSStream' in window);
 
     const isStandalone = window.matchMedia(
-      "(display-mode: standalone)"
+      '(display-mode: standalone)'
     ).matches;
 
     if (isIOS && !isStandalone) {
@@ -42,7 +42,7 @@ export function InstallPrompt() {
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -30, transition: { duration: 0.2 } }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           className="fixed top-4 left-4 right-4 md:left-1/2 md:-translate-x-1/2 md:w-auto md:max-w-sm p-3 bg-card text-card-foreground shadow-xl rounded-lg border border-border overflow-hidden z-50"
         >
           <div className="flex items-start justify-between gap-3">
@@ -59,7 +59,7 @@ export function InstallPrompt() {
               </p>
               <p className="mt-0.5 text-xs text-muted-foreground inline-flex items-center gap-1">
                 Tap <Share className="w-3 h-3 text-primary" /> then "Add to Home
-                Screen"{" "}
+                Screen"{' '}
                 <span
                   role="img"
                   aria-label="plus icon"

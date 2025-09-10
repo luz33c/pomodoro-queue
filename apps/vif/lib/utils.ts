@@ -1,8 +1,8 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 // Create dates in the user's timezone using a more reliable method
@@ -17,7 +17,7 @@ export function getDateInTimezone(timezone: string) {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
-    hour12: false
+    hour12: false,
   };
 
   // Format date in timezone
@@ -25,7 +25,9 @@ export function getDateInTimezone(timezone: string) {
 
   // Parse components from formatted string (formats like "04/10/2024, 00:30:00")
   const [datePart] = dateTimeString.split(', ');
-  const [month, day, year] = datePart.split('/').map(num => parseInt(num, 10));
+  const [month, day, year] = datePart
+    .split('/')
+    .map((num) => Number.parseInt(num, 10));
 
   // Create a date string in YYYY-MM-DD format
   return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;

@@ -1,48 +1,30 @@
-"use client";
+'use client';
 
-import { useState, useEffect, Suspense, useRef } from "react";
-import { format } from "date-fns";
 import {
-  List,
   CaretDown,
-  Smiley,
   Check,
-  X,
-  Robot,
+  List,
   Question,
-} from "@phosphor-icons/react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Calendar } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
-import {
-  EmojiPicker,
-  EmojiPickerContent,
-  EmojiPickerFooter,
-  EmojiPickerSearch,
-} from "@/components/ui/emoji-picker";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  Robot,
+  Smiley,
+  X,
+} from '@phosphor-icons/react';
+import { format } from 'date-fns';
+import { Suspense, useEffect, useRef, useState } from 'react';
+import { determineAction } from '@/app/actions';
+import { ThemeToggleButton } from '@/components/theme-toggle';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
-  DialogClose,
+  DialogHeader,
+  DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Drawer,
   DrawerClose,
@@ -52,32 +34,48 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
-import { useMicrophonePermission } from "@/hooks/use-microphone-permission";
-import { useLocalStorage } from "@/hooks/use-local-storage";
-import { useSpeechRecognition } from "@/hooks/use-speech-recognition";
-import { determineAction } from "@/app/actions";
-import { TodoItem, SortOption } from "@/types";
+} from '@/components/ui/drawer';
 import {
-  filterTodosByDate,
-  sortTodos,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  EmojiPicker,
+  EmojiPickerContent,
+  EmojiPickerFooter,
+  EmojiPickerSearch,
+} from '@/components/ui/emoji-picker';
+import { Input } from '@/components/ui/input';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { useLocalStorage } from '@/hooks/use-local-storage';
+import { useMicrophonePermission } from '@/hooks/use-microphone-permission';
+import { useSpeechRecognition } from '@/hooks/use-speech-recognition';
+import { type Model, modelOptions } from '@/lib/models';
+import { cn } from '@/lib/utils';
+import {
   calculateProgress,
+  filterTodosByDate,
   formatDate,
   serializeTodo,
-} from "@/lib/utils/todo";
-import { Model } from "@/lib/models";
-
+  sortTodos,
+} from '@/lib/utils/todo';
+import type { SortOption, TodoItem } from '@/types';
 // custom components
-import { CircularProgress } from "./CircularProgress";
-import { TodoSkeleton } from "./TodoSkeleton";
-import { TodoList } from "./TodoList";
-import { InputLoadingIndicator } from "./InputLoadingIndicator";
-import { MicButton } from "./MicButton";
-import { FaqContent } from "./FaqContent";
-import { EmptyState } from "./EmptyState";
-import { LoadingState } from "./LoadingState";
-import { ThemeToggleButton } from "@/components/theme-toggle";
-import { modelOptions } from "@/lib/models";
+import { CircularProgress } from './CircularProgress';
+import { EmptyState } from './EmptyState';
+import { FaqContent } from './FaqContent';
+import { InputLoadingIndicator } from './InputLoadingIndicator';
+import { LoadingState } from './LoadingState';
+import { MicButton } from './MicButton';
+import { TodoList } from './TodoList';
+import { TodoSkeleton } from './TodoSkeleton';
 
 // Add these interfaces before the main component
 interface MenuItemProps {
@@ -85,7 +83,7 @@ interface MenuItemProps {
   label: string;
   onClick?: () => void;
   selected?: boolean;
-  variant?: "default" | "danger";
+  variant?: 'default' | 'danger';
   endIcon?: React.ReactNode;
 }
 
@@ -100,35 +98,35 @@ const MenuItem = ({
   label,
   onClick,
   selected,
-  variant = "default",
+  variant = 'default',
   endIcon,
 }: MenuItemProps) => (
   <DropdownMenuItem
     onClick={onClick}
     className={cn(
-      "rounded-lg cursor-pointer flex items-center group h-8 px-2",
-      selected && "bg-muted",
-      variant === "danger" &&
-        "text-red-600 focus:text-red-600 focus:bg-red-100 dark:hover:bg-red-900/50 dark:hover:text-red-400 hover:text-red-600"
+      'rounded-lg cursor-pointer flex items-center group h-8 px-2',
+      selected && 'bg-muted',
+      variant === 'danger' &&
+        'text-red-600 focus:text-red-600 focus:bg-red-100 dark:hover:bg-red-900/50 dark:hover:text-red-400 hover:text-red-600'
     )}
   >
     <Icon
       className={cn(
-        "w-3.5 h-3.5 mr-2",
-        variant === "danger" &&
-          "group-hover:text-red-600 dark:group-hover:text-red-400"
+        'w-3.5 h-3.5 mr-2',
+        variant === 'danger' &&
+          'group-hover:text-red-600 dark:group-hover:text-red-400'
       )}
     />
     <span className="text-sm">{label}</span>
     {endIcon && (
       <span
         className={cn(
-          "ml-auto",
-          typeof selected === "boolean" &&
+          'ml-auto',
+          typeof selected === 'boolean' &&
             !selected &&
-            "text-muted-foreground/50",
-          variant === "danger" &&
-            "group-hover:text-red-600 dark:group-hover:text-red-400"
+            'text-muted-foreground/50',
+          variant === 'danger' &&
+            'group-hover:text-red-600 dark:group-hover:text-red-400'
         )}
       >
         {endIcon}
@@ -149,18 +147,18 @@ const MenuSection = ({ title, children }: MenuSectionProps) => (
 export default function Todo() {
   const [isLoading, setIsLoading] = useState(false);
   const [isClientLoaded, setIsClientLoaded] = useState(false);
-  const [todos, setTodos] = useLocalStorage<TodoItem[]>("todos", []);
-  const [newTodo, setNewTodo] = useState("");
+  const [todos, setTodos] = useLocalStorage<TodoItem[]>('todos', []);
+  const [newTodo, setNewTodo] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedEmoji, setSelectedEmoji] = useState<string>("😊");
+  const [selectedEmoji, setSelectedEmoji] = useState<string>('😊');
   const [selectedModel, setSelectedModel] = useLocalStorage<Model>(
-    "selectedModel",
-    "vif-default"
+    'selectedModel',
+    'vif-default'
   );
-  const [sortBy, setSortBy] = useState<SortOption>("newest");
+  const [sortBy, setSortBy] = useState<SortOption>('newest');
   const [editingTodoId, setEditingTodoId] = useState<string | null>(null);
-  const [editText, setEditText] = useState("");
-  const [editEmoji, setEditEmoji] = useState("");
+  const [editText, setEditText] = useState('');
+  const [editEmoji, setEditEmoji] = useState('');
   const [showFaqDialog, setShowFaqDialog] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
@@ -186,25 +184,25 @@ export default function Todo() {
     checkIfMobile();
 
     // Add event listener for window resize
-    window.addEventListener("resize", checkIfMobile);
+    window.addEventListener('resize', checkIfMobile);
 
     // Clean up
-    return () => window.removeEventListener("resize", checkIfMobile);
+    return () => window.removeEventListener('resize', checkIfMobile);
   }, []);
 
   // Add effect to detect standalone PWA mode
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       // Check if the app is running in standalone mode (PWA)
       const isInStandaloneMode =
-        window.matchMedia("(display-mode: standalone)").matches ||
+        window.matchMedia('(display-mode: standalone)').matches ||
         (window.navigator as any).standalone ||
-        document.referrer.includes("android-app://");
+        document.referrer.includes('android-app://');
 
       setIsStandalone(isInStandaloneMode);
 
       // Listen for changes in display mode
-      const mediaQueryList = window.matchMedia("(display-mode: standalone)");
+      const mediaQueryList = window.matchMedia('(display-mode: standalone)');
       const handleChange = (e: MediaQueryListEvent) => {
         setIsStandalone(
           e.matches || (window.navigator as any).standalone || false
@@ -213,7 +211,7 @@ export default function Todo() {
 
       // Modern browsers use addEventListener, older ones use addListener
       if (mediaQueryList.addEventListener) {
-        mediaQueryList.addEventListener("change", handleChange);
+        mediaQueryList.addEventListener('change', handleChange);
       } else if (mediaQueryList.addListener) {
         // For Safari < 14
         mediaQueryList.addListener(handleChange);
@@ -221,7 +219,7 @@ export default function Todo() {
 
       return () => {
         if (mediaQueryList.removeEventListener) {
-          mediaQueryList.removeEventListener("change", handleChange);
+          mediaQueryList.removeEventListener('change', handleChange);
         } else if (mediaQueryList.removeListener) {
           mediaQueryList.removeListener(handleChange);
         }
@@ -248,7 +246,7 @@ export default function Todo() {
     if (!text.trim()) return;
 
     setIsLoading(true);
-    setNewTodo("");
+    setNewTodo('');
 
     let newTodos = [...todos];
     let clearActionExecuted = false;
@@ -258,7 +256,7 @@ export default function Todo() {
       const actions = (
         await determineAction(
           text,
-          selectedEmoji || "",
+          selectedEmoji || '',
           filteredTodos,
           selectedModel,
           timezone
@@ -266,7 +264,7 @@ export default function Todo() {
       ).actions;
       actions.forEach((action) => {
         switch (action.action) {
-          case "add":
+          case 'add': {
             let todoDate = selectedDate;
             if (action.targetDate) {
               todoDate = new Date(action.targetDate);
@@ -282,41 +280,42 @@ export default function Todo() {
               })
             );
             break;
+          }
 
-          case "delete":
+          case 'delete':
             if (action.todoId) {
               newTodos = newTodos.filter((todo) => todo.id !== action.todoId);
             }
             break;
 
-          case "mark":
+          case 'mark':
             if (action.todoId) {
               newTodos = newTodos.map((todo) => {
                 if (todo.id === action.todoId) {
                   // If status is provided, set to that specific status
-                  if (action.status === "complete") {
+                  if (action.status === 'complete') {
                     return { ...todo, completed: true };
-                  } else if (action.status === "incomplete") {
-                    return { ...todo, completed: false };
-                  } else {
-                    // If no status provided, toggle the current status
-                    return { ...todo, completed: !todo.completed };
                   }
+                  if (action.status === 'incomplete') {
+                    return { ...todo, completed: false };
+                  }
+                  // If no status provided, toggle the current status
+                  return { ...todo, completed: !todo.completed };
                 }
                 return todo;
               });
             }
             break;
 
-          case "sort":
+          case 'sort':
             if (action.sortBy) {
               setSortBy(action.sortBy);
             }
             break;
 
-          case "edit":
+          case 'edit':
             if (action.todoId && action.text) {
-              console.log("AI editing todo:", {
+              console.log('AI editing todo:', {
                 todoId: action.todoId,
                 newText: action.text,
                 newDate: action.targetDate,
@@ -334,7 +333,7 @@ export default function Todo() {
                       : todo.date,
                     time: action.time || todo.time,
                   });
-                  console.log("AI updated todo:", updatedTodo);
+                  console.log('AI updated todo:', updatedTodo);
                   return updatedTodo;
                 }
                 return todo;
@@ -342,37 +341,37 @@ export default function Todo() {
             }
             break;
 
-          case "clear":
+          case 'clear':
             clearActionExecuted = true;
             if (action.listToClear) {
               switch (action.listToClear) {
-                case "all":
+                case 'all':
                   // Clear all todos for the selected date
                   newTodos = todos.filter(
                     (todo) =>
-                      format(todo.date, "yyyy-MM-dd") !==
-                      format(selectedDate, "yyyy-MM-dd")
+                      format(todo.date, 'yyyy-MM-dd') !==
+                      format(selectedDate, 'yyyy-MM-dd')
                   );
                   break;
-                case "completed":
+                case 'completed':
                   // Clear completed todos for the selected date
                   newTodos = todos.filter(
                     (todo) =>
                       !(
                         todo.completed &&
-                        format(todo.date, "yyyy-MM-dd") ===
-                          format(selectedDate, "yyyy-MM-dd")
+                        format(todo.date, 'yyyy-MM-dd') ===
+                          format(selectedDate, 'yyyy-MM-dd')
                       )
                   );
                   break;
-                case "incomplete":
+                case 'incomplete':
                   // Clear incomplete todos for the selected date
                   newTodos = todos.filter(
                     (todo) =>
                       !(
                         !todo.completed &&
-                        format(todo.date, "yyyy-MM-dd") ===
-                          format(selectedDate, "yyyy-MM-dd")
+                        format(todo.date, 'yyyy-MM-dd') ===
+                          format(selectedDate, 'yyyy-MM-dd')
                       )
                   );
                   break;
@@ -384,7 +383,7 @@ export default function Todo() {
 
       setTodos(newTodos);
     } catch (error) {
-      console.error("AI Action failed:", error);
+      console.error('AI Action failed:', error);
       setTodos([
         ...todos,
         serializeTodo({
@@ -415,18 +414,18 @@ export default function Todo() {
   const startEditing = (id: string, text: string, emoji?: string) => {
     setEditingTodoId(id);
     setEditText(text);
-    setEditEmoji(emoji || "");
+    setEditEmoji(emoji || '');
   };
 
   const cancelEditing = () => {
     setEditingTodoId(null);
-    setEditText("");
-    setEditEmoji("");
+    setEditText('');
+    setEditEmoji('');
   };
 
   const handleEditTodo = (updatedTodo: TodoItem) => {
     if (updatedTodo.text.trim()) {
-      console.log("Editing todo:", updatedTodo);
+      console.log('Editing todo:', updatedTodo);
 
       setTodos(
         todos.map((todo) => {
@@ -437,7 +436,7 @@ export default function Todo() {
               emoji: updatedTodo.emoji,
               time: updatedTodo.time,
             });
-            console.log("Updated todo:", updated);
+            console.log('Updated todo:', updated);
             return updated;
           }
           return todo;
@@ -445,15 +444,15 @@ export default function Todo() {
       );
     }
     setEditingTodoId(null);
-    setEditText("");
-    setEditEmoji("");
+    setEditText('');
+    setEditEmoji('');
   };
 
   const clearAllTodos = () => {
     setTodos(
       todos.filter(
         (todo) =>
-          format(todo.date, "yyyy-MM-dd") !== format(selectedDate, "yyyy-MM-dd")
+          format(todo.date, 'yyyy-MM-dd') !== format(selectedDate, 'yyyy-MM-dd')
       )
     );
   };
@@ -464,8 +463,8 @@ export default function Todo() {
         (todo) =>
           !(
             todo.completed &&
-            format(todo.date, "yyyy-MM-dd") ===
-              format(selectedDate, "yyyy-MM-dd")
+            format(todo.date, 'yyyy-MM-dd') ===
+              format(selectedDate, 'yyyy-MM-dd')
           )
       )
     );
@@ -477,15 +476,15 @@ export default function Todo() {
         (todo) =>
           !(
             !todo.completed &&
-            format(todo.date, "yyyy-MM-dd") ===
-              format(selectedDate, "yyyy-MM-dd")
+            format(todo.date, 'yyyy-MM-dd') ===
+              format(selectedDate, 'yyyy-MM-dd')
           )
       )
     );
   };
 
   const handleInputKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && !isLoading) {
+    if (e.key === 'Enter' && !isLoading) {
       handleAction(newTodo);
     }
   };
@@ -575,9 +574,9 @@ export default function Todo() {
 
       <div
         className={cn(
-          "fixed bottom-0 left-0 right-0 p-4 bg-background border-t transition-all duration-200 ease-in-out",
-          isStandalone && "pb-8",
-          isInputFocused && "pb-4"
+          'fixed bottom-0 left-0 right-0 p-4 bg-background border-t transition-all duration-200 ease-in-out',
+          isStandalone && 'pb-8',
+          isInputFocused && 'pb-4'
         )}
       >
         <div className="max-w-md mx-auto flex items-center space-x-2">
@@ -670,7 +669,7 @@ export default function Todo() {
               ref={inputRef}
               type="text"
               placeholder={
-                isLoading ? "Processing..." : "insert or send action"
+                isLoading ? 'Processing...' : 'insert or send action'
               }
               value={newTodo}
               onChange={(e) => setNewTodo(e.target.value)}
@@ -679,8 +678,8 @@ export default function Todo() {
               onFocus={() => setIsInputFocused(true)}
               onBlur={() => setIsInputFocused(false)}
               className={cn(
-                "flex-1 border-0 !bg-transparent focus:!outline-none focus:!ring-0 focus-visible:!ring-0 focus-visible:!ring-offset-0 h-9 rounded-none shadow-none px-2",
-                isLoading && "text-muted-foreground"
+                'flex-1 border-0 !bg-transparent focus:!outline-none focus:!ring-0 focus-visible:!ring-0 focus-visible:!ring-offset-0 h-9 rounded-none shadow-none px-2',
+                isLoading && 'text-muted-foreground'
               )}
               disabled={isLoading || isProcessingSpeech}
             />

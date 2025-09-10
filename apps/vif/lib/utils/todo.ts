@@ -1,5 +1,5 @@
-import { TodoItem } from "@/types";
-import { format } from "date-fns";
+import { format } from 'date-fns';
+import type { TodoItem } from '@/types';
 
 // Helper function to ensure Date objects are properly serialized
 export const serializeTodo = (todo: TodoItem): TodoItem => {
@@ -11,7 +11,7 @@ export const serializeTodo = (todo: TodoItem): TodoItem => {
   // If date is a string, convert it to a Date object
   return {
     ...todo,
-    date: new Date(todo.date)
+    date: new Date(todo.date),
   };
 };
 
@@ -22,18 +22,19 @@ export const formatDate = (date: Date) => {
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   if (date.toDateString() === today.toDateString()) {
-    return "Today";
-  } else if (date.toDateString() === tomorrow.toDateString()) {
-    return `Tomorrow, ${format(date, "EEE, d MMM")}`;
-  } else {
-    return format(date, "EEE, d MMM");
+    return 'Today';
   }
+  if (date.toDateString() === tomorrow.toDateString()) {
+    return `Tomorrow, ${format(date, 'EEE, d MMM')}`;
+  }
+  return format(date, 'EEE, d MMM');
 };
 
 // Filter todos by date
 export const filterTodosByDate = (todos: TodoItem[], selectedDate: Date) => {
   return todos.filter(
-    (todo) => format(todo.date, "yyyy-MM-dd") === format(selectedDate, "yyyy-MM-dd")
+    (todo) =>
+      format(todo.date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd')
   );
 };
 
@@ -41,13 +42,13 @@ export const filterTodosByDate = (todos: TodoItem[], selectedDate: Date) => {
 export const sortTodos = (todos: TodoItem[], sortBy: string) => {
   return [...todos].sort((a, b) => {
     switch (sortBy) {
-      case "newest":
+      case 'newest':
         return b.id.localeCompare(a.id);
-      case "oldest":
+      case 'oldest':
         return a.id.localeCompare(b.id);
-      case "alphabetical":
+      case 'alphabetical':
         return a.text.localeCompare(b.text);
-      case "completed":
+      case 'completed':
         return Number(b.completed) - Number(a.completed);
       default:
         return 0;
@@ -61,4 +62,4 @@ export const calculateProgress = (todos: TodoItem[]) => {
   return todos.length > 0
     ? Math.round((completedCount / todos.length) * 100)
     : 0;
-}; 
+};

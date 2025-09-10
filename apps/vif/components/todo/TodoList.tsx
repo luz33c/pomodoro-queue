@@ -1,22 +1,22 @@
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { X, PencilSimple, Check, Smiley, Clock } from "@phosphor-icons/react";
-import { CircleCheckbox } from "./CircleCheckbox";
-import { TodoListProps } from "@/types";
-import { useRef, useCallback, useState, useEffect } from "react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Check, Clock, PencilSimple, Smiley, X } from '@phosphor-icons/react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   EmojiPicker,
   EmojiPickerContent,
   EmojiPickerFooter,
   EmojiPickerSearch,
-} from "@/components/ui/emoji-picker";
-import { TimePicker, formatTimeDisplay } from "./TimePicker";
+} from '@/components/ui/emoji-picker';
+import { Input } from '@/components/ui/input';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+import type { TodoListProps } from '@/types';
+import { CircleCheckbox } from './CircleCheckbox';
+import { formatTimeDisplay, TimePicker } from './TimePicker';
 
 export function TodoList({
   todos,
@@ -34,7 +34,7 @@ export function TodoList({
   // Create a reference for the edit input
   const editInputRef = useRef<HTMLInputElement>(null);
   const [isMobile, setIsMobile] = useState(false);
-  const [editTime, setEditTime] = useState<string>("");
+  const [editTime, setEditTime] = useState<string>('');
 
   // Effect to detect mobile screens
   useEffect(() => {
@@ -46,10 +46,10 @@ export function TodoList({
     checkIfMobile();
 
     // Add event listener for window resize
-    window.addEventListener("resize", checkIfMobile);
+    window.addEventListener('resize', checkIfMobile);
 
     // Clean up
-    return () => window.removeEventListener("resize", checkIfMobile);
+    return () => window.removeEventListener('resize', checkIfMobile);
   }, []);
 
   // Create a memoized handler for input changes
@@ -74,7 +74,7 @@ export function TodoList({
   useEffect(() => {
     if (editingTodoId) {
       const todo = todos.find((t) => t.id === editingTodoId);
-      setEditTime(todo?.time || "");
+      setEditTime(todo?.time || '');
     }
   }, [editingTodoId, todos]);
 
@@ -87,11 +87,11 @@ export function TodoList({
         <div
           key={todo.id}
           className={cn(
-            "group flex items-start px-4 py-2.5 gap-3",
-            todo.completed ? "text-muted-foreground/50" : "hover:bg-muted/50",
-            editingTodoId === todo.id && "bg-muted/80 rounded-lg",
-            editingTodoId !== todo.id && "cursor-pointer",
-            "transition-colors"
+            'group flex items-start px-4 py-2.5 gap-3',
+            todo.completed ? 'text-muted-foreground/50' : 'hover:bg-muted/50',
+            editingTodoId === todo.id && 'bg-muted/80 rounded-lg',
+            editingTodoId !== todo.id && 'cursor-pointer',
+            'transition-colors'
           )}
           onClick={(e: React.MouseEvent) => {
             if (editingTodoId !== todo.id && e.target === e.currentTarget) {
@@ -146,14 +146,14 @@ export function TodoList({
                     value={editText}
                     onChange={handleEditInputChange}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter") {
+                      if (e.key === 'Enter') {
                         handleEditTodo({
                           ...todo,
                           text: editText,
                           emoji: editEmoji,
                           time: editTime,
                         });
-                      } else if (e.key === "Escape") {
+                      } else if (e.key === 'Escape') {
                         cancelEditing();
                       }
                     }}
@@ -199,14 +199,17 @@ export function TodoList({
             </>
           ) : (
             <>
-              <div onClick={(e: React.MouseEvent) => e.stopPropagation()} className="mt-0.5">
+              <div
+                onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                className="mt-0.5"
+              >
                 <CircleCheckbox
                   checked={todo.completed}
                   onCheckedChange={() => onToggle(todo.id)}
                   className={cn(
                     todo.completed
-                      ? "border-muted-foreground/50 bg-muted-foreground/20"
-                      : "hover:border-muted-foreground/70"
+                      ? 'border-muted-foreground/50 bg-muted-foreground/20'
+                      : 'hover:border-muted-foreground/70'
                   )}
                 />
               </div>
@@ -225,12 +228,12 @@ export function TodoList({
                 <div className="flex flex-col min-w-0">
                   <span
                     className={cn(
-                      todo.text.length > 50 
-                        ? "text-xs leading-relaxed" 
-                        : todo.text.length > 30 
-                        ? "text-sm leading-relaxed" 
-                        : "text-[15px] leading-relaxed",
-                      todo.completed && "line-through"
+                      todo.text.length > 50
+                        ? 'text-xs leading-relaxed'
+                        : todo.text.length > 30
+                          ? 'text-sm leading-relaxed'
+                          : 'text-[15px] leading-relaxed',
+                      todo.completed && 'line-through'
                     )}
                   >
                     {todo.text}
@@ -247,10 +250,10 @@ export function TodoList({
                 variant="ghost"
                 size="icon"
                 className={cn(
-                  "h-7 w-7 text-muted-foreground hover:text-foreground",
+                  'h-7 w-7 text-muted-foreground hover:text-foreground',
                   isMobile
-                    ? "opacity-100"
-                    : "opacity-0 group-hover:opacity-100 transition-opacity"
+                    ? 'opacity-100'
+                    : 'opacity-0 group-hover:opacity-100 transition-opacity'
                 )}
                 onClick={(e: React.MouseEvent) => {
                   e.stopPropagation();
@@ -263,10 +266,10 @@ export function TodoList({
                 variant="ghost"
                 size="icon"
                 className={cn(
-                  "h-7 w-7 text-muted-foreground hover:text-destructive",
+                  'h-7 w-7 text-muted-foreground hover:text-destructive',
                   isMobile
-                    ? "opacity-100"
-                    : "opacity-0 group-hover:opacity-100 transition-opacity"
+                    ? 'opacity-100'
+                    : 'opacity-0 group-hover:opacity-100 transition-opacity'
                 )}
                 onClick={(e: React.MouseEvent) => {
                   e.stopPropagation();

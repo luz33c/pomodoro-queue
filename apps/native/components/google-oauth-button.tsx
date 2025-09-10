@@ -1,9 +1,9 @@
-import React from 'react';
-import { TouchableOpacity, Text, View, Alert } from 'react-native';
 import { useOAuth } from '@clerk/clerk-expo';
+import * as Linking from 'expo-linking';
 import { useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
-import * as Linking from 'expo-linking';
+import React from 'react';
+import { Alert, Text, TouchableOpacity, View } from 'react-native';
 
 // Warm up the browser on Android
 WebBrowser.maybeCompleteAuthSession();
@@ -14,9 +14,10 @@ export default function GoogleOAuthButton() {
 
   const onPress = React.useCallback(async () => {
     try {
-      const { createdSessionId, signIn, signUp, setActive } = await startOAuthFlow({
-        redirectUrl: Linking.createURL('/'),
-      });
+      const { createdSessionId, signIn, signUp, setActive } =
+        await startOAuthFlow({
+          redirectUrl: Linking.createURL('/'),
+        });
 
       if (createdSessionId) {
         setActive!({ session: createdSessionId });
@@ -27,7 +28,10 @@ export default function GoogleOAuthButton() {
       }
     } catch (err: any) {
       console.error('OAuth error', err);
-      Alert.alert('Authentication Error', err.errors?.[0]?.message || 'Failed to authenticate with Google');
+      Alert.alert(
+        'Authentication Error',
+        err.errors?.[0]?.message || 'Failed to authenticate with Google'
+      );
     }
   }, [startOAuthFlow, router]);
 

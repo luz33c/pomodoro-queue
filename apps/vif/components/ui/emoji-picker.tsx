@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
 import {
   type EmojiPickerListCategoryHeaderProps,
   type EmojiPickerListEmojiProps,
   type EmojiPickerListRowProps,
   EmojiPicker as EmojiPickerPrimitive,
-} from "frimousse";
-import { LoaderIcon, SearchIcon } from "lucide-react";
-import type * as React from "react";
+} from 'frimousse';
+import { LoaderIcon, SearchIcon } from 'lucide-react';
+import type * as React from 'react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 function EmojiPicker({
   className,
@@ -18,7 +18,7 @@ function EmojiPicker({
   return (
     <EmojiPickerPrimitive.Root
       className={cn(
-        "bg-popover text-popover-foreground isolate flex h-full w-fit flex-col overflow-hidden rounded-md",
+        'bg-popover text-popover-foreground isolate flex h-full w-fit flex-col overflow-hidden rounded-md',
         className
       )}
       data-slot="emoji-picker"
@@ -33,7 +33,7 @@ function EmojiPickerSearch({
 }: React.ComponentProps<typeof EmojiPickerPrimitive.Search>) {
   return (
     <div
-      className={cn("flex h-9 items-center gap-2 border-b px-3", className)}
+      className={cn('flex h-9 items-center gap-2 border-b px-3', className)}
       data-slot="emoji-picker-search-wrapper"
     >
       <SearchIcon className="size-4 shrink-0 opacity-50" />
@@ -63,7 +63,7 @@ function EmojiPickerEmoji({
     <button
       {...props}
       className={cn(
-        "data-[active]:bg-accent flex size-7 items-center justify-center rounded-sm text-base",
+        'data-[active]:bg-accent flex size-7 items-center justify-center rounded-sm text-base',
         className
       )}
       data-slot="emoji-picker-emoji"
@@ -94,7 +94,7 @@ function EmojiPickerContent({
 }: React.ComponentProps<typeof EmojiPickerPrimitive.Viewport>) {
   return (
     <EmojiPickerPrimitive.Viewport
-      className={cn("outline-hidden relative flex-1", className)}
+      className={cn('outline-hidden relative flex-1', className)}
       data-slot="emoji-picker-viewport"
       {...props}
     >
@@ -126,11 +126,11 @@ function EmojiPickerContent({
 function EmojiPickerFooter({
   className,
   ...props
-}: React.ComponentProps<"div">) {
+}: React.ComponentProps<'div'>) {
   return (
     <div
       className={cn(
-        "max-w-(--frimousse-viewport-width) flex w-full min-w-0 items-center gap-1 border-t p-2",
+        'max-w-(--frimousse-viewport-width) flex w-full min-w-0 items-center gap-1 border-t p-2',
         className
       )}
       data-slot="emoji-picker-footer"
