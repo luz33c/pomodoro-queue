@@ -418,6 +418,27 @@ export async function resumeTimer() {
   };
   await storage.set(STORAGE_KEY, next);
   await schedulePhaseEndAlarm(next);
+
+  // 从暂停恢复时，如处于休息阶段则按模式处理
+  if (next.phase === 'short' || next.phase === 'long') {
+    if (next.config?.strictMode) {
+      // Mark: break control
+      // 恢复于休息阶段且为严格模式 → 打开/聚焦 Break 页面
+      await beginStrictBreak();
+    } else {
+      // 普通模式：覆盖遮罩
+      // Mark: break control
+      // 恢复于休息阶段且为普通模式 → 注入遮罩并清理严格模式
+      await showOverlayOnAllOpenTabs();
+      // Mark: break control
+      // 确保不存在遗留的严格模式 Break 页面
+      await endStrictBreak();
+    }
+  } else {
+    // 非休息阶段恢复 → 关闭可能的 Break 页面
+    // Mark: break control
+    await endStrictBreak();
+  }
 }
 
 export async function applyConfig(cfg: PomodoroState['config']) {

@@ -1,10 +1,16 @@
 import '@/style.css';
 
-import { useMemo, useState } from 'react';
+import { lazy, Suspense, useMemo, useState } from 'react';
 import { Toaster } from 'sonner';
 import { PomodoroHome } from './components/pomodoro/PomodoroHome';
-import { PomodoroSettings } from './components/pomodoro/PomodoroSettings';
 import { usePomodoro } from './hooks/pomodoro/usePomodoro';
+
+// 按需加载设置页，避免首屏引入不必要的大模块
+const PomodoroSettingsLazy = lazy(() =>
+  import('./components/pomodoro/PomodoroSettings').then((m) => ({
+    default: m.PomodoroSettings,
+  }))
+);
 
 function IndexPopup() {
   const [showSettings, setShowSettings] = useState(false);
@@ -22,15 +28,23 @@ function IndexPopup() {
 
   return (
     <div
-      className={`dark relative flex h-[600px] w-[380px] flex-col overflow-hidden overscroll-none ${backgroundClass}`}
+      className={`dark relative flex h-[640px] w-[360px] flex-col overflow-hidden overscroll-none ${backgroundClass}`}
     >
       <Toaster />
       {showSettings ? (
-        <PomodoroSettings
-          isOpen={showSettings}
-          onClose={() => setShowSettings(false)}
-          showTaskSetting={false}
-        />
+        <Suspense
+          fallback={
+            <div className="flex h-full items-center justify-center text-white/80">
+              Loading...
+            </div>
+          }
+        >
+          <PomodoroSettingsLazy
+            isOpen={showSettings}
+            onClose={() => setShowSettings(false)}
+            showTaskSetting={false}
+          />
+        </Suspense>
       ) : (
         <PomodoroHome onOpenSettings={() => setShowSettings(true)} />
       )}

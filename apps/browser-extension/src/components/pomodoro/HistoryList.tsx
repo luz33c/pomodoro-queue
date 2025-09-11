@@ -1,5 +1,6 @@
 import { Storage } from '@plasmohq/storage';
 import { useStorage } from '@plasmohq/storage/hook';
+import { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { usePomodoro } from '@/hooks/pomodoro/usePomodoro';
@@ -59,10 +60,11 @@ export function HistoryList() {
     instance: localInstance,
   });
 
-  const sorted = [...(history ?? [])].sort((a, b) => b.endedAt - a.endedAt);
-  const list = currentQueue
-    ? sorted.filter((h) => h.queueId === currentQueue.id)
-    : [];
+  const list = useMemo(() => {
+    if (!currentQueue) return [] as PomodoroHistoryEntry[];
+    const sorted = [...(history ?? [])].sort((a, b) => b.endedAt - a.endedAt);
+    return sorted.filter((h) => h.queueId === currentQueue.id);
+  }, [history, currentQueue]);
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden px-1">

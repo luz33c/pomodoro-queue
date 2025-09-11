@@ -1,5 +1,7 @@
 /** biome-ignore-all lint/suspicious/noUnknownAtRules: Tailwind CSS directives */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
+/* 移除阻塞渲染的远程字体 @import，避免 popup 首屏被外链 CSS 阻塞。
+   如需使用 Google Fonts，请改为在静态 HTML 里通过 <link rel="preconnect"> + <link rel="stylesheet"> 的方式引入，
+   并启用 font-display: swap 或使用系统字体栈。扩展弹窗场景推荐直接使用系统字体以获得最快首屏。 */
 
 @tailwind base;
 @tailwind components;

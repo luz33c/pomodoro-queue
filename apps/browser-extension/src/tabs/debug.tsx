@@ -1,6 +1,6 @@
 import '@/style.css';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Toaster } from 'sonner';
 import { PomodoroHome } from '../components/pomodoro/PomodoroHome';
 import { PomodoroSettings } from '../components/pomodoro/PomodoroSettings';
@@ -36,13 +36,19 @@ function DebugTab() {
     return JSON.stringify(value);
   };
 
+  // 设置页面标题，避免显示占位符 __MSG_extensionName__
+  useEffect(() => {
+    const extName = chrome.i18n.getMessage('extensionName');
+    document.title = extName || 'Pomodoro Queue';
+  }, []);
+
   return (
     <div className="dark flex h-screen w-full bg-background text-foreground">
       <Toaster />
 
       {/* Left Panel - Pomodoro Interface */}
       <div
-        className={`relative flex h-[600px] w-[380px] flex-col overflow-hidden overscroll-none ${backgroundClass} mt-8 ml-8 border rounded-lg shadow-lg`}
+        className={`relative flex h-[640px] w-[360px] flex-col overflow-hidden overscroll-none ${backgroundClass} mt-8 ml-8 border rounded-lg shadow-lg`}
       >
         {/* <div className="absolute top-2 right-2 text-xs text-white/70 bg-black/20 px-2 py-1 rounded backdrop-blur-sm">
           Debug Mode

@@ -53,6 +53,13 @@ function BreakPage() {
     // Plasmo 会自动清理 storage watch
   }, [flashHint]);
 
+  // 设置页面标题，避免显示占位符 __MSG_extensionName__
+  useEffect(() => {
+    const extName = chrome.i18n.getMessage('extensionName');
+    const pageTitle = t('breakPageTitle') || extName || 'Pomodoro';
+    document.title = `${pageTitle}`;
+  }, [t]);
+
   const handlePause = async () => {
     await pause();
   };
