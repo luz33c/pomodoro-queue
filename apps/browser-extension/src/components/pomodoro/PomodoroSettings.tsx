@@ -172,7 +172,7 @@ export function PomodoroSettings({
                 {t('settingsDisplayOptions')}
               </h3>
 
-              <div className="flex items-start justify-between gap-3">
+              {/* <div className="flex items-start justify-between gap-3">
                 <div className="flex-1">
                   <Label
                     className="text-sm font-medium text-white"
@@ -193,7 +193,7 @@ export function PomodoroSettings({
                     updateConfigPartial({ showFloatingTimer: v })
                   }
                 />
-              </div>
+              </div> */}
 
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1">
@@ -218,7 +218,7 @@ export function PomodoroSettings({
             </div>
 
             {/* Break Behavior Section */}
-            <div className="space-y-3">
+            {/* <div className="space-y-3">
               <h3 className="text-sm font-medium text-white">
                 {t('settingsBreakBehavior')}
               </h3>
@@ -262,21 +262,11 @@ export function PomodoroSettings({
                   </p>
                 </div>
               )}
-            </div>
+            </div> */}
           </div>
         )}
 
         <Separator className="my-4 bg-white/30" />
-
-        {/* <div className="flex justify-end gap-2">
-          <Button
-            onClick={onClose}
-            size="sm"
-            className="rounded-lg border-0 shadow-none bg-white/20 text-white hover:bg-white/30"
-            variant="outline">
-            {t("buttonClose")}
-          </Button>
-        </div> */}
       </div>
     </div>
   );

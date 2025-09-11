@@ -75,7 +75,7 @@ export function HistoryList() {
         {state?.running && (
           <Button
             aria-label={t('buttonStop')}
-            className="bg-white/20 text-white hover:bg-white/30 px-2.5 py-1 rounded-md border-0 shadow-none transition-colors duration-200 text-xs"
+            className="bg-white/20 text-white hover:bg-white/30 h-7 px-2 py-0.5 rounded-md border-0 shadow-none transition-colors duration-200 text-[12px]"
             onClick={() => stop()}
             size="sm"
             type="button"

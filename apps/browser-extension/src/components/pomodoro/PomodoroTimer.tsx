@@ -47,7 +47,7 @@ export function PomodoroTimer({ onOpenSettings }: PomodoroTimerProps) {
     <div className="w-full text-white">
       <div className="flex items-center justify-between mb-2">
         <h2 className="font-semibold text-lg text-white">
-          {t('pomodoroTimer')}
+          {/* {t('pomodoroTimer')} */}
         </h2>
         <Button
           aria-label={t('tooltipOpenSettings')}

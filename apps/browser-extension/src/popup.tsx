@@ -28,7 +28,7 @@ function IndexPopup() {
 
   return (
     <div
-      className={`dark relative flex h-[640px] w-[360px] flex-col overflow-hidden overscroll-none ${backgroundClass}`}
+      className={`dark relative flex h-[600px] w-[360px] flex-col overflow-hidden overscroll-none ${backgroundClass}`}
     >
       <Toaster />
       {showSettings ? (

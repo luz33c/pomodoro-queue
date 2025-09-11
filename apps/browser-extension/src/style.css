@@ -114,8 +114,9 @@
 
   /* WebKit (Chrome, Edge, Safari) */
   .custom-scrollbar::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    /* 将滚动条厚度缩小为原来的一半 */
+    width: 5px;
+    height: 5px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
@@ -125,9 +126,10 @@
   .custom-scrollbar::-webkit-scrollbar-thumb {
     background-color: transparent; /* 默认隐藏 */
     border-radius: 9999px;
-    border: 3px solid transparent; /* 留出与内容的间隙，保证易点按 */
+    /* 缩小可视宽度，但保留可点按区域 */
+    border: 2px solid transparent;
     background-clip: padding-box;
-    min-height: 32px; /* 稍微加长拇指长度 */
+    height: 8px; /* 与厚度相称，避免视觉上显得粗 */
   }
 
   .custom-scrollbar:hover::-webkit-scrollbar-thumb {

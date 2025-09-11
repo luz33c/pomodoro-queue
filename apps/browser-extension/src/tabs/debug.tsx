@@ -48,7 +48,7 @@ function DebugTab() {
 
       {/* Left Panel - Pomodoro Interface */}
       <div
-        className={`relative flex h-[640px] w-[360px] flex-col overflow-hidden overscroll-none ${backgroundClass} mt-8 ml-8 border rounded-lg shadow-lg`}
+        className={`relative flex h-[600px] w-[360px] flex-col overflow-hidden overscroll-none ${backgroundClass} mt-8 ml-8 border rounded-lg shadow-lg`}
       >
         {/* <div className="absolute top-2 right-2 text-xs text-white/70 bg-black/20 px-2 py-1 rounded backdrop-blur-sm">
           Debug Mode
