@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title>PomodoQ — flat mark</title>
+  <desc>A flat Q-shaped timer ring with a tomato leaf accent.</desc>
+  <style>
+    :root{
+      --brand:#FF4D4F;
+      --leaf:#16A34A;
+      --ink:#0F172A;
+    }
+    .ring{fill:none;stroke:var(--brand,#FF4D4F);stroke-width:28;stroke-linecap:round}
+    .tail{fill:var(--brand,#FF4D4F)}
+    .leaf{fill:var(--leaf,#16A34A)}
+  </style>
+
+  <!-- Q ring -->
+  <circle cx="128" cy="128" r="68" class="ring"/>
+  <!-- tail -->
+  <rect x="164" y="164" width="56" height="20" rx="10" class="tail" transform="rotate(45 192 174)"/>
+  <!-- leaf cluster -->
+  <g transform="translate(8,-6)">
+    <ellipse cx="120" cy="52" rx="16" ry="10" class="leaf" transform="rotate(-18 120 52)"/>
+    <ellipse cx="140" cy="50" rx="14" ry="9" class="leaf" transform="rotate(20 140 50)"/>
+    <rect x="128" y="48" width="6" height="12" rx="3" class="leaf"/>
+  </g>
+</svg>

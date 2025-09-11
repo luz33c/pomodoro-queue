@@ -38,7 +38,8 @@
     /* Pomodoro state backgrounds - light mode */
     --pomodoro-focus-bg: 158 94% 20%;
     --pomodoro-focus-fg: 210 40% 98%;
-    --pomodoro-break-bg: 32 95% 44%;
+    --pomodoro-break-bg: #ff4d4f;
+    /* // 32 95% 44% */
     --pomodoro-break-fg: 210 40% 98%;
   }
 
@@ -71,7 +72,7 @@
     /* Pomodoro state backgrounds - dark mode */
     --pomodoro-focus-bg: 151 79% 39%;
     --pomodoro-focus-fg: 222.2 84% 4.9%;
-    --pomodoro-break-bg: 32 95% 44%;
+    --pomodoro-break-bg: #ff4d4f;
     --pomodoro-break-fg: 210 40% 98%;
   }
 }
@@ -149,7 +150,7 @@
   }
 
   .pomodoro-break-bg {
-    background-color: hsl(var(--pomodoro-break-bg));
+    background-color: var(--pomodoro-break-bg);
     color: hsl(var(--pomodoro-break-fg));
   }
 }

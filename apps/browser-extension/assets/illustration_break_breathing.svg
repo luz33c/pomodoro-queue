@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Breathing circles for break page -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-labelledby="title desc">
+  <title>Breathing Circles</title>
+  <desc>Two concentric circles with slow breathing animation.</desc>
+  <style>
+    :root{
+      --brand:#FF4D4F;
+      --brand-soft:#FFD1D1;
+      --bg:transparent;
+    }
+    .ring{fill:none;stroke:var(--brand);stroke-width:14;opacity:.85}
+    .ring-soft{fill:none;stroke:var(--brand-soft);stroke-width:18;opacity:.6}
+    @keyframes breathe {
+      0%{transform:scale(0.92);opacity:.85}
+      50%{transform:scale(1.06);opacity:.65}
+      100%{transform:scale(0.92);opacity:.85}
+    }
+    @keyframes breathe-soft {
+      0%{transform:scale(0.88);opacity:.6}
+      50%{transform:scale(1.10);opacity:.35}
+      100%{transform:scale(0.88);opacity:.6}
+    }
+    .a1{transform-origin:160px 160px;animation:breathe 6s ease-in-out infinite}
+    .a2{transform-origin:160px 160px;animation:breathe-soft 6s ease-in-out infinite}
+  </style>
+  <circle cx="160" cy="160" r="90" class="ring a1"/>
+  <circle cx="160" cy="160" r="120" class="ring-soft a2"/>
+</svg>

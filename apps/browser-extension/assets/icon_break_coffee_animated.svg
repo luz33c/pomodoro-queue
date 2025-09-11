@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Break page coffee icon (animated steam) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-labelledby="title desc">
+  <title>Break — Coffee Icon (Animated)</title>
+  <desc>Flat coffee mug with gently rising steam animation, brand colors via CSS vars.</desc>
+  <style>
+    :root{
+      --brand:#FF4D4F;   /* mug */
+      --ink:#111827;     /* steam */
+      --foam:#FFE6E6;    /* foam strip */
+    }
+    .mug{fill:var(--brand)}
+    .foam{fill:var(--foam)}
+    .steam{fill:none;stroke:var(--ink);stroke-width:6;stroke-linecap:round;opacity:.85}
+    .steam-g{transform-box: fill-box; transform-origin: center}
+    @keyframes rise {
+      0%   { transform: translateY(0) scale(1);     opacity: 0 }
+      10%  {                                         opacity: .6 }
+      50%  {                   						opacity: .9 }
+      100% { transform: translateY(-28px) scale(1.04); opacity: 0 }
+    }
+    .s1{ animation: rise 2.8s ease-in-out infinite }
+    .s2{ animation: rise 3.2s ease-in-out infinite .2s }
+    .s3{ animation: rise 3.0s ease-in-out infinite .4s }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .s1,.s2,.s3{ animation: none }
+    }
+  </style>
+
+  <g transform="translate(0,10)">
+    <!-- mug body -->
+    <rect x="40" y="70" width="96" height="64" rx="12" class="mug"/>
+    <!-- handle -->
+    <path d="M132,82 h18 a18,18 0 0 1 0,36 h-18 v-10 h16 a8,8 0 0 0 0,-16 h-16 z" class="mug"/>
+    <!-- foam -->
+    <rect x="40" y="62" width="96" height="18" rx="9" class="foam"/>
+
+    <!-- steam groups with animation -->
+    <g class="steam-g s1"><path d="M68 40 C68 28,84 28,84 16" class="steam"/></g>
+    <g class="steam-g s2"><path d="M92 40 C92 28,108 28,108 16" class="steam"/></g>
+    <g class="steam-g s3"><path d="M116 40 C116 28,132 28,132 16" class="steam"/></g>
+  </g>
+</svg>
