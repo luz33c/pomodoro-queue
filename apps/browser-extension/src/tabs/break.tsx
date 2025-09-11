@@ -1,3 +1,6 @@
+// 使用 Plasmo 的 react: 方案将 SVG 作为 React 组件引入
+import CoffeeIcon from 'react:../../assets/icon_break_coffee_animated.svg';
+import BreathingIllustration from 'react:../../assets/illustration_break_breathing.svg';
 import { Storage } from '@plasmohq/storage';
 import { useCallback, useEffect, useState } from 'react';
 import { usePomodoro } from '~hooks/pomodoro/usePomodoro';
@@ -83,10 +86,17 @@ function BreakPage() {
       </div>
 
       <div className="break-content">
-        <div className="break-emoji">☕</div>
+        <CoffeeIcon role="img" className="break-illustration" />
         <div className="break-msg">{t('breakPageTitle')}</div>
-        <div className="breathing-circle" />
-        <div className="break-timer">{mmss}</div>
+
+        <div className="timer-stack" aria-live="polite">
+          <BreathingIllustration
+            className="breathing-illustration"
+            focusable="false"
+            aria-hidden="true"
+          />
+          <div className="break-timer">{mmss}</div>
+        </div>
         <div className="break-tips">
           {t('breakPageTip1')}
           <br />
@@ -102,6 +112,7 @@ function BreakPage() {
               <button
                 className="break-control-btn break-pause-btn"
                 onClick={handlePause}
+                type="button"
                 title={t('tooltipPauseTimer')}
               >
                 ⏸
@@ -110,6 +121,7 @@ function BreakPage() {
               <button
                 className="break-control-btn break-resume-btn"
                 onClick={handleResume}
+                type="button"
                 title={t('tooltipResumeTimer')}
               >
                 ▶

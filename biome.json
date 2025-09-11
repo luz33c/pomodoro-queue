@@ -69,7 +69,9 @@
         "noUnusedVariables": "off"
       },
       "performance": {
-        "noNamespaceImport": "off"
+        "noNamespaceImport": "off",
+        "noImgElement": "off",
+        "noSvgElement": "off"
       },
       "a11y": {
         "useButtonType": "off"
