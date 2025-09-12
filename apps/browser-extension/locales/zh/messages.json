@@ -1,6 +1,6 @@
 {
   "extensionName": {
-    "message": "番茄钟队列",
+    "message": "PomodoQ",
     "description": "扩展名称"
   },
   "extensionDescription": {
@@ -8,7 +8,7 @@
     "description": "扩展描述"
   },
   "pomodoroTimer": {
-    "message": "番茄钟",
+    "message": "PomodoQ 番茄钟",
     "description": "番茄钟标题"
   },
   "phaseFocus": {
@@ -60,7 +60,7 @@
     "description": "保存按钮"
   },
   "settings": {
-    "message": "番茄钟设置",
+    "message": "PomodoQ 设置",
     "description": "设置页面标题"
   },
   "settingsBreakBehavior": {
@@ -88,7 +88,7 @@
     "description": "严格模式启用描述"
   },
   "createQueueTitle": {
-    "message": "创建番茄钟队列",
+    "message": "创建 PomodoQ 队列",
     "description": "创建队列标题"
   },
   "createQueueDesc": {

@@ -1,6 +1,6 @@
 {
   "extensionName": {
-    "message": "ポモドーロキュー",
+    "message": "PomodoQ",
     "description": "拡張機能名"
   },
   "extensionDescription": {
@@ -8,7 +8,7 @@
     "description": "拡張機能の説明"
   },
   "pomodoroTimer": {
-    "message": "ポモドーロタイマー",
+    "message": "PomodoQ タイマー",
     "description": "ポモドーロタイマーのタイトル"
   },
   "phaseFocus": {
@@ -60,7 +60,7 @@
     "description": "保存ボタン"
   },
   "settings": {
-    "message": "ポモドーロ設定",
+    "message": "PomodoQ 設定",
     "description": "設定ページタイトル"
   },
   "settingsBreakBehavior": {
@@ -88,7 +88,7 @@
     "description": "厳格モード有効説明"
   },
   "createQueueTitle": {
-    "message": "ポモドーロキューを作成",
+    "message": "PomodoQ キューを作成",
     "description": "キュー作成タイトル"
   },
   "createQueueDesc": {

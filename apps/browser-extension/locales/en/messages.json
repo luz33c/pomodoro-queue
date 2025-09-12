@@ -1,6 +1,6 @@
 {
   "extensionName": {
-    "message": "Pomodoro Queue",
+    "message": "PomodoQ",
     "description": "Extension name"
   },
   "extensionDescription": {
@@ -8,7 +8,7 @@
     "description": "Extension description"
   },
   "pomodoroTimer": {
-    "message": "Pomodoro Timer",
+    "message": "PomodoQ Timer",
     "description": "Pomodoro timer title"
   },
   "phaseFocus": {
@@ -60,7 +60,7 @@
     "description": "Save button"
   },
   "settings": {
-    "message": "Pomodoro Settings",
+    "message": "PomodoQ Settings",
     "description": "Settings page title"
   },
   "settingsBreakBehavior": {
@@ -88,7 +88,7 @@
     "description": "Strict mode enabled description"
   },
   "createQueueTitle": {
-    "message": "Create Pomodoro Queue",
+    "message": "Create PomodoQ Session",
     "description": "Create queue title"
   },
   "createQueueDesc": {

@@ -59,7 +59,7 @@ function BreakPage() {
   // 设置页面标题，避免显示占位符 __MSG_extensionName__
   useEffect(() => {
     const extName = chrome.i18n.getMessage('extensionName');
-    const pageTitle = t('breakPageTitle') || extName || 'Pomodoro';
+    const pageTitle = t('breakPageTitle') || extName || 'PomodoQ';
     document.title = `${pageTitle}`;
   }, [t]);
 

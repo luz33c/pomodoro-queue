@@ -39,7 +39,7 @@ function DebugTab() {
   // 设置页面标题，避免显示占位符 __MSG_extensionName__
   useEffect(() => {
     const extName = chrome.i18n.getMessage('extensionName');
-    document.title = extName || 'Pomodoro Queue';
+    document.title = extName || 'PomodoQ';
   }, []);
 
   return (
