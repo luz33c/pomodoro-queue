@@ -1,10 +1,10 @@
 {
   "extensionName": {
-    "message": "PomodoQ",
+    "message": "PomodoQ – 強制休憩 & リマインダー付きポモドーロタイマー",
     "description": "拡張機能名"
   },
   "extensionDescription": {
-    "message": "効率的なポモドーロテクニック時間管理ツール",
+    "message": "作業・休憩時間を自由設定。休憩中は専用ページでロック、またはオーバーレイ/通知でやさしく促す。健やかなワークリズムを。",
     "description": "拡張機能の説明"
   },
   "pomodoroTimer": {
@@ -234,6 +234,18 @@
   "languageJapanese": {
     "message": "日本語",
     "description": "日本語言語オプション"
+  },
+  "languageFrench": {
+    "message": "Français",
+    "description": "フランス語言語オプション"
+  },
+  "languageGerman": {
+    "message": "Deutsch",
+    "description": "ドイツ語言語オプション"
+  },
+  "languageSpanish": {
+    "message": "Español",
+    "description": "スペイン語言語オプション"
   },
   "settingsTaskMode": {
     "message": "タスクモード",

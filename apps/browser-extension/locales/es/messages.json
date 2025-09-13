@@ -1,0 +1,282 @@
+{
+  "extensionName": {
+    "message": "PomodoQ – Temporizador Pomodoro con descansos forzados & recordatorios",
+    "description": "Nombre de la extensión"
+  },
+  "extensionDescription": {
+    "message": "Configura libremente las duraciones; activa página de descanso bloqueada o recordatorios suaves para un ritmo trabajo‑descanso saludable.",
+    "description": "Descripción de la extensión"
+  },
+  "pomodoroTimer": {
+    "message": "Temporizador PomodoQ",
+    "description": "Título del temporizador Pomodoro"
+  },
+  "phaseFocus": {
+    "message": "Sesión de enfoque",
+    "description": "Etiqueta de fase de enfoque"
+  },
+  "phaseShortBreak": {
+    "message": "Descanso corto",
+    "description": "Etiqueta de fase de descanso corto"
+  },
+  "phaseLongBreak": {
+    "message": "Descanso largo",
+    "description": "Etiqueta de fase de descanso largo"
+  },
+  "phaseIdle": {
+    "message": "No iniciado",
+    "description": "Etiqueta de estado inactivo"
+  },
+  "buttonStart": {
+    "message": "Iniciar",
+    "description": "Botón de inicio"
+  },
+  "buttonPause": {
+    "message": "Pausar",
+    "description": "Botón de pausa"
+  },
+  "buttonResume": {
+    "message": "Reanudar",
+    "description": "Botón de reanudación"
+  },
+  "buttonStop": {
+    "message": "Detener cola",
+    "description": "Botón de detención"
+  },
+  "buttonSkip": {
+    "message": "Omitir",
+    "description": "Botón de omisión"
+  },
+  "buttonClose": {
+    "message": "Cerrar",
+    "description": "Botón de cierre"
+  },
+  "buttonCancel": {
+    "message": "Cancelar",
+    "description": "Botón de cancelación"
+  },
+  "buttonSave": {
+    "message": "Guardar configuración",
+    "description": "Botón de guardado"
+  },
+  "settings": {
+    "message": "Configuración de PomodoQ",
+    "description": "Título de la página de configuración"
+  },
+  "settingsBreakBehavior": {
+    "message": "Configuración del comportamiento de descanso",
+    "description": "Título de configuración de descanso"
+  },
+  "settingsStrictMode": {
+    "message": "Modo de descanso estricto",
+    "description": "Etiqueta del modo estricto"
+  },
+  "settingsStrictModeDesc": {
+    "message": "Cuando está habilitado, se le obliga a permanecer en la página de descanso durante los descansos y no puede navegar a otras pestañas",
+    "description": "Descripción del modo estricto"
+  },
+  "settingsNormalMode": {
+    "message": "Modo normal: Muestra un recordatorio de superposición en la página actual durante los descansos",
+    "description": "Descripción del modo normal"
+  },
+  "settingsStrictModeEnabled": {
+    "message": "Modo estricto habilitado",
+    "description": "Indicador de modo estricto habilitado"
+  },
+  "settingsStrictModeEnabledDesc": {
+    "message": "Se abrirá una página de descanso dedicada durante los descansos, y cambiar de pestaña lo redirigirá automáticamente de vuelta",
+    "description": "Descripción del modo estricto habilitado"
+  },
+  "createQueueTitle": {
+    "message": "Crear sesión PomodoQ",
+    "description": "Título de creación de cola"
+  },
+  "createQueueDesc": {
+    "message": "Personaliza las duraciones de enfoque y descanso para crear tu ritmo ideal.",
+    "description": "Descripción de creación de cola"
+  },
+  "createQueueGenerate": {
+    "message": "Generar e iniciar",
+    "description": "Botón de generación e inicio"
+  },
+  "focusDuration": {
+    "message": "Duración de enfoque (minutos)",
+    "description": "Etiqueta de duración de enfoque"
+  },
+  "shortBreakDuration": {
+    "message": "Duración de descanso corto (minutos)",
+    "description": "Etiqueta de duración de descanso corto"
+  },
+  "longBreakDuration": {
+    "message": "Duración de descanso largo (minutos)",
+    "description": "Etiqueta de duración de descanso largo"
+  },
+  "longBreakInterval": {
+    "message": "Intervalo de descanso largo (después de cuántas sesiones de enfoque)",
+    "description": "Etiqueta de intervalo de descanso largo"
+  },
+  "validationFocusMin": {
+    "message": "La duración de enfoque debe ser ≥ 1",
+    "description": "Error de validación de duración de enfoque"
+  },
+  "validationShortMin": {
+    "message": "El descanso corto debe ser ≥ 0",
+    "description": "Error de validación de descanso corto"
+  },
+  "validationLongMin": {
+    "message": "El descanso largo debe ser ≥ 0",
+    "description": "Error de validación de descanso largo"
+  },
+  "validationLongEvery": {
+    "message": "El intervalo de descanso largo debe ser ≥ 2",
+    "description": "Error de validación de intervalo de descanso largo"
+  },
+  "historyTitle": {
+    "message": "Historial",
+    "description": "Título del historial"
+  },
+  "historyCurrent": {
+    "message": "Actual",
+    "description": "Etiqueta de estado actual"
+  },
+  "historyInProgress": {
+    "message": "En progreso",
+    "description": "Estado en progreso"
+  },
+  "historyMinutes": {
+    "message": "minutos",
+    "description": "Unidad de minutos"
+  },
+  "historyEmpty": {
+    "message": "Aún no hay pomodoros completados, ¡inicia tu primera sesión de enfoque!",
+    "description": "Mensaje de historial vacío"
+  },
+  "breakPageTitle": {
+    "message": "Tiempo de descanso",
+    "description": "Título de la página de descanso"
+  },
+  "breakPageHint": {
+    "message": "Redirigido a la página de descanso, enfócate en descansar",
+    "description": "Indicador de redirección forzada a página de descanso"
+  },
+  "breakPageTip1": {
+    "message": "Aléjate de la pantalla, deja descansar tus ojos",
+    "description": "Consejo de descanso 1"
+  },
+  "breakPageTip2": {
+    "message": "Haz algunos estiramientos o respiraciones profundas",
+    "description": "Consejo de descanso 2"
+  },
+  "breakPageTip3": {
+    "message": "Bebe un vaso de agua, mantente hidratado",
+    "description": "Consejo de descanso 3"
+  },
+  "breakOverlayMessage": {
+    "message": "Tiempo de descanso, por favor aléjate de la pantalla y relájate",
+    "description": "Mensaje de superposición de descanso"
+  },
+  "tooltipPauseTimer": {
+    "message": "Pausar temporizador",
+    "description": "Tooltip de pausa del temporizador"
+  },
+  "tooltipResumeTimer": {
+    "message": "Reanudar temporizador",
+    "description": "Tooltip de reanudación del temporizador"
+  },
+  "tooltipSkipBreak": {
+    "message": "Omitir descanso",
+    "description": "Tooltip de omisión de descanso"
+  },
+  "tooltipOpenSettings": {
+    "message": "Abrir configuración",
+    "description": "Tooltip de apertura de configuración"
+  },
+  "notificationFocusTitle": {
+    "message": "Iniciar enfoque",
+    "description": "Título de notificación de enfoque"
+  },
+  "notificationFocusMessage": {
+    "message": "Entrando en sesión de enfoque",
+    "description": "Mensaje de notificación de enfoque"
+  },
+  "notificationShortBreakTitle": {
+    "message": "Descanso corto",
+    "description": "Título de notificación de descanso corto"
+  },
+  "notificationShortBreakMessage": {
+    "message": "Es hora de relajarse~",
+    "description": "Mensaje de notificación de descanso corto"
+  },
+  "notificationLongBreakTitle": {
+    "message": "Descanso largo",
+    "description": "Título de notificación de descanso largo"
+  },
+  "notificationLongBreakMessage": {
+    "message": "Toma un buen descanso",
+    "description": "Mensaje de notificación de descanso largo"
+  },
+  "languageSettings": {
+    "message": "Configuración de idioma",
+    "description": "Título de configuración de idioma"
+  },
+  "languageSelectLabel": {
+    "message": "Seleccionar idioma",
+    "description": "Etiqueta de selección de idioma"
+  },
+  "languageChinese": {
+    "message": "中文",
+    "description": "Opción de idioma chino"
+  },
+  "languageEnglish": {
+    "message": "English",
+    "description": "Opción de idioma inglés"
+  },
+  "languageJapanese": {
+    "message": "日本語",
+    "description": "Opción de idioma japonés"
+  },
+  "languageFrench": {
+    "message": "Français",
+    "description": "Opción de idioma francés"
+  },
+  "languageGerman": {
+    "message": "Deutsch",
+    "description": "Opción de idioma alemán"
+  },
+  "languageSpanish": {
+    "message": "Español",
+    "description": "Opción de idioma español"
+  },
+  "settingsTaskMode": {
+    "message": "Modo tarea",
+    "description": "Etiqueta de configuración de modo tarea"
+  },
+  "settingsTaskModeDesc": {
+    "message": "Habilitar seguimiento de tareas durante sesiones pomodoro",
+    "description": "Descripción del modo tarea"
+  },
+  "settingsFloatingTimer": {
+    "message": "Mostrar temporizador flotante",
+    "description": "Etiqueta de configuración de temporizador flotante"
+  },
+  "settingsFloatingTimerDesc": {
+    "message": "Mostrar una superposición de temporizador flotante en páginas web para mejor visibilidad",
+    "description": "Descripción del temporizador flotante"
+  },
+  "settingsBreakNotifications": {
+    "message": "Notificaciones de descanso",
+    "description": "Etiqueta de configuración de notificaciones de descanso"
+  },
+  "settingsBreakNotificationsDesc": {
+    "message": "Habilitar notificaciones de recordatorio durante períodos de descanso",
+    "description": "Descripción de notificaciones de descanso"
+  },
+  "settingsGeneralFeatures": {
+    "message": "Funciones generales",
+    "description": "Título de sección de funciones generales"
+  },
+  "settingsDisplayOptions": {
+    "message": "Opciones de visualización",
+    "description": "Título de sección de opciones de visualización"
+  }
+}

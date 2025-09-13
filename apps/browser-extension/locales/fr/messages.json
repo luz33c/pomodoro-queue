@@ -1,0 +1,282 @@
+{
+  "extensionName": {
+    "message": "PomodoQ – Minuteur Pomodoro avec pauses forcées & rappels",
+    "description": "Nom de l'extension"
+  },
+  "extensionDescription": {
+    "message": "Personnalisez vos durées, imposez une page de pause verrouillée ou des rappels doux, et gardez un rythme de travail sain.",
+    "description": "Description de l'extension"
+  },
+  "pomodoroTimer": {
+    "message": "Minuteur PomodoQ",
+    "description": "Titre du minuteur Pomodoro"
+  },
+  "phaseFocus": {
+    "message": "Session de concentration",
+    "description": "Étiquette de phase de concentration"
+  },
+  "phaseShortBreak": {
+    "message": "Courte pause",
+    "description": "Étiquette de phase de courte pause"
+  },
+  "phaseLongBreak": {
+    "message": "Longue pause",
+    "description": "Étiquette de phase de longue pause"
+  },
+  "phaseIdle": {
+    "message": "Non démarré",
+    "description": "Étiquette d'état inactif"
+  },
+  "buttonStart": {
+    "message": "Commencer",
+    "description": "Bouton de démarrage"
+  },
+  "buttonPause": {
+    "message": "Pause",
+    "description": "Bouton de pause"
+  },
+  "buttonResume": {
+    "message": "Reprendre",
+    "description": "Bouton de reprise"
+  },
+  "buttonStop": {
+    "message": "Arrêter la file",
+    "description": "Bouton d'arrêt"
+  },
+  "buttonSkip": {
+    "message": "Sauter",
+    "description": "Bouton de saut"
+  },
+  "buttonClose": {
+    "message": "Fermer",
+    "description": "Bouton de fermeture"
+  },
+  "buttonCancel": {
+    "message": "Annuler",
+    "description": "Bouton d'annulation"
+  },
+  "buttonSave": {
+    "message": "Enregistrer les paramètres",
+    "description": "Bouton de sauvegarde"
+  },
+  "settings": {
+    "message": "Paramètres PomodoQ",
+    "description": "Titre de la page de paramètres"
+  },
+  "settingsBreakBehavior": {
+    "message": "Paramètres du comportement de pause",
+    "description": "Titre des paramètres de pause"
+  },
+  "settingsStrictMode": {
+    "message": "Mode de pause stricte",
+    "description": "Étiquette du mode strict"
+  },
+  "settingsStrictModeDesc": {
+    "message": "Lorsqu'elle est activée, vous êtes forcé de rester sur la page de pause pendant les pauses et ne pouvez pas naviguer vers d'autres onglets",
+    "description": "Description du mode strict"
+  },
+  "settingsNormalMode": {
+    "message": "Mode normal : Affiche un rappel de superposition sur la page actuelle pendant les pauses",
+    "description": "Description du mode normal"
+  },
+  "settingsStrictModeEnabled": {
+    "message": "Mode strict activé",
+    "description": "Invite de mode strict activé"
+  },
+  "settingsStrictModeEnabledDesc": {
+    "message": "Une page de pause dédiée s'ouvrira pendant les pauses, et le changement d'onglet vous ramènera automatiquement",
+    "description": "Description du mode strict activé"
+  },
+  "createQueueTitle": {
+    "message": "Créer une session PomodoQ",
+    "description": "Titre de création de file"
+  },
+  "createQueueDesc": {
+    "message": "Personnalisez les durées de concentration et de pause pour créer votre rythme idéal.",
+    "description": "Description de création de file"
+  },
+  "createQueueGenerate": {
+    "message": "Générer et commencer",
+    "description": "Bouton de génération et démarrage"
+  },
+  "focusDuration": {
+    "message": "Durée de concentration (minutes)",
+    "description": "Étiquette de durée de concentration"
+  },
+  "shortBreakDuration": {
+    "message": "Durée de courte pause (minutes)",
+    "description": "Étiquette de durée de courte pause"
+  },
+  "longBreakDuration": {
+    "message": "Durée de longue pause (minutes)",
+    "description": "Étiquette de durée de longue pause"
+  },
+  "longBreakInterval": {
+    "message": "Intervalle de longue pause (après combien de sessions de concentration)",
+    "description": "Étiquette d'intervalle de longue pause"
+  },
+  "validationFocusMin": {
+    "message": "La durée de concentration doit être ≥ 1",
+    "description": "Erreur de validation de durée de concentration"
+  },
+  "validationShortMin": {
+    "message": "La courte pause doit être ≥ 0",
+    "description": "Erreur de validation de courte pause"
+  },
+  "validationLongMin": {
+    "message": "La longue pause doit être ≥ 0",
+    "description": "Erreur de validation de longue pause"
+  },
+  "validationLongEvery": {
+    "message": "L'intervalle de longue pause doit être ≥ 2",
+    "description": "Erreur de validation d'intervalle de longue pause"
+  },
+  "historyTitle": {
+    "message": "Historique",
+    "description": "Titre de l'historique"
+  },
+  "historyCurrent": {
+    "message": "Actuel",
+    "description": "Étiquette d'état actuel"
+  },
+  "historyInProgress": {
+    "message": "En cours",
+    "description": "État en cours"
+  },
+  "historyMinutes": {
+    "message": "minutes",
+    "description": "Unité de minutes"
+  },
+  "historyEmpty": {
+    "message": "Aucun pomodoro terminé encore, commencez votre première session de concentration !",
+    "description": "Message d'historique vide"
+  },
+  "breakPageTitle": {
+    "message": "Temps de pause",
+    "description": "Titre de la page de pause"
+  },
+  "breakPageHint": {
+    "message": "Redirigé vers la page de pause, concentrez-vous sur le repos",
+    "description": "Astuce de redirection forcée vers la page de pause"
+  },
+  "breakPageTip1": {
+    "message": "Éloignez-vous de l'écran, laissez vos yeux se reposer",
+    "description": "Conseil de pause 1"
+  },
+  "breakPageTip2": {
+    "message": "Faites quelques étirements ou une respiration profonde",
+    "description": "Conseil de pause 2"
+  },
+  "breakPageTip3": {
+    "message": "Buvez un verre d'eau, restez hydraté",
+    "description": "Conseil de pause 3"
+  },
+  "breakOverlayMessage": {
+    "message": "Temps de pause, veuillez vous éloigner de l'écran et vous détendre",
+    "description": "Message de superposition de pause"
+  },
+  "tooltipPauseTimer": {
+    "message": "Mettre le minuteur en pause",
+    "description": "Info-bulle de pause du minuteur"
+  },
+  "tooltipResumeTimer": {
+    "message": "Reprendre le minuteur",
+    "description": "Info-bulle de reprise du minuteur"
+  },
+  "tooltipSkipBreak": {
+    "message": "Sauter la pause",
+    "description": "Info-bulle de saut de pause"
+  },
+  "tooltipOpenSettings": {
+    "message": "Ouvrir les paramètres",
+    "description": "Info-bulle d'ouverture des paramètres"
+  },
+  "notificationFocusTitle": {
+    "message": "Commencer la concentration",
+    "description": "Titre de notification de concentration"
+  },
+  "notificationFocusMessage": {
+    "message": "Entrer en session de concentration",
+    "description": "Message de notification de concentration"
+  },
+  "notificationShortBreakTitle": {
+    "message": "Courte pause",
+    "description": "Titre de notification de courte pause"
+  },
+  "notificationShortBreakMessage": {
+    "message": "Il est temps de vous détendre~",
+    "description": "Message de notification de courte pause"
+  },
+  "notificationLongBreakTitle": {
+    "message": "Longue pause",
+    "description": "Titre de notification de longue pause"
+  },
+  "notificationLongBreakMessage": {
+    "message": "Prenez un bon repos",
+    "description": "Message de notification de longue pause"
+  },
+  "languageSettings": {
+    "message": "Paramètres de langue",
+    "description": "Titre des paramètres de langue"
+  },
+  "languageSelectLabel": {
+    "message": "Sélectionner la langue",
+    "description": "Étiquette de sélection de langue"
+  },
+  "languageChinese": {
+    "message": "中文",
+    "description": "Option de langue chinoise"
+  },
+  "languageEnglish": {
+    "message": "English",
+    "description": "Option de langue anglaise"
+  },
+  "languageJapanese": {
+    "message": "日本語",
+    "description": "Option de langue japonaise"
+  },
+  "languageFrench": {
+    "message": "Français",
+    "description": "Option de langue française"
+  },
+  "languageGerman": {
+    "message": "Deutsch",
+    "description": "Option de langue allemande"
+  },
+  "languageSpanish": {
+    "message": "Español",
+    "description": "Option de langue espagnole"
+  },
+  "settingsTaskMode": {
+    "message": "Mode tâche",
+    "description": "Étiquette de paramètre de mode tâche"
+  },
+  "settingsTaskModeDesc": {
+    "message": "Activer le suivi des tâches pendant les sessions pomodoro",
+    "description": "Description du mode tâche"
+  },
+  "settingsFloatingTimer": {
+    "message": "Afficher le minuteur flottant",
+    "description": "Étiquette de paramètre de minuteur flottant"
+  },
+  "settingsFloatingTimerDesc": {
+    "message": "Afficher une superposition de minuteur flottant sur les pages web pour une meilleure visibilité",
+    "description": "Description du minuteur flottant"
+  },
+  "settingsBreakNotifications": {
+    "message": "Notifications de pause",
+    "description": "Étiquette de paramètre de notifications de pause"
+  },
+  "settingsBreakNotificationsDesc": {
+    "message": "Activer les notifications de rappel pendant les périodes de pause",
+    "description": "Description des notifications de pause"
+  },
+  "settingsGeneralFeatures": {
+    "message": "Fonctionnalités générales",
+    "description": "Titre de section des fonctionnalités générales"
+  },
+  "settingsDisplayOptions": {
+    "message": "Options d'affichage",
+    "description": "Titre de section des options d'affichage"
+  }
+}

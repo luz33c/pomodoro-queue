@@ -1,10 +1,10 @@
 {
   "extensionName": {
-    "message": "PomodoQ",
+    "message": "PomodoQ – Enforced‑Break Pomodoro with Custom Durations & Reminders",
     "description": "Extension name"
   },
   "extensionDescription": {
-    "message": "Efficient Pomodoro Technique time management tool",
+    "message": "Customize focus/break lengths, enforce a locked break page or gentle notifications, and keep a healthy work‑rest rhythm.",
     "description": "Extension description"
   },
   "pomodoroTimer": {
@@ -234,6 +234,18 @@
   "languageJapanese": {
     "message": "日本語",
     "description": "Japanese language option"
+  },
+  "languageFrench": {
+    "message": "Français",
+    "description": "French language option"
+  },
+  "languageGerman": {
+    "message": "Deutsch",
+    "description": "German language option"
+  },
+  "languageSpanish": {
+    "message": "Español",
+    "description": "Spanish language option"
   },
   "settingsTaskMode": {
     "message": "Task Mode",

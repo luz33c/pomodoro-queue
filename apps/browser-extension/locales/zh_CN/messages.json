@@ -1,10 +1,10 @@
 {
   "extensionName": {
-    "message": "PomodoQ",
+    "message": "PomodoQ 番茄钟 – 强制休息 & 休息提醒",
     "description": "扩展名称"
   },
   "extensionDescription": {
-    "message": "高效的番茄工作法时间管理工具",
+    "message": "自由设定专注/休息时长，休息阶段强制锁定休息页面 & 消息通知，助你劳逸结合提升效率。",
     "description": "扩展描述"
   },
   "pomodoroTimer": {
@@ -234,6 +234,18 @@
   "languageJapanese": {
     "message": "日本語",
     "description": "日语语言选项"
+  },
+  "languageFrench": {
+    "message": "Français",
+    "description": "法语语言选项"
+  },
+  "languageGerman": {
+    "message": "Deutsch",
+    "description": "德语语言选项"
+  },
+  "languageSpanish": {
+    "message": "Español",
+    "description": "西班牙语语言选项"
   },
   "settingsTaskMode": {
     "message": "任务模式",
