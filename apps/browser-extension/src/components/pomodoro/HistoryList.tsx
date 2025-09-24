@@ -5,16 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { usePomodoro } from '@/hooks/pomodoro/usePomodoro';
 import { useI18n } from '@/hooks/useI18n';
-import type {
-  CurrentQueue,
-  PomodoroHistoryEntry,
-  PomodoroState,
-} from '@/model/pomodoro/types';
-import {
-  CURRENT_QUEUE_KEY,
-  HISTORY_KEY,
-  STORAGE_KEY,
-} from '@/model/pomodoro/types';
+import type { PomodoroState } from '@/model/pomodoro/types';
+import { STORAGE_KEY } from '@/model/pomodoro/types';
+import { useFreeQueueHistory } from '@/hooks/pomodoro/useFreeQueueHistory';
 
 const localInstance = new Storage({ area: 'local' });
 
@@ -47,24 +40,16 @@ function phaseLabel(phase: string, t: (key: string) => string) {
 export function HistoryList() {
   const { t } = useI18n();
   const { stop } = usePomodoro();
-  const [history] = useStorage<PomodoroHistoryEntry[]>({
-    key: HISTORY_KEY,
-    instance: localInstance,
-  });
   const [state] = useStorage<PomodoroState>({
     key: STORAGE_KEY,
     instance: localInstance,
   });
-  const [currentQueue] = useStorage<CurrentQueue | null>({
-    key: CURRENT_QUEUE_KEY,
-    instance: localInstance,
-  });
+  const { entries } = useFreeQueueHistory();
 
   const list = useMemo(() => {
-    if (!currentQueue) return [] as PomodoroHistoryEntry[];
-    const sorted = [...(history ?? [])].sort((a, b) => b.endedAt - a.endedAt);
-    return sorted.filter((h) => h.queueId === currentQueue.id);
-  }, [history, currentQueue]);
+    const sorted = [...entries].sort((a, b) => b.endedAt - a.endedAt);
+    return sorted;
+  }, [entries]);
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden px-1">

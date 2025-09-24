@@ -14,14 +14,8 @@ import {
   schedulePhaseEndAlarm,
 } from '~background/index';
 import { endStrictBreak } from '~background/strict-break';
-import {
-  CURRENT_QUEUE_KEY,
-  type CurrentQueue,
-  HISTORY_KEY,
-  type PomodoroHistoryEntry,
-  type PomodoroState,
-  STORAGE_KEY,
-} from '~model/pomodoro/types';
+import { type PomodoroState, STORAGE_KEY } from '~model/pomodoro/types';
+import { appendFreeModeHistory } from '~store/pomodoro/freeQueueStore';
 
 const storage = new Storage({ area: 'local' });
 
@@ -52,22 +46,14 @@ const handler: PlasmoMessaging.MessageHandler<never, ResponseBody> = async (
             : chrome.i18n.getMessage('phaseLongBreak');
 
       // 获取现有历史记录和当前队列信息
-      const list =
-        (await storage.get<PomodoroHistoryEntry[]>(HISTORY_KEY)) ?? [];
-      const q = (await storage.get<CurrentQueue>(CURRENT_QUEUE_KEY)) ?? null;
-
-      // 添加新的历史记录
-      list.push({
+      await appendFreeModeHistory({
         id: `${Date.now()}`,
         phase: s.phase,
         title,
         startedAt: s.startedAt,
         endedAt,
         durationMs: Math.max(0, endedAt - s.startedAt),
-        queueId: q?.id,
       });
-
-      await storage.set(HISTORY_KEY, list);
     }
 
     // 获取跳过后的下一个状态

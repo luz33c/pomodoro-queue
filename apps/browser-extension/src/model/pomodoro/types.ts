@@ -23,6 +23,8 @@ export type PomodoroState = {
   config: PomodoroConfig;
 };
 
+export type PomodoroQueueMode = 'free' | 'task';
+
 export type PomodoroHistoryEntry = {
   id: string;
   phase: Exclude<PomodoroPhase, 'idle'>;
@@ -32,11 +34,14 @@ export type PomodoroHistoryEntry = {
   durationMs: number;
   // The queue that this history entry belongs to. Optional for backward compatibility.
   queueId?: string;
+  mode?: PomodoroQueueMode;
 };
 
 export type CurrentQueue = {
   id: string;
   startedAt: number;
+  mode: PomodoroQueueMode;
+  label?: string;
 };
 
 export const DEFAULT_CONFIG: PomodoroConfig = {

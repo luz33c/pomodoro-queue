@@ -1,16 +1,12 @@
 import { Storage } from '@plasmohq/storage';
-import type {
-  PomodoroHistoryEntry,
-  PomodoroPhase,
-  PomodoroState,
-} from '~model/pomodoro/types';
+import type { PomodoroPhase, PomodoroState } from '~model/pomodoro/types';
+import { DEFAULT_CONFIG, STORAGE_KEY } from '~model/pomodoro/types';
 import {
-  CURRENT_QUEUE_KEY,
-  type CurrentQueue,
-  DEFAULT_CONFIG,
-  HISTORY_KEY,
-  STORAGE_KEY,
-} from '~model/pomodoro/types';
+  appendFreeModeHistory,
+  clearFreeModeData,
+  ensureFreeModeQueue,
+  resetFreeModeIfOutdated,
+} from '~store/pomodoro/freeQueueStore';
 import {
   beginStrictBreak,
   endStrictBreak,
@@ -29,29 +25,6 @@ function genId() {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-async function getCurrentQueue(): Promise<CurrentQueue | null> {
-  return (await storage.get<CurrentQueue>(CURRENT_QUEUE_KEY)) ?? null;
-}
-
-async function ensureCurrentQueue(now: number): Promise<CurrentQueue> {
-  const existing = await getCurrentQueue();
-  if (existing) return existing;
-  const q: CurrentQueue = { id: genId(), startedAt: now };
-  await storage.set(CURRENT_QUEUE_KEY, q);
-  return q;
-}
-
-async function clearCurrentQueue() {
-  await storage.set(CURRENT_QUEUE_KEY, null as unknown as undefined);
-}
-
-async function pushHistory(entry: PomodoroHistoryEntry) {
-  const list = (await storage.get<PomodoroHistoryEntry[]>(HISTORY_KEY)) ?? [];
-  const q = await getCurrentQueue();
-  list.push({ ...entry, queueId: q?.id });
-  await storage.set(HISTORY_KEY, list);
-}
-
 // 默认值设置
 async function ensureInitialState() {
   const state = await storage.get<PomodoroState>(STORAGE_KEY);
@@ -68,12 +41,14 @@ async function ensureInitialState() {
   }
 }
 
-chrome.runtime.onInstalled.addListener(() => {
-  ensureInitialState();
+chrome.runtime.onInstalled.addListener(async () => {
+  await ensureInitialState();
+  await resetFreeModeIfOutdated(Date.now());
 });
 
 // Check strict mode on startup
 chrome.runtime.onStartup.addListener(async () => {
+  await resetFreeModeIfOutdated(Date.now());
   const s = await storage.get<PomodoroState>(STORAGE_KEY);
   const inBreak = s?.phase === 'short' || s?.phase === 'long';
   if (inBreak && s?.config?.strictMode) {
@@ -113,7 +88,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
         : state.phase === 'short'
           ? chrome.i18n.getMessage('phaseShortBreak')
           : chrome.i18n.getMessage('phaseLongBreak');
-    await pushHistory({
+    await appendFreeModeHistory({
       id: genId(),
       phase: state.phase,
       title,
@@ -306,7 +281,7 @@ export async function startPhase(phase: PomodoroPhase) {
 
   // If starting from idle/not running, create a new current queue
   if (!s.running || s.phase === 'idle') {
-    await ensureCurrentQueue(now);
+    await ensureFreeModeQueue(now);
   }
 
   const next: PomodoroState = {
@@ -359,7 +334,7 @@ export async function stopAll() {
         : s.phase === 'short'
           ? chrome.i18n.getMessage('phaseShortBreak')
           : chrome.i18n.getMessage('phaseLongBreak');
-    await pushHistory({
+    await appendFreeModeHistory({
       id: genId(),
       phase: s.phase,
       title,
@@ -381,7 +356,7 @@ export async function stopAll() {
   };
   await storage.set(STORAGE_KEY, next);
   await chrome.alarms.clear(PHASE_ALARM);
-  await clearCurrentQueue();
+  await clearFreeModeData();
   // End strict mode when stopping
   // Mark: break control
   // 用户点击“停止” → 关闭 Break 页面并退出严格模式
