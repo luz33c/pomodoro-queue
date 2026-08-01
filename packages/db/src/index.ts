@@ -2,8 +2,8 @@ import { join } from "node:path";
 
 import "@tanstack/react-start/server-only";
 import { sql } from "drizzle-orm";
-import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { drizzle } from "drizzle-orm/postgres-js";
+import { migrate } from "drizzle-orm/postgres-js/migrator";
 import postgres from "postgres";
 
 import { ENV_SERVER } from "@tsu-stack/env/server/env";

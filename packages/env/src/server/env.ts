@@ -5,7 +5,10 @@ import { isProduction } from "std-env";
 import { z } from "zod";
 
 console.debug("⏳ [ENV_SERVER] Loading environment variables...", {
+  CLERK_AUTHORIZED_PARTIES: process.env.CLERK_AUTHORIZED_PARTIES,
+  CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY ? "[redacted]" : undefined,
   SOURCE_COMMIT: process.env.SOURCE_COMMIT,
+  VITE_CLERK_PUBLISHABLE_KEY: process.env.VITE_CLERK_PUBLISHABLE_KEY,
   VITE_SERVER_URL: process.env.VITE_SERVER_URL,
   VITE_WEB_URL: process.env.VITE_WEB_URL
 });
@@ -16,6 +19,9 @@ export const ENV_SERVER = createEnv({
   server: {
     VITE_SERVER_URL: isProduction ? z.url() : z.url().default("http://localhost:5000/server"),
     VITE_WEB_URL: isProduction ? z.url() : z.url().default("http://localhost:3000/web"),
+    VITE_CLERK_PUBLISHABLE_KEY: z.string().min(1),
+    CLERK_SECRET_KEY: z.string().min(1),
+    CLERK_AUTHORIZED_PARTIES: z.string().default(""),
     DATABASE_URL: z.string().min(1),
     BETTER_AUTH_SECRET: z.string().min(32),
     NODE_ENV: z.enum(["development", "production"]).default("development"),

@@ -1,3 +1,4 @@
+import { clerkMiddleware } from "@clerk/tanstack-react-start/server";
 import { createCsrfMiddleware, createStart } from "@tanstack/react-start";
 
 import { LOG_SERVICES, initLogger } from "@tsu-stack/logger/server";
@@ -37,6 +38,7 @@ export const startInstance = createStart(() => {
     ],
     // for API routes
     requestMiddleware: [
+      clerkMiddleware(),
       createCsrfMiddleware({
         filter: (ctx) => ctx.handlerType === "serverFn"
       }),

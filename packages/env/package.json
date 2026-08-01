@@ -8,6 +8,9 @@
   "exports": {
     "./*": "./src/*.ts"
   },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
   "dependencies": {
     "@t3-oss/env-core": "catalog:",
     "std-env": "catalog:",

@@ -1,25 +1,26 @@
+import { auth as clerkAuth } from "@clerk/tanstack-react-start/server";
 import { createORPCClient } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
 import { createRouterClient, type RouterClient } from "@orpc/server";
 import { createTanstackQueryUtils } from "@orpc/tanstack-query";
 import { createIsomorphicFn } from "@tanstack/react-start";
-import { getRequestHeaders } from "@tanstack/react-start/server";
 
-import { auth } from "@tsu-stack/auth/index";
 import { ENV_WEB_ISOMORPHIC } from "@tsu-stack/env/web/env.isomorphic";
 import { createLogger } from "@tsu-stack/logger/server";
 
+import { getClerkAuthToken } from "#@/client/tanstack-start/clerk-auth";
 import { appRouter } from "#@/routers/index";
 
 const getORPCClient = createIsomorphicFn()
   .server(() =>
     createRouterClient(appRouter, {
       context: async () => {
-        const headers = getRequestHeaders();
-        const session = await auth.api.getSession({ headers });
+        const authState = await clerkAuth();
+
         return {
+          auth: authState.userId ? { userId: authState.userId } : null,
           logger: createLogger({ operation: "web__client__orpc" }),
-          session
+          session: null
         };
       }
     })
@@ -31,6 +32,10 @@ const getORPCClient = createIsomorphicFn()
           ...options,
           credentials: "include"
         });
+      },
+      headers: async () => {
+        const token = await getClerkAuthToken();
+        return token ? { Authorization: `Bearer ${token}` } : {};
       },
       url: `${ENV_WEB_ISOMORPHIC.VITE_SERVER_URL}/rpc`
     });

@@ -1,0 +1,73 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "ignorePatterns": [
+    "pnpm-lock.yaml",
+    "package-lock.json",
+    "yarn.lock",
+    "bun.lock",
+    "routeTree.gen.ts",
+    ".tanstack-start/",
+    ".tanstack/",
+    "drizzle/",
+    "migrations/",
+    ".drizzle/",
+    ".cache",
+    "worker-configuration.d.ts",
+    ".vercel",
+    ".output",
+    ".wrangler",
+    ".netlify",
+    "dist"
+  ],
+  "sortImports": {
+    "customGroups": [
+      {
+        "elementNamePattern": ["@tsu-stack/**"],
+        "groupName": "@tsu-stack"
+      },
+      {
+        "elementNamePattern": ["@/pages/**"],
+        "groupName": "pages"
+      },
+      {
+        "elementNamePattern": ["@/widgets/**"],
+        "groupName": "widgets"
+      },
+      {
+        "elementNamePattern": ["@/features/**"],
+        "groupName": "features"
+      },
+      {
+        "elementNamePattern": ["@/entities/**"],
+        "groupName": "entities"
+      },
+      {
+        "elementNamePattern": ["@/shared/**"],
+        "groupName": "shared"
+      }
+    ],
+    "groups": [
+      "builtin",
+      "external",
+      "@tsu-stack",
+      "shared",
+      "entities",
+      "features",
+      "widgets",
+      "pages",
+      ["internal", "subpath"],
+      ["parent", "sibling", "index"],
+      "style",
+      "unknown"
+    ],
+    "internalPattern": ["@/", "#@/", "~/", "~~/", "#"],
+    "sortSideEffects": true
+  },
+  "sortPackageJson": true,
+  "sortTailwindcss": {
+    "attributes": ["class", "className"],
+    "functions": ["clsx", "cn", "cva", "tw"],
+    "stylesheet": "./packages/ui/styles/globals.css"
+  },
+  "trailingComma": "none"
+}

@@ -9,10 +9,10 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "build": "cross-env IS_BUILD=true vp pack",
-    "compile": "cross-env IS_BUILD=true BUILD_EXE=true pnpm dotenvx run -f ../../packages/env/.env -- vp pack",
-    "dev": "pnpm dotenvx run -f ../../packages/env/.env -- node --import tsx --watch src/index.ts",
-    "start": "pnpm dotenvx run -f ../../packages/env/.env -- node .output/index.mjs"
+    "build": "cross-env IS_BUILD=true tsdown",
+    "dev": "node --env-file=../../packages/env/.env --watch src/index.ts",
+    "start": "dotenvx run -f ../../packages/env/.env -- node .output/index.mjs",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "catalog:",
@@ -33,7 +33,7 @@
     "@tsu-stack/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "cross-env": "catalog:",
-    "tsx": "catalog:",
+    "tsdown": "catalog:",
     "typescript": "catalog:"
   }
 }

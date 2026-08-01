@@ -8,7 +8,8 @@
     "./components/*": "./components/*.tsx"
   },
   "scripts": {
-    "ui": "vpx shadcn@latest"
+    "typecheck": "tsc --noEmit",
+    "ui": "pnpm dlx shadcn@latest"
   },
   "dependencies": {
     "@lonik/oh-image": "catalog:",

@@ -1,5 +1,3 @@
-import { Suspense } from "react";
-
 import { Link } from "@tsu-stack/i18n/tanstack-start/components/link";
 import { Button } from "@tsu-stack/ui/components/button";
 import { useScroll } from "@tsu-stack/ui/hooks/use-scroll.hook";
@@ -45,9 +43,7 @@ export function Navbar() {
           ))}
           <LocaleSwitcher />
           <ThemeSwitcher size="icon-sm" />
-          <Suspense fallback={null}>
-            <UserDropdown />
-          </Suspense>
+          <UserDropdown />
         </div>
         <MobileNav />
       </nav>

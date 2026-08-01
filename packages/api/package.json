@@ -9,12 +9,16 @@
       "default": "./src/*.ts"
     }
   },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
   "dependencies": {
+    "@clerk/backend": "catalog:",
+    "@clerk/tanstack-react-start": "catalog:",
     "@orpc/client": "catalog:",
     "@orpc/server": "catalog:",
     "@orpc/tanstack-query": "catalog:",
     "@tanstack/react-start": "catalog:",
-    "@tsu-stack/auth": "workspace:*",
     "@tsu-stack/core": "workspace:*",
     "@tsu-stack/db": "workspace:*",
     "@tsu-stack/env": "workspace:*",
@@ -25,6 +29,7 @@
     "@tsu-stack/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "hono": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vite": "catalog:"
   }
 }

@@ -4,7 +4,7 @@
 </h1>
 
 <p align="center">
-   <img src="https://img.shields.io/badge/NodeJS-25.8.2-green" alt="NodeJS version badge">
+   <img src="https://img.shields.io/badge/Node.js-24.18.0_LTS-green" alt="Node.js version badge">
    <img src="https://img.shields.io/github/license/tsu-moe/tsu-stack" alt="License badge">
    <img src="https://img.shields.io/github/last-commit/tsu-moe/tsu-stack" alt="Last commit badge">
    <img src="https://img.shields.io/github/stars/tsu-moe/tsu-stack?style=flat" alt="GitHub stars badge">
@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-  Vite Plus (Vite+) TanStack Start monorepo with shadcn/ui, Paraglide.js (i18n), Hono, oRPC, drizzle-orm, better-auth, Feature-Sliced Design (FSD), and more. 🐋 Dockerized and opinionated. Compatible with the ⛅ Cloudflare Workers workerd runtime with a few tweaks.
+  Node.js 24 and pnpm TanStack Start monorepo featuring shadcn/ui, Paraglide.js (i18n), Hono, oRPC, drizzle-orm, better-auth, Feature-Sliced Design (FSD), and more. 🐋 Dockerized and opinionated. Compatible with the ⛅ Cloudflare Workers workerd runtime with a few tweaks.
 </p>
 
 <p align="center">
@@ -49,6 +49,8 @@
 - [Environment Variables](#environment-variables)
   - [Server](#server)
   - [Web](#web)
+  - [Native](#native)
+  - [Extension](#extension)
 - [Merging Server to Web App](#merging-server-to-web-app)
   - [Resource Usage](#resource-usage)
 - [Issue Watchlist](#issue-watchlist)
@@ -61,30 +63,31 @@
 
 Here is a non-exhaustive list of the main technologies used in this project, along with their purposes and possible alternatives they replace:
 
-| Technology                                        | Purpose                                                                                                                                                                       | Replaces/Similar Alternatives                                                      |
-| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| [**pnpm**](https://pnpm.io/)                      | Fast, disk-efficient package manager for Node.js with package catalogs for monorepo dependecy deduplication.                                                                  | npm, yarn                                                                          |
-| [**Vite Plus (Vite+)**](https://viteplus.dev/)    | Unified toolchain for development, testing, and building the monorepo.                                                                                                        | Turborepo, Nx, Vitest, Prettier, ESLint, husky, lint-staged, lefthook, tsdown, tsc |
-| [**TanStack Start**](https://tanstack.com/router) | Modern full-stack React framework with support for SPA, SSR, ISR, and integrated with TanStack Query. It uses Vite's Nitro adapter for cross-platform deployment portability. | Next.js, Remix, React Router                                                       |
-| [**Paraglide.js**](https://paraglide.dev/)        | Compiled internationalization (i18n) library for managing translations.                                                                                                       | i18next, next-intl                                                                 |
-| [**Hono**](https://hono.dev/)                     | Lightweight web server framework built on web standards and is WinterCG-compliant for cross-platform portability.                                                             | Express.js, Fastify, Elysia.js                                                     |
-| [**oRPC**](https://orpc.dev/)                     | RPC framework to define API routes and generate OpenAPI specs and documentation with [Scalar](https://scalar.com/).                                                           | tRPC                                                                               |
-| [**Drizzle ORM**](https://orm.drizzle.team/)      | Type-safe and lightweight ORM for database interactions.                                                                                                                      | Prisma, TypeORM                                                                    |
-| [**PostgreSQL**](https://www.postgresql.org/)     | Stable open-source relational database.                                                                                                                                       | MySQL, MariaDB                                                                     |
-| [**Better Auth**](https://better-auth.com/)       | Self-hosted authentication framework with support for all major OAuth providers.                                                                                              | Auth.js                                                                            |
-| [**Docker**](https://www.docker.com/)             | Containerization for local development and deployment.                                                                                                                        | Podman                                                                             |
-| [**shadcn/ui**](https://ui.shadcn.com/)           | Accessible and customizable React component library.                                                                                                                          | Chakra UI, Material UI, Mantine UI                                                 |
+| Technology                                        | Purpose                                                                                                                                                                  | Replaces/Similar Alternatives      |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------- |
+| [**Node.js 24 LTS**](https://nodejs.org/)         | Development and production JavaScript runtime.                                                                                                                           | Bun, Deno                          |
+| [**pnpm**](https://pnpm.io/)                      | Package manager, workspace task runner, one-off CLI runner, and project Node.js runtime manager.                                                                         | npm, yarn, npx                     |
+| [**Vite**](https://vite.dev/)                     | Development server and production builder for the Web app.                                                                                                               | webpack, Rspack                    |
+| [**Vitest**](https://vitest.dev/)                 | Unit test runner.                                                                                                                                                        | Jest                               |
+| [**Oxfmt / Oxlint**](https://oxc.rs/)             | Formatting and linting.                                                                                                                                                  | Prettier, ESLint                   |
+| [**TanStack Start**](https://tanstack.com/router) | Modern full-stack React framework with support for SPA, SSR, ISR, and integrated TanStack Query. It uses Vite's Nitro adapter for cross-platform deployment portability. | Next.js, Remix, React Router       |
+| [**Paraglide.js**](https://paraglide.dev/)        | Compiled internationalization (i18n) library for managing translations.                                                                                                  | i18next, next-intl                 |
+| [**Hono**](https://hono.dev/)                     | Lightweight web server framework built on web standards and WinterCG-compliant for cross-platform portability.                                                           | Express.js, Fastify, Elysia.js     |
+| [**oRPC**](https://orpc.dev/)                     | RPC framework to define API routes and generate OpenAPI specs and documentation with [Scalar](https://scalar.com/).                                                      | tRPC                               |
+| [**Drizzle ORM**](https://orm.drizzle.team/)      | Type-safe and lightweight ORM for database interactions.                                                                                                                 | Prisma, TypeORM                    |
+| [**PostgreSQL**](https://www.postgresql.org/)     | Stable open-source relational database.                                                                                                                                  | MySQL, MariaDB                     |
+| [**Better Auth**](https://better-auth.com/)       | Self-hosted authentication framework with support for all major OAuth providers.                                                                                         | Auth.js                            |
+| [**Docker**](https://www.docker.com/)             | Containerization for local development and deployment.                                                                                                                   | Podman                             |
+| [**shadcn/ui**](https://ui.shadcn.com/)           | Accessible and customizable React component library.                                                                                                                     | Chakra UI, Material UI, Mantine UI |
 
 ## Getting Started
 
 ### Prerequisites
 
-- **Node.js** ≥ 25
-  - install via [Node.js official website](https://nodejs.org/) or [nvm](https://github.com/nvm-sh/nvm)
-- **Vite Plus (vp)**
-  - install via `curl -fsSL https://vite.plus | bash` (macOS/Linux) or `irm https://vite.plus/ps1 | iex` (Windows)
-- **pnpm** ≥ 10
-  - install via `vp install -g pnpm`
+- **Node.js 22 or newer** to launch pnpm
+  - pnpm installs and uses the project's pinned Node.js 24.18.0 runtime
+- **pnpm 11.3.0**
+  - install with `corepack enable && corepack install --global pnpm@11.3.0`
 - **Docker**
   - install it via their [official website](https://www.docker.com/)
 
@@ -93,12 +96,11 @@ Here is a non-exhaustive list of the main technologies used in this project, alo
 1. **Clone the repository and install dependencies:**
 
    ```bash
-   vpx tiged https://github.com/tsu-moe/tsu-stack#main my-tsu-stack-app
+   pnpm dlx tiged https://github.com/tsu-moe/tsu-stack#main my-tsu-stack-app
    # Available branch specifiers: `main` | `variant/merged` | `variant/merged-cloudflare`
 
    cd my-tsu-stack-app
-   vp env install    # install Node.js version specified in package.json
-   vp install        # install all packages in the monorepo
+   pnpm install --frozen-lockfile
    ```
 
 2. **Copy the environment files:**
@@ -110,43 +112,45 @@ Here is a non-exhaustive list of the main technologies used in this project, alo
 3. **Generate a Better-Auth secret** and set it as `BETTER_AUTH_SECRET` in `packages/env/.env`:
 
    ```bash
-   vp run auth:secret
+   pnpm run auth:secret
    ```
 
 4. **Start the local PostgreSQL database:**
 
    ```bash
-   vp run db:dev:start
-   # you can stop it later with vp run db:dev:stop
+   pnpm run db:dev:start
+   # you can stop it later with pnpm run db:dev:stop
    ```
 
 5. **Migrate the database**:
 
    ```bash
-   vp run db:migrate
+   pnpm run db:migrate
    ```
 
 6. **Start all development servers:**
 
    ```bash
-   vp run dev
+   pnpm run dev
    ```
 
    The following applications will be running:
    - **Web App**: `http://localhost:3000/web`
    - **Server**: `http://localhost:5000/server`
+   - **Native App**: Expo dev server
+   - **Browser Extension**: WXT dev server
 
 > [!TIP]
-> Run `vp run fix` to lint, format, and type-check your code. This is also automatically run when you do `git commit`.
+> Run `pnpm run fix` to apply formatting and lint fixes, then type-check your code. The tracked pre-commit hook runs the read-only `pnpm run check` command.
 
 ### Running with Docker Locally
 
-As an alternative to `vp run dev`, you can run the full stack inside Docker using the local compose file:
+As an alternative to `pnpm run dev`, you can run the full stack inside Docker using the local compose file:
 
 ```bash
 cp .env.docker.example .env.docker # And set environment variables as needed
-vp run docker:up
-vp run docker:up:build # OR: force a rebuild when you make changes to the code
+pnpm run docker:up
+pnpm run docker:up:build # OR: force a rebuild when you make changes to the code
 ```
 
 ## Deployment
@@ -202,14 +206,15 @@ You will need to use the `@cloudflare/vite-plugin` adapter instead of `nitro`. S
 
 Then, you will need to switch to using a singleton `db` instance instead of a connection pool in the server app since Cloudflare Workers do not support long-lived connections. See [this commit](https://github.com/tsu-moe/tsu-stack/commit/8d6cf54b52e430ac6b3f840bbf5eecec040238b3) for example changes.
 
-You'll need to set the secrets manually in the Cloudflare dashboard before running the deployment commands or via `pnpm wrangler secret put <VARIABLE_NAME>` one-by-one.
+You'll need to set the secrets manually in the Cloudflare dashboard before running the deployment commands or via `pnpm dlx wrangler secret put <VARIABLE_NAME>` one-by-one.
 
-Finally, you can deploy by running the following commands:
+Authenticate Wrangler after adding the Worker configuration required by your chosen adapter:
 
 ```bash
-pnpm wrangler login # authenticate with your Cloudflare account # copy the shared env variables to the web app's env file for wrangler to read them
-vp run deploy       # run the deploy task which uses wrangler to deploy the web app to Cloudflare Workers
+pnpm dlx wrangler login
 ```
+
+Use the deployment command from that Worker configuration; this branch does not define a generic `deploy` script.
 
 > [!CAUTION]
 > I do not recommend this way of deploying because it is prone to human error.
@@ -240,26 +245,66 @@ TanStack Start uses [Nitro](https://nitro.build) as its server engine, which mea
 
 For the Hono server, use the following environment variables:
 
-| Variable Name          | Required | Default Value | Description                                                                                      |
-| ---------------------- | -------- | ------------- | ------------------------------------------------------------------------------------------------ |
-| `VITE_SERVER_URL`      | ✅       | -             | Base URL for the server. May also include a subpath if needed, ex: `https://example.com/server`. |
-| `VITE_WEB_URL`         | ✅       | -             | Base URL for the web app. May also include a subpath if needed, ex: `https://example.com/web`.   |
-| `BETTER_AUTH_SECRET`   | ✅       | -             | Secret key for Better-Auth. Generate with `vp run auth:secret`.                                  |
-| `DATABASE_URL`         | ✅       | -             | PostgreSQL connection string.                                                                    |
-| `ENABLE_OPEN_API_DOCS` | ❌       | `false`       | Enable OpenAPI `/docs` endpoint.                                                                 |
+| Variable Name                | Required | Default Value | Description                                                                                      |
+| ---------------------------- | -------- | ------------- | ------------------------------------------------------------------------------------------------ |
+| `VITE_SERVER_URL`            | ✅       | -             | Base URL for the server. May also include a subpath if needed, ex: `https://example.com/server`. |
+| `VITE_WEB_URL`               | ✅       | -             | Base URL for the web app. May also include a subpath if needed, ex: `https://example.com/web`.   |
+| `CLERK_SECRET_KEY`           | ✅       | -             | Clerk secret key used to verify Clerk sessions and bearer tokens server-side.                    |
+| `VITE_CLERK_PUBLISHABLE_KEY` | ✅       | -             | Clerk publishable key. Safe for the browser and required by Clerk client components.             |
+| `CLERK_AUTHORIZED_PARTIES`   | ❌       | -             | Comma-separated extra Clerk `azp` / authorized party origins, e.g. `chrome-extension://<id>`.    |
+| `BETTER_AUTH_SECRET`         | ✅       | -             | Secret key for Better-Auth. Generate with `pnpm run auth:secret`.                                |
+| `DATABASE_URL`               | ✅       | -             | PostgreSQL connection string.                                                                    |
+| `ENABLE_OPEN_API_DOCS`       | ❌       | `false`       | Enable OpenAPI `/docs` endpoint.                                                                 |
 
 ### Web
 
 For the web app, use the following environment variables:
 
-| Variable Name             | Required | Default Value | Description                                                                                                                         |
-| ------------------------- | -------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `VITE_SERVER_URL`         | ✅       | -             | Base URL for the server. May also include a subpath if needed, ex: `https://example.com/server`.                                    |
-| `VITE_WEB_URL`            | ✅       | -             | Base URL for the web app. May also include a subpath if needed, ex: `https://example.com/web`.                                      |
-| `BETTER_AUTH_SECRET`      | ✅       | -             | Secret key for Better-Auth. Generate with `vp run auth:secret`.                                                                     |
-| `DATABASE_URL`            | ✅       | -             | PostgreSQL connection string.                                                                                                       |
-| `VITE_IMGPROXY_URL`       | ❌       | -             | URL for image optimization. You'll need to deploy your own [imgproxy](https://hub.docker.com/r/darthsim/imgproxy/) container first. |
-| `VITE_IMGPROXY_SIGNATURE` | ❌       | `_`           | imgproxy signature path segment. Use `insecure` or a precomputed signature if your imgproxy setup requires it.                      |
+| Variable Name                | Required | Default Value | Description                                                                                                                         |
+| ---------------------------- | -------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `VITE_SERVER_URL`            | ✅       | -             | Base URL for the server. May also include a subpath if needed, ex: `https://example.com/server`.                                    |
+| `VITE_WEB_URL`               | ✅       | -             | Base URL for the web app. May also include a subpath if needed, ex: `https://example.com/web`.                                      |
+| `CLERK_SECRET_KEY`           | ✅       | -             | Clerk secret key used by TanStack Start middleware. Do not expose it with a `VITE_` prefix.                                         |
+| `VITE_CLERK_PUBLISHABLE_KEY` | ✅       | -             | Clerk publishable key used by the browser Clerk provider.                                                                           |
+| `BETTER_AUTH_SECRET`         | ✅       | -             | Secret key for Better-Auth. Generate with `pnpm run auth:secret`.                                                                   |
+| `DATABASE_URL`               | ✅       | -             | PostgreSQL connection string.                                                                                                       |
+| `VITE_IMGPROXY_URL`          | ❌       | -             | URL for image optimization. You'll need to deploy your own [imgproxy](https://hub.docker.com/r/darthsim/imgproxy/) container first. |
+| `VITE_IMGPROXY_SIGNATURE`    | ❌       | `_`           | imgproxy signature path segment. Use `insecure` or a precomputed signature if your imgproxy setup requires it.                      |
+
+### Native
+
+For the Expo app, use the following environment variables:
+
+| Variable Name                       | Required | Default Value | Description                                                   |
+| ----------------------------------- | -------- | ------------- | ------------------------------------------------------------- |
+| `EXPO_PUBLIC_SERVER_URL`            | ✅       | -             | Base URL for the server, e.g. `http://localhost:5000/server`. |
+| `EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY` | ✅       | -             | Clerk publishable key exposed to the Expo app.                |
+
+Run it with:
+
+```bash
+pnpm run dev:native
+```
+
+### Extension
+
+For the WXT browser extension, use the following environment variables:
+
+| Variable Name               | Required | Default Value | Description                                                                                       |
+| --------------------------- | -------- | ------------- | ------------------------------------------------------------------------------------------------- |
+| `WXT_SERVER_URL`            | ✅       | -             | Base URL for the server, e.g. `http://localhost:5000/server`.                                     |
+| `WXT_CLERK_PUBLISHABLE_KEY` | ✅       | -             | Clerk publishable key exposed to the browser extension.                                           |
+| `WXT_CLERK_FRONTEND_API`    | ❌       | -             | Clerk Frontend API URL from Clerk's Chrome Extension quick-copy block. Used for host permissions. |
+| `WXT_CLERK_SYNC_HOST`       | ❌       | -             | Web app URL used by Clerk Sync Host when syncing web and extension sessions.                      |
+| `WXT_EXTENSION_PUBLIC_KEY`  | ❌       | -             | Chrome extension public key used to keep a stable CRX ID during development and production.       |
+
+Run it with:
+
+```bash
+pnpm run dev:extension
+```
+
+When using the extension against protected API procedures, set `CLERK_AUTHORIZED_PARTIES` on the server to include the stable extension origin, for example `chrome-extension://abcdefghijklmnopabcdefghijklmnop`.
 
 ## Merging Server to Web App
 
@@ -365,7 +410,6 @@ However, the benefit is singular deployments and lower memory usage for websites
   - Currently, when using newer versions of Nitro, you may encounter CJS to ESM interop crashes on build with the error: `TypeError: Cannot destructure property '__extends' of '__toESM$1(...).default' as it is undefined.`
   - This is similar to the issue described in [nitrojs/nitro#4113](https://github.com/nitrojs/nitro/issues/4113)
 - [Better Auth experimental Drizzle adapter](https://github.com/better-auth/better-auth/pull/9489) - We're using a separate branch of Better Auth's Drizzle adapter that supports Drizzle relations v2.
-- [Vite+ issues](https://github.com/voidzero-dev/vite-plus/issues) - Vite+ is in alpha.
 
 ### Pitfalls
 
@@ -377,9 +421,7 @@ However, the benefit is singular deployments and lower memory usage for websites
   - `X-Content-Type-Options: nosniff`
   - `Referrer-Policy`
   - `Permissions-Policy`
-- Builds are slower and more bloated in general because Vite Plus does not have a [`turbo prune`](https://turborepo.dev/docs/reference/prune) alternative
-  - See this related issue: https://github.com/voidzero-dev/vite-plus/issues/839
-- On a similar note, there isn't an elegant way to install `vp` in Dockerfile images, so you need to manually bump the desired `vp` version in the `/apps/*/Dockerfile`'s `VITE_PLUS_VERSION` variable.
+- Run project commands through pnpm so they use the pinned Node.js 24 runtime; a bare shell `node` may resolve to the system installation.
 - There is a hydration error when navigating to an i18n subpath like `/de`, but it subsides in subsequent navigations.
   - Need to investigate further, but otherwise, I haven't encountered any app-breaking bugs with it.
 - `robots.txt` [needs to be at the root of the domain](https://developers.google.com/search/docs/crawling-indexing/robots/intro) to be detected by search engines (ie. `example.com/robots.txt`), but since the web app is served on a subpath (ie. `example.com/web`), you need to set up a redirect from `example.com/robots.txt` to `example.com/web/robots.txt` in order for it to be detected.

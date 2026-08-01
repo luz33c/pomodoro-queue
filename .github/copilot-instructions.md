@@ -1,6 +1,6 @@
 # tsu!stack Project
 
-An opinionated Vite+ monorepo. It uses `vp` (Vite+ CLI) to run scripts across packages, and `vpx` to run package binaries without installing them. You can run `vp run -w` to run a command in the workspace root `package.json` context.
+An opinionated Node.js 24 LTS monorepo. pnpm 11.3.0 owns dependency installation, the lockfile, workspace tasks, package scripts, one-off CLIs, and the pinned Node.js runtime. Use `pnpm install` for dependencies, `pnpm run <script>` for package scripts, `pnpm exec <bin>` for installed binaries, and `pnpm dlx <pkg>` for one-off packages.
 
 ## Tech Stack
 
@@ -22,7 +22,7 @@ apps/server   - Hono API server (port 5000, path /server)
 apps/web      - TanStack Start web app (port 3000, path /web)
 packages/api  - oRPC routers & client where all the API logic lives with OpenAPI metadata
 packages/auth - Better Auth config
-packages/db   - Drizzle schemas & migrations, run `vp run -w db:*` to manage the database
+packages/db   - Drizzle schemas & migrations, run `pnpm run db:*` from the workspace root to manage the database
 packages/env  - Shared env validation (.env lives here)
 packages/i18n - Paraglide i18n + Vite plugin
 packages/logger - Logtape isomorphic logger (client + server) with designated categories
@@ -32,24 +32,26 @@ tools/tsconfig - Shared TypeScript base config
 
 ## Key Commands
 
-> All scripts are run via `vp run <script>` (not `vp <script>`), because the script names overlap with Vite+ built-ins.
+> Run package scripts and workspace tasks through pnpm so they use the project-pinned Node.js runtime.
 
-| Command                  | Description                                              |
-| ------------------------ | -------------------------------------------------------- |
-| `vp run dev`             | Start all dev servers concurrently                       |
-| `vp run fix`             | Format, lint, and type-check (auto-runs on `git commit`) |
-| `vp run test`            | Run all tests                                            |
-| `vp run build`           | Build all packages                                       |
-| `vp run db:dev:start`    | Start local PostgreSQL (Docker)                          |
-| `vp run db:dev:stop`     | Stop local PostgreSQL                                    |
-| `vp run db:migrate`      | Run Drizzle migrations                                   |
-| `vp run db:generate`     | Generate Drizzle migration files                         |
-| `vp run db:studio`       | Open Drizzle Studio                                      |
-| `vp run auth:secret`     | Generate a Better Auth secret                            |
-| `vp run docker:up`       | Start full stack in Docker                               |
-| `vp run docker:up:build` | Rebuild and start full stack in Docker                   |
+| Command                    | Description                                  |
+| -------------------------- | -------------------------------------------- |
+| `pnpm run dev`             | Start all dev servers concurrently           |
+| `pnpm run check`           | Check formatting, lint, and types            |
+| `pnpm run fix`             | Apply formatting/lint fixes, then type-check |
+| `pnpm run test:unit:run`   | Run all unit tests                           |
+| `pnpm run test:e2e:run`    | Run all end-to-end tests                     |
+| `pnpm run build`           | Build all packages                           |
+| `pnpm run db:dev:start`    | Start local PostgreSQL (Docker)              |
+| `pnpm run db:dev:stop`     | Stop local PostgreSQL                        |
+| `pnpm run db:migrate`      | Run Drizzle migrations                       |
+| `pnpm run db:generate`     | Generate Drizzle migration files             |
+| `pnpm run db:studio`       | Open Drizzle Studio                          |
+| `pnpm run auth:secret`     | Generate a Better Auth secret                |
+| `pnpm run docker:up`       | Start full stack in Docker                   |
+| `pnpm run docker:up:build` | Rebuild and start full stack in Docker       |
 
-> `vpx <pkg>` is shorthand for `vp dlx <pkg>` (run a package binary without installing it).
+> Use `pnpm exec <bin>` for an installed package binary and `pnpm dlx <pkg>` for a one-off package.
 
 ## Environment Variables
 

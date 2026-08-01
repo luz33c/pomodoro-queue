@@ -1,3 +1,4 @@
+import { ClerkProvider, useAuth as useClerkAuth } from "@clerk/tanstack-react-start";
 import geistMonoCyrillic from "@fontsource-variable/geist-mono/files/geist-mono-cyrillic-wght-normal.woff2?url";
 import geistMonoLatinExt from "@fontsource-variable/geist-mono/files/geist-mono-latin-ext-wght-normal.woff2?url";
 import geistMonoLatin from "@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2?url";
@@ -12,15 +13,16 @@ import { type QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { HeadContent, Scripts, createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { useEffect } from "react";
 
-import { type AuthQueryResult } from "@tsu-stack/auth/react/tanstack-start/queries";
-import { getAuthUserQueryOptions } from "@tsu-stack/auth/react/tanstack-start/queries";
+import { setClerkAuthTokenGetter } from "@tsu-stack/api/client/tanstack-start/clerk-auth";
 import { resolvePublicAssetUrl } from "@tsu-stack/core/assets";
 import { ENV_WEB_ISOMORPHIC } from "@tsu-stack/env/web/env.isomorphic";
 import { getLocale } from "@tsu-stack/i18n/runtime";
 import { Toaster } from "@tsu-stack/ui/components/sonner";
 
 import { generateAppSeo } from "@/shared/lib/seo";
+import { LoggerProvider } from "@/shared/providers/logger-provider";
 import { ProgressProvider } from "@/shared/providers/progress.provider";
 import appCss from "@/shared/styles/app.css?url";
 import { ThemeProvider } from "@/shared/ui/theme-switcher";
@@ -30,21 +32,25 @@ import { DefaultErrorPage } from "@/pages/default-error";
 // Root route with shared context for the entire app, inject them in router.tsx
 type RouterAppContext = {
   queryClient: QueryClient;
-  user: AuthQueryResult;
 };
+
+function ClerkApiAuthBridge() {
+  const { getToken } = useClerkAuth();
+
+  useEffect(() => {
+    setClerkAuthTokenGetter(getToken);
+
+    return () => {
+      setClerkAuthTokenGetter(null);
+    };
+  }, [getToken]);
+
+  return null;
+}
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
   errorComponent: DefaultErrorPage,
   shellComponent: RootDocument,
-  // Consider removing this if you don't need the auth state everywhere
-  // An example of when to KEEP it is when you conditionally display a sign-up button in the header based on the auth state
-  beforeLoad: ({ context, preload }) => {
-    // Don't prefetch during preload to prevent spamming the server with getSession requests
-    if (!preload) {
-      // Prefetch (don't await) the user data on app load to have it ready for any route that needs it, and to set the auth state early
-      void context.queryClient.prefetchQuery(getAuthUserQueryOptions());
-    }
-  },
   head: () => {
     const rootSeo = generateAppSeo({
       includeDocumentMeta: true
@@ -127,28 +133,33 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {/* We place the progress provider here otherwise we will get "Cannot render a <style> outside the main document" error */}
-        <ThemeProvider attribute="class" defaultTheme="dark">
-          <ProgressProvider>
-            {children}
-            <Toaster richColors />
-            <TanStackDevtools
-              plugins={[
-                {
-                  name: "TanStack Query",
-                  render: <ReactQueryDevtoolsPanel />
-                },
-                {
-                  name: "TanStack Router",
-                  render: <TanStackRouterDevtoolsPanel />
-                },
-                formDevtoolsPlugin(),
-                a11yDevtoolsPlugin()
-              ]}
-            />
-            <Scripts />
-          </ProgressProvider>
-        </ThemeProvider>
+        <ClerkProvider publishableKey={ENV_WEB_ISOMORPHIC.VITE_CLERK_PUBLISHABLE_KEY}>
+          <ClerkApiAuthBridge />
+          <LoggerProvider>
+            {/* We place the progress provider here otherwise we will get "Cannot render a <style> outside the main document" error */}
+            <ThemeProvider attribute="class" defaultTheme="dark">
+              <ProgressProvider>
+                {children}
+                <Toaster richColors />
+                <TanStackDevtools
+                  plugins={[
+                    {
+                      name: "TanStack Query",
+                      render: <ReactQueryDevtoolsPanel />
+                    },
+                    {
+                      name: "TanStack Router",
+                      render: <TanStackRouterDevtoolsPanel />
+                    },
+                    formDevtoolsPlugin(),
+                    a11yDevtoolsPlugin()
+                  ]}
+                />
+                <Scripts />
+              </ProgressProvider>
+            </ThemeProvider>
+          </LoggerProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

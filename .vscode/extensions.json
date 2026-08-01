@@ -1,7 +1,7 @@
 {
   "recommendations": [
-    // Vite+ Extensions
-    "VoidZero.vite-plus-extension-pack",
+    // Oxfmt and Oxlint
+    "oxc.oxc-vscode",
     // Markdown
     "unifiedjs.vscode-mdx",
     // Git

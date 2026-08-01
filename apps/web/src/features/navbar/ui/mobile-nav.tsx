@@ -1,14 +1,12 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useAuth as useClerkAuth, useUser } from "@clerk/tanstack-react-start";
 import { useRouter, useRouterState } from "@tanstack/react-router";
 import { LogOut, Menu, X } from "lucide-react";
-import React, { Suspense } from "react";
+import React from "react";
 
-import { authClient } from "@tsu-stack/auth/react/auth-client";
-import { useAuthSuspense } from "@tsu-stack/auth/react/tanstack-start/hooks";
-import { getAuthUserQueryOptions } from "@tsu-stack/auth/react/tanstack-start/queries";
 import { Link } from "@tsu-stack/i18n/tanstack-start/components/link";
 import { Button } from "@tsu-stack/ui/components/button";
 import { Portal, PortalBackdrop } from "@tsu-stack/ui/components/portal";
+import { Skeleton } from "@tsu-stack/ui/components/skeleton";
 import { cn } from "@tsu-stack/ui/lib/utils";
 
 import { LocaleSwitcher } from "@/shared/ui/locale-switcher";
@@ -61,9 +59,7 @@ export function MobileNav() {
                 </Button>
               ))}
             </div>
-            <Suspense fallback={null}>
-              <MobileNavAuth onNavigate={onNavigate} />
-            </Suspense>
+            <MobileNavAuth onNavigate={onNavigate} />
           </div>
         </Portal>
       )}
@@ -72,26 +68,24 @@ export function MobileNav() {
 }
 
 function MobileNavAuth({ onNavigate }: { onNavigate: () => void }) {
-  const queryClient = useQueryClient();
   const router = useRouter();
   const routerState = useRouterState();
-  const { user } = useAuthSuspense();
+  const { signOut } = useClerkAuth();
+  const { isLoaded, isSignedIn, user } = useUser();
 
   const redirect = routerState.location.search?.redirect;
 
   const handleSignOut = async () => {
-    await authClient.signOut({
-      fetchOptions: {
-        onResponse: async () => {
-          await queryClient.invalidateQueries(getAuthUserQueryOptions());
-          await router.invalidate();
-          onNavigate();
-        }
-      }
-    });
+    await signOut();
+    await router.invalidate();
+    onNavigate();
   };
 
-  if (!user) {
+  if (!isLoaded) {
+    return <Skeleton aria-hidden="true" className="mt-12 h-20 w-full" />;
+  }
+
+  if (!isSignedIn) {
     return (
       <div className="mt-12 flex flex-col gap-2">
         <Button onClick={onNavigate} asChild className="w-full" variant="outline">
@@ -108,11 +102,14 @@ function MobileNavAuth({ onNavigate }: { onNavigate: () => void }) {
     );
   }
 
+  const email = user.primaryEmailAddress?.emailAddress;
+  const name = user.fullName ?? user.username ?? email ?? "User";
+
   return (
     <div className="mt-10 flex flex-col gap-6">
       <div className="border-t" />
       <div className="flex items-center gap-3 px-2">
-        <NavbarAvatar avatarImgSrc={user.image} name={user.name} email={user.email} />
+        <NavbarAvatar avatarImgSrc={user.imageUrl} name={name} email={email} />
       </div>
       <Button className="w-full" variant="destructive" onClick={handleSignOut}>
         <LogOut aria-hidden="true" size={16} />

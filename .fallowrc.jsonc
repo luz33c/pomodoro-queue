@@ -18,10 +18,10 @@
     "@tanstack/eslint-plugin-router",
     "eslint-plugin-fsd-lint",
     "eslint-plugin-react-hooks",
-    // Custom pnpm-workspace.yaml package specifiers
-    "@voidzero-dev/vite-plus-test",
+    // Tooling invoked from package scripts instead of imported by source files
     "nitro-nightly",
-    "vite-plus"
+    "oxfmt",
+    "oxlint"
   ],
   "ignoreExports": [{ "file": "**/*.mdx", "exports": ["*"] }],
   "ignoreExportsUsedInFile": true,

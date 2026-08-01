@@ -2,9 +2,10 @@ import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { z } from "zod";
 
-import { getAuthUserQueryOptions } from "@tsu-stack/auth/react/tanstack-start/queries";
 import { redirect } from "@tsu-stack/i18n/tanstack-start/lib/redirect";
 import { validateNavigateTo } from "@tsu-stack/i18n/tanstack-start/lib/validate-navigate-to";
+
+import { getClerkAuthState } from "@/features/auth";
 
 import { routeTree } from "@/routeTree.gen";
 
@@ -26,16 +27,13 @@ const guestSearchSchema = z.object({
 export const Route = createFileRoute("/{-$locale}/(centered-layout)/(guest)")({
   validateSearch: zodValidator(guestSearchSchema),
   component: Outlet,
-  beforeLoad: async ({ context, search }) => {
-    const user = await context.queryClient.ensureQueryData({
-      ...getAuthUserQueryOptions(),
-      revalidateIfStale: true
-    });
+  beforeLoad: async ({ search }) => {
+    const authState = await getClerkAuthState();
 
     // `redirect` is always NavigateTo (never undefined) thanks to schema transform & i18n path validation util
     const redirectTo = search.redirect;
 
-    if (user) {
+    if (authState.isAuthenticated && authState.userId) {
       throw redirect({
         to: redirectTo
       });

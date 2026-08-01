@@ -1,10 +1,7 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useAuth as useClerkAuth, useUser } from "@clerk/tanstack-react-start";
 import { useRouter } from "@tanstack/react-router";
 import { FileText, BarChart2, Lock, LogOut, UserSquare } from "lucide-react";
 
-import { authClient } from "@tsu-stack/auth/react/auth-client";
-import { useAuthSuspense } from "@tsu-stack/auth/react/tanstack-start/hooks";
-import { getAuthUserQueryOptions } from "@tsu-stack/auth/react/tanstack-start/queries";
 import { m } from "@tsu-stack/i18n/messages";
 import { Link } from "@tsu-stack/i18n/tanstack-start/components/link";
 import { Button } from "@tsu-stack/ui/components/button";
@@ -17,30 +14,31 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@tsu-stack/ui/components/dropdown-menu";
+import { Skeleton } from "@tsu-stack/ui/components/skeleton";
 
 import { NavbarAvatar } from "@/features/navbar/ui/navbar-avatar";
 import { NavbarUnauthenticatedButtons } from "@/features/navbar/ui/navbar-unauthenticated-buttons";
 
 export function UserDropdown() {
-  const queryClient = useQueryClient();
   const router = useRouter();
-  const { user } = useAuthSuspense();
+  const { signOut } = useClerkAuth();
+  const { isLoaded, isSignedIn, user } = useUser();
 
   const handleSignOut = async () => {
-    await authClient.signOut({
-      fetchOptions: {
-        onResponse: async () => {
-          // Invalidate to sync across all tabs
-          await queryClient.invalidateQueries(getAuthUserQueryOptions());
-          await router.invalidate();
-        }
-      }
-    });
+    await signOut();
+    await router.invalidate();
   };
 
-  if (!user) {
+  if (!isLoaded) {
+    return <Skeleton aria-hidden="true" className="size-9 shrink-0" />;
+  }
+
+  if (!isSignedIn) {
     return <NavbarUnauthenticatedButtons />;
   }
+
+  const email = user.primaryEmailAddress?.emailAddress;
+  const name = user.fullName ?? user.username ?? email ?? "User";
 
   return (
     <DropdownMenu>
@@ -51,7 +49,7 @@ export function UserDropdown() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="max-w-sm min-w-fit">
         <DropdownMenuLabel className="flex items-start gap-3">
-          <NavbarAvatar avatarImgSrc={user.image} name={user.name} email={user.email} />
+          <NavbarAvatar avatarImgSrc={user.imageUrl} name={name} email={email} />
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
@@ -80,7 +78,7 @@ export function UserDropdown() {
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer" variant="destructive" onClick={handleSignOut}>
           <LogOut aria-hidden="true" className="opacity-60" />
-          <button onClick={handleSignOut}>{m.user_dropdown__logout()}</button>
+          <span>{m.user_dropdown__logout()}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -1,0 +1,34 @@
+{
+  "name": "@tsu-stack/extension",
+  "version": "0.0.0",
+  "private": true,
+  "description": "TSU Stack browser extension",
+  "type": "module",
+  "scripts": {
+    "build": "dotenvx run -f ../../packages/env/.env -- wxt build",
+    "check": "wxt prepare && tsc --noEmit",
+    "dev": "dotenvx run -f ../../packages/env/.env -- wxt --port 5555",
+    "dev:firefox": "dotenvx run -f ../../packages/env/.env -- wxt -b firefox",
+    "postinstall": "wxt prepare",
+    "typecheck": "wxt prepare && tsc --noEmit",
+    "zip": "dotenvx run -f ../../packages/env/.env -- wxt zip"
+  },
+  "dependencies": {
+    "@clerk/chrome-extension": "catalog:",
+    "@orpc/client": "catalog:",
+    "@orpc/tanstack-query": "catalog:",
+    "@tanstack/react-query": "catalog:",
+    "@tsu-stack/api": "workspace:*",
+    "@tsu-stack/env": "workspace:*",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@dotenvx/dotenvx": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@wxt-dev/module-react": "catalog:",
+    "typescript": "catalog:",
+    "wxt": "catalog:"
+  }
+}

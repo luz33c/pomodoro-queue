@@ -1,6 +1,6 @@
 # tsu-stack
 
-Opinionated full-stack TypeScript monorepo: TanStack Start + Hono + oRPC + Drizzle + Better Auth + Paraglide.js (i18n), powered by Vite Plus.
+Opinionated full-stack TypeScript monorepo: TanStack Start + Hono + oRPC + Drizzle + Better Auth + Paraglide.js (i18n), running on Node.js 24 and managed with pnpm.
 
 ## Start Here
 
@@ -10,7 +10,7 @@ Opinionated full-stack TypeScript monorepo: TanStack Start + Hono + oRPC + Drizz
 
 ## Cross-Cutting Docs
 
-- [Vite+ toolchain](.agents/vite-plus.md) for package management, workspace scripts, and CLI syntax.
+- [Node.js and pnpm toolchain](.agents/toolchain.md) for runtime management, package management, workspace scripts, and CLI syntax.
 - [Workflow](.agents/workflow.md) for user-directed validation timing, build checks, and migration safety.
 - [Choice flows](.agents/choice-flows.md) for native approvals, structured input, validation prompts, and human decision points.
 - [Logging](.agents/logging.md) only when adding, changing, or keeping durable logs.
@@ -56,8 +56,8 @@ Pick the most specific file for the task. Use links within that file instead of 
 
 Before substantial work:
 
-- Skill check: run `vpx @tanstack/intent@latest list`, or use skills already listed in context.
-- Skill guidance: if one local skill clearly matches the task, run `vpx @tanstack/intent@latest load <package>#<skill>` and follow the returned `SKILL.md`.
+- Skill check: run `pnpm dlx @tanstack/intent@latest list`, or use skills already listed in context.
+- Skill guidance: if one local skill clearly matches the task, run `pnpm dlx @tanstack/intent@latest load <package>#<skill>` and follow the returned `SKILL.md`.
 - Monorepos: when working across packages, run the skill check from the workspace root and prefer the local skill for the package being changed.
 - Multiple matches: prefer the most specific local skill for the package or concern you are changing; load additional skills only when the task spans multiple packages or concerns.
 
@@ -65,17 +65,17 @@ Before substantial work:
 
 ## TanStack Docs
 
-Use `pnpm tanstack` (aliased to `vpx @tanstack/cli@latest`) to look up TanStack documentation. Always pass `--json` for machine-readable output.
+Use `pnpm run tanstack` (aliased to `pnpm dlx @tanstack/cli@latest`) to look up TanStack documentation. Always pass `--json` for machine-readable output.
 
 ```bash
 # List TanStack libraries (optionally filter by --group state|headlessUI|performance|tooling)
-pnpm tanstack libraries --json
+pnpm run tanstack libraries --json
 
 # Fetch a specific doc page
-pnpm tanstack doc router framework/react/guide/data-loading --json
-pnpm tanstack doc query framework/react/overview --docs-version v5 --json
+pnpm run tanstack doc router framework/react/guide/data-loading --json
+pnpm run tanstack doc query framework/react/overview --docs-version v5 --json
 
 # Search docs (optionally filter by --library, --framework, --limit)
-pnpm tanstack search-docs "server functions" --library start --json
-pnpm tanstack search-docs "loaders" --library router --framework react --json
+pnpm run tanstack search-docs "server functions" --library start --json
+pnpm run tanstack search-docs "loaders" --library router --framework react --json
 ```

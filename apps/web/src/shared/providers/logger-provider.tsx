@@ -1,6 +1,6 @@
+import { useAuth as useClerkAuth } from "@clerk/tanstack-react-start";
 import { createContext, useContext, useEffect } from "react";
 
-import { useAuth } from "@tsu-stack/auth/react/tanstack-start/hooks";
 import { clearIdentity, log, setIdentity } from "@tsu-stack/logger/client";
 
 type LoggerContextValue = {
@@ -10,11 +10,11 @@ type LoggerContextValue = {
 const LoggerContext = createContext<LoggerContextValue | null>(null);
 
 export function LoggerProvider({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth();
+  const { isLoaded, isSignedIn, userId } = useClerkAuth();
 
   useEffect(() => {
-    if (user) {
-      setIdentity({ user: { id: user.id } });
+    if (isLoaded && isSignedIn && userId) {
+      setIdentity({ user: { id: userId } });
     } else {
       setIdentity({ user: { id: "anonymous" } });
     }
@@ -22,7 +22,7 @@ export function LoggerProvider({ children }: { children: React.ReactNode }) {
     return () => {
       clearIdentity();
     };
-  }, [user]);
+  }, [isLoaded, isSignedIn, userId]);
 
   return <LoggerContext.Provider value={{ logger: log }}>{children}</LoggerContext.Provider>;
 }

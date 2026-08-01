@@ -1,0 +1,51 @@
+{
+  "name": "@tsu-stack/native",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "expo-router/entry",
+  "scripts": {
+    "android": "dotenvx run -f ../../packages/env/.env -- expo run:android",
+    "check": "tsc --noEmit",
+    "dev": "dotenvx run -f ../../packages/env/.env -- expo start --clear",
+    "ios": "dotenvx run -f ../../packages/env/.env -- expo run:ios",
+    "prebuild": "dotenvx run -f ../../packages/env/.env -- expo prebuild",
+    "typecheck": "tsc --noEmit",
+    "web": "dotenvx run -f ../../packages/env/.env -- expo start --web"
+  },
+  "dependencies": {
+    "@clerk/expo": "catalog:",
+    "@expo/log-box": "catalog:",
+    "@expo/metro-runtime": "catalog:",
+    "@orpc/client": "catalog:",
+    "@orpc/tanstack-query": "catalog:",
+    "@tanstack/react-query": "catalog:",
+    "@tsu-stack/api": "workspace:*",
+    "@tsu-stack/env": "workspace:*",
+    "expo": "catalog:",
+    "expo-auth-session": "catalog:",
+    "expo-constants": "catalog:",
+    "expo-crypto": "catalog:",
+    "expo-linking": "catalog:",
+    "expo-router": "catalog:",
+    "expo-secure-store": "catalog:",
+    "expo-status-bar": "catalog:",
+    "expo-web-browser": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "react-native": "catalog:",
+    "react-native-gesture-handler": "catalog:",
+    "react-native-reanimated": "catalog:",
+    "react-native-safe-area-context": "catalog:",
+    "react-native-screens": "catalog:",
+    "react-native-web": "catalog:"
+  },
+  "devDependencies": {
+    "@dotenvx/dotenvx": "catalog:",
+    "@react-native/metro-config": "catalog:",
+    "@tsu-stack/tsconfig": "workspace:*",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "typescript": "catalog:"
+  }
+}

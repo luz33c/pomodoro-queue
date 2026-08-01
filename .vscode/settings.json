@@ -46,10 +46,10 @@
     "**/routeTree.gen.ts": true
   },
 
-  // Vite Plus Defaults
+  // Oxfmt and Oxlint defaults
   "prettier.enable": false,
   "editor.defaultFormatter": "oxc.oxc-vscode",
-  "oxc.fmt.configPath": "./vite.config.ts",
+  "oxc.fmt.configPath": "./.oxfmtrc.jsonc",
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
   "editor.codeActionsOnSave": {
@@ -126,7 +126,7 @@
   "explorer.fileNesting.patterns": {
     "tsconfig.json": "tsconfig.*.json, env.d.ts",
     "vite.config.*": "jsconfig*, vitest.config.*, cypress.config.*, playwright.config.*",
-    "package.json": "LICENSE, package-lock.json, renovate.*, .npmrc, .fallowrc.jsonc, .node-version, pnpm*, components.json, commitlint*, .nvmrc, .yarnrc*, yarn*, .eslint*, eslint*, .prettier*, prettier*, .editorconfig, .gitattributes, .gitignore, bun.lock",
+    "package.json": "LICENSE, package-lock.json, renovate.*, .npmrc, .fallowrc.jsonc, .node-version, pnpm*, components.json, commitlint*, .nvmrc, .yarnrc*, yarn*, .eslint*, eslint*, .prettier*, prettier*, .ox*.jsonc, .editorconfig, .gitattributes, .gitignore, bun.lock",
     "router.tsx": "routeTree.gen.ts",
     "docker-compose.yaml": ".dockerignore, Dockerfile*, docker-compose.*.yaml, .env.docker*"
   },

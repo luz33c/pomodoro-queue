@@ -1,4 +1,4 @@
-FROM node:25-bookworm-slim AS base
+FROM node:24.18.0-bookworm-slim AS base
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends wget git ca-certificates \
@@ -11,23 +11,14 @@ WORKDIR /app
 
 FROM base AS installer
 
-# Use `npm view vite-plus version` to get the latest version of vite-plus for reproducible builds
-# FIXME: Use the documented manual method when it's available
-# @see {@link https://github.com/voidzero-dev/vite-plus/issues/896}
-ARG VITE_PLUS_VERSION=0.1.24
-RUN npm pack "@voidzero-dev/vite-plus-cli-linux-x64-gnu@${VITE_PLUS_VERSION}" \
-        --pack-destination /tmp && \
-    mkdir -p /root/.vite-plus/bin && \
-    tar xzf /tmp/voidzero-dev-vite-plus-cli-linux-x64-gnu-*.tgz -C /root/.vite-plus/bin \
-        --strip-components=1 package/vp && \
-    chmod +x /root/.vite-plus/bin/vp
-ENV PATH="/root/.vite-plus/bin:$PATH"
+ARG PNPM_VERSION=11.3.0
+RUN npm install --global "pnpm@${PNPM_VERSION}"
 
 # This layer only invalidates when dependencies change, not on source changes.
 # --parents preserves directory structure, picking up all workspace packages automatically.
 COPY --parents **/package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-RUN vp install --frozen-lockfile --ignore-scripts
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 # =========================================================================== #
 
@@ -35,7 +26,7 @@ FROM installer AS migrator
 
 COPY . .
 
-CMD ["vp", "run", "db:migrate"]
+CMD ["pnpm", "run", "db:migrate"]
 
 # =========================================================================== #
 
@@ -46,16 +37,19 @@ COPY . .
 # Ensure the migrations directory exists so that the build doesn't fail when trying to copy it in the production stage.
 RUN mkdir -p packages/db/migrations
 
-ARG SOURCE_COMMIT VITE_SERVER_URL VITE_WEB_URL DATABASE_URL BETTER_AUTH_SECRET
+ARG SOURCE_COMMIT VITE_SERVER_URL VITE_WEB_URL VITE_CLERK_PUBLISHABLE_KEY CLERK_SECRET_KEY CLERK_AUTHORIZED_PARTIES DATABASE_URL BETTER_AUTH_SECRET
 ENV SOURCE_COMMIT=${SOURCE_COMMIT} \
     VITE_SERVER_URL=${VITE_SERVER_URL} \
-    VITE_WEB_URL=${VITE_WEB_URL}
+    VITE_WEB_URL=${VITE_WEB_URL} \
+    VITE_CLERK_PUBLISHABLE_KEY=${VITE_CLERK_PUBLISHABLE_KEY} \
+    CLERK_SECRET_KEY=${CLERK_SECRET_KEY} \
+    CLERK_AUTHORIZED_PARTIES=${CLERK_AUTHORIZED_PARTIES}
 
 # TODO: Uncomment this when you have `test:unit` or `test:e2e` scripts defined in your apps/*/package.json or packages/*/package.json files.
-RUN vp run test:unit:run
-# RUN vp run test:e2e:run
+RUN pnpm run test:unit:run
+# RUN pnpm run test:e2e:run
 
-RUN vp run -v --filter server build
+RUN pnpm --filter @tsu-stack/server run build
 
 # =========================================================================== #
 

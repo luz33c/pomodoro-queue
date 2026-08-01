@@ -13,6 +13,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { type ContentfulStatusCode } from "hono/utils/http-status";
 
+import { getClerkAuthorizedParties } from "@tsu-stack/api/lib/auth/clerk-authorized-parties";
 import { createContext } from "@tsu-stack/api/lib/context/hono/create-context";
 import { appRouter } from "@tsu-stack/api/routers/index";
 import { auth } from "@tsu-stack/auth/index";
@@ -39,7 +40,7 @@ app.use(
     allowHeaders: ["Content-Type", "Authorization", "X-Request-Id"],
     allowMethods: ["GET", "POST", "OPTIONS"],
     credentials: true,
-    origin: [new URL(ENV_SERVER.VITE_WEB_URL).origin]
+    origin: getClerkAuthorizedParties()
   })
 );
 
@@ -137,11 +138,17 @@ export const openApiHandler = new OpenAPIHandler(appRouter, {
               in: "cookie",
               name: "better_auth.session_token",
               type: "apiKey"
+            },
+            clerkBearer: {
+              bearerFormat: "JWT",
+              description: "Clerk session token passed as a Bearer token.",
+              scheme: "bearer",
+              type: "http"
             }
           }
         },
         info: {
-          description: `This is the API for @tsu-stack/server.\n## Usage\nFor authentication, you can sign in via the \`/sign-in\` endpoint in [the Auth Reference](${ENV_SERVER.VITE_SERVER_URL}/docs#auth-api-reference). Include the session cookie in subsequent requests to access protected endpoints.\n## Resources\n - [Official Website](${ENV_SERVER.VITE_WEB_URL})\n - [Auth API Reference](${ENV_SERVER.VITE_SERVER_URL}/docs#auth-api-reference)`,
+          description: `This is the API for @tsu-stack/server.\n## Usage\nProtected endpoints require a Clerk session token in the \`Authorization: Bearer <token>\` header. The legacy Better Auth endpoints are still mounted at \`/auth/*\` for compatibility.\n## Resources\n - [Official Website](${ENV_SERVER.VITE_WEB_URL})\n - [Auth API Reference](${ENV_SERVER.VITE_SERVER_URL}/docs#auth-api-reference)`,
           title: "@tsu-stack/server API",
           version: ENV_SERVER.SOURCE_COMMIT
         },

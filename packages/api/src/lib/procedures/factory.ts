@@ -7,12 +7,13 @@ const o = os.$context<OrpcContext>();
 export const publicProcedure = o;
 
 const requireAuth = o.middleware(async ({ context, next }) => {
-  if (!context.session?.user) {
+  if (!context.auth?.userId) {
     throw new ORPCError("UNAUTHORIZED");
   }
+
   return next({
     context: {
-      session: context.session
+      auth: context.auth
     }
   });
 });
@@ -21,7 +22,7 @@ export const protectedProcedure = publicProcedure.use(requireAuth).route({
   spec: (spec) => {
     return {
       ...spec,
-      security: [{ authCookie: [] }]
+      security: [{ clerkBearer: [] }]
     };
   }
 });

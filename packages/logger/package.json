@@ -11,6 +11,9 @@
     "./server/tanstack-start/middleware": "./src/server/tanstack-start/middleware.ts",
     "./server/hono/middleware": "./src/server/hono/middleware.ts"
   },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
   "dependencies": {
     "@tanstack/react-start": "catalog:",
     "defu": "catalog:",

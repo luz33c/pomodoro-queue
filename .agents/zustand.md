@@ -15,7 +15,7 @@ For server data, route preloading, and mutations, follow [API fetching patterns]
 
 ## Dependency
 
-When adding the first Zustand store to a package, make sure the package declares `zustand` as a dependency. Use the workspace package-management rules from [Vite+ toolchain](./vite-plus.md).
+When adding the first Zustand store to a package, make sure the package declares `zustand` as a dependency. Use the workspace package-management rules from [Node.js and pnpm](./toolchain.md).
 
 ## Goals
 

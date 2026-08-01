@@ -6,7 +6,6 @@ import { ENV_WEB_ISOMORPHIC } from "@tsu-stack/env/web/env.isomorphic";
 import { LOG_SERVICES, initLog } from "@tsu-stack/logger/client";
 import { Spinner } from "@tsu-stack/ui/components/spinner";
 
-import { LoggerProvider } from "@/shared/providers/logger-provider";
 import { QueryClientProvider, getQueryClient } from "@/shared/providers/query-client.provider";
 
 import { DefaultNotFoundPage } from "@/pages/default-not-found";
@@ -60,13 +59,11 @@ export function getRouter() {
     // https://tanstack.com/router/latest/docs/guide/render-optimizations
     defaultStructuralSharing: true,
     // Global initial context defined in __root's RouterAppContext type goes here
-    context: { queryClient, user: null },
+    context: { queryClient },
     routeTree,
     scrollRestoration: true,
     Wrap: ({ children }) => (
-      <QueryClientProvider client={queryClient}>
-        <LoggerProvider>{children}</LoggerProvider>
-      </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     )
   });
 

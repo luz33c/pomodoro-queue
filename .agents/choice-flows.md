@@ -60,12 +60,7 @@ This example is conceptual unless the current runtime exposes an MCP elicitation
       "properties": {
         "choice": {
           "type": "string",
-          "enum": [
-            "run_full_check",
-            "skip_validation",
-            "review_markdown_only",
-            "custom"
-          ],
+          "enum": ["run_full_check", "skip_validation", "review_markdown_only", "custom"],
           "description": "How should the agent proceed?"
         },
         "customInstructions": {
@@ -95,7 +90,7 @@ Use the runtime's structured-input mechanism if available.
 
 Preferred structured choices:
 
-- `run_full_check`: run `vp check`
+- `run_full_check`: run `pnpm run check`
 - `skip_validation`: skip validation
 - `review_markdown_only`: review the changed markdown only; no lighter docs-only validation command exists
 - `custom`: wait for custom instructions
@@ -106,7 +101,7 @@ Plain text fallback only:
 Decision required: this is a markdown-only documentation change, and validation is optional.
 
 Options:
-1. Run the general repo check: `vp check`
+1. Run the general repo check: `pnpm run check`
 2. Skip validation
 3. No lighter docs-only validation command exists; review the changed markdown only
 4. Other: provide custom instructions
@@ -120,9 +115,9 @@ Use the runtime's structured-input mechanism if available.
 
 Preferred structured choices:
 
-- `run_unit_tests`: run `vp run test:unit:run`
+- `run_unit_tests`: run `pnpm run test:unit:run`
 - `skip_tests`: skip tests
-- `run_package_unit_tests`: run `vp test` from the touched package, when available
+- `run_package_unit_tests`: run `pnpm run test:unit` from the touched package, when available
 - `custom`: wait for custom instructions
 
 Plain text fallback only:
@@ -131,9 +126,9 @@ Plain text fallback only:
 Decision required: changes may require tests.
 
 Options:
-1. Run the repo unit test wrapper: `vp run test:unit:run`
+1. Run the repo unit test wrapper: `pnpm run test:unit:run`
 2. Skip tests
-3. Run a narrower package-local unit test command, when available: `vp test` from the touched package
+3. Run a narrower package-local unit test command, when available: `pnpm run test:unit` from the touched package
 4. Other: provide custom instructions
 
 Reply with 1, 2, 3, 4, or custom text.
@@ -145,9 +140,9 @@ Use native command approval if the runtime requires approval for the command. Fo
 
 Preferred structured choices:
 
-- `run_fix`: run `vp run fix`
+- `run_fix`: run `pnpm run fix`
 - `skip_fixes`: skip formatting/fixes
-- `show_command`: show `vp run fix` without running it
+- `show_command`: show `pnpm run fix` without running it
 - `custom`: wait for custom instructions
 
 Plain text fallback only:
@@ -156,7 +151,7 @@ Plain text fallback only:
 Decision required: formatting or lint fixes are available.
 
 Options:
-1. Run the root fix script: `vp run fix`
+1. Run the root fix script: `pnpm run fix`
 2. Skip formatting/fixes
 3. Show the proposed formatting/fix command without running it
 4. Other: provide custom instructions
@@ -170,9 +165,9 @@ Use the runtime's structured-input mechanism if available.
 
 Preferred structured choices:
 
-- `run_package_check`: run `vp check` in the touched app or package
+- `run_package_check`: run `pnpm run check` in the touched app or package
 - `skip_validation`: skip validation
-- `run_fix`: run `vp run fix` so the agent can clean up auto-fixable issues
+- `run_fix`: run `pnpm run fix` so the agent can clean up auto-fixable issues
 - `custom`: wait for custom instructions
 
 Plain text fallback only:
@@ -181,9 +176,9 @@ Plain text fallback only:
 Decision required: code changed, and validation is optional until approved.
 
 Options:
-1. Run the narrowest relevant package check: `vp check`
+1. Run the narrowest relevant package check: `pnpm run check`
 2. Skip validation
-3. Run the root fix script so the agent can clean up auto-fixable issues: `vp run fix`
+3. Run the root fix script so the agent can clean up auto-fixable issues: `pnpm run fix`
 4. Other: provide custom instructions
 
 Reply with 1, 2, 3, 4, or custom text.
@@ -195,9 +190,9 @@ Use the runtime's structured-input mechanism if available.
 
 Preferred structured choices:
 
-- `run_e2e_tests`: run `vp run test:e2e:run`
+- `run_e2e_tests`: run `pnpm run test:e2e:run`
 - `skip_e2e_tests`: skip e2e tests
-- `run_unit_tests`: run `vp run test:unit:run`
+- `run_unit_tests`: run `pnpm run test:unit:run`
 - `custom`: wait for custom instructions
 
 Plain text fallback only:
@@ -206,9 +201,9 @@ Plain text fallback only:
 Decision required: changes may require end-to-end tests.
 
 Options:
-1. Run the repo e2e test wrapper: `vp run test:e2e:run`
+1. Run the repo e2e test wrapper: `pnpm run test:e2e:run`
 2. Skip e2e tests
-3. Run unit tests instead: `vp run test:unit:run`
+3. Run unit tests instead: `pnpm run test:unit:run`
 4. Other: provide custom instructions
 
 Reply with 1, 2, 3, 4, or custom text.

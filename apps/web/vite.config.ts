@@ -8,7 +8,7 @@ import { devtools } from "@tanstack/devtools-vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { nitro } from "nitro/vite";
-import { defineConfig } from "vite-plus";
+import { defineConfig } from "vite";
 
 import { ENV_WEB_ISOMORPHIC } from "@tsu-stack/env/web/env.isomorphic";
 import { ENV_WEB_SERVER } from "@tsu-stack/env/web/env.server";
@@ -57,28 +57,6 @@ function getPortFromUrl(url: string, fallback: number): number {
 }
 
 export default defineConfig({
-  run: {
-    tasks: {
-      build: {
-        command: "cross-env IS_BUILD=true pnpm dotenvx run -f ../../packages/env/.env -- vp build",
-        dependsOn: ["@tsu-stack/i18n#build"],
-        // These environment variables are dependencies of the build process and need to be passed here to be picked up by the Vite Task runner.
-        // CAUTION: These are hardcoded into the image. You should consider Build Secrets for sensitive values.
-        //          In Coolify, you need to check "Use Docker Build Secrets" in the Environment Variables tab.
-        env: [
-          "NODE_ENV",
-          "VITE_SERVER_URL",
-          "VITE_WEB_URL",
-          "VITE_IMGPROXY_URL",
-          "VITE_IMGPROXY_SIGNATURE",
-          "SOURCE_COMMIT",
-          "BETTER_AUTH_SECRET",
-          "DATABASE_URL"
-        ]
-      }
-    }
-  },
-
   /**
    * FIXME: This is needed for prerendering to work in Docker Compose builds
    * @see {@link https://github.com/TanStack/router/issues/6275}

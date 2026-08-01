@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "TSU Stack",
+    "slug": "tsu-stack-native",
+    "scheme": "tsu-stack",
+    "orientation": "default",
+    "userInterfaceStyle": "automatic",
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

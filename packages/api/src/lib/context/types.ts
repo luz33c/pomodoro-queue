@@ -1,7 +1,11 @@
-import { type AuthSession } from "@tsu-stack/auth/index";
 import { type RequestLogger } from "@tsu-stack/logger/server";
 
+export type ClerkContextAuth = {
+  userId: string;
+};
+
 export type OrpcContext = {
-  session: AuthSession | null;
+  auth: ClerkContextAuth | null;
   logger: RequestLogger;
+  session: null;
 };

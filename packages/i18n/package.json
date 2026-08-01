@@ -17,7 +17,8 @@
   "scripts": {
     "build": "paraglide-js compile --project ./project.inlang --outdir ./src/paraglide",
     "dev": "paraglide-js compile --watch --project ./project.inlang --outdir ./src/paraglide",
-    "machine-translate": "inlang machine translate --project project.inlang"
+    "machine-translate": "inlang machine translate --project project.inlang",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@tanstack/react-router": "catalog:",

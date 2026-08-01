@@ -12,7 +12,8 @@
     "./*": "./src/*.ts"
   },
   "scripts": {
-    "test:unit": "vp test"
+    "test:unit": "vitest run",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "zod": "catalog:"
@@ -21,6 +22,6 @@
     "@tsu-stack/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "typescript": "catalog:",
-    "vite-plus": "catalog:"
+    "vitest": "catalog:"
   }
 }

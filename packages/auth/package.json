@@ -8,6 +8,9 @@
   "exports": {
     "./*": "./src/*.ts"
   },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
   "dependencies": {
     "@better-auth/drizzle-adapter": "catalog:",
     "better-auth": "catalog:"
@@ -16,7 +19,8 @@
     "@tsu-stack/env": "workspace:*",
     "@tsu-stack/tsconfig": "workspace:*",
     "@types/node": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vite": "catalog:"
   },
   "peerDependencies": {
     "@tanstack/react-query": "catalog:",

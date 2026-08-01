@@ -10,10 +10,10 @@
     "./schema": "./src/schema/index.ts"
   },
   "scripts": {
-    "db": "pnpm dotenvx run -f ../env/.env -- drizzle-kit",
+    "db": "dotenvx run -f ../env/.env -- drizzle-kit",
     "db:dev:start": "docker compose -f docker-compose.dev.yaml up -d",
     "db:dev:stop": "docker compose -f docker-compose.dev.yaml stop",
-    "auth:generate": "vp run -w auth:generate"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@tsu-stack/logger": "workspace:*",

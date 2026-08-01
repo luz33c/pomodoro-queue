@@ -3,15 +3,19 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check": "vp check",
-    "check:fix": "vp check --fix",
-    "dev": "pnpm dotenvx run -f ../../packages/env/.env -- vp dev",
-    "preview": "pnpm dotenvx run -f ../../packages/env/.env -- vp preview",
-    "start": "pnpm dotenvx run -f ../../packages/env/.env -- node .output/server/index.mjs",
-    "ui": "vpx shadcn@latest"
+    "build": "cross-env IS_BUILD=true dotenvx run -f ../../packages/env/.env -- vite build",
+    "check": "tsc --noEmit",
+    "prebuild": "pnpm --dir ../.. --filter @tsu-stack/i18n run build",
+    "predev": "pnpm --dir ../.. --filter @tsu-stack/i18n run build",
+    "dev": "dotenvx run -f ../../packages/env/.env -- vite",
+    "preview": "dotenvx run -f ../../packages/env/.env -- vite preview",
+    "start": "dotenvx run -f ../../packages/env/.env -- node .output/server/index.mjs",
+    "typecheck": "tsc --noEmit",
+    "ui": "pnpm dlx shadcn@latest"
   },
   "dependencies": {
     "@bprogress/react": "catalog:",
+    "@clerk/tanstack-react-start": "catalog:",
     "@fontsource-variable/geist": "catalog:",
     "@fontsource-variable/geist-mono": "catalog:",
     "@fontsource/instrument-serif": "catalog:",
@@ -25,7 +29,6 @@
     "@tanstack/react-start": "catalog:",
     "@tanstack/zod-adapter": "catalog:",
     "@tsu-stack/api": "workspace:*",
-    "@tsu-stack/auth": "workspace:*",
     "@tsu-stack/core": "workspace:*",
     "@tsu-stack/db": "workspace:*",
     "@tsu-stack/env": "workspace:*",

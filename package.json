@@ -3,31 +3,39 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check": "vp check",
-    "fix": "vp check --fix",
-    "test:unit:run": "pnpm dotenvx run -f ./packages/env/.env -- vp run -r test:unit",
-    "test:e2e:run": "pnpm dotenvx run -f ./packages/env/.env -- vp run -r test:e2e",
-    "dev": "pnpm -r --parallel dev",
-    "build": "vp run -r build",
-    "prepare": "vp config",
-    "deps": "vpx taze@latest -Ilwr --maturity-period 3",
-    "deps:major": "vpx taze@latest major -Ilwr --maturity-period 3",
-    "fallow": "vpx fallow --skip health",
-    "tanstack": "vpx @tanstack/cli@latest",
-    "db": "vp run --filter @tsu-stack/db db",
-    "db:dev:start": "vp run --filter @tsu-stack/db db:dev:start",
-    "db:dev:stop": "vp run --filter @tsu-stack/db db:dev:stop",
-    "db:push": "vp run -w db push",
-    "db:generate": "vp run -w db generate",
-    "db:migrate": "vp run -w db migrate",
-    "db:studio": "vp run -w db studio",
-    "docker:up": "pnpm dotenvx run -f .env.docker docker -- compose up",
-    "docker:up:build": "pnpm dotenvx run -f .env.docker docker -- compose up --build",
-    "docker:down": "pnpm dotenvx run -f .env.docker docker -- compose down",
-    "ui": "vp run --filter @tsu-stack/ui ui",
-    "ui:web": "vp run --filter @tsu-stack/web ui",
-    "auth:secret": "vpx auth@latest secret",
-    "auth:generate": "vp run --filter @tsu-stack/db auth:generate"
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
+    "lint": "oxlint --type-aware --type-check .",
+    "lint:fix": "oxlint --fix --type-aware --type-check .",
+    "typecheck": "pnpm -r --if-present run typecheck",
+    "check": "pnpm run format:check && pnpm run lint && pnpm run typecheck",
+    "fix": "pnpm run format && pnpm run lint:fix && pnpm run typecheck",
+    "test": "pnpm run test:unit:run",
+    "test:unit:run": "dotenvx run -f ./packages/env/.env -- pnpm -r --if-present run test:unit",
+    "test:e2e:run": "dotenvx run -f ./packages/env/.env -- pnpm -r --if-present run test:e2e",
+    "dev": "pnpm -r --parallel --if-present run dev",
+    "build": "pnpm --filter @tsu-stack/web --filter @tsu-stack/server --filter @tsu-stack/extension --if-present run build",
+    "prepare": "git rev-parse --git-dir > /dev/null 2>&1 && git config core.hooksPath .githooks || true",
+    "deps": "pnpm dlx taze@latest -Ilwr --maturity-period 3",
+    "deps:major": "pnpm dlx taze@latest major -Ilwr --maturity-period 3",
+    "dev:extension": "pnpm --filter @tsu-stack/extension run dev",
+    "dev:native": "pnpm --filter @tsu-stack/native run dev",
+    "fallow": "pnpm dlx fallow --skip health",
+    "tanstack": "pnpm dlx @tanstack/cli@latest",
+    "db": "pnpm --filter @tsu-stack/db run db",
+    "db:dev:start": "pnpm --filter @tsu-stack/db run db:dev:start",
+    "db:dev:stop": "pnpm --filter @tsu-stack/db run db:dev:stop",
+    "db:push": "pnpm --filter @tsu-stack/db run db push",
+    "db:generate": "pnpm --filter @tsu-stack/db run db generate",
+    "db:migrate": "pnpm --filter @tsu-stack/db run db migrate",
+    "db:studio": "pnpm --filter @tsu-stack/db run db studio",
+    "docker:up": "dotenvx run -f .env.docker docker -- compose up",
+    "docker:up:build": "dotenvx run -f .env.docker docker -- compose up --build",
+    "docker:down": "dotenvx run -f .env.docker docker -- compose down",
+    "ui": "pnpm --filter @tsu-stack/ui run ui",
+    "ui:web": "pnpm --filter @tsu-stack/web run ui",
+    "auth:secret": "pnpm dlx auth@latest secret",
+    "auth:generate": "dotenvx run -f ./packages/env/.env -- pnpm dlx auth@latest generate --config ./packages/auth/src/index.ts --output ./packages/db/src/schema/auth.schema.ts"
   },
   "devDependencies": {
     "@commitlint/cli": "catalog:",
@@ -38,14 +46,26 @@
     "@typescript/native-preview": "catalog:",
     "eslint-plugin-fsd-lint": "catalog:",
     "eslint-plugin-react-hooks": "catalog:",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
     "oxlint-tsgolint": "catalog:",
-    "vite-plus": "catalog:",
     "vitest": "catalog:"
   },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
     ]
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "24.18.0",
+      "onFail": "download"
+    }
+  },
+  "engines": {
+    "node": ">=24.18.0 <25",
+    "pnpm": "11.3.0"
   },
   "packageManager": "pnpm@11.3.0"
 }

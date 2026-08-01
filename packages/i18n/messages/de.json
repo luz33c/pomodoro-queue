@@ -4,7 +4,7 @@
   "home_page__hero_beta_badge": "Erste Beta-Veröffentlichung",
   "home_page__hero_title_line_1": "Ihr Stack,",
   "home_page__hero_title_line_2": "neu definiert.",
-  "home_page__hero_description": "Ein eigensinniges Vite Plus (Vite+) Monorepo mit TanStack Start, Dockerisierte Bereitstellungen, Paraglide.js (i18n), Hono, oRPC, drizzle-orm, better-auth, shadcn-ui, und mehr.",
+  "home_page__hero_description": "Ein eigensinniges Node.js-24-Monorepo mit pnpm, TanStack Start, dockerisierten Bereitstellungen, Paraglide.js (i18n), Hono, oRPC, drizzle-orm, better-auth, shadcn-ui und mehr.",
   "home_page__hero_cta": "Dokumentation anzeigen",
   "home_page__integrations__heading": "Überall bereitstellen",
   "home_page__integrations__description": "TanStack Start funktioniert mit den meisten großen Cloud-Anbietern und JavaScript-Runtimes dank seines Nitro-Deployment-Adapters und Docker-Vorlagen.",

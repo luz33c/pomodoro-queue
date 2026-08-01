@@ -7,19 +7,19 @@ This document is the authoritative testing policy for contributors and AI agents
 - Assume no tests unless explicitly requested.
 - Never auto-add tests to feature work.
 - Respect unit and e2e conventions enumerated below.
-- Use Vite+ setup for new test environments.
+- Use the official Vitest package for new test environments.
 - Do not generate, modify, suggest, or proactively add tests unless the developer explicitly asks.
 - Implementation requests should return implementation only unless tests are explicitly requested.
 - When asking whether to run tests, use [Choice flows](./choice-flows.md) and prefer native approval or structured input before any plain text fallback.
 - Inspect nearby tests before generating new ones.
-- Use Vite+ testing conventions, not standalone Vitest defaults.
+- Follow the repository's standalone Vitest conventions.
 
 ## Test Commands
 
 Canonical commands:
 
-- `vp run test:unit:run`
-- `vp run test:e2e:run`
+- `pnpm run test:unit:run`
+- `pnpm run test:e2e:run`
 
 ## Test Locations
 
@@ -33,19 +33,19 @@ End-to-end tests:
 
 Use `__e2e__` as the project convention for end-to-end tests.
 
-## Vite+ / Vitest Setup Rule
+## Vitest Setup Rule
 
-When tests are explicitly requested, and the package or app does not already have Vite+ testing configured:
+When tests are explicitly requested and the package or app does not already have Vitest configured:
 
-1. Install and configure Vite+.
-2. Add a root `vite.config.ts` in the package or app being tested.
-3. Do not create `vitest.config.ts`.
-4. Put Vitest config inside `vite.config.ts` using Vite+ conventions.
+1. Add the official `vitest` package through the workspace catalog.
+2. Reuse a nearby Vitest config when one already covers the package.
+3. Otherwise, add `vitest.config.ts` in the package or app being tested.
+4. Keep test scripts explicit and run them through pnpm.
 
 Default config:
 
 ```ts
-import { defineConfig } from "vite-plus";
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
@@ -56,9 +56,9 @@ export default defineConfig({
 
 Explicit rules:
 
-- The Vitest config belongs in `vite.config.ts`.
-- `vitest.config.ts` should not be used in this repository.
-- Follow the Vite+ test docs as the source of truth: https://viteplus.dev/guide/test
+- Prefer `vitest.config.ts` for test-only configuration.
+- Keep Web build configuration in `vite.config.ts`; do not couple unrelated package tests to the Web Vite config.
+- Follow the official Vitest configuration documentation: https://vitest.dev/config/
 
 ## When Tests Are Explicitly Requested
 
