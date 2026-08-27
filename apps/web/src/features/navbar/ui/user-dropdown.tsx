@@ -14,7 +14,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@tsu-stack/ui/components/dropdown-menu";
-import { Skeleton } from "@tsu-stack/ui/components/skeleton";
 
 import { NavbarAvatar } from "@/features/navbar/ui/navbar-avatar";
 import { NavbarUnauthenticatedButtons } from "@/features/navbar/ui/navbar-unauthenticated-buttons";
@@ -30,7 +29,14 @@ export function UserDropdown() {
   };
 
   if (!isLoaded) {
-    return <Skeleton aria-hidden="true" className="size-9 shrink-0" />;
+    return (
+      <span
+        aria-hidden="true"
+        className="flex size-9 shrink-0 items-center justify-center text-primary"
+      >
+        <UserSquare className="size-4" />
+      </span>
+    );
   }
 
   if (!isSignedIn) {

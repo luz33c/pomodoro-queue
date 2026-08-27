@@ -1,4 +1,3 @@
-import { useUser } from "@clerk/tanstack-react-start";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -30,19 +29,12 @@ export const Route = createFileRoute("/{-$locale}/(root-layout)/(auth)/dashboard
 });
 
 function RouteComponent() {
-  const { auth } = Route.useRouteContext();
-  const { user } = useUser();
-  const email = user?.primaryEmailAddress?.emailAddress;
-  const displayName = user?.fullName ?? user?.username ?? email ?? auth.userId;
-
   const privateData = useQuery(orpc.private.data.queryOptions());
   const isClient = useIsClient();
 
   return (
     <Container>
-      <h2 className="font-display mb-2 text-4xl">
-        {m.dashboard_page__title()} {displayName}
-      </h2>
+      <h2 className="font-display mb-2 text-4xl">{m.dashboard_page__title()}</h2>
       <section>
         <h2 className="font-display my-8 text-2xl">{m.dashboard_page__protected_rpc_route()}</h2>
         <div className="rounded-lg border p-4">
