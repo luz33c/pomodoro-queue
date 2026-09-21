@@ -9,16 +9,19 @@ import instrumentSerifLatin400 from "@fontsource/instrument-serif/files/instrume
 import { a11yDevtoolsPlugin } from "@tanstack/devtools-a11y/react";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { formDevtoolsPlugin } from "@tanstack/react-form-devtools";
-import { type QueryClient } from "@tanstack/react-query";
+import { type QueryClient, useQueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { HeadContent, Scripts, createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { useEffect } from "react";
+import { Fragment, useEffect, useRef } from "react";
 
 import { setClerkAuthTokenGetter } from "@tsu-stack/api/client/tanstack-start/clerk-auth";
 import { resolvePublicAssetUrl } from "@tsu-stack/core/assets";
 import { ENV_WEB_ISOMORPHIC } from "@tsu-stack/env/web/env.isomorphic";
-import { getLocale } from "@tsu-stack/i18n/runtime";
+import {
+  LocaleProvider,
+  useLocale
+} from "@tsu-stack/i18n/tanstack-start/components/locale-provider";
 import { Toaster } from "@tsu-stack/ui/components/sonner";
 
 import { generateAppSeo } from "@/shared/lib/seo";
@@ -35,7 +38,9 @@ type RouterAppContext = {
 };
 
 function ClerkApiAuthBridge() {
-  const { getToken } = useClerkAuth();
+  const { getToken, isLoaded, userId } = useClerkAuth();
+  const queryClient = useQueryClient();
+  const previousUserId = useRef<string | null | undefined>(undefined);
 
   useEffect(() => {
     setClerkAuthTokenGetter(getToken);
@@ -44,6 +49,20 @@ function ClerkApiAuthBridge() {
       setClerkAuthTokenGetter(null);
     };
   }, [getToken]);
+
+  useEffect(() => {
+    if (!isLoaded) {
+      return;
+    }
+
+    const nextUserId = userId ?? null;
+
+    if (previousUserId.current !== undefined && previousUserId.current !== nextUserId) {
+      queryClient.clear();
+    }
+
+    previousUserId.current = nextUserId;
+  }, [isLoaded, queryClient, userId]);
 
   return null;
 }
@@ -128,7 +147,17 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html suppressHydrationWarning lang={getLocale()}>
+    <LocaleProvider>
+      <RootDocumentInner>{children}</RootDocumentInner>
+    </LocaleProvider>
+  );
+}
+
+function RootDocumentInner({ children }: { children: React.ReactNode }) {
+  const { locale } = useLocale();
+
+  return (
+    <html suppressHydrationWarning lang={locale}>
       <head>
         <HeadContent />
       </head>
@@ -139,7 +168,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             {/* We place the progress provider here otherwise we will get "Cannot render a <style> outside the main document" error */}
             <ThemeProvider attribute="class" defaultTheme="dark">
               <ProgressProvider>
-                {children}
+                <Fragment key={locale}>{children}</Fragment>
                 <Toaster richColors />
                 <TanStackDevtools
                   plugins={[

@@ -6,7 +6,7 @@
 
 迁移后的职责划分：
 
-- pnpm 11.3.0：依赖安装、workspace 脚本、筛选包、并行执行和命令行工具。
+- pnpm 11.22.0：依赖安装、workspace 脚本、筛选包、并行执行和命令行工具。
 - Node.js 24.18.0：项目运行时、Server 的原生 TypeScript 执行、文件监听和 `.env` 加载。
 - Vite：仅继续作为 Web 应用的开发服务器与构建器；本次迁移没有用 Node.js 替代它。
 
@@ -47,7 +47,7 @@
 ### Web、Docker 与本地工作流
 
 - [apps/web/package.json](../apps/web/package.json) 的 i18n 生命周期脚本改用 pnpm 的 workspace filter。
-- [apps/server/Dockerfile](../apps/server/Dockerfile) 和 [apps/web/Dockerfile](../apps/web/Dockerfile) 改为 Node 24.18 + pnpm 11.3，不再安装 Nub。
+- [apps/server/Dockerfile](../apps/server/Dockerfile) 和 [apps/web/Dockerfile](../apps/web/Dockerfile) 改为 Node 24.18 + pnpm 11.22，不再安装 Nub。
 - [.githooks/pre-commit](../.githooks/pre-commit) 改为执行 `pnpm run check`。
 - 项目指南、环境示例和界面文案中的 Nub 命令同步改为 pnpm / Node 24 表述，包括 [.agents/toolchain.md](../.agents/toolchain.md)。
 

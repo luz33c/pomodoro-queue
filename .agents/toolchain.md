@@ -3,8 +3,10 @@
 ## Responsibilities
 
 - **Node.js 24 LTS** is the development and production runtime.
-- **pnpm 11.3.0** owns dependency installation, the lockfile, workspace catalogs, package scripts, workspace tasks, and one-off binaries.
+- **pnpm 11.22.0** owns dependency installation, the lockfile, workspace catalogs, package scripts, workspace tasks, and one-off binaries.
 - **Vite**, **Vitest**, **Oxfmt**, **Oxlint**, **tsc/tsgo**, and **tsdown** remain independent tools for their respective jobs.
+
+Most workspaces use TypeScript 7. `apps/native` deliberately pins TypeScript 6.0.3 because Expo SDK 57 validates against that compiler line; keep the exception until Expo supports TypeScript 7.
 
 The root `devEngines.runtime` entry pins Node.js 24.18.0. `pnpm install` downloads that runtime when needed, and project scripts launched through pnpm use it. Keep `.node-version` and `engines.node` aligned for editors and external tooling.
 

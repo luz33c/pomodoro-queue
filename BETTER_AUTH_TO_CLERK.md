@@ -524,5 +524,5 @@ pnpm --filter @tsu-stack/native exec expo config --json
 
 已知情况：
 
-- `pnpm peers check` 仍有既有版本策略相关 warning：`srvx`、`zod`、Better Auth beta adapter 相关 peer；新增 native 带来的 React Native Metro peer mismatch 已处理。
+- `pnpm peers check` 仍有既有依赖链 warning：Nitro 的旧 `srvx`、TanStack Zod adapter 的 Zod 3 peer 声明，以及 Expo 间接依赖的 `ws` / `utf-8-validate` 版本声明。Better Auth 已切换为同版本 stable adapter，Native 的 Expo / React Native 版本由 Expo compatibility check 校准。
 - Clerk Chrome Extension build 会从 Clerk UI 依赖链生成较大的 chunks，并输出 `import.meta`/chunk size warning；WXT build 仍成功。

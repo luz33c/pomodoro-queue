@@ -38,7 +38,8 @@
     "react-native-reanimated": "catalog:",
     "react-native-safe-area-context": "catalog:",
     "react-native-screens": "catalog:",
-    "react-native-web": "catalog:"
+    "react-native-web": "catalog:",
+    "react-native-worklets": "catalog:"
   },
   "devDependencies": {
     "@dotenvx/dotenvx": "catalog:",
@@ -46,6 +47,6 @@
     "@tsu-stack/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "6.0.3"
   }
 }

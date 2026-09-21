@@ -1,6 +1,6 @@
 # tsu!stack Project
 
-An opinionated Node.js 24 LTS monorepo. pnpm 11.3.0 owns dependency installation, the lockfile, workspace tasks, package scripts, one-off CLIs, and the pinned Node.js runtime. Use `pnpm install` for dependencies, `pnpm run <script>` for package scripts, `pnpm exec <bin>` for installed binaries, and `pnpm dlx <pkg>` for one-off packages.
+An opinionated Node.js 24 LTS monorepo. pnpm 11.22.0 owns dependency installation, the lockfile, workspace tasks, package scripts, one-off CLIs, and the pinned Node.js runtime. Use `pnpm install` for dependencies, `pnpm run <script>` for package scripts, `pnpm exec <bin>` for installed binaries, and `pnpm dlx <pkg>` for one-off packages.
 
 ## Tech Stack
 

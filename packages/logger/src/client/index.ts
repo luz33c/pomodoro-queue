@@ -13,16 +13,18 @@ type ClientLoggerConfig = {
 };
 
 type LogMethod = typeof evlogLog.info;
+type ErrorLogMethod = typeof evlogLog.error;
+type LogEvent = Parameters<LogMethod>[0];
 
 const DEFAULT_CLIENT_LOGGER_CONFIG = {
   service: LOG_SERVICES.DEFAULT
 } satisfies ClientLoggerConfig;
 
 let isInitialized = false;
-let identityContext: Record<string, unknown> = {};
+let identityContext: LogEvent = {};
 
 const debugLogMethod = evlogLog.debug.bind(evlogLog) as LogMethod;
-const errorLogMethod = evlogLog.error.bind(evlogLog) as LogMethod;
+const errorLogMethod = evlogLog.error.bind(evlogLog) as ErrorLogMethod;
 const infoLogMethod = evlogLog.info.bind(evlogLog) as LogMethod;
 const warnLogMethod = evlogLog.warn.bind(evlogLog) as LogMethod;
 
@@ -114,7 +116,7 @@ export const log = {
  * setIdentity({ user: { id: user.id } });
  * ```
  */
-export function setIdentity(identity: Record<string, unknown>) {
+export function setIdentity(identity: LogEvent) {
   if (!isBrowserRuntime()) {
     return;
   }
@@ -140,29 +142,45 @@ export function clearIdentity() {
   identityContext = {};
 }
 
-function withIdentity(method: LogMethod): LogMethod {
-  return ((tagOrEvent: unknown, message?: string) => {
+function withIdentity(method: ErrorLogMethod): ErrorLogMethod;
+function withIdentity(method: LogMethod): LogMethod;
+function withIdentity(method: LogMethod | ErrorLogMethod) {
+  function logWithIdentity(event: LogEvent): void;
+  function logWithIdentity(error: Error): void;
+  function logWithIdentity(tag: string, message: string): void;
+  function logWithIdentity(tagOrEvent: Error | LogEvent | string, message?: string) {
     if (!isBrowserRuntime()) {
       return;
     }
 
+    const invoke = method as (tagOrEvent: Error | LogEvent | string, message?: string) => void;
+
+    if (tagOrEvent instanceof Error && message === undefined) {
+      invoke(tagOrEvent);
+      return;
+    }
+
     if (isRecord(tagOrEvent) && message === undefined) {
-      method({
+      invoke({
         ...identityContext,
         ...tagOrEvent
       });
       return;
     }
 
-    if (message === undefined) {
-      method(tagOrEvent as never);
+    if (typeof tagOrEvent === "string") {
+      if (message !== undefined) {
+        invoke(tagOrEvent, message);
+      }
       return;
     }
 
-    method(tagOrEvent as never, message);
-  }) as LogMethod;
+    invoke(tagOrEvent);
+  }
+
+  return logWithIdentity;
 }
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return !!value && typeof value === "object" && !Array.isArray(value);
+function isRecord(value: Error | LogEvent | string): value is LogEvent {
+  return !!value && typeof value === "object" && !Array.isArray(value) && !(value instanceof Error);
 }

@@ -8,18 +8,19 @@
     "lint": "oxlint --type-aware --type-check .",
     "lint:fix": "oxlint --fix --type-aware --type-check .",
     "typecheck": "pnpm -r --if-present run typecheck",
-    "check": "pnpm run format:check && pnpm run lint && pnpm run typecheck",
-    "fix": "pnpm run format && pnpm run lint:fix && pnpm run typecheck",
+    "check": "pnpm run i18n:ensure && pnpm run format:check && pnpm run lint && pnpm run typecheck",
+    "fix": "pnpm run i18n:ensure && pnpm run format && pnpm run lint:fix && pnpm run typecheck",
     "test": "pnpm run test:unit:run",
     "test:unit:run": "dotenvx run -f ./packages/env/.env -- pnpm -r --if-present run test:unit",
     "test:e2e:run": "dotenvx run -f ./packages/env/.env -- pnpm -r --if-present run test:e2e",
-    "dev": "pnpm -r --parallel --if-present run dev",
+    "dev": "pnpm run i18n:ensure && pnpm -r --parallel --if-present run dev",
     "build": "pnpm --filter @tsu-stack/web --filter @tsu-stack/server --filter @tsu-stack/extension --if-present run build",
     "prepare": "git rev-parse --git-dir > /dev/null 2>&1 && git config core.hooksPath .githooks || true",
     "deps": "pnpm dlx taze@latest -Ilwr --maturity-period 3",
     "deps:major": "pnpm dlx taze@latest major -Ilwr --maturity-period 3",
     "dev:extension": "pnpm --filter @tsu-stack/extension run dev",
     "dev:native": "pnpm --filter @tsu-stack/native run dev",
+    "i18n:ensure": "node -e \"const { existsSync } = require('node:fs'); const { execFileSync } = require('node:child_process'); if (['messages/_index.js', 'messages.js', 'registry.js', 'runtime.js', 'server.js'].some((file) => !existsSync('packages/i18n/src/paraglide/' + file))) execFileSync('pnpm', ['--filter', '@tsu-stack/i18n', 'run', 'build'], { stdio: 'inherit' })\"",
     "fallow": "pnpm dlx fallow --skip health",
     "tanstack": "pnpm dlx @tanstack/cli@latest",
     "db": "pnpm --filter @tsu-stack/db run db",
@@ -43,7 +44,6 @@
     "@dotenvx/dotenvx": "catalog:",
     "@tanstack/eslint-plugin-query": "catalog:",
     "@tanstack/eslint-plugin-router": "catalog:",
-    "@typescript/native-preview": "catalog:",
     "eslint-plugin-fsd-lint": "catalog:",
     "eslint-plugin-react-hooks": "catalog:",
     "oxfmt": "catalog:",
@@ -65,7 +65,7 @@
   },
   "engines": {
     "node": ">=24.18.0 <25",
-    "pnpm": "11.3.0"
+    "pnpm": "11.22.0"
   },
-  "packageManager": "pnpm@11.3.0"
+  "packageManager": "pnpm@11.22.0"
 }

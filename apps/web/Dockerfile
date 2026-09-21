@@ -11,7 +11,7 @@ WORKDIR /app
 
 FROM base AS installer
 
-ARG PNPM_VERSION=11.3.0
+ARG PNPM_VERSION=11.22.0
 RUN npm install --global "pnpm@${PNPM_VERSION}"
 
 # This layer only invalidates when dependencies change, not on source changes.

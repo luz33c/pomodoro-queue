@@ -86,8 +86,8 @@ Here is a non-exhaustive list of the main technologies used in this project, alo
 
 - **Node.js 22 or newer** to launch pnpm
   - pnpm installs and uses the project's pinned Node.js 24.18.0 runtime
-- **pnpm 11.3.0**
-  - install with `corepack enable && corepack install --global pnpm@11.3.0`
+- **pnpm 11.22.0**
+  - install with `corepack enable && corepack install --global pnpm@11.22.0`
 - **Docker**
   - install it via their [official website](https://www.docker.com/)
 
