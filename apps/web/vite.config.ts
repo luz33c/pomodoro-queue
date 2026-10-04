@@ -7,7 +7,6 @@ import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact, { reactCompilerPreset } from "@vitejs/plugin-react";
-import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
 
 import { ENV_WEB_ISOMORPHIC } from "@tsu-stack/env/web/env.isomorphic";
@@ -26,8 +25,6 @@ const ROUTES_TO_PRERENDER: FileRouteTypes["fullPaths"][] = [
   "/{-$locale}/",
   "/{-$locale}/playground/",
   "/{-$locale}/privacy-policy/",
-  "/{-$locale}/sign-in/",
-  "/{-$locale}/create-an-account/",
   "/sitemap.xml",
   "/robots.txt"
 ];
@@ -105,18 +102,6 @@ export default defineConfig({
     }),
     paraglideVitePlugin({
       basePath: new URL(ENV_WEB_ISOMORPHIC.VITE_WEB_URL).pathname
-    }),
-    /** @see {@link https://tanstack.com/start/latest/docs/framework/react/guide/hosting} */
-    nitro({
-      baseURL: new URL(ENV_WEB_ISOMORPHIC.VITE_WEB_URL).pathname,
-      /**
-       * We need to add this or else we will get `Error: Cannot find module 'react'` during prod.
-       * FIXME: I haven't found a fix or related issue yet, but this is where I got the idea to trace the deps:
-       * @see {@link https://github.com/nuxt/nuxt/issues/20773}
-       * Recent Discord discussion on the matter
-       * @see {@link https://discord.com/channels/719702312431386674/1490005967067414608}
-       */
-      traceDeps: ["react", "react-dom"]
     }),
     tailwindcss(),
     ohImage({

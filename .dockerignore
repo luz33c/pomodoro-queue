@@ -14,7 +14,6 @@
 **/dist
 **/build
 **/.output
-**/.nitro
 **/.next
 **/.turbo
 **/.sst

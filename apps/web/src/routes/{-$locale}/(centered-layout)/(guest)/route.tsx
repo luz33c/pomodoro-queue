@@ -1,5 +1,4 @@
 import { Outlet, createFileRoute } from "@tanstack/react-router";
-import { zodValidator } from "@tanstack/zod-adapter";
 import { z } from "zod";
 
 import { redirect } from "@tsu-stack/i18n/tanstack-start/lib/redirect";
@@ -25,7 +24,7 @@ const guestSearchSchema = z.object({
 });
 
 export const Route = createFileRoute("/{-$locale}/(centered-layout)/(guest)")({
-  validateSearch: zodValidator(guestSearchSchema),
+  validateSearch: guestSearchSchema,
   component: Outlet,
   beforeLoad: async ({ search }) => {
     const authState = await getClerkAuthState();

@@ -18,31 +18,37 @@
         --line: #dbe2ee;
       }
 
-      * { box-sizing: border-box; }
+      * {
+        box-sizing: border-box;
+      }
 
       body {
         margin: 0;
         color: var(--ink);
         background:
           radial-gradient(circle at 8% 2%, #ffe9a9 0 7rem, transparent 7.1rem),
-          radial-gradient(circle at 91% 6%, #cbe9ff 0 11rem, transparent 11.1rem),
-          var(--paper);
+          radial-gradient(circle at 91% 6%, #cbe9ff 0 11rem, transparent 11.1rem), var(--paper);
         font-family: ui-rounded, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
         line-height: 1.45;
       }
 
-      main { max-width: 1160px; margin: 0 auto; padding: 28px 20px 72px; }
+      main {
+        max-width: 1160px;
+        margin: 0 auto;
+        padding: 28px 20px 72px;
+      }
 
       .hero {
         display: grid;
-        grid-template-columns: 1.15fr .85fr;
+        grid-template-columns: 1.15fr 0.85fr;
         gap: 28px;
         align-items: center;
         min-height: 290px;
         padding: 22px 6px 42px;
       }
 
-      .tag, .pill {
+      .tag,
+      .pill {
         display: inline-flex;
         align-items: center;
         gap: 6px;
@@ -51,14 +57,43 @@
         font-weight: 800;
       }
 
-      .tag { padding: 7px 12px; background: #e9e2ff; color: #5738b6; font-size: .9rem; }
-      .pill { padding: 6px 10px; background: #eff8f4; color: #08714e; font-size: .85rem; }
+      .tag {
+        padding: 7px 12px;
+        background: #e9e2ff;
+        color: #5738b6;
+        font-size: 0.9rem;
+      }
+      .pill {
+        padding: 6px 10px;
+        background: #eff8f4;
+        color: #08714e;
+        font-size: 0.85rem;
+      }
 
-      h1 { margin: 12px 0 10px; max-width: 740px; font-size: clamp(2.25rem, 7vw, 4.9rem); line-height: .98; letter-spacing: -.075em; }
-      h2 { margin: 0 0 16px; font-size: clamp(1.55rem, 4vw, 2.25rem); letter-spacing: -.045em; }
-      h3 { margin: 6px 0; font-size: 1.1rem; }
-      p { margin: 0; color: var(--muted); }
-      .lead { max-width: 630px; font-size: 1.13rem; }
+      h1 {
+        margin: 12px 0 10px;
+        max-width: 740px;
+        font-size: clamp(2.25rem, 7vw, 4.9rem);
+        line-height: 0.98;
+        letter-spacing: -0.075em;
+      }
+      h2 {
+        margin: 0 0 16px;
+        font-size: clamp(1.55rem, 4vw, 2.25rem);
+        letter-spacing: -0.045em;
+      }
+      h3 {
+        margin: 6px 0;
+        font-size: 1.1rem;
+      }
+      p {
+        margin: 0;
+        color: var(--muted);
+      }
+      .lead {
+        max-width: 630px;
+        font-size: 1.13rem;
+      }
 
       .hero-art {
         position: relative;
@@ -110,8 +145,13 @@
         font-weight: 800;
       }
 
-      section { margin-top: 56px; }
-      .subhead { max-width: 710px; margin: -8px 0 22px; }
+      section {
+        margin-top: 56px;
+      }
+      .subhead {
+        max-width: 710px;
+        margin: -8px 0 22px;
+      }
 
       .flow {
         position: relative;
@@ -120,21 +160,45 @@
         gap: 16px;
       }
 
-      .card, .node, .note, .folder {
+      .card,
+      .node,
+      .note,
+      .folder {
         border: 2px solid var(--ink);
         border-radius: 20px;
         background: #fff;
         box-shadow: 4px 5px 0 var(--ink);
       }
 
-      .node { min-height: 172px; padding: 19px; text-align: center; }
-      .node .icon { display: block; margin-bottom: 3px; font-size: 3.4rem; line-height: 1.1; }
-      .node p { font-size: .94rem; }
-      .blue { background: #e7f2ff; }
-      .purple { background: #f0eaff; }
-      .green { background: #e4faef; }
-      .yellow { background: #fff4c9; }
-      .peach { background: var(--peach); }
+      .node {
+        min-height: 172px;
+        padding: 19px;
+        text-align: center;
+      }
+      .node .icon {
+        display: block;
+        margin-bottom: 3px;
+        font-size: 3.4rem;
+        line-height: 1.1;
+      }
+      .node p {
+        font-size: 0.94rem;
+      }
+      .blue {
+        background: #e7f2ff;
+      }
+      .purple {
+        background: #f0eaff;
+      }
+      .green {
+        background: #e4faef;
+      }
+      .yellow {
+        background: #fff4c9;
+      }
+      .peach {
+        background: var(--peach);
+      }
 
       .drop-arrow {
         grid-column: 1 / -1;
@@ -142,7 +206,7 @@
         color: var(--blue);
         font-size: 2.9rem;
         font-weight: 900;
-        line-height: .72;
+        line-height: 0.72;
       }
 
       .gateway {
@@ -154,15 +218,38 @@
         padding: 16px 24px;
         background: #eaf0ff;
       }
-      .gateway .icon { font-size: 4rem; }
-      .gateway h3 { font-size: 1.35rem; }
-      .gateway p { font-size: .96rem; }
+      .gateway .icon {
+        font-size: 4rem;
+      }
+      .gateway h3 {
+        font-size: 1.35rem;
+      }
+      .gateway p {
+        font-size: 0.96rem;
+      }
 
-      .flow-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; grid-column: 1 / -1; }
-      .legacy { padding: 17px 20px; border-style: dashed; box-shadow: none; }
-      .legacy p { font-size: .93rem; }
-      .db { padding: 16px 20px; }
-      .db .icon { float: left; margin-right: 12px; font-size: 3.3rem; }
+      .flow-bottom {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        grid-column: 1 / -1;
+      }
+      .legacy {
+        padding: 17px 20px;
+        border-style: dashed;
+        box-shadow: none;
+      }
+      .legacy p {
+        font-size: 0.93rem;
+      }
+      .db {
+        padding: 16px 20px;
+      }
+      .db .icon {
+        float: left;
+        margin-right: 12px;
+        font-size: 3.3rem;
+      }
 
       .callout {
         display: grid;
@@ -175,60 +262,213 @@
         background: #fff1be;
         border: 2px solid #7a5710;
       }
-      .callout .icon { font-size: 2rem; }
-      .callout strong { display: block; margin-bottom: 2px; }
+      .callout .icon {
+        font-size: 2rem;
+      }
+      .callout strong {
+        display: block;
+        margin-bottom: 2px;
+      }
 
-      .tree-layout { display: grid; grid-template-columns: 1.1fr .9fr; gap: 22px; align-items: start; }
-      .tree { padding: 22px; background: #182033; color: #eafff5; overflow-x: auto; font: 600 .93rem/1.8 ui-monospace, SFMono-Regular, Menlo, monospace; }
-      .tree .folder-name { color: #ffc94d; }
-      .tree .file-name { color: #9ddcfb; }
-      .tree .comment { color: #a6b4cb; font-family: ui-rounded, "PingFang SC", sans-serif; }
-      .tree ul { margin: 0; padding-left: 1.2em; list-style: "├─ "; }
-      .tree ul ul { list-style: "│  ├─ "; }
-      .tree li:last-child { list-style: "└─ "; }
-      .tree ul ul li:last-child { list-style: "│  └─ "; }
+      .tree-layout {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 22px;
+        align-items: start;
+      }
+      .tree {
+        padding: 22px;
+        background: #182033;
+        color: #eafff5;
+        overflow-x: auto;
+        font:
+          600 0.93rem/1.8 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          monospace;
+      }
+      .tree .folder-name {
+        color: #ffc94d;
+      }
+      .tree .file-name {
+        color: #9ddcfb;
+      }
+      .tree .comment {
+        color: #a6b4cb;
+        font-family: ui-rounded, "PingFang SC", sans-serif;
+      }
+      .tree ul {
+        margin: 0;
+        padding-left: 1.2em;
+        list-style: "├─ ";
+      }
+      .tree ul ul {
+        list-style: "│  ├─ ";
+      }
+      .tree li:last-child {
+        list-style: "└─ ";
+      }
+      .tree ul ul li:last-child {
+        list-style: "│  └─ ";
+      }
 
-      .folders { display: grid; gap: 12px; }
-      .folder { display: grid; grid-template-columns: 42px 1fr; gap: 10px; align-items: center; padding: 14px; box-shadow: 3px 4px 0 var(--ink); }
-      .folder .icon { font-size: 2rem; }
-      .folder h3 { margin: 0; }
-      .folder p { font-size: .91rem; }
+      .folders {
+        display: grid;
+        gap: 12px;
+      }
+      .folder {
+        display: grid;
+        grid-template-columns: 42px 1fr;
+        gap: 10px;
+        align-items: center;
+        padding: 14px;
+        box-shadow: 3px 4px 0 var(--ink);
+      }
+      .folder .icon {
+        font-size: 2rem;
+      }
+      .folder h3 {
+        margin: 0;
+      }
+      .folder p {
+        font-size: 0.91rem;
+      }
 
-      .layers { display: grid; grid-template-columns: repeat(5, 1fr); gap: 11px; }
-      .layer { min-height: 150px; padding: 14px; border: 2px solid var(--ink); border-radius: 18px; text-align: center; }
-      .layer .icon { display: block; font-size: 2.5rem; }
-      .layer p { margin-top: 6px; font-size: .86rem; }
+      .layers {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 11px;
+      }
+      .layer {
+        min-height: 150px;
+        padding: 14px;
+        border: 2px solid var(--ink);
+        border-radius: 18px;
+        text-align: center;
+      }
+      .layer .icon {
+        display: block;
+        font-size: 2.5rem;
+      }
+      .layer p {
+        margin-top: 6px;
+        font-size: 0.86rem;
+      }
 
-      .feature-path { display: grid; grid-template-columns: repeat(7, auto); gap: 8px; align-items: center; justify-content: center; margin: 24px 0 0; }
-      .step { padding: 12px 14px; border: 2px solid var(--ink); border-radius: 14px; background: #fff; font-weight: 900; text-align: center; box-shadow: 3px 3px 0 var(--ink); }
-      .arrow { color: var(--purple); font-size: 1.65rem; font-weight: 900; }
+      .feature-path {
+        display: grid;
+        grid-template-columns: repeat(7, auto);
+        gap: 8px;
+        align-items: center;
+        justify-content: center;
+        margin: 24px 0 0;
+      }
+      .step {
+        padding: 12px 14px;
+        border: 2px solid var(--ink);
+        border-radius: 14px;
+        background: #fff;
+        font-weight: 900;
+        text-align: center;
+        box-shadow: 3px 3px 0 var(--ink);
+      }
+      .arrow {
+        color: var(--purple);
+        font-size: 1.65rem;
+        font-weight: 900;
+      }
 
-      .why { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-      .why .card { padding: 19px; min-height: 180px; }
-      .why .icon { display: block; font-size: 3rem; }
-      .why p { font-size: .94rem; }
+      .why {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+      .why .card {
+        padding: 19px;
+        min-height: 180px;
+      }
+      .why .icon {
+        display: block;
+        font-size: 3rem;
+      }
+      .why p {
+        font-size: 0.94rem;
+      }
 
-      .status { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-      .status .card { padding: 22px; }
-      .status ul { margin: 10px 0 0; padding-left: 1.25em; color: var(--muted); }
-      .status li { margin: 6px 0; }
-      .summary { border: 3px solid var(--ink); border-radius: 26px; padding: 26px; background: var(--green); box-shadow: 8px 8px 0 var(--ink); }
-      .summary h2 { margin-bottom: 8px; }
-      .summary p { color: #174b39; font-size: 1.12rem; }
+      .status {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .status .card {
+        padding: 22px;
+      }
+      .status ul {
+        margin: 10px 0 0;
+        padding-left: 1.25em;
+        color: var(--muted);
+      }
+      .status li {
+        margin: 6px 0;
+      }
+      .summary {
+        border: 3px solid var(--ink);
+        border-radius: 26px;
+        padding: 26px;
+        background: var(--green);
+        box-shadow: 8px 8px 0 var(--ink);
+      }
+      .summary h2 {
+        margin-bottom: 8px;
+      }
+      .summary p {
+        color: #174b39;
+        font-size: 1.12rem;
+      }
 
-      footer { margin-top: 52px; color: var(--muted); font-size: .9rem; text-align: center; }
+      footer {
+        margin-top: 52px;
+        color: var(--muted);
+        font-size: 0.9rem;
+        text-align: center;
+      }
 
       @media (max-width: 760px) {
-        main { padding: 20px 15px 48px; }
-        .hero, .tree-layout, .status { grid-template-columns: 1fr; }
-        .hero-art { min-height: 210px; }
-        .flow, .why { grid-template-columns: 1fr; }
-        .flow-bottom { grid-template-columns: 1fr; }
-        .layers { grid-template-columns: repeat(2, 1fr); }
-        .gateway { grid-template-columns: auto 1fr; }
-        .gateway .pill { grid-column: 1 / -1; }
-        .feature-path { grid-template-columns: 1fr; justify-items: stretch; }
-        .arrow { transform: rotate(90deg); text-align: center; }
+        main {
+          padding: 20px 15px 48px;
+        }
+        .hero,
+        .tree-layout,
+        .status {
+          grid-template-columns: 1fr;
+        }
+        .hero-art {
+          min-height: 210px;
+        }
+        .flow,
+        .why {
+          grid-template-columns: 1fr;
+        }
+        .flow-bottom {
+          grid-template-columns: 1fr;
+        }
+        .layers {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .gateway {
+          grid-template-columns: auto 1fr;
+        }
+        .gateway .pill {
+          grid-column: 1 / -1;
+        }
+        .feature-path {
+          grid-template-columns: 1fr;
+          justify-items: stretch;
+        }
+        .arrow {
+          transform: rotate(90deg);
+          text-align: center;
+        }
       }
     </style>
   </head>
@@ -248,16 +488,32 @@
 
       <section>
         <h2>先看：东西怎么走？</h2>
-        <p class="subhead">用户从三扇门进来，带着登录小票；中间的服务员检查后，才去拿数据库里的东西。</p>
+        <p class="subhead">
+          用户从三扇门进来，带着登录小票；中间的服务员检查后，才去拿数据库里的东西。
+        </p>
         <div class="flow">
-          <article class="node blue"><span class="icon">🖥️</span><h3>网站</h3><p>TanStack Start<br />会先在服务器画页面</p></article>
-          <article class="node purple"><span class="icon">📱</span><h3>手机 App</h3><p>Expo / React Native</p></article>
-          <article class="node yellow"><span class="icon">🧩</span><h3>浏览器扩展</h3><p>WXT + React</p></article>
+          <article class="node blue">
+            <span class="icon">🖥️</span>
+            <h3>网站</h3>
+            <p>TanStack Start<br />会先在服务器画页面</p>
+          </article>
+          <article class="node purple">
+            <span class="icon">📱</span>
+            <h3>手机 App</h3>
+            <p>Expo / React Native</p>
+          </article>
+          <article class="node yellow">
+            <span class="icon">🧩</span>
+            <h3>浏览器扩展</h3>
+            <p>WXT + React</p>
+          </article>
 
           <div class="drop-arrow" aria-hidden="true">↓</div>
 
-          <article class="node peach" style="grid-column: 1 / -1; min-height: auto; padding: 14px;">
-            <span class="icon" style="display:inline; font-size:2.4rem; vertical-align:middle;">🪪</span>
+          <article class="node peach" style="grid-column: 1 / -1; min-height: auto; padding: 14px">
+            <span class="icon" style="display: inline; font-size: 2.4rem; vertical-align: middle"
+              >🪪</span
+            >
             <strong>Clerk = 登录小票机</strong>
             <p>三个端用同一个账号；请求会带上它发的令牌。</p>
           </article>
@@ -266,65 +522,155 @@
 
           <article class="gateway card">
             <span class="icon">🚪</span>
-            <div><h3>独立 API 服务：Hono + oRPC</h3><p>统一入口：验身份、写日志、给出类型安全的接口；也能生成 OpenAPI 文档。</p></div>
+            <div>
+              <h3>独立 API 服务：Hono + oRPC</h3>
+              <p>统一入口：验身份、写日志、给出类型安全的接口；也能生成 OpenAPI 文档。</p>
+            </div>
             <span class="pill">/rpc · /docs</span>
           </article>
 
           <div class="drop-arrow" aria-hidden="true">↓</div>
 
           <div class="flow-bottom">
-            <article class="db card green"><span class="icon">🗄️</span><h3>PostgreSQL 数据库</h3><p>Drizzle 是翻译官：把 TypeScript 的要求变成数据库听得懂的话。</p></article>
-            <article class="legacy card legacy"><h3>🧳 旧行李：Better Auth</h3><p>旧登录表和 <code>/auth/*</code> 还在，作为兼容入口；现在的主登录路线是 Clerk。</p></article>
+            <article class="db card green">
+              <span class="icon">🗄️</span>
+              <h3>PostgreSQL 数据库</h3>
+              <p>Drizzle 是翻译官：把 TypeScript 的要求变成数据库听得懂的话。</p>
+            </article>
+            <article class="legacy card legacy">
+              <h3>🧳 旧行李：Better Auth</h3>
+              <p>旧登录表和 <code>/auth/*</code> 还在，作为兼容入口；现在的主登录路线是 Clerk。</p>
+            </article>
           </div>
         </div>
-        <div class="callout"><span class="icon">✨</span><p><strong>网站有一个小特权</strong>服务器正在画网页时，可以直接调用共享 API 路由；浏览器、手机和扩展才会通过网络访问 <code>/rpc</code>。</p></div>
+        <div class="callout">
+          <span class="icon">✨</span>
+          <p>
+            <strong>网站有一个小特权</strong>服务器正在画网页时，可以直接调用共享 API
+            路由；浏览器、手机和扩展才会通过网络访问 <code>/rpc</code>。
+          </p>
+        </div>
       </section>
 
       <section>
         <h2>目录就是一座积木仓库</h2>
-        <p class="subhead">pnpm 负责把所有小盒子放在同一个工作区；<code>workspace:*</code> 表示盒子之间直接共用本地代码。</p>
+        <p class="subhead">
+          pnpm 负责把所有小盒子放在同一个工作区；<code>workspace:*</code>
+          表示盒子之间直接共用本地代码。
+        </p>
         <div class="tree-layout">
           <div class="tree card" aria-label="简化的项目目录树">
             <div><span class="folder-name">tsu-stack/</span></div>
             <ul>
-              <li><span class="folder-name">apps/</span> <span class="comment">可以直接运行的产品</span>
+              <li>
+                <span class="folder-name">apps/</span>
+                <span class="comment">可以直接运行的产品</span>
                 <ul>
                   <li><span class="folder-name">web/</span> <span class="comment">网页</span></li>
-                  <li><span class="folder-name">server/</span> <span class="comment">API 服务</span></li>
-                  <li><span class="folder-name">native/</span> <span class="comment">手机 App</span></li>
-                  <li><span class="folder-name">extension/</span> <span class="comment">浏览器扩展</span></li>
+                  <li>
+                    <span class="folder-name">server/</span> <span class="comment">API 服务</span>
+                  </li>
+                  <li>
+                    <span class="folder-name">native/</span> <span class="comment">手机 App</span>
+                  </li>
+                  <li>
+                    <span class="folder-name">extension/</span>
+                    <span class="comment">浏览器扩展</span>
+                  </li>
                 </ul>
               </li>
-              <li><span class="folder-name">packages/</span> <span class="comment">可重复使用的积木</span>
+              <li>
+                <span class="folder-name">packages/</span>
+                <span class="comment">可重复使用的积木</span>
                 <ul>
-                  <li><span class="folder-name">api/</span>, <span class="folder-name">db/</span>, <span class="folder-name">auth/</span></li>
-                  <li><span class="folder-name">core/</span>, <span class="folder-name">env/</span>, <span class="folder-name">logger/</span></li>
-                  <li><span class="folder-name">ui/</span>, <span class="folder-name">i18n/</span>, <span class="folder-name">seo/</span></li>
+                  <li>
+                    <span class="folder-name">api/</span>, <span class="folder-name">db/</span>,
+                    <span class="folder-name">auth/</span>
+                  </li>
+                  <li>
+                    <span class="folder-name">core/</span>, <span class="folder-name">env/</span>,
+                    <span class="folder-name">logger/</span>
+                  </li>
+                  <li>
+                    <span class="folder-name">ui/</span>, <span class="folder-name">i18n/</span>,
+                    <span class="folder-name">seo/</span>
+                  </li>
                 </ul>
               </li>
-              <li><span class="folder-name">tools/</span> <span class="comment">共享 TypeScript 规则</span></li>
-              <li><span class="file-name">docker-compose*.yaml</span> <span class="comment">把服务装进容器</span></li>
-              <li><span class="file-name">pnpm-workspace.yaml</span> <span class="comment">仓库地图</span></li>
+              <li>
+                <span class="folder-name">tools/</span>
+                <span class="comment">共享 TypeScript 规则</span>
+              </li>
+              <li>
+                <span class="file-name">docker-compose*.yaml</span>
+                <span class="comment">把服务装进容器</span>
+              </li>
+              <li>
+                <span class="file-name">pnpm-workspace.yaml</span>
+                <span class="comment">仓库地图</span>
+              </li>
             </ul>
           </div>
           <div class="folders">
-            <article class="folder blue"><span class="icon">🏠</span><div><h3>apps</h3><p>“成品房子”：用户真的会打开它们。</p></div></article>
-            <article class="folder purple"><span class="icon">🧱</span><div><h3>packages</h3><p>“通用积木”：一处修改，多端受益。</p></div></article>
-            <article class="folder yellow"><span class="icon">🧰</span><div><h3>tools</h3><p>“共同的尺子”：TypeScript 配置不各写一份。</p></div></article>
-            <article class="folder green"><span class="icon">📦</span><div><h3>Docker</h3><p>“搬家箱”：网页、API、Postgres 一起启动。</p></div></article>
+            <article class="folder blue">
+              <span class="icon">🏠</span>
+              <div>
+                <h3>apps</h3>
+                <p>“成品房子”：用户真的会打开它们。</p>
+              </div>
+            </article>
+            <article class="folder purple">
+              <span class="icon">🧱</span>
+              <div>
+                <h3>packages</h3>
+                <p>“通用积木”：一处修改，多端受益。</p>
+              </div>
+            </article>
+            <article class="folder yellow">
+              <span class="icon">🧰</span>
+              <div>
+                <h3>tools</h3>
+                <p>“共同的尺子”：TypeScript 配置不各写一份。</p>
+              </div>
+            </article>
+            <article class="folder green">
+              <span class="icon">📦</span>
+              <div>
+                <h3>Docker</h3>
+                <p>“搬家箱”：网页、API、Postgres 一起启动。</p>
+              </div>
+            </article>
           </div>
         </div>
       </section>
 
       <section>
         <h2>网页里面再分五层</h2>
-        <p class="subhead">网页采用 Feature-Sliced Design（FSD）：上面的大东西可以用下面的小东西，反过来不行。这样积木不容易缠在一起。</p>
+        <p class="subhead">
+          网页采用 Feature-Sliced
+          Design（FSD）：上面的大东西可以用下面的小东西，反过来不行。这样积木不容易缠在一起。
+        </p>
         <div class="layers">
-          <article class="layer blue"><span class="icon">🛣️</span><strong>routes</strong><p>地址和页面入口</p></article>
-          <article class="layer purple"><span class="icon">📄</span><strong>pages</strong><p>一整页内容</p></article>
-          <article class="layer yellow"><span class="icon">🧩</span><strong>widgets</strong><p>导航栏、布局</p></article>
-          <article class="layer peach"><span class="icon">✨</span><strong>features</strong><p>登录、页脚等动作</p></article>
-          <article class="layer green"><span class="icon">🔩</span><strong>shared</strong><p>按钮、样式、通用小工具</p></article>
+          <article class="layer blue">
+            <span class="icon">🛣️</span><strong>routes</strong>
+            <p>地址和页面入口</p>
+          </article>
+          <article class="layer purple">
+            <span class="icon">📄</span><strong>pages</strong>
+            <p>一整页内容</p>
+          </article>
+          <article class="layer yellow">
+            <span class="icon">🧩</span><strong>widgets</strong>
+            <p>导航栏、布局</p>
+          </article>
+          <article class="layer peach">
+            <span class="icon">✨</span><strong>features</strong>
+            <p>登录、页脚等动作</p>
+          </article>
+          <article class="layer green">
+            <span class="icon">🔩</span><strong>shared</strong>
+            <p>按钮、样式、通用小工具</p>
+          </article>
         </div>
         <div class="feature-path" aria-label="新增功能的推荐路径">
           <span class="step">🗄️ db<br />存什么？</span><span class="arrow">→</span>
@@ -337,23 +683,57 @@
       <section>
         <h2>为什么要分这么多盒子？</h2>
         <div class="why">
-          <article class="card blue"><span class="icon">🧬</span><h3>少复制</h3><p>API 类型、健康检查规则、环境变量、日志规则可以共同使用。</p></article>
-          <article class="card purple"><span class="icon">🔐</span><h3>少漏门锁</h3><p>鉴权只集中在 API 入口检查，三个客户端用同一种令牌。</p></article>
-          <article class="card yellow"><span class="icon">🧭</span><h3>少迷路</h3><p>路由、页面、功能、通用组件各归各位；lint 会阻止不该有的跨层引用。</p></article>
+          <article class="card blue">
+            <span class="icon">🧬</span>
+            <h3>少复制</h3>
+            <p>API 类型、健康检查规则、环境变量、日志规则可以共同使用。</p>
+          </article>
+          <article class="card purple">
+            <span class="icon">🔐</span>
+            <h3>少漏门锁</h3>
+            <p>鉴权只集中在 API 入口检查，三个客户端用同一种令牌。</p>
+          </article>
+          <article class="card yellow">
+            <span class="icon">🧭</span>
+            <h3>少迷路</h3>
+            <p>路由、页面、功能、通用组件各归各位；lint 会阻止不该有的跨层引用。</p>
+          </article>
         </div>
       </section>
 
       <section>
         <h2>它现在长到哪一步了？</h2>
         <div class="status">
-          <article class="card green"><span class="pill">已经有的地基</span><h3>多端骨架是通的</h3><ul><li>网页支持 SSR、国际化、SEO、React Query</li><li>手机和扩展会调用同一套 oRPC API</li><li>Docker 会按“迁移数据库 → API → 网页”顺序启动</li><li>日志、健康检查、环境变量都有独立积木</li></ul></article>
-          <article class="card yellow"><span class="pill" style="background:#fff; color:#805900;">还没有大量业务</span><h3>这更像高级模板</h3><ul><li>当前共享 API 只有健康检查和受保护的示例数据</li><li>数据库 schema 目前主要是旧 Better Auth 表</li><li><code>core</code> 目前主要放健康检查和资源工具</li><li>真正的业务领域模块还等着加入</li></ul></article>
+          <article class="card green">
+            <span class="pill">已经有的地基</span>
+            <h3>多端骨架是通的</h3>
+            <ul>
+              <li>网页支持 SSR、国际化、SEO、React Query</li>
+              <li>手机和扩展会调用同一套 oRPC API</li>
+              <li>Docker 会按“迁移数据库 → API → 网页”顺序启动</li>
+              <li>日志、健康检查、环境变量都有独立积木</li>
+            </ul>
+          </article>
+          <article class="card yellow">
+            <span class="pill" style="background: #fff; color: #805900">还没有大量业务</span>
+            <h3>这更像高级模板</h3>
+            <ul>
+              <li>当前共享 API 只有健康检查和受保护的示例数据</li>
+              <li>数据库 schema 目前主要是旧 Better Auth 表</li>
+              <li><code>core</code> 目前主要放健康检查和资源工具</li>
+              <li>真正的业务领域模块还等着加入</li>
+            </ul>
+          </article>
         </div>
       </section>
 
       <section class="summary">
         <h2>一句话结论</h2>
-        <p><strong>这是一个“网页 + 手机 + 扩展共用后端”的 TypeScript 单仓库地基。</strong>架构先把路、门锁和积木仓库搭好；下一步加业务时，照着“数据库 → 共同规则 → API → 页面”这条路走就不容易乱。</p>
+        <p>
+          <strong>这是一个“网页 + 手机 + 扩展共用后端”的 TypeScript 单仓库地基。</strong
+          >架构先把路、门锁和积木仓库搭好；下一步加业务时，照着“数据库 → 共同规则 → API →
+          页面”这条路走就不容易乱。
+        </p>
       </section>
 
       <footer>分析范围：当前工作区代码与配置。未读取任何真实环境变量或数据库内容。</footer>

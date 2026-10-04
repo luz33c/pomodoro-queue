@@ -15,6 +15,8 @@
   "mdx": {
     "checkMdx": true
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  // `.mdx` is listed so Vite's native `resolve.tsconfigPaths` also applies `paths` to MDX importers;
+  // tsc itself ignores the extension.
+  "include": ["**/*.ts", "**/*.tsx", "**/*.mdx"],
   "exclude": ["node_modules"]
 }

@@ -7,7 +7,7 @@
   "home_page__hero_description": "An opinionated Node.js 24 monorepo powered by pnpm, featuring TanStack Start, Dockerized deployments, Paraglide.js (i18n), Hono, oRPC, drizzle-orm, better-auth, and more.",
   "home_page__hero_cta": "View Documentation",
   "home_page__integrations__heading": "Deploy Anywhere",
-  "home_page__integrations__description": "TanStack Start works with most major cloud providers and JavaScript runtimes thanks to the Nitro Vite plugin and our Docker templates.",
+  "home_page__integrations__description": "Deploy on Node.js with our Docker templates, or configure a TanStack Start adapter for your preferred cloud platform.",
   "home_page__cta_title": "Start Building Today",
   "home_page__cta_description": "Read our documentation to get started with tsu-stack or check out our GitHub repository.",
   "home_page__cta_github": "GitHub",

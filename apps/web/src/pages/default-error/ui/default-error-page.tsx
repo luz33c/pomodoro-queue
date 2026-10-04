@@ -1,3 +1,4 @@
+import { type ErrorComponentProps } from "@tanstack/react-router";
 import { Home, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -17,9 +18,18 @@ import { CenteredLayout } from "@/widgets/layouts";
 
 const loggedErrorKeys = new Set<string>();
 
-export function DefaultErrorPage({ error, reset }: { error: Error; reset: () => void }) {
+/**
+ * TanStack Router hands the error boundary whatever was thrown, typed as `unknown`
+ * since anything can be thrown in JavaScript. Normalize before reading Error fields.
+ */
+function normalizeError(error: unknown): Error {
+  return error instanceof Error ? error : new Error(String(error));
+}
+
+export function DefaultErrorPage({ error, reset }: ErrorComponentProps) {
   useEffect(() => {
-    const errorKey = `${error.name}:${error.message}:${error.stack ?? ""}`;
+    const normalizedError = normalizeError(error);
+    const errorKey = `${normalizedError.name}:${normalizedError.message}:${normalizedError.stack ?? ""}`;
 
     if (loggedErrorKeys.has(errorKey)) {
       return;
@@ -30,9 +40,9 @@ export function DefaultErrorPage({ error, reset }: { error: Error; reset: () => 
     log.error({
       action: "global_error_boundary",
       error: {
-        message: error.message,
-        name: error.name,
-        stack: error.stack
+        message: normalizedError.message,
+        name: normalizedError.name,
+        stack: normalizedError.stack
       }
     });
   }, [error]);

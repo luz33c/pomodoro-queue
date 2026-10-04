@@ -1,15 +1,20 @@
 {
   "name": "@tsu-stack/web",
   "private": true,
+  "files": [
+    "dist",
+    "server.ts"
+  ],
   "type": "module",
   "scripts": {
     "build": "cross-env IS_BUILD=true dotenvx run -f ../../packages/env/.env -- vite build",
     "check": "tsc --noEmit",
+    "check:server": "cross-env NODE_ENV=production dotenvx run -f ../../packages/env/.env -- node scripts/check-server.mjs",
     "prebuild": "pnpm --dir ../.. --filter @tsu-stack/i18n run build",
     "predev": "pnpm --dir ../.. --filter @tsu-stack/i18n run build",
     "dev": "dotenvx run -f ../../packages/env/.env -- vite",
     "preview": "dotenvx run -f ../../packages/env/.env -- vite preview",
-    "start": "dotenvx run -f ../../packages/env/.env -- node .output/server/index.mjs",
+    "start": "cross-env NODE_ENV=production dotenvx run -f ../../packages/env/.env -- node server.ts",
     "typecheck": "tsc --noEmit",
     "ui": "pnpm dlx shadcn@latest"
   },
@@ -19,6 +24,7 @@
     "@fontsource-variable/geist": "catalog:",
     "@fontsource-variable/geist-mono": "catalog:",
     "@fontsource/instrument-serif": "catalog:",
+    "@hono/node-server": "catalog:",
     "@lonik/oh-image": "catalog:",
     "@paper-design/shaders-react": "catalog:",
     "@tanstack/react-form": "catalog:",
@@ -26,7 +32,6 @@
     "@tanstack/react-router": "catalog:",
     "@tanstack/react-router-ssr-query": "catalog:",
     "@tanstack/react-start": "catalog:",
-    "@tanstack/zod-adapter": "catalog:",
     "@tsu-stack/api": "workspace:*",
     "@tsu-stack/core": "workspace:*",
     "@tsu-stack/db": "workspace:*",
@@ -35,6 +40,7 @@
     "@tsu-stack/logger": "workspace:*",
     "@tsu-stack/seo": "workspace:*",
     "@tsu-stack/ui": "workspace:*",
+    "hono": "catalog:",
     "lucide-react": "catalog:",
     "next-themes": "catalog:",
     "react": "catalog:",
@@ -66,7 +72,6 @@
     "babel-plugin-react-compiler": "catalog:",
     "cross-env": "catalog:",
     "esbuild": "catalog:",
-    "nitro": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:"

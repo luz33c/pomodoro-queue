@@ -1,4 +1,4 @@
-FROM node:24.18.0-bookworm-slim AS base
+FROM node:24.21.0-bookworm-slim AS base
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends wget git ca-certificates \
@@ -11,7 +11,7 @@ WORKDIR /app
 
 FROM base AS installer
 
-ARG PNPM_VERSION=11.22.0
+ARG PNPM_VERSION=11.28.2
 RUN npm install --global "pnpm@${PNPM_VERSION}"
 
 # This layer only invalidates when dependencies change, not on source changes.

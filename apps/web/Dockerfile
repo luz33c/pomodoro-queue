@@ -1,4 +1,4 @@
-FROM node:24.18.0-bookworm-slim AS base
+FROM node:24.21.0-bookworm-slim AS base
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends wget git ca-certificates \
@@ -11,7 +11,7 @@ WORKDIR /app
 
 FROM base AS installer
 
-ARG PNPM_VERSION=11.22.0
+ARG PNPM_VERSION=11.28.2
 RUN npm install --global "pnpm@${PNPM_VERSION}"
 
 # This layer only invalidates when dependencies change, not on source changes.
@@ -42,6 +42,7 @@ RUN pnpm run test:unit:run
 # RUN pnpm run test:e2e:run
 
 RUN pnpm --filter @tsu-stack/web run build
+RUN pnpm --filter @tsu-stack/web deploy --prod --legacy /prod/web
 
 # =========================================================================== #
 
@@ -50,7 +51,7 @@ FROM base AS production
 RUN addgroup --gid 1001 nodejs \
     && adduser --uid 1001 --ingroup nodejs --disabled-password --gecos "" web
 
-COPY --from=builder --chown=web:nodejs /app/apps/web/.output /app/.output
+COPY --from=builder --chown=web:nodejs /prod/web /app
 
 USER web
 
@@ -60,4 +61,4 @@ ENV PORT=3000
 HEALTHCHECK --interval=10s --timeout=3s --retries=3 \
   CMD wget -qO- http://127.0.0.1:${PORT}$(echo ${VITE_WEB_URL} | sed 's|^http[s]*://[^/]*||' | sed 's|/$||')/_api/health/live || exit 1
 
-CMD ["node", "/app/.output/server/index.mjs", "--hostname", "0.0.0.0"]
+CMD ["node", "/app/server.ts"]
