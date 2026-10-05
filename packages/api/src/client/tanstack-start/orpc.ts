@@ -19,8 +19,7 @@ const getORPCClient = createIsomorphicFn()
 
         return {
           auth: authState.userId ? { userId: authState.userId } : null,
-          logger: createLogger({ operation: "web__client__orpc" }),
-          session: null
+          logger: createLogger({ operation: "web__client__orpc" })
         };
       }
     })

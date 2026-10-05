@@ -7,5 +7,4 @@ export type ClerkContextAuth = {
 export type OrpcContext = {
   auth: ClerkContextAuth | null;
   logger: RequestLogger;
-  session: null;
 };

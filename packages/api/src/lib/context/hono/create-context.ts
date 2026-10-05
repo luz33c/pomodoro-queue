@@ -36,7 +36,6 @@ export async function createContext({
 
   return {
     auth: clerkAuth,
-    logger,
-    session: null
+    logger
   };
 }

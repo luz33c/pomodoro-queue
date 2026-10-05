@@ -6,6 +6,8 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+# evlog local file drain output (development only)
+.evlog/
 
 node_modules
 dist
@@ -28,3 +30,6 @@ tmp
 *.njsproj
 *.sln
 *.sw?
+
+# Agent tooling: personal Claude Code settings (shared settings live in .claude/settings.json)
+.claude/settings.local.json

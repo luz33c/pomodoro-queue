@@ -8,13 +8,7 @@ services:
       dockerfile: apps/server/Dockerfile
       target: migrator
     environment:
-      - "VITE_SERVER_URL=${VITE_SERVER_URL:-http://localhost:5000}"
-      - "VITE_WEB_URL=${VITE_WEB_URL:-http://localhost:3000}"
-      - "VITE_CLERK_PUBLISHABLE_KEY=${VITE_CLERK_PUBLISHABLE_KEY:-pk_test_replace-with-your-clerk-publishable-key}"
-      - "CLERK_SECRET_KEY=${CLERK_SECRET_KEY:-sk_test_replace-with-your-clerk-secret-key}"
-      - "CLERK_AUTHORIZED_PARTIES=${CLERK_AUTHORIZED_PARTIES:-}"
       - "DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-changeme}@postgres:5432/${POSTGRES_DB:-tsu-stack}"
-      - "BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET:-replace_me_generate_a_real_auth_secret_here}"
     networks:
       - tsu-stack-network
     depends_on:
@@ -35,7 +29,6 @@ services:
         - "CLERK_SECRET_KEY=${CLERK_SECRET_KEY:-sk_test_replace-with-your-clerk-secret-key}"
         - "CLERK_AUTHORIZED_PARTIES=${CLERK_AUTHORIZED_PARTIES:-}"
         - "DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-changeme}@postgres:5432/${POSTGRES_DB:-tsu-stack}"
-        - "BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET:-replace_me_generate_a_real_auth_secret_here}"
     ports:
       - "${SERVER_PORT:-5000}:5000"
     environment:
@@ -45,7 +38,6 @@ services:
       - "CLERK_SECRET_KEY=${CLERK_SECRET_KEY:-sk_test_replace-with-your-clerk-secret-key}"
       - "CLERK_AUTHORIZED_PARTIES=${CLERK_AUTHORIZED_PARTIES:-}"
       - "DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-changeme}@postgres:5432/${POSTGRES_DB:-tsu-stack}"
-      - "BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET:-replace_me_generate_a_real_auth_secret_here}"
       - "ENABLE_OPEN_API_DOCS=${ENABLE_OPEN_API_DOCS:-false}"
     healthcheck:
       test:
@@ -76,7 +68,6 @@ services:
         - "VITE_IMGPROXY_URL=${VITE_IMGPROXY_URL:-}"
         - "VITE_IMGPROXY_SIGNATURE=${VITE_IMGPROXY_SIGNATURE:-_}"
         - "DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-changeme}@postgres:5432/${POSTGRES_DB:-tsu-stack}"
-        - "BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET:-replace_me_generate_a_real_auth_secret_here}"
     environment:
       - "VITE_SERVER_URL=${VITE_SERVER_URL:-http://localhost:5000}"
       - "VITE_WEB_URL=${VITE_WEB_URL:-http://localhost:3000}"
@@ -85,7 +76,6 @@ services:
       - "VITE_IMGPROXY_URL=${VITE_IMGPROXY_URL:-}"
       - "VITE_IMGPROXY_SIGNATURE=${VITE_IMGPROXY_SIGNATURE:-_}"
       - "DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-changeme}@postgres:5432/${POSTGRES_DB:-tsu-stack}"
-      - "BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET:-replace_me_generate_a_real_auth_secret_here}"
     ports:
       - "${WEB_PORT:-3000}:3000"
     healthcheck:

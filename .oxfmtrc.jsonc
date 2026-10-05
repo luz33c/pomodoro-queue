@@ -17,7 +17,11 @@
     ".output",
     ".wrangler",
     ".netlify",
-    "dist"
+    "dist",
+    // Vendored agent skills and their lockfile are managed by the `skills` CLI
+    ".agents/skills/",
+    ".claude/skills/",
+    "skills-lock.json"
   ],
   "sortImports": {
     "customGroups": [

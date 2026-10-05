@@ -16,7 +16,6 @@ import { type ContentfulStatusCode } from "hono/utils/http-status";
 import { getClerkAuthorizedParties } from "@tsu-stack/api/lib/auth/clerk-authorized-parties";
 import { createContext } from "@tsu-stack/api/lib/context/hono/create-context";
 import { appRouter } from "@tsu-stack/api/routers/index";
-import { auth } from "@tsu-stack/auth/index";
 import { migrateDatabase } from "@tsu-stack/db";
 import { ENV_SERVER } from "@tsu-stack/env/server/env";
 import { log, parseError } from "@tsu-stack/logger/server";
@@ -78,23 +77,6 @@ app.onError((error, c) => {
   );
 });
 
-/**
- * Disable /auth/reference calls as they are handled by the OpenAPI generator
- * @see https://better-auth.com/docs/plugins/open-api#configuration
- */
-app.on(["POST", "GET"], "/auth/reference", (c) =>
-  c.redirect(`${ENV_SERVER.VITE_SERVER_URL}/docs#auth-api-reference`, 301)
-);
-
-app.get("/auth/open-api/generate-schema", async (c) => {
-  // IMPORTANT: Need to explicitly do this instead of relying on the OpenAPI plugin's built-in schema generation
-  // Otherwise, it will 404 with the /auth/* endpoint
-  const schema = await auth.api.generateOpenAPISchema();
-  return c.json(schema);
-});
-
-app.on(["POST", "GET"], "/auth/*", async (c) => auth.handler(c.req.raw));
-
 export const openApiHandler = new OpenAPIHandler(appRouter, {
   interceptors: [
     onError((error, { context }) => {
@@ -119,10 +101,6 @@ export const openApiHandler = new OpenAPIHandler(appRouter, {
             {
               title: "API Reference",
               url: join(apiBasePath, "docs", "spec.json")
-            },
-            {
-              title: "Auth API Reference",
-              url: join(apiBasePath, "auth", "open-api", "generate-schema")
             }
           ],
           theme: "deepSpace"
@@ -133,12 +111,6 @@ export const openApiHandler = new OpenAPIHandler(appRouter, {
       specGenerateOptions: {
         components: {
           securitySchemes: {
-            authCookie: {
-              description: `**(optional)** Session cookie from signing-in, required for protected endpoints [View Auth Reference](${ENV_SERVER.VITE_SERVER_URL}/docs#auth-api-reference)`,
-              in: "cookie",
-              name: "better_auth.session_token",
-              type: "apiKey"
-            },
             clerkBearer: {
               bearerFormat: "JWT",
               description: "Clerk session token passed as a Bearer token.",
@@ -148,7 +120,7 @@ export const openApiHandler = new OpenAPIHandler(appRouter, {
           }
         },
         info: {
-          description: `This is the API for @tsu-stack/server.\n## Usage\nProtected endpoints require a Clerk session token in the \`Authorization: Bearer <token>\` header. The legacy Better Auth endpoints are still mounted at \`/auth/*\` for compatibility.\n## Resources\n - [Official Website](${ENV_SERVER.VITE_WEB_URL})\n - [Auth API Reference](${ENV_SERVER.VITE_SERVER_URL}/docs#auth-api-reference)`,
+          description: `This is the API for @tsu-stack/server.\n## Usage\nProtected endpoints require a Clerk session token in the \`Authorization: Bearer <token>\` header.\n## Resources\n - [Official Website](${ENV_SERVER.VITE_WEB_URL})`,
           title: "@tsu-stack/server API",
           version: ENV_SERVER.SOURCE_COMMIT
         },

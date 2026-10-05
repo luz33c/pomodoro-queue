@@ -2,6 +2,8 @@
 
 Use `evlog` through `@tsu-stack/logger` only. Do not install or import `evlog` directly from `apps/*` or feature packages; the logger package is the facade and adapter boundary.
 
+The vendored evlog skills (`analyze-logs`, `review-logging-patterns`, `build-audit-logs`) describe upstream evlog; the facade and policy rules in this file take precedence. Do not run `evlog init` or `evlog agents`, which wire evlog directly into apps and rewrite AGENTS.md. To investigate runtime behavior, read the [local log files](#local-log-files) with `analyze-logs` before adding temporary logs.
+
 If logging is not part of the task, stop here and do not add new durable logs.
 
 ## Default Rule
@@ -129,21 +131,19 @@ throw createError({
 
 Do not log an error and then rethrow it unless the downstream global handler will not see it. Add useful context with `log.set(...)`, then let the global handler record the failure once. If a framework integration handles errors internally, prefer its request-scoped logger/context; use the global `log.error(...)` only when no request logger exists.
 
-## Identity And Better Auth
+## Identity And Clerk
 
-Use Better Auth identification through evlog's Better Auth integration when request identity is needed. Keep that integration behind `@tsu-stack/logger`; do not import `evlog/better-auth` directly from app or feature code unless the logger package is being updated.
+Use the verified Clerk identity from the existing authentication context when request identity is needed. Follow [Auth patterns](./auth.md) for the Web, API, Native, and Extension authentication paths.
 
-Server request identity should be automatic and request-scoped:
+Server request identity must be request-scoped:
 
-- Resolve identity in middleware after the request logger exists and before route handlers run.
-- Hono: identify `c.get("log")` with `c.req.raw.headers` and `c.req.path`.
-- TanStack Start/oRPC: identify the request logger passed through context, using request headers.
-- Exclude auth endpoints, log ingestion endpoints, health checks, and other noisy/system routes unless explicitly needed.
-- Do not manually `log.set({ user })` or attach full Better Auth session objects in feature handlers.
+- Resolve identity after Clerk authentication and after the request logger exists.
+- Hono/oRPC handlers use the verified `context.auth.userId`; Web server functions use Clerk's request-scoped `auth()` result.
+- Keep shared identity enrichment at the middleware/context boundary instead of repeating it in feature handlers.
+- Exclude log ingestion endpoints, health checks, and other noisy/system routes unless explicitly needed.
+- Attach only allowlisted identifiers when logging is required. Do not attach full Clerk user or session records.
 
-Rely on the Better Auth integration's safe field extraction. It should identify users with stable, allowlisted fields such as user/session IDs and approved profile/session metadata. Do not log passwords, tokens, raw cookies, authorization headers, or full user/session records.
-
-Client identity sync is separate from server request identity. Browser logs should only mirror the minimal current identity needed for correlation, usually `user.id`.
+Client identity sync is separate from server request identity. The Web logger provider reads Clerk's `userId` and uses `setIdentity` for the current user or an anonymous identity.
 
 When using `setIdentity` on the client:
 
@@ -186,6 +186,14 @@ Client logs should be rare. Prefer logging client errors, failed important user 
 Do not log in React render paths. If a client log is necessary, emit it from an effect or event handler and dedupe where needed.
 
 When browser transport is enabled, remember that client logs are sent to the server ingestion endpoint. Treat them as production logs, not just DevTools messages.
+
+## Local Log Files
+
+Outside production, the Hono API server mirrors every drained event to `apps/server/.evlog/logs/<date>.jsonl` as NDJSON and keeps the newest 7 daily files. That covers request events (the middleware excludes health and ingest routes), errors recorded by `app.onError`, and browser logs received at `/_logs/ingest`. Events are redacted before they are written, and `.evlog/` is gitignored.
+
+- Wire it only with `createLocalFileDrain()` from `@tsu-stack/logger/server/fs-drain`, and only from Node-only entry points such as `apps/server/src/shared/lib/logger.ts`. Do not import it from modules that are also bundled for the browser, such as `apps/web/src/start.ts`.
+- Never enable it in production.
+- The web SSR process does not write local files.
 
 ## Bootstrap Console
 

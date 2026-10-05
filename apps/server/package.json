@@ -22,7 +22,6 @@
     "@orpc/server": "catalog:",
     "@orpc/zod": "catalog:",
     "@tsu-stack/api": "workspace:*",
-    "@tsu-stack/auth": "workspace:*",
     "@tsu-stack/db": "workspace:*",
     "@tsu-stack/env": "workspace:*",
     "@tsu-stack/logger": "workspace:*",

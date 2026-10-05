@@ -34,9 +34,7 @@
     "docker:up:build": "dotenvx run -f .env.docker docker -- compose up --build",
     "docker:down": "dotenvx run -f .env.docker docker -- compose down",
     "ui": "pnpm --filter @tsu-stack/ui run ui",
-    "ui:web": "pnpm --filter @tsu-stack/web run ui",
-    "auth:secret": "pnpm dlx auth@latest secret",
-    "auth:generate": "dotenvx run -f ./packages/env/.env -- pnpm dlx auth@latest generate --config ./packages/auth/src/index.ts --output ./packages/db/src/schema/auth.schema.ts"
+    "ui:web": "pnpm --filter @tsu-stack/web run ui"
   },
   "devDependencies": {
     "@commitlint/cli": "catalog:",

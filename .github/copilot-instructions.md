@@ -11,7 +11,7 @@ An opinionated Node.js 24 LTS monorepo. pnpm 11.28.2 owns dependency installatio
 | oRPC           | RPC layer + OpenAPI/Scalar docs                      |
 | Drizzle ORM    | Type-safe ORM                                        |
 | PostgreSQL     | Primary database                                     |
-| Better Auth    | Self-hosted auth                                     |
+| Clerk          | Shared authentication for Web, Native, and Extension |
 | Paraglide.js   | Compiled i18n                                        |
 | shadcn/ui      | Component library                                    |
 
@@ -21,7 +21,6 @@ An opinionated Node.js 24 LTS monorepo. pnpm 11.28.2 owns dependency installatio
 apps/server   - Hono API server (port 5000, path /server)
 apps/web      - TanStack Start web app (port 3000, path /web)
 packages/api  - oRPC routers & client where all the API logic lives with OpenAPI metadata
-packages/auth - Better Auth config
 packages/db   - Drizzle schemas & migrations, run `pnpm run db:*` from the workspace root to manage the database
 packages/env  - Shared env validation (.env lives here)
 packages/i18n - Paraglide i18n + Vite plugin
@@ -49,7 +48,6 @@ The Web app uses Vite's default `dist/client` and `dist/server/server.js` output
 | `pnpm run db:migrate`      | Run Drizzle migrations                       |
 | `pnpm run db:generate`     | Generate Drizzle migration files             |
 | `pnpm run db:studio`       | Open Drizzle Studio                          |
-| `pnpm run auth:secret`     | Generate a Better Auth secret                |
 | `pnpm run docker:up`       | Start full stack in Docker                   |
 | `pnpm run docker:up:build` | Rebuild and start full stack in Docker       |
 

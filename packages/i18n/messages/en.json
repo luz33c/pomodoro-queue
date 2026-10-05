@@ -4,7 +4,7 @@
   "home_page__hero_beta_badge": "Initial Beta Release",
   "home_page__hero_title_line_1": "Your stack,",
   "home_page__hero_title_line_2": "redefined.",
-  "home_page__hero_description": "An opinionated Node.js 24 monorepo powered by pnpm, featuring TanStack Start, Dockerized deployments, Paraglide.js (i18n), Hono, oRPC, drizzle-orm, better-auth, and more.",
+  "home_page__hero_description": "An opinionated Node.js 24 monorepo powered by pnpm, featuring TanStack Start, Dockerized deployments, Paraglide.js (i18n), Hono, oRPC, drizzle-orm, Clerk, and more.",
   "home_page__hero_cta": "View Documentation",
   "home_page__integrations__heading": "Deploy Anywhere",
   "home_page__integrations__description": "Deploy on Node.js with our Docker templates, or configure a TanStack Start adapter for your preferred cloud platform.",

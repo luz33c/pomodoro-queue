@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-  Node.js 24 and pnpm TanStack Start monorepo featuring shadcn/ui, Paraglide.js (i18n), Hono, oRPC, drizzle-orm, better-auth, Feature-Sliced Design (FSD), and more. 🐋 Dockerized and opinionated. Other runtimes, including ⛅ Cloudflare Workers, require their corresponding deployment adapter.
+  Node.js 24 and pnpm TanStack Start monorepo featuring shadcn/ui, Paraglide.js (i18n), Hono, oRPC, drizzle-orm, Clerk, Feature-Sliced Design (FSD), and more. 🐋 Dockerized and opinionated. Other runtimes, including ⛅ Cloudflare Workers, require their corresponding deployment adapter.
 </p>
 
 <p align="center">
@@ -47,6 +47,7 @@
     - [Git-based CI/CD](#git-based-cicd)
   - [Deploying to Other Platforms](#deploying-to-other-platforms)
 - [Environment Variables](#environment-variables)
+  - [Database Tools](#database-tools)
   - [Server](#server)
   - [Web](#web)
   - [Native](#native)
@@ -76,7 +77,7 @@ Here is a non-exhaustive list of the main technologies used in this project, alo
 | [**oRPC**](https://orpc.dev/)                     | RPC framework to define API routes and generate OpenAPI specs and documentation with [Scalar](https://scalar.com/).                          | tRPC                               |
 | [**Drizzle ORM**](https://orm.drizzle.team/)      | Type-safe and lightweight ORM for database interactions.                                                                                     | Prisma, TypeORM                    |
 | [**PostgreSQL**](https://www.postgresql.org/)     | Stable open-source relational database.                                                                                                      | MySQL, MariaDB                     |
-| [**Better Auth**](https://better-auth.com/)       | Self-hosted authentication framework with support for all major OAuth providers.                                                             | Auth.js                            |
+| [**Clerk**](https://clerk.com/)                   | Authentication and session management shared by Web, Native, Extension, and the API.                                                         | Managed authentication             |
 | [**Docker**](https://www.docker.com/)             | Containerization for local development and deployment.                                                                                       | Podman                             |
 | [**shadcn/ui**](https://ui.shadcn.com/)           | Accessible and customizable React component library.                                                                                         | Chakra UI, Material UI, Mantine UI |
 
@@ -109,11 +110,9 @@ Here is a non-exhaustive list of the main technologies used in this project, alo
    cp packages/env/.env.example packages/env/.env
    ```
 
-3. **Generate a Better-Auth secret** and set it as `BETTER_AUTH_SECRET` in `packages/env/.env`:
+3. **Configure Clerk** in `packages/env/.env`:
 
-   ```bash
-   pnpm run auth:secret
-   ```
+   Set `CLERK_SECRET_KEY` and `VITE_CLERK_PUBLISHABLE_KEY` for your Clerk application. Configure its allowed origins and sign-in/sign-up URLs to match `VITE_WEB_URL`, including any deployment subpath. See the [authentication guide](../.agents/auth.md) for the Web, Native, and Extension flows.
 
 4. **Start the local PostgreSQL database:**
 
@@ -252,6 +251,14 @@ The **web app** runs on Node.js 24 with Hono and `@hono/node-server`, using the 
 
 ## Environment Variables
 
+### Database Tools
+
+Database CLI commands (`db:generate`, `db:migrate`, `db:push`, and `db:studio`) load `packages/env/.env` and validate only `DATABASE_URL` through `ENV_DATABASE`. Clerk credentials and application URLs are not required for these commands. Both Docker Compose `migrate` services receive only the database connection string.
+
+This scope is specific to database tooling. The application DB singleton, Server, and Web SSR retain their existing environment requirements.
+
+Clerk is the only active authentication provider. The legacy authentication tables and their migrations are retained pending a decision about existing data; see the [migration record](../BETTER_AUTH_TO_CLERK.md#当前状态).
+
 ### Server
 
 For the Hono server, use the following environment variables:
@@ -263,7 +270,6 @@ For the Hono server, use the following environment variables:
 | `CLERK_SECRET_KEY`           | ✅       | -             | Clerk secret key used to verify Clerk sessions and bearer tokens server-side.                    |
 | `VITE_CLERK_PUBLISHABLE_KEY` | ✅       | -             | Clerk publishable key. Safe for the browser and required by Clerk client components.             |
 | `CLERK_AUTHORIZED_PARTIES`   | ❌       | -             | Comma-separated extra Clerk `azp` / authorized party origins, e.g. `chrome-extension://<id>`.    |
-| `BETTER_AUTH_SECRET`         | ✅       | -             | Secret key for Better-Auth. Generate with `pnpm run auth:secret`.                                |
 | `DATABASE_URL`               | ✅       | -             | PostgreSQL connection string.                                                                    |
 | `ENABLE_OPEN_API_DOCS`       | ❌       | `false`       | Enable OpenAPI `/docs` endpoint.                                                                 |
 
@@ -277,7 +283,6 @@ For the web app, use the following environment variables:
 | `VITE_WEB_URL`               | ✅       | -             | Base URL for the web app. May also include a subpath if needed, ex: `https://example.com/web`.                                      |
 | `CLERK_SECRET_KEY`           | ✅       | -             | Clerk secret key used by TanStack Start middleware. Do not expose it with a `VITE_` prefix.                                         |
 | `VITE_CLERK_PUBLISHABLE_KEY` | ✅       | -             | Clerk publishable key used by the browser Clerk provider.                                                                           |
-| `BETTER_AUTH_SECRET`         | ✅       | -             | Secret key for Better-Auth. Generate with `pnpm run auth:secret`.                                                                   |
 | `DATABASE_URL`               | ✅       | -             | PostgreSQL connection string.                                                                                                       |
 | `VITE_IMGPROXY_URL`          | ❌       | -             | URL for image optimization. You'll need to deploy your own [imgproxy](https://hub.docker.com/r/darthsim/imgproxy/) container first. |
 | `VITE_IMGPROXY_SIGNATURE`    | ❌       | `_`           | imgproxy signature path segment. Use `insecure` or a precomputed signature if your imgproxy setup requires it.                      |
@@ -417,11 +422,9 @@ However, the benefit is singular deployments and lower memory usage for websites
 
 - [Router/Start issues](https://github.com/TanStack/router/issues) - TanStack Start is in RC.
 - [Devtools releases](https://github.com/TanStack/devtools/releases) - TanStack Devtools is in alpha and may still have breaking changes.
-- [Better Auth experimental Drizzle adapter](https://github.com/better-auth/better-auth/pull/9489) - We're using a separate branch of Better Auth's Drizzle adapter that supports Drizzle relations v2.
 
 ### Pitfalls
 
-- Better Auth uses its default cookie settings (`SameSite=Lax`) here to better support OAuth and other redirect-based flows. Cross-domain deployments still require deliberate cookie, domain, and CORS configuration. See [Better Auth cookie docs](https://better-auth.com/docs/concepts/cookies#safari-itp-and-cross-domain-setups) for context.
 - This implementation does not include security headers by default. You should add the following headers in production for improved security:
   - `Content-Security-Policy`
   - `Strict-Transport-Security`

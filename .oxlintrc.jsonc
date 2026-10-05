@@ -14,7 +14,10 @@
     "build/",
     "worker-configuration.d.ts",
     "scripts/",
-    "*.md"
+    "*.md",
+    // Vendored agent skills are managed by the `skills` CLI
+    ".agents/skills/",
+    ".claude/skills/"
   ],
   "jsPlugins": [
     { "name": "react-hooks-js", "specifier": "eslint-plugin-react-hooks" },

@@ -8,7 +8,7 @@ This file is the source of truth for what belongs in `packages/core`, how to str
 
 - Keep shared domain contracts in one place.
 - Make API and frontend behavior follow shared changes by import, not by parallel manual edits.
-- Keep `packages/core` runtime-agnostic and safe to consume from `packages/auth`, `packages/db`, `packages/api`, `apps/web`, and `apps/server`.
+- Keep `packages/core` runtime-agnostic and safe to consume from `packages/db`, `packages/api`, `apps/web`, and `apps/server`.
 
 ## What Belongs In `packages/core`
 
@@ -117,7 +117,7 @@ If adding one enum value requires hand-editing multiple literal unions in `apps/
 Move logic into `packages/core` when:
 
 - the same domain shape is needed by both `packages/api` and `apps/web`
-- `packages/auth` and `packages/api` share the same normalization or validation rule
+- `packages/api` and `apps/web` share the same normalization or validation rule
 - a shared enum, default, or format should drive frontend behavior automatically
 
 Keep logic local when it is truly slice-specific, UI-only, router-only, or persistence-only.
