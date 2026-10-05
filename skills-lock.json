@@ -1,0 +1,98 @@
+{
+  "version": 1,
+  "skills": {
+    "analyze-logs": {
+      "source": "evlog.dev",
+      "sourceUrl": "https://www.evlog.dev",
+      "sourceType": "well-known",
+      "computedHash": "53c5a02ea2badb819f2f2cfe7848cc9de322b621ce7f604736f976d017126f83",
+      "wellKnownDigest": "sha256:17b43cc6b9fe51ee087b01c19df408a13596bb7abba052ea569652d1322e887d"
+    },
+    "build-audit-logs": {
+      "source": "evlog.dev",
+      "sourceUrl": "https://www.evlog.dev",
+      "sourceType": "well-known",
+      "computedHash": "f4e231625b13dd38467916aed00e666bf460a3671768c0c8251f379fd31637f5",
+      "wellKnownDigest": "sha256:dcfb5246d719d3f1822fb5fef5f4b0661f9ed8fd6ca4497b20285236d8e10ae2"
+    },
+    "clerk": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/core/clerk/SKILL.md",
+      "computedHash": "5e8e1e9944563cb98b468af435f3a3efacf4469a9e02f9768f8112b152df05b7"
+    },
+    "clerk-chrome-extension-patterns": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/frameworks/clerk-chrome-extension-patterns/SKILL.md",
+      "computedHash": "10585eb6da43efe02048c9ed3911850bd9733ae909b62e2662473479e2335cc6"
+    },
+    "clerk-expo": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/mobile/clerk-expo/SKILL.md",
+      "computedHash": "15c3f265d693cd5a61b6154e686d9b606910e84feeaafbdbaf99bac9db0ad2ba"
+    },
+    "clerk-tanstack-patterns": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/frameworks/clerk-tanstack-patterns/SKILL.md",
+      "computedHash": "dae6b1764f59c280cc257fc114ff3d2acc186d27537875e3c461650b7addb85d"
+    },
+    "clerk-testing": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/features/clerk-testing/SKILL.md",
+      "computedHash": "2e2172e0ef81c58cec2bdb7ff5edefbd1ba424e9fca931e0cb80a1bd8bfd4e80"
+    },
+    "clerk-webhooks": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/features/clerk-webhooks/SKILL.md",
+      "computedHash": "e3c348bdc6dee1f28bc56577cd4aac605d3dfc3c63fcb10fc51e6c04c1fe3fb0"
+    },
+    "expo-data-fetching": {
+      "source": "expo/skills",
+      "sourceType": "github",
+      "skillPath": "plugins/expo/skills/expo-data-fetching/SKILL.md",
+      "computedHash": "e3d31524a94bc06915293a1ececfe23b60c13e89c733f0d6780606669ad60ef9"
+    },
+    "expo-router": {
+      "source": "expo/skills",
+      "sourceType": "github",
+      "skillPath": "plugins/expo/skills/expo-router/SKILL.md",
+      "computedHash": "512978d4ea35857932b79ee9b15a47d7ab78382dc1fcd275601b87e4c80c1e59"
+    },
+    "hono": {
+      "source": "honojs/skills",
+      "sourceType": "github",
+      "skillPath": "skills/hono/SKILL.md",
+      "computedHash": "e3f141a41800df815000216a53510fe6f888629471c214706cc05adff27297fb"
+    },
+    "review-logging-patterns": {
+      "source": "evlog.dev",
+      "sourceUrl": "https://www.evlog.dev",
+      "sourceType": "well-known",
+      "computedHash": "7f883fe916056701c8348f2495f8ef5fffcdbfc24d78ca36c0a39788a4f30b5c",
+      "wellKnownDigest": "sha256:27e7feb7a65f2236f1b8ff681b09158d39ada90aa2df5df8e6c346bc19672794"
+    },
+    "shadcn": {
+      "source": "shadcn/ui",
+      "sourceType": "github",
+      "skillPath": "skills/shadcn/SKILL.md",
+      "computedHash": "f615de216e085a84e31593ad0fa9062232adc40cd87b7c7ab2b8e49abf6500be"
+    },
+    "vercel-composition-patterns": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/composition-patterns/SKILL.md",
+      "computedHash": "f98931159fa9c7fed043bcd18a891a46dcf89ababa38df13a4c5b7b30dc0ce07"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/web-design-guidelines/SKILL.md",
+      "computedHash": "a6a44d5498f7e8f68289902f3dedfc6f38ae0cee1e96527c80724cf27f727c2a"
+    }
+  }
+}

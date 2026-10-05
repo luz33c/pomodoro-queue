@@ -4,7 +4,7 @@
 </h1>
 
 <p align="center">
-   <img src="https://img.shields.io/badge/Node.js-24.18.0_LTS-green" alt="Node.js version badge">
+   <img src="https://img.shields.io/badge/Node.js-24.21.0_LTS-green" alt="Node.js version badge">
    <img src="https://img.shields.io/github/license/tsu-moe/tsu-stack" alt="License badge">
    <img src="https://img.shields.io/github/last-commit/tsu-moe/tsu-stack" alt="Last commit badge">
    <img src="https://img.shields.io/github/stars/tsu-moe/tsu-stack?style=flat" alt="GitHub stars badge">
@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-  Node.js 24 and pnpm TanStack Start monorepo featuring shadcn/ui, Paraglide.js (i18n), Hono, oRPC, drizzle-orm, better-auth, Feature-Sliced Design (FSD), and more. 🐋 Dockerized and opinionated. Compatible with the ⛅ Cloudflare Workers workerd runtime with a few tweaks.
+  Node.js 24 and pnpm TanStack Start monorepo featuring shadcn/ui, Paraglide.js (i18n), Hono, oRPC, drizzle-orm, better-auth, Feature-Sliced Design (FSD), and more. 🐋 Dockerized and opinionated. Other runtimes, including ⛅ Cloudflare Workers, require their corresponding deployment adapter.
 </p>
 
 <p align="center">
@@ -63,31 +63,31 @@
 
 Here is a non-exhaustive list of the main technologies used in this project, along with their purposes and possible alternatives they replace:
 
-| Technology                                        | Purpose                                                                                                                                                                  | Replaces/Similar Alternatives      |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------- |
-| [**Node.js 24 LTS**](https://nodejs.org/)         | Development and production JavaScript runtime.                                                                                                                           | Bun, Deno                          |
-| [**pnpm**](https://pnpm.io/)                      | Package manager, workspace task runner, one-off CLI runner, and project Node.js runtime manager.                                                                         | npm, yarn, npx                     |
-| [**Vite**](https://vite.dev/)                     | Development server and production builder for the Web app.                                                                                                               | webpack, Rspack                    |
-| [**Vitest**](https://vitest.dev/)                 | Unit test runner.                                                                                                                                                        | Jest                               |
-| [**Oxfmt / Oxlint**](https://oxc.rs/)             | Formatting and linting.                                                                                                                                                  | Prettier, ESLint                   |
-| [**TanStack Start**](https://tanstack.com/router) | Modern full-stack React framework with support for SPA, SSR, ISR, and integrated TanStack Query. It uses Vite's Nitro adapter for cross-platform deployment portability. | Next.js, Remix, React Router       |
-| [**Paraglide.js**](https://paraglide.dev/)        | Compiled internationalization (i18n) library for managing translations.                                                                                                  | i18next, next-intl                 |
-| [**Hono**](https://hono.dev/)                     | Lightweight web server framework built on web standards and WinterCG-compliant for cross-platform portability.                                                           | Express.js, Fastify, Elysia.js     |
-| [**oRPC**](https://orpc.dev/)                     | RPC framework to define API routes and generate OpenAPI specs and documentation with [Scalar](https://scalar.com/).                                                      | tRPC                               |
-| [**Drizzle ORM**](https://orm.drizzle.team/)      | Type-safe and lightweight ORM for database interactions.                                                                                                                 | Prisma, TypeORM                    |
-| [**PostgreSQL**](https://www.postgresql.org/)     | Stable open-source relational database.                                                                                                                                  | MySQL, MariaDB                     |
-| [**Better Auth**](https://better-auth.com/)       | Self-hosted authentication framework with support for all major OAuth providers.                                                                                         | Auth.js                            |
-| [**Docker**](https://www.docker.com/)             | Containerization for local development and deployment.                                                                                                                   | Podman                             |
-| [**shadcn/ui**](https://ui.shadcn.com/)           | Accessible and customizable React component library.                                                                                                                     | Chakra UI, Material UI, Mantine UI |
+| Technology                                        | Purpose                                                                                                                                      | Replaces/Similar Alternatives      |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| [**Node.js 24 LTS**](https://nodejs.org/)         | Development and production JavaScript runtime.                                                                                               | Bun, Deno                          |
+| [**pnpm**](https://pnpm.io/)                      | Package manager, workspace task runner, one-off CLI runner, and project Node.js runtime manager.                                             | npm, yarn, npx                     |
+| [**Vite**](https://vite.dev/)                     | Development server and production builder for the Web app.                                                                                   | webpack, Rspack                    |
+| [**Vitest**](https://vitest.dev/)                 | Unit test runner.                                                                                                                            | Jest                               |
+| [**Oxfmt / Oxlint**](https://oxc.rs/)             | Formatting and linting.                                                                                                                      | Prettier, ESLint                   |
+| [**TanStack Start**](https://tanstack.com/router) | Modern full-stack React framework with SSR, prerendering, and integrated TanStack Query. Vite builds the app, and Hono serves it on Node.js. | Next.js, Remix, React Router       |
+| [**Paraglide.js**](https://paraglide.dev/)        | Compiled internationalization (i18n) library for managing translations.                                                                      | i18next, next-intl                 |
+| [**Hono**](https://hono.dev/)                     | Lightweight web server framework built on web standards and WinterCG-compliant for cross-platform portability.                               | Express.js, Fastify, Elysia.js     |
+| [**oRPC**](https://orpc.dev/)                     | RPC framework to define API routes and generate OpenAPI specs and documentation with [Scalar](https://scalar.com/).                          | tRPC                               |
+| [**Drizzle ORM**](https://orm.drizzle.team/)      | Type-safe and lightweight ORM for database interactions.                                                                                     | Prisma, TypeORM                    |
+| [**PostgreSQL**](https://www.postgresql.org/)     | Stable open-source relational database.                                                                                                      | MySQL, MariaDB                     |
+| [**Better Auth**](https://better-auth.com/)       | Self-hosted authentication framework with support for all major OAuth providers.                                                             | Auth.js                            |
+| [**Docker**](https://www.docker.com/)             | Containerization for local development and deployment.                                                                                       | Podman                             |
+| [**shadcn/ui**](https://ui.shadcn.com/)           | Accessible and customizable React component library.                                                                                         | Chakra UI, Material UI, Mantine UI |
 
 ## Getting Started
 
 ### Prerequisites
 
 - **Node.js 22 or newer** to launch pnpm
-  - pnpm installs and uses the project's pinned Node.js 24.18.0 runtime
-- **pnpm 11.22.0**
-  - install with `corepack enable && corepack install --global pnpm@11.22.0`
+  - pnpm installs and uses the project's pinned Node.js 24.21.0 runtime
+- **pnpm 11.28.2**
+  - install with `corepack enable && corepack install --global pnpm@11.28.2`
 - **Docker**
   - install it via their [official website](https://www.docker.com/)
 
@@ -157,6 +157,17 @@ pnpm run docker:up:build # OR: force a rebuild when you make changes to the code
 
 This project is designed to be deployed as separate applications for the server and web frontend. Below are the recommended deployment strategies and configurations.
 
+The Web app uses TanStack Start's Vite build, which outputs static assets and prerendered pages to `apps/web/dist/client` and the request handler to `apps/web/dist/server/server.js`. Node.js 24 runs `apps/web/server.ts` directly: Hono serves existing static files for GET/HEAD requests, then forwards other requests to the Start handler. Sign-in and account creation stay dynamic so their session guards run on every request. Start still provides prerendering and `vite preview`.
+
+To build and run the Web app locally:
+
+```bash
+pnpm --filter @tsu-stack/web run build
+pnpm --filter @tsu-stack/web run start
+```
+
+The Web Dockerfile packages the build and its production dependencies with `pnpm --filter @tsu-stack/web deploy --prod --legacy /prod/web`, copies that directory to `/app`, and starts `node /app/server.ts`. The deployed `node_modules` directory is required for dependencies that Vite leaves external.
+
 ### Coolify
 
 Coolify can be used to deploy the server and web applications. Choose a strategy and follow the steps below to configure each app:
@@ -202,7 +213,7 @@ Finally, set any required [environment variables](#environment-variables) in the
 > [!TIP]
 > You can clone the [`variant/merged-cloudflare` branch](https://github.com/tsu-moe/tsu-stack/tree/variant/merged-cloudflare) for a Cloudflare Workers-compatible setup.
 
-You will need to use the `@cloudflare/vite-plugin` adapter instead of `nitro`. See [this commit](https://github.com/tsu-moe/tsu-stack/commit/644ceb10a47836d8a3eb6f23c0b664e20207a9e0) for example changes.
+You will need to configure the `@cloudflare/vite-plugin` adapter and a Worker entry point instead of the default Node.js launcher in `apps/web/server.ts`. The Docker deployment in this branch targets Node.js.
 
 Then, you will need to switch to using a singleton `db` instance instead of a connection pool in the server app since Cloudflare Workers do not support long-lived connections. See [this commit](https://github.com/tsu-moe/tsu-stack/commit/8d6cf54b52e430ac6b3f840bbf5eecec040238b3) for example changes.
 
@@ -234,7 +245,7 @@ You will need to set up the _build environment variables_ and _variables and sec
 
 ### Deploying to Other Platforms
 
-TanStack Start uses [Nitro](https://nitro.build) as its server engine, which means the **web app** can be deployed to any platform Nitro supports out of the box - Cloudflare Workers, Vercel, AWS Lambda, Deno Deploy, and [many more](https://nitro.build/deploy). Configure the target by setting the appropriate Nitro preset in `apps/web/vite.config.ts`.
+The **web app** runs on Node.js 24 with Hono and `@hono/node-server`, using the included Dockerfile or a Node.js host. For another platform, configure its TanStack Start deployment adapter and entry point in place of the Node.js launcher. Platform-specific deployment is not configured by default.
 
 > [!CAUTION]
 > The **server** (`apps/server`) is a Node.js/Hono server and is not compatible with edge runtimes like Cloudflare Workers. It must be deployed to a Node.js-capable environment (e.g. a VPS, container, or serverless platform with Node.js support). This is by design - the dedicated Node.js server is cheaper to self-host for database-heavy workloads.
@@ -406,9 +417,6 @@ However, the benefit is singular deployments and lower memory usage for websites
 
 - [Router/Start issues](https://github.com/TanStack/router/issues) - TanStack Start is in RC.
 - [Devtools releases](https://github.com/TanStack/devtools/releases) - TanStack Devtools is in alpha and may still have breaking changes.
-- [Nitro v3](https://nitro.build/blog/v3-beta) - This template is configured with Nitro Nightly (3.0.1-20260128-211656-ae83c97e) by default.
-  - Currently, when using newer versions of Nitro, you may encounter CJS to ESM interop crashes on build with the error: `TypeError: Cannot destructure property '__extends' of '__toESM$1(...).default' as it is undefined.`
-  - This is similar to the issue described in [nitrojs/nitro#4113](https://github.com/nitrojs/nitro/issues/4113)
 - [Better Auth experimental Drizzle adapter](https://github.com/better-auth/better-auth/pull/9489) - We're using a separate branch of Better Auth's Drizzle adapter that supports Drizzle relations v2.
 
 ### Pitfalls

@@ -19,7 +19,6 @@
     "eslint-plugin-fsd-lint",
     "eslint-plugin-react-hooks",
     // Tooling invoked from package scripts instead of imported by source files
-    "nitro-nightly",
     "oxfmt",
     "oxlint"
   ],

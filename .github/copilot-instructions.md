@@ -1,19 +1,19 @@
 # tsu!stack Project
 
-An opinionated Node.js 24 LTS monorepo. pnpm 11.22.0 owns dependency installation, the lockfile, workspace tasks, package scripts, one-off CLIs, and the pinned Node.js runtime. Use `pnpm install` for dependencies, `pnpm run <script>` for package scripts, `pnpm exec <bin>` for installed binaries, and `pnpm dlx <pkg>` for one-off packages.
+An opinionated Node.js 24 LTS monorepo. pnpm 11.28.2 owns dependency installation, the lockfile, workspace tasks, package scripts, one-off CLIs, and the pinned Node.js runtime. Use `pnpm install` for dependencies, `pnpm run <script>` for package scripts, `pnpm exec <bin>` for installed binaries, and `pnpm dlx <pkg>` for one-off packages.
 
 ## Tech Stack
 
-| Package        | Role                                               |
-| -------------- | -------------------------------------------------- |
-| TanStack Start | Full-stack React framework (SSR/SPA/ISR) via Nitro |
-| Hono           | Node.js API server (WinterCG-compliant)            |
-| oRPC           | RPC layer + OpenAPI/Scalar docs                    |
-| Drizzle ORM    | Type-safe ORM                                      |
-| PostgreSQL     | Primary database                                   |
-| Better Auth    | Self-hosted auth                                   |
-| Paraglide.js   | Compiled i18n                                      |
-| shadcn/ui      | Component library                                  |
+| Package        | Role                                                 |
+| -------------- | ---------------------------------------------------- |
+| TanStack Start | Full-stack React framework with SSR and prerendering |
+| Hono           | Node.js API server and Web production launcher       |
+| oRPC           | RPC layer + OpenAPI/Scalar docs                      |
+| Drizzle ORM    | Type-safe ORM                                        |
+| PostgreSQL     | Primary database                                     |
+| Better Auth    | Self-hosted auth                                     |
+| Paraglide.js   | Compiled i18n                                        |
+| shadcn/ui      | Component library                                    |
 
 ## Monorepo Structure
 
@@ -29,6 +29,8 @@ packages/logger - Logtape isomorphic logger (client + server) with designated ca
 packages/ui   - shadcn/ui components shared across all apps/*
 tools/tsconfig - Shared TypeScript base config
 ```
+
+The Web app uses Vite's default `dist/client` and `dist/server/server.js` outputs. Its root `server.ts` runs on Node.js 24 with Hono and `@hono/node-server`; `src/server.ts` remains the Start request handler. See [the toolchain guide](../.agents/toolchain.md#web-production-runtime) for runtime and packaging details.
 
 ## Key Commands
 
