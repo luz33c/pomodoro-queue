@@ -2,7 +2,7 @@
 
 ## Architecture
 
-Clerk is the authentication provider for Web, Native, Extension, and the API.
+Clerk is the only authentication provider for Web, Native, Extension, and the API.
 
 - **Web**: `ClerkProvider` in `apps/web/src/routes/__root.tsx` and `clerkMiddleware()` in `apps/web/src/start.ts` connect browser and server authentication.
 - **SSR**: `getClerkAuthState` in `apps/web/src/features/auth/api/clerk-auth-state.functions.ts` reads the current request with Clerk's server-side `auth()` helper.
@@ -43,7 +43,7 @@ Use Clerk's `SignIn`, `SignUp`, `useAuth`, and `useUser` integrations. Do not in
 
 Clerk manages authentication records and sessions. A Clerk account is not automatically a row in the local database.
 
-The existing `user`, `account`, `session`, and `verification` tables and their Drizzle declarations are retained pending confirmation of legacy data retention. They do not authenticate current users. Do not use them for new Clerk features or delete them through `db:push` as incidental cleanup. Their eventual removal requires a reviewed migration and an explicit decision about existing data.
+The current Drizzle schema contains no legacy authentication tables or business tables. The `user`, `account`, `session`, and `verification` declarations and their relations have been removed. An appended cleanup migration drops those four legacy tables; do not recreate them for Clerk authentication or use `db:push` to replace the migration path.
 
 Keep historical migrations intact. The API server runs pending migrations at production startup, so a destructive cleanup migration must only enter the release once its data impact is approved.
 

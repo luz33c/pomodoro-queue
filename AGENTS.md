@@ -1,6 +1,6 @@
 # tsu-stack
 
-Opinionated full-stack TypeScript monorepo: TanStack Start + Hono + oRPC + Drizzle + Better Auth + Paraglide.js (i18n), running on Node.js 24 and managed with pnpm.
+Opinionated full-stack TypeScript monorepo: TanStack Start + Hono + oRPC + Drizzle + Clerk + Paraglide.js (i18n), running on Node.js 24 and managed with pnpm.
 
 ## Start Here
 
@@ -30,7 +30,7 @@ Pick the most specific file for the task. Use links within that file instead of 
 - [API fetching patterns](.agents/api-fetching-patterns.md) for slice-local TanStack Query and oRPC client wrappers in `apps/web`.
 - [Zustand state management](.agents/zustand.md) for complex client-owned state shared across components, and for avoiding React Context as the default mutable state tool.
 - [oRPC patterns](.agents/orpc.md) for server procedures, router shape, typed errors, and request-scoped handler logging.
-- [Auth patterns](.agents/auth.md) for Better Auth architecture, auth query behavior, and protected/guest route rules.
+- [Auth patterns](.agents/auth.md) for Clerk architecture, token handling, and protected/guest route rules.
 - [i18n guidelines](.agents/i18n.md) for copy keys, locale file policy, and Paraglide codegen.
 - [SEO patterns](.agents/seo.md) for route `head()` usage and `@tsu-stack/seo` integration.
 
@@ -62,6 +62,33 @@ Before substantial work:
 - Multiple matches: prefer the most specific local skill for the package or concern you are changing; load additional skills only when the task spans multiple packages or concerns.
 
 <!-- intent-skills:end -->
+
+## Vendored Skills
+
+`.agents/skills/` holds upstream skills for libraries that do not ship skills through `@tanstack/intent`. Codex and GitHub Copilot read it directly, `.claude/skills/` symlinks it for Claude Code, and `skills-lock.json` pins each skill's source and content hash.
+
+- Clerk (web, native, extension, webhooks, E2E): `clerk`, `clerk-tanstack-patterns`, `clerk-expo`, `clerk-chrome-extension-patterns`, `clerk-webhooks`, `clerk-testing`
+- Logging and debugging: `analyze-logs` (local server logs in `apps/server/.evlog/logs/`), `review-logging-patterns`, `build-audit-logs`
+- Hono server: `hono`
+- shadcn/ui: `shadcn`
+- Expo app: `expo-router`, `expo-data-fetching`
+- UI review and React composition: `web-design-guidelines`, `vercel-composition-patterns`
+
+Rules:
+
+- `.agents/*.md` define this repository's conventions and take precedence over vendored skills, which carry generic upstream guidance. When a repository doc and the current code disagree, treat the code as authoritative.
+- Translate `npx`, `bunx`, and `npm install` commands shown in skills to the pnpm equivalents in [Node.js and pnpm toolchain](.agents/toolchain.md), and add dependencies through the workspace catalog.
+- Do not run setup CLIs that skills suggest (for example `evlog init`, `evlog agents`, `shadcn init`, or Clerk setup flows) unless the user asks; they rewrite existing wiring and docs.
+- TanStack libraries and drizzle-kit already ship version-matched skills through `@tanstack/intent` (see Skill Loading); do not vendor copies of them.
+- Treat `.agents/skills/` as vendored and do not hand-edit it. Add skills with `pnpm dlx skills@latest add <source> -s <skill> -a claude-code codex github-copilot`, update them with `pnpm dlx skills@latest update`, and restore them from the lockfile with `pnpm dlx skills@latest experimental_install`.
+
+## MCP Servers
+
+Project MCP servers are defined in `.mcp.json` for Claude Code (pre-approved in `.claude/settings.json`) and in `.codex/config.toml` for Codex. Keep the two files in sync.
+
+- `shadcn`: search, view, and get examples or add commands for registry items; run its add commands through `pnpm run ui` (`packages/ui`) or `pnpm run ui:web` (`apps/web`), choosing the target per [UI guidelines](.agents/ui.md)
+- `clerk`: Clerk SDK snippets and patterns
+- `expo`: Expo and EAS tooling; requires a one-time Expo account login (`/mcp` in Claude Code, `codex mcp login expo` in Codex)
 
 ## TanStack Docs
 

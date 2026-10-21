@@ -9,19 +9,11 @@ import postgres from "postgres";
 import { ENV_SERVER } from "@tsu-stack/env/server/env";
 import { createLogger } from "@tsu-stack/logger/server";
 
-import { relations as authRelations } from "#@/schema/auth.schema";
-import { relations } from "#@/schema/relations";
-
 export * from "drizzle-orm/sql";
 
 const client = postgres(ENV_SERVER.DATABASE_URL);
 
-export const db = drizzle({
-  client,
-  // `defineRelationsPart()` must be merged after the main `defineRelations()` config.
-  // https://orm.drizzle.team/docs/relations-v2#relations-parts
-  relations: { ...relations, ...authRelations }
-});
+export const db = drizzle({ client });
 
 export async function checkIsDbReady(): Promise<boolean> {
   try {

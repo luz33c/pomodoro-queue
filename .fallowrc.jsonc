@@ -1,12 +1,14 @@
 {
   "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
-  "entry": [
-    "apps/web/src/start.ts",
-    "scripts/*.ts",
-    "packages/i18n/**/*.ts",
-    "packages/auth/**/middleware.ts"
+  "entry": ["apps/web/src/start.ts", "scripts/*.ts", "packages/i18n/**/*.ts"],
+  "ignorePatterns": [
+    "**/*.generated.ts",
+    "**/*.d.ts",
+    "**/*.gen.*",
+    // Vendored agent skills are managed by the `skills` CLI
+    ".agents/skills/**",
+    ".claude/skills/**"
   ],
-  "ignorePatterns": ["**/*.generated.ts", "**/*.d.ts", "**/*.gen.*"],
   "ignoreDependencies": [
     // Type definitions and other packages that are not directly imported, but used
     "@types/node",
