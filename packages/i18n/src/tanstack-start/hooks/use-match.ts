@@ -5,8 +5,8 @@ import {
   useMatch as rawUseMatch
 } from "@tanstack/react-router";
 
-import { LOCALE_ROUTE_PREFIX } from "#@/tanstack-start/constants/index";
-import { stripLocalePrefix } from "#@/tanstack-start/lib/strip-locale-prefix";
+import { LOCALE_ROUTE_PREFIX } from "#/tanstack-start/constants/index";
+import { stripLocalePrefix } from "#/tanstack-start/lib/strip-locale-prefix";
 
 type LocalizedFrom<TFrom extends string> = `/${typeof LOCALE_ROUTE_PREFIX}${TFrom}`;
 

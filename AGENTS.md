@@ -37,6 +37,7 @@ Pick the most specific file for the task. Use links within that file instead of 
 ### Shared Packages And Platform
 
 - [Core package patterns](.agents/core.md) for shared domain contracts in `packages/core`, file roles, and propagation into API and web code.
+- [Database package](packages/db/AGENTS.md) for schema files, relations, table-level query functions, and `@tsu-stack/db` entry points.
 - [Media storage and uploads](.agents/media-storage.md) for preemptive S3 object conventions, first-implementation workflow, delete policy, and storage env configuration.
 - [UI guidelines](.agents/ui.md) for app UI composition, extraction decisions, and `packages/ui` boundaries.
 - [TypeScript conventions](.agents/typescript.md) for schema placement, import boundaries, and `lib/` vs `utils/`.
@@ -48,7 +49,7 @@ Pick the most specific file for the task. Use links within that file instead of 
 - Shared client state: Start with [Zustand state management](.agents/zustand.md). Do not use React Context unless the user explicitly asks for it.
 - Bugfix: Start with the owning domain doc from the index above, then use [Workflow](.agents/workflow.md) for user-directed validation timing. Add [Core package patterns](.agents/core.md) when the fix touches shared enums, schemas, formatters, defaults, or other cross-package contracts. Add [Logging](.agents/logging.md) or [Testing](.agents/testing.md) only when the task explicitly calls for them or their policies require them.
 - Uploads or object storage: Start with [Media storage and uploads](.agents/media-storage.md). Use it even for the first storage feature in this repo, then update it in the same change once the real provider, env surface, and asset purposes are known. Add [Core package patterns](.agents/core.md) when changing shared upload contracts, [oRPC patterns](.agents/orpc.md) when wiring route handlers, and [Environment variables](.agents/environment-variables.md) when storage config changes.
-- End-to-end feature: Start with [End-to-end feature workflow](.agents/end-to-end-features.md), then load the relevant domain docs such as [Core package patterns](.agents/core.md), [oRPC patterns](.agents/orpc.md), [API fetching patterns](.agents/api-fetching-patterns.md), [TanStack patterns](.agents/tanstack-patterns.md), [Zustand state management](.agents/zustand.md), [Auth patterns](.agents/auth.md), or [UI guidelines](.agents/ui.md).
+- End-to-end feature: Start with [End-to-end feature workflow](.agents/end-to-end-features.md), then load the relevant domain docs such as [Database package](packages/db/AGENTS.md), [Core package patterns](.agents/core.md), [oRPC patterns](.agents/orpc.md), [API fetching patterns](.agents/api-fetching-patterns.md), [TanStack patterns](.agents/tanstack-patterns.md), [Zustand state management](.agents/zustand.md), [Auth patterns](.agents/auth.md), or [UI guidelines](.agents/ui.md).
 
 <!-- intent-skills:start -->
 

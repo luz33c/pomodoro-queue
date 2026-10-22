@@ -4,8 +4,8 @@ import { type Context as HonoContext } from "hono";
 import { ENV_SERVER } from "@tsu-stack/env/server/env";
 import { type RequestLogger } from "@tsu-stack/logger/server";
 
-import { getClerkAuthorizedParties } from "#@/lib/auth/clerk-authorized-parties";
-import { type ClerkContextAuth, type OrpcContext } from "#@/lib/context/types";
+import { getClerkAuthorizedParties } from "#/lib/auth/clerk-authorized-parties";
+import { type ClerkContextAuth, type OrpcContext } from "#/lib/context/types";
 
 const clerkClient = createClerkClient({
   publishableKey: ENV_SERVER.VITE_CLERK_PUBLISHABLE_KEY,

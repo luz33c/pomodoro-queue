@@ -125,8 +125,8 @@ When a handler genuinely needs a durable outcome log, use one wide terminal even
 
 - Group related procedures in a slice router, for example `profileRouter`.
 - Prefer straightforward names like `byId`, `search`, `edit`, `create`, `remove`.
-- Keep DB access close to the handler unless reuse clearly justifies extraction.
-- If extraction is justified but the logic is still slice-local, colocate it beside the router in sibling files such as `queries.ts` or `utils.ts`. Do not push one-off router helpers into `packages/api/src/lib/` by default.
+- Use the table-level query functions from `@tsu-stack/db/queries` for reusable reads and writes, and add new ones there per [Database package](../packages/db/AGENTS.md).
+- Keep DB access that serves only one procedure close to the handler. If it grows, colocate it beside the router in sibling files such as `queries.ts` or `utils.ts`. Do not push one-off router helpers into `packages/api/src/lib/` by default.
 - Convert server-only values to transport-safe output values at the edge, for example `Date` → ISO string.
 - Keep handler logic linear and shallow. If the flow grows, extract helpers.
 

@@ -9,8 +9,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { ENV_NATIVE } from "@tsu-stack/env/native/env";
 
-import { setClerkAuthTokenGetter } from "@/utils/clerk-auth";
-import { queryClient } from "@/utils/orpc";
+import { setClerkAuthTokenGetter } from "#/utils/clerk-auth";
+import { queryClient } from "#/utils/orpc";
 
 function ClerkApiAuthBridge() {
   const { getToken } = useAuth();

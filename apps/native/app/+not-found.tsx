@@ -1,7 +1,7 @@
 import { Link } from "expo-router";
 
-import { PrimaryButton } from "@/components/primary-button";
-import { EmptyState, Screen } from "@/components/screen";
+import { PrimaryButton } from "#/components/primary-button";
+import { EmptyState, Screen } from "#/components/screen";
 
 export default function NotFoundScreen() {
   return (

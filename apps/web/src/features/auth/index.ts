@@ -1,3 +1,3 @@
-export { CreateAnAccountForm } from "@/features/auth/ui/create-an-account-form";
-export { SignInForm } from "@/features/auth/ui/sign-in-form";
-export { getClerkAuthState } from "@/features/auth/api/clerk-auth-state.functions";
+export { CreateAnAccountForm } from "./ui/create-an-account-form";
+export { SignInForm } from "./ui/sign-in-form";
+export { getClerkAuthState } from "./api/clerk-auth-state.functions";

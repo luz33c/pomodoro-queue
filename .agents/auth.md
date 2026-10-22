@@ -43,7 +43,9 @@ Use Clerk's `SignIn`, `SignUp`, `useAuth`, and `useUser` integrations. Do not in
 
 Clerk manages authentication records and sessions. A Clerk account is not automatically a row in the local database.
 
-The current Drizzle schema contains no legacy authentication tables or business tables. The `user`, `account`, `session`, and `verification` declarations and their relations have been removed. An appended cleanup migration drops those four legacy tables; do not recreate them for Clerk authentication or use `db:push` to replace the migration path.
+The Drizzle schema contains no authentication tables. The legacy `user`, `account`, `session`, and `verification` declarations and their relations have been removed. An appended cleanup migration drops those four legacy tables; do not recreate them for Clerk authentication or use `db:push` to replace the migration path.
+
+Tables whose rows belong to a user store the Clerk user ID in a `text` column without a foreign key, as `todo.owner_id` does. See [Database package](../packages/db/AGENTS.md).
 
 Keep historical migrations intact. The API server runs pending migrations at production startup, so a destructive cleanup migration must only enter the release once its data impact is approved.
 

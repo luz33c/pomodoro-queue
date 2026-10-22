@@ -6,6 +6,12 @@
     "server.ts"
   ],
   "type": "module",
+  "imports": {
+    "#/shared/providers/*": "./src/shared/providers/*.tsx",
+    "#/shared/ui/*": "./src/shared/ui/*.tsx",
+    "#/*.css": "./src/*.css",
+    "#/*": "./src/*.ts"
+  },
   "scripts": {
     "build": "cross-env IS_BUILD=true dotenvx run -f ../../packages/env/.env -- vite build",
     "check": "tsc --noEmit",

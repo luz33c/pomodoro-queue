@@ -1,4 +1,4 @@
-import { locales } from "#@/paraglide/runtime";
+import { locales } from "#/paraglide/runtime";
 
 /**
  * Strips the locale prefix from a path if present.

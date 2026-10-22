@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "imports": {
-    "#@/*": "./src/*.ts"
+    "#/*": "./src/*.ts"
   },
   "exports": {
     "./client": "./src/client/index.ts",

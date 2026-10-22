@@ -39,9 +39,34 @@ If the frontend needs labels, options, or defaults for a shared enum, derive the
 
 ## Module Resolution
 
-- `nodenext` module resolution with `allowImportingTsExtensions`
-- Cross-package: `@tsu-stack/<package>/<subpath>`
-- Intra-package: `#@/` alias
+`tools/tsconfig/tsconfig.base.json` uses `Bundler` module resolution with `resolvePackageJsonImports`.
+
+### Import Rules
+
+1. Across workspace projects, import by package name through the target's `exports`: `@tsu-stack/<package>/<subpath>`. `@tsu-stack/*` names are package exports, not path aliases.
+2. Inside a workspace project, import across folders with `#/`, for example `import { db } from "#/client"`. This applies to every package and app.
+3. Relative imports only reach the same folder or below (`./`), and only in two places:
+   - `apps/web`: inside one FSD slice, such as a slice's `index.ts` re-exporting its own `ui/` or a component importing a sibling. Anything that needs `../` uses `#/` instead; `import/no-relative-parent-imports` rejects `../`, and `fsd/no-relative-imports` rejects relative imports into another slice.
+   - `apps/extension`: files and styles inside one entrypoint folder, such as `./App` and `./App.css`.
+
+Packages and `apps/server` never use relative imports. `apps/server` runs package source directly on Node in development, and Node does not resolve extensionless relative paths.
+
+### `#/` Mappings
+
+Each project declares `#/` in the `imports` field of its own `package.json`. Resolution is scoped to that package, so the same prefix never leaks between projects.
+
+| Project                                     | `imports`                                                                                                                                               |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `packages/*` except `ui`, and `apps/server` | `"#/*": "./src/*.ts"`; `packages/i18n` adds `"#/paraglide/*": "./src/paraglide/*.js"`                                                                   |
+| `packages/ui`                               | `"#/components/*": "./components/*.tsx"`, `"#/hooks/*": "./hooks/*.ts"`, `"#/lib/*": "./lib/*.ts"`                                                      |
+| `apps/web`                                  | `"#/shared/providers/*": "./src/shared/providers/*.tsx"`, `"#/shared/ui/*": "./src/shared/ui/*.tsx"`, `"#/*.css": "./src/*.css"`, `"#/*": "./src/*.ts"` |
+| `apps/native`                               | `"#/components/*": "./components/*.tsx"`, `"#/*": "./*.ts"`                                                                                             |
+| `apps/extension`                            | `"#/*": "./*.ts"`                                                                                                                                       |
+
+- TypeScript and Metro resolve the mapped path literally, without adding extensions or `index`. Each rule names one extension, and a directory barrel is imported as `#/<dir>/index`.
+- A folder of `.tsx` files needs its own rule. In `apps/web`, other `.tsx` files sit in slice `ui/` folders and are reached with `./` from their own slice, or from outside through the slice's `index.ts`.
+- shadcn `components.json` aliases use `#/` (`#/components`, `#/lib/utils`, `#/shared/ui`). The CLI writes extensionless imports, which resolve through the folder rules above.
+- Never declare `#/` in tsconfig `paths`. TypeScript applies `paths` to every file in the program, so an app's `#/*` path would also rewrite the `#/` imports of package sources the app compiles. The only tsconfig path left is `@tsu-stack/ui/*` in `apps/web`, kept for the shadcn CLI.
 
 ## `lib/` vs `utils/`
 
@@ -71,4 +96,4 @@ ESLint-style comments (`eslint-disable-*`) also work for compatibility.
 
 ## Import Sorting (auto-enforced by Oxfmt)
 
-Order: builtins → external → `@tsu-stack/*` → `@/pages` → `@/widgets` → `@/features` → `@/entities` → `@/shared` → relative → styles
+Order: builtins → external → `@tsu-stack/*` → `#/shared` → `#/entities` → `#/features` → `#/widgets` → `#/pages` → other `#/` → relative → styles

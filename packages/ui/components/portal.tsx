@@ -1,8 +1,8 @@
 import React from "react";
 import { createPortal } from "react-dom";
 
-import { useIsClient } from "@tsu-stack/ui/hooks/use-is-client.hook";
-import { cn } from "@tsu-stack/ui/lib/utils";
+import { useIsClient } from "#/hooks/use-is-client.hook";
+import { cn } from "#/lib/utils";
 
 function Portal({ className, ...props }: React.ComponentProps<"div">) {
   const isClient = useIsClient();

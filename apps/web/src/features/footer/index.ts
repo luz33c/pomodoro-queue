@@ -1,1 +1,1 @@
-export { Footer } from "@/features/footer/ui";
+export { Footer } from "./ui";

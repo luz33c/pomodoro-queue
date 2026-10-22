@@ -3,8 +3,8 @@ import { Link, useRouter } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 
-import { PrimaryButton } from "@/components/primary-button";
-import { Screen } from "@/components/screen";
+import { PrimaryButton } from "#/components/primary-button";
+import { Screen } from "#/components/screen";
 
 function getErrorMessage(error: unknown, fallback: string) {
   if (error && typeof error === "object" && "longMessage" in error) {

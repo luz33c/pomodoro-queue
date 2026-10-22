@@ -3,7 +3,7 @@
   "type": "module",
   "main": "src/index.ts",
   "imports": {
-    "#@/*": "./src/*.ts"
+    "#/*": "./src/*.ts"
   },
   "exports": {
     ".": "./src/index.ts"

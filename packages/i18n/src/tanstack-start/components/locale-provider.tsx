@@ -1,7 +1,7 @@
 import { useLocation, useRouter } from "@tanstack/react-router";
 import * as React from "react";
 
-import { baseLocale, locales, localizeUrl, overwriteGetLocale } from "#@/paraglide/runtime";
+import { baseLocale, locales, localizeUrl, overwriteGetLocale } from "#/paraglide/runtime";
 
 type Locale = (typeof locales)[number];
 

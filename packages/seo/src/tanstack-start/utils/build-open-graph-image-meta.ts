@@ -1,6 +1,6 @@
-import { type TanStackStartSeoImage, type TanStackStartSeoMetaTag } from "#@/tanstack-start/types";
-import { isDefined } from "#@/tanstack-start/utils/is-defined";
-import { resolveRelativePathToAbsoluteUrl } from "#@/tanstack-start/utils/resolve-relative-path-to-absolute-url";
+import { type TanStackStartSeoImage, type TanStackStartSeoMetaTag } from "#/tanstack-start/types";
+import { isDefined } from "#/tanstack-start/utils/is-defined";
+import { resolveRelativePathToAbsoluteUrl } from "#/tanstack-start/utils/resolve-relative-path-to-absolute-url";
 
 export function buildOpenGraphImageMeta({
   baseUrl,

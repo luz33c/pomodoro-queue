@@ -2,6 +2,11 @@
   "name": "@tsu-stack/ui",
   "private": true,
   "type": "module",
+  "imports": {
+    "#/components/*": "./components/*.tsx",
+    "#/hooks/*": "./hooks/*.ts",
+    "#/lib/*": "./lib/*.ts"
+  },
   "exports": {
     "./*": "./*.ts",
     "./styles/globals.css": "./styles/globals.css",

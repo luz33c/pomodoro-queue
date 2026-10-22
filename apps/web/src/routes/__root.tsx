@@ -24,13 +24,13 @@ import {
 } from "@tsu-stack/i18n/tanstack-start/components/locale-provider";
 import { Toaster } from "@tsu-stack/ui/components/sonner";
 
-import { generateAppSeo } from "@/shared/lib/seo";
-import { LoggerProvider } from "@/shared/providers/logger-provider";
-import { ProgressProvider } from "@/shared/providers/progress.provider";
-import appCss from "@/shared/styles/app.css?url";
-import { ThemeProvider } from "@/shared/ui/theme-switcher";
+import { generateAppSeo } from "#/shared/lib/seo";
+import { LoggerProvider } from "#/shared/providers/logger-provider";
+import { ProgressProvider } from "#/shared/providers/progress.provider";
+import appCss from "#/shared/styles/app.css?url";
+import { ThemeProvider } from "#/shared/ui/theme-switcher";
 
-import { DefaultErrorPage } from "@/pages/default-error";
+import { DefaultErrorPage } from "#/pages/default-error/index";
 
 // Root route with shared context for the entire app, inject them in router.tsx
 type RouterAppContext = {

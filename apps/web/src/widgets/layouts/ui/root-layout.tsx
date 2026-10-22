@@ -1,7 +1,7 @@
 import { cn } from "@tsu-stack/ui/lib/utils";
 
-import { Footer } from "@/features/footer";
-import { Navbar } from "@/features/navbar";
+import { Footer } from "#/features/footer/index";
+import { Navbar } from "#/features/navbar/index";
 
 export function RootLayout({
   children,

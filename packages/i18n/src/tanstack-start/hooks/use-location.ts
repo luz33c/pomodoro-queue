@@ -5,7 +5,7 @@ import {
   useLocation as rawUseLocation
 } from "@tanstack/react-router";
 
-import { stripLocalePrefix } from "#@/tanstack-start/lib/strip-locale-prefix";
+import { stripLocalePrefix } from "#/tanstack-start/lib/strip-locale-prefix";
 
 type ParsedLocation = RouterState<RegisteredRouter["routeTree"]>["location"];
 

@@ -4,6 +4,9 @@
   "private": true,
   "description": "TSU Stack browser extension",
   "type": "module",
+  "imports": {
+    "#/*": "./*.ts"
+  },
   "scripts": {
     "build": "dotenvx run -f ../../packages/env/.env -- wxt build",
     "check": "wxt prepare && tsc --noEmit",

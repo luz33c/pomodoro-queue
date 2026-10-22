@@ -2,7 +2,7 @@ import {
   type GenerateTanStackStartSeoParams,
   type TanStackStartSeoHead,
   type TanStackStartSeoMetaTag
-} from "#@/tanstack-start/types";
+} from "#/tanstack-start/types";
 import {
   buildOpenGraphImageMeta,
   formatTanStackStartRobotsContent,
@@ -10,7 +10,7 @@ import {
   generateTanStackStartAlternateLinks,
   isDefined,
   resolveRelativePathToAbsoluteUrl
-} from "#@/tanstack-start/utils/index";
+} from "#/tanstack-start/utils/index";
 
 export function generateTanStackStartSeo({
   alternates,

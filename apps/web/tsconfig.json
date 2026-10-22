@@ -2,8 +2,6 @@
   "extends": "@tsu-stack/tsconfig/tsconfig.base.json",
   "compilerOptions": {
     "paths": {
-      "@/*": ["./src/*"],
-
       // for shadcn CLI to resolve @tsu-stack/ui paths to the /packages/ui directory
       "@tsu-stack/ui/*": ["../../packages/ui/*"]
     },

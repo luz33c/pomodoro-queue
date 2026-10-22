@@ -78,7 +78,7 @@ packages/core/src/media-asset/
   index.ts
 
 packages/db/src/schema/
-  media-asset.schema.ts
+  media-asset.ts
 
 packages/api/src/lib/storage/
   index.ts
@@ -90,7 +90,7 @@ Default responsibilities:
 - `packages/core/src/media-asset/constants.ts`: MIME lists, size limits, upload expiry durations, and other shared storage constants
 - `packages/core/src/media-asset/types.ts`: `mediaAssetSchema`, upload request and response schemas, and inferred types
 - `packages/core/src/media-asset/utils.ts`: pure key, prefix, and schema-derived helpers only
-- `packages/db/src/schema/media-asset.schema.ts`: persistence schema, indexes, and persisted enums when needed
+- `packages/db/src/schema/media-asset.ts`: persistence schema, indexes, and persisted enums when needed
 - `packages/api/src/lib/storage/index.ts`: configured `files` client only
 - `packages/api/src/lib/storage/media-asset/index.ts`: `createMediaAssetUpload`, `completeMediaAssetUpload`, `deleteMediaAssetObject`, and other infrastructure-level storage helpers
 - oRPC procedures: keep them in the owning slice router per [oRPC patterns](./orpc.md); do not create routers under `lib/storage`
@@ -101,7 +101,7 @@ Default responsibilities:
 When implementing storage for the first time, prefer this order unless the task explicitly requires divergence:
 
 1. Add shared constants, schemas, and pure helpers under `packages/core/src/media-asset/` following [Core package patterns](./core.md).
-2. Add `packages/db/src/schema/media-asset.schema.ts`, then generate and apply the migration following [Workflow](./workflow.md).
+2. Add `packages/db/src/schema/media-asset.ts`, then generate and apply the migration following [Workflow](./workflow.md).
 3. Add storage env validation and runtime config following [Environment variables](./environment-variables.md).
 4. Add the configured `files` client in `packages/api/src/lib/storage/index.ts`.
 5. Add storage lifecycle helpers in `packages/api/src/lib/storage/media-asset/index.ts`.

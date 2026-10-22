@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { resolvePublicAssetUrl } from "#@/assets/utils";
+import { resolvePublicAssetUrl } from "#/assets/utils";
 
 describe("resolvePublicAssetUrl", () => {
   describe("happy path behavior", () => {

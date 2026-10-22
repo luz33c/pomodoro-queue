@@ -14,7 +14,7 @@ import {
   EmptyTitle
 } from "@tsu-stack/ui/components/empty";
 
-import { CenteredLayout } from "@/widgets/layouts";
+import { CenteredLayout } from "#/widgets/layouts/index";
 
 const loggedErrorKeys = new Set<string>();
 

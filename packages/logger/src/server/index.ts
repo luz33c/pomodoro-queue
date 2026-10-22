@@ -12,7 +12,7 @@ import {
   type RequestLogger as EvlogRequestLogger
 } from "evlog";
 
-import { LOG_SERVICES } from "#@/constants/services";
+import { LOG_SERVICES } from "#/constants/services";
 
 type ServerLoggerConfig = EvlogLoggerConfig;
 

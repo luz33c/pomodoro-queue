@@ -6,11 +6,11 @@ import { ENV_WEB_ISOMORPHIC } from "@tsu-stack/env/web/env.isomorphic";
 import { LOG_SERVICES, initLog } from "@tsu-stack/logger/client";
 import { Spinner } from "@tsu-stack/ui/components/spinner";
 
-import { QueryClientProvider, getQueryClient } from "@/shared/providers/query-client.provider";
+import { QueryClientProvider, getQueryClient } from "#/shared/providers/query-client.provider";
 
-import { DefaultNotFoundPage } from "@/pages/default-not-found";
+import { DefaultNotFoundPage } from "#/pages/default-not-found/index";
 
-import { routeTree } from "@/routeTree.gen";
+import { routeTree } from "#/routeTree.gen";
 
 const browserLogEndpoint = `${ENV_WEB_ISOMORPHIC.VITE_SERVER_URL.replace(/\/$/, "")}/_logs/ingest`;
 

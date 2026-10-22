@@ -6,7 +6,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { type AppRouterClient } from "@tsu-stack/api/routers/types";
 import { ENV_NATIVE } from "@tsu-stack/env/native/env";
 
-import { getClerkAuthToken } from "@/utils/clerk-auth";
+import { getClerkAuthToken } from "#/utils/clerk-auth";
 
 export const queryClient = new QueryClient({
   defaultOptions: {

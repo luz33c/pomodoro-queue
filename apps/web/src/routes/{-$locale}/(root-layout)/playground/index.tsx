@@ -10,12 +10,12 @@ import { type To } from "@tsu-stack/i18n/tanstack-start/types";
 import { Button } from "@tsu-stack/ui/components/button";
 import { useIsClient } from "@tsu-stack/ui/hooks/use-is-client.hook";
 
-import { generateAppSeo } from "@/shared/lib/seo";
-import { useLogger } from "@/shared/providers/logger-provider";
-import { Container } from "@/shared/ui/container";
-import { Image } from "@/shared/ui/image";
+import { generateAppSeo } from "#/shared/lib/seo";
+import { useLogger } from "#/shared/providers/logger-provider";
+import { Container } from "#/shared/ui/container";
+import { Image } from "#/shared/ui/image";
 
-import { appConfig } from "@/config/app.config";
+import { appConfig } from "#/config/app.config";
 
 export const Route = createFileRoute("/{-$locale}/(root-layout)/playground/")({
   head: ({ params }) =>

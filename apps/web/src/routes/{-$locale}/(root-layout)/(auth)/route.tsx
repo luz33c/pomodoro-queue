@@ -9,11 +9,11 @@ import { redirect } from "@tsu-stack/i18n/tanstack-start/lib/redirect";
 import { stripLocalePrefix } from "@tsu-stack/i18n/tanstack-start/lib/strip-locale-prefix";
 import { validateNavigateTo } from "@tsu-stack/i18n/tanstack-start/lib/validate-navigate-to";
 
-import { useLogger } from "@/shared/providers/logger-provider";
+import { useLogger } from "#/shared/providers/logger-provider";
 
-import { getClerkAuthState } from "@/features/auth";
+import { getClerkAuthState } from "#/features/auth/index";
 
-import { routeTree } from "@/routeTree.gen";
+import { routeTree } from "#/routeTree.gen";
 
 /**
  * Checks if a given pathname is a guest route (sign-in, create-an-account, etc.)

@@ -1,2 +1,2 @@
-export { CenteredLayout } from "@/widgets/layouts/ui/centered-layout";
-export { RootLayout } from "@/widgets/layouts/ui/root-layout";
+export { CenteredLayout } from "./ui/centered-layout";
+export { RootLayout } from "./ui/root-layout";

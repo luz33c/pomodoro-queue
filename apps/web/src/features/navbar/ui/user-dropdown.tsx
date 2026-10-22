@@ -15,8 +15,8 @@ import {
   DropdownMenuTrigger
 } from "@tsu-stack/ui/components/dropdown-menu";
 
-import { NavbarAvatar } from "@/features/navbar/ui/navbar-avatar";
-import { NavbarUnauthenticatedButtons } from "@/features/navbar/ui/navbar-unauthenticated-buttons";
+import { NavbarAvatar } from "./navbar-avatar";
+import { NavbarUnauthenticatedButtons } from "./navbar-unauthenticated-buttons";
 
 export function UserDropdown() {
   const router = useRouter();

@@ -2,8 +2,8 @@
   "name": "@tsu-stack/i18n",
   "type": "module",
   "imports": {
-    "#@/paraglide/*": "./src/paraglide/*.js",
-    "#@/*": "./src/*.ts"
+    "#/paraglide/*": "./src/paraglide/*.js",
+    "#/*": "./src/*.ts"
   },
   "exports": {
     "./messages": "./src/paraglide/messages.js",

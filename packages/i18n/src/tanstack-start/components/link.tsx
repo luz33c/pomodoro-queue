@@ -3,10 +3,10 @@ import { Link as RawLink } from "@tanstack/react-router";
 import { type FC } from "react";
 import React from "react";
 
-import { baseLocale, getLocale } from "#@/paraglide/runtime";
-import { LOCALE_ROUTE_PREFIX } from "#@/tanstack-start/constants/index";
-import { stripLocalePrefix } from "#@/tanstack-start/lib/strip-locale-prefix";
-import { type LinkProps } from "#@/tanstack-start/types/index";
+import { baseLocale, getLocale } from "#/paraglide/runtime";
+import { LOCALE_ROUTE_PREFIX } from "#/tanstack-start/constants/index";
+import { stripLocalePrefix } from "#/tanstack-start/lib/strip-locale-prefix";
+import { type LinkProps } from "#/tanstack-start/types/index";
 
 export type { LinkProps };
 

@@ -7,9 +7,9 @@ import { Button } from "@tsu-stack/ui/components/button";
 import { Image } from "@tsu-stack/ui/components/image";
 import { cn } from "@tsu-stack/ui/lib/utils";
 
-import { LogoWordmark } from "@/shared/ui/logo";
+import { LogoWordmark } from "#/shared/ui/logo";
 
-import { appConfig } from "@/config/app.config";
+import { appConfig } from "#/config/app.config";
 
 type FooterLink =
   | { label: () => string; href: LinkProps["href"]; to?: never }

@@ -4,9 +4,9 @@ import { z } from "zod";
 import { redirect } from "@tsu-stack/i18n/tanstack-start/lib/redirect";
 import { validateNavigateTo } from "@tsu-stack/i18n/tanstack-start/lib/validate-navigate-to";
 
-import { getClerkAuthState } from "@/features/auth";
+import { getClerkAuthState } from "#/features/auth/index";
 
-import { routeTree } from "@/routeTree.gen";
+import { routeTree } from "#/routeTree.gen";
 
 const guestSearchSchema = z.object({
   redirect: z

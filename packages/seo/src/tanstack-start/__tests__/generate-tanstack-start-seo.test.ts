@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { generateTanStackStartSeo } from "#@/tanstack-start/generate-tanstack-start-seo";
+import { generateTanStackStartSeo } from "#/tanstack-start/generate-tanstack-start-seo";
 import {
   type GenerateTanStackStartSeoParams,
   type TanStackStartSeoMetaTag,
   type TanStackStartSeoSite
-} from "#@/tanstack-start/types";
+} from "#/tanstack-start/types";
 
 const baseSite = {
   applicationName: "Example App",

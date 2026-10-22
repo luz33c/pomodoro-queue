@@ -6,10 +6,10 @@ import { m } from "@tsu-stack/i18n/messages";
 import { Spinner } from "@tsu-stack/ui/components/spinner";
 import { useIsClient } from "@tsu-stack/ui/hooks/use-is-client.hook";
 
-import { generateAppSeo } from "@/shared/lib/seo";
-import { Container } from "@/shared/ui/container";
+import { generateAppSeo } from "#/shared/lib/seo";
+import { Container } from "#/shared/ui/container";
 
-import { appConfig } from "@/config/app.config";
+import { appConfig } from "#/config/app.config";
 
 export const Route = createFileRoute("/{-$locale}/(root-layout)/(auth)/dashboard/")({
   head: ({ params }) =>

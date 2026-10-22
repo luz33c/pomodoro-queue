@@ -3,13 +3,14 @@ import { Button } from "@tsu-stack/ui/components/button";
 import { useScroll } from "@tsu-stack/ui/hooks/use-scroll.hook";
 import { cn } from "@tsu-stack/ui/lib/utils";
 
-import { LocaleSwitcher } from "@/shared/ui/locale-switcher";
-import { LogoWordmark } from "@/shared/ui/logo";
-import { ThemeSwitcher } from "@/shared/ui/theme-switcher";
+import { LocaleSwitcher } from "#/shared/ui/locale-switcher";
+import { LogoWordmark } from "#/shared/ui/logo";
+import { ThemeSwitcher } from "#/shared/ui/theme-switcher";
 
-import { navLinks } from "@/features/navbar/config/nav-links.config";
-import { MobileNav } from "@/features/navbar/ui/mobile-nav";
-import { UserDropdown } from "@/features/navbar/ui/user-dropdown";
+import { navLinks } from "#/features/navbar/config/nav-links.config";
+
+import { MobileNav } from "./mobile-nav";
+import { UserDropdown } from "./user-dropdown";
 
 export function Navbar() {
   const scrolled = useScroll(10);

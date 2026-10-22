@@ -5,7 +5,7 @@ import {
 } from "@tanstack/react-router";
 import type React from "react";
 
-import { type LOCALE_ROUTE_PREFIX } from "#@/tanstack-start/constants/index";
+import { type LOCALE_ROUTE_PREFIX } from "#/tanstack-start/constants/index";
 
 export type StripLocalePrefix<T> = T extends string ? RemoveLocaleFromString<T> : T;
 

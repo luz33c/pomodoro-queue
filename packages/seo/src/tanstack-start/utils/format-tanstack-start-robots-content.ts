@@ -1,5 +1,5 @@
-import { type TanStackStartSeoRobots } from "#@/tanstack-start/types";
-import { isDefined } from "#@/tanstack-start/utils/is-defined";
+import { type TanStackStartSeoRobots } from "#/tanstack-start/types";
+import { isDefined } from "#/tanstack-start/utils/is-defined";
 
 export function formatTanStackStartRobotsContent({
   follow = true,

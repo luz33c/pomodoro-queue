@@ -3,9 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
-import { PrimaryButton } from "@/components/primary-button";
-import { Screen } from "@/components/screen";
-import { orpc } from "@/utils/orpc";
+import { PrimaryButton } from "#/components/primary-button";
+import { Screen } from "#/components/screen";
+import { orpc } from "#/utils/orpc";
 
 export default function DashboardScreen() {
   const router = useRouter();

@@ -19,6 +19,7 @@ When a feature introduces shared contracts that should drive both API and fronte
 ## Step 1: Database
 
 - Edit schemas in `packages/db/src/schema/` when the feature changes persisted data.
+- Add table-level query functions in `packages/db/src/queries/` when the API needs reusable reads or writes. Follow [Database package](../packages/db/AGENTS.md) for schema and query conventions.
 - Follow [Workflow](./workflow.md) for migration generation, localhost `DATABASE_URL` safety, and migration application.
 - Keep schema and migration work complete before defining API output shapes that depend on it.
 

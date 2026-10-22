@@ -7,7 +7,7 @@ Use `@tsu-stack/seo` for TanStack Start route `head()` objects.
 - Keep `packages/seo` isolated from `packages/env`.
 - Pass app-specific values from the consuming app.
 - Do not expand the package surface casually. Export only what the app actually uses.
-- Prefer `#@/` absolute imports inside `packages/seo`.
+- Use `#/` subpath imports inside `packages/seo`, per [TypeScript conventions](./typescript.md#module-resolution).
 
 ## App Pattern
 

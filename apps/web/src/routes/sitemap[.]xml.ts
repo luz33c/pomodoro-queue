@@ -4,8 +4,8 @@ import { getRouteTreePathsLocalized } from "@tsu-stack/i18n/tanstack-start/lib/g
 import { stripLocalePrefix } from "@tsu-stack/i18n/tanstack-start/lib/strip-locale-prefix";
 import { type NavigateTo } from "@tsu-stack/i18n/tanstack-start/types";
 
-import { appConfig } from "@/config/app.config";
-import { routeTree } from "@/routeTree.gen";
+import { appConfig } from "#/config/app.config";
+import { routeTree } from "#/routeTree.gen";
 
 // TODO: Add routes you don't want included in the sitemap to this blacklist. Useful for routes that don't represent actual pages (e.g. redirect routes) or that you want to exclude for any reason.
 const ROUTE_BLACKLIST = [] as const satisfies ReadonlyArray<NavigateTo>;

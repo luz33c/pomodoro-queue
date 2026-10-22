@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { generateAppSeo } from "@/shared/lib/seo";
+import { generateAppSeo } from "#/shared/lib/seo";
 
-import { CreateAnAccountForm } from "@/features/auth";
+import { CreateAnAccountForm } from "#/features/auth/index";
 
-import { appConfig } from "@/config/app.config";
+import { appConfig } from "#/config/app.config";
 
 export const Route = createFileRoute("/{-$locale}/(centered-layout)/(guest)/create-an-account/")({
   head: ({ params }) =>

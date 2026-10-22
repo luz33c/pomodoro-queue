@@ -13,11 +13,11 @@
   "iconLibrary": "lucide",
   "rtl": false,
   "aliases": {
-    "components": "@tsu-stack/ui/components",
-    "utils": "@tsu-stack/ui/lib/utils",
-    "ui": "@tsu-stack/ui/components",
-    "lib": "@tsu-stack/ui/lib",
-    "hooks": "@tsu-stack/ui/hooks"
+    "components": "#/components",
+    "utils": "#/lib/utils",
+    "ui": "#/components",
+    "lib": "#/lib",
+    "hooks": "#/hooks"
   },
   "menuColor": "default",
   "menuAccent": "subtle",

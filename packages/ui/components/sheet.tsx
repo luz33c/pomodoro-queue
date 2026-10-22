@@ -2,8 +2,8 @@ import { X } from "lucide-react";
 import { Dialog as SheetPrimitive } from "radix-ui";
 import * as React from "react";
 
-import { Button } from "@tsu-stack/ui/components/button";
-import { cn } from "@tsu-stack/ui/lib/utils";
+import { Button } from "#/components/button";
+import { cn } from "#/lib/utils";
 
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />;

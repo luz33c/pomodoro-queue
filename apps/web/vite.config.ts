@@ -14,7 +14,7 @@ import { ENV_WEB_SERVER } from "@tsu-stack/env/web/env.server";
 import { locales } from "@tsu-stack/i18n/runtime";
 import { paraglideVitePlugin } from "@tsu-stack/i18n/vite/plugin";
 
-import { type FileRouteTypes } from "@/routeTree.gen";
+import { type FileRouteTypes } from "#/routeTree.gen";
 
 /**
  * IMPORTANT: We define this explicitly here instead of crawling from the root (/) because

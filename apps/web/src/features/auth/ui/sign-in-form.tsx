@@ -6,12 +6,12 @@ import { type NavigateTo } from "@tsu-stack/i18n/tanstack-start/types";
 import { FieldDescription } from "@tsu-stack/ui/components/field";
 import { cn } from "@tsu-stack/ui/lib/utils";
 
-import { Container } from "@/shared/ui/container";
-import { LogoIcon } from "@/shared/ui/logo";
+import { Container } from "#/shared/ui/container";
+import { LogoIcon } from "#/shared/ui/logo";
 
-import { toClerkAppPath, toClerkAuthPath } from "@/features/auth/lib/clerk-urls";
+import { toClerkAppPath, toClerkAuthPath } from "#/features/auth/lib/clerk-urls";
 
-import { appConfig } from "@/config/app.config";
+import { appConfig } from "#/config/app.config";
 
 export function SignInForm({
   redirectTo = "/",

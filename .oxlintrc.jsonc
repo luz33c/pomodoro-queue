@@ -55,7 +55,7 @@
           {
             "rootPath": "/apps/web/src/",
             "tsconfigPath": "./apps/web/tsconfig.json",
-            "alias": { "value": "@", "withSlash": false },
+            "alias": { "value": "#", "withSlash": false },
             "layers": {
               "app": { "pattern": "routes" },
               "pages": { "pattern": "pages" },
@@ -72,7 +72,7 @@
           {
             "rootPath": "/apps/web/src/",
             "tsconfigPath": "./apps/web/tsconfig.json",
-            "alias": { "value": "@", "withSlash": true },
+            "alias": { "value": "#", "withSlash": true },
             "layers": {
               "app": { "pattern": "routes" },
               "pages": { "pattern": "pages" },
@@ -90,7 +90,7 @@
           {
             "rootPath": "/apps/web/src/",
             "tsconfigPath": "./apps/web/tsconfig.json",
-            "alias": { "value": "@", "withSlash": true },
+            "alias": { "value": "#", "withSlash": true },
             "layers": {
               "app": { "pattern": "routes" },
               "pages": { "pattern": "pages" },
@@ -107,7 +107,7 @@
           {
             "rootPath": "/apps/web/src/",
             "tsconfigPath": "./apps/web/tsconfig.json",
-            "alias": { "value": "@", "withSlash": true },
+            "alias": { "value": "#", "withSlash": true },
             "layers": {
               "app": { "pattern": "routes" },
               "pages": { "pattern": "pages" },
@@ -127,7 +127,7 @@
           {
             "rootPath": "/apps/web/src/",
             "tsconfigPath": "./apps/web/tsconfig.json",
-            "alias": { "value": "@", "withSlash": true },
+            "alias": { "value": "#", "withSlash": true },
             "layers": {
               "app": { "pattern": "routes" },
               "pages": { "pattern": "pages" },

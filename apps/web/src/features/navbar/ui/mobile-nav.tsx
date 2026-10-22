@@ -9,11 +9,12 @@ import { Portal, PortalBackdrop } from "@tsu-stack/ui/components/portal";
 import { Skeleton } from "@tsu-stack/ui/components/skeleton";
 import { cn } from "@tsu-stack/ui/lib/utils";
 
-import { LocaleSwitcher } from "@/shared/ui/locale-switcher";
-import { ThemeSwitcher } from "@/shared/ui/theme-switcher";
+import { LocaleSwitcher } from "#/shared/ui/locale-switcher";
+import { ThemeSwitcher } from "#/shared/ui/theme-switcher";
 
-import { navLinks } from "@/features/navbar/config/nav-links.config";
-import { NavbarAvatar } from "@/features/navbar/ui/navbar-avatar";
+import { navLinks } from "#/features/navbar/config/nav-links.config";
+
+import { NavbarAvatar } from "./navbar-avatar";
 export function MobileNav() {
   const [open, setOpen] = React.useState(false);
 

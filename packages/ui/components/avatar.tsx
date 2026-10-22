@@ -1,7 +1,7 @@
 import { Avatar as AvatarPrimitive } from "radix-ui";
 import * as React from "react";
 
-import { cn } from "@tsu-stack/ui/lib/utils";
+import { cn } from "#/lib/utils";
 
 function Avatar({
   className,

@@ -1,1 +1,1 @@
-export { DefaultErrorPage } from "@/pages/default-error/ui/default-error-page";
+export { DefaultErrorPage } from "./ui/default-error-page";

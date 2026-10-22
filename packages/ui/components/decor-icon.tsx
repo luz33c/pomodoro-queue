@@ -1,7 +1,7 @@
 import { type VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
 
-import { cn } from "@tsu-stack/ui/lib/utils";
+import { cn } from "#/lib/utils";
 
 const DecorIconVariants = cva(
   "pointer-events-none absolute z-1 size-5 shrink-0 stroke-muted-foreground stroke-1",

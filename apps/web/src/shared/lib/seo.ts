@@ -6,7 +6,7 @@ import {
   type TanStackStartSeoSite
 } from "@tsu-stack/seo";
 
-import { appConfig } from "@/config/app.config";
+import { appConfig } from "#/config/app.config";
 
 const site = {
   applicationName: appConfig.site.longName,

@@ -1,4 +1,4 @@
-import { type TanStackStartSeoSite } from "#@/tanstack-start/types";
+import { type TanStackStartSeoSite } from "#/tanstack-start/types";
 
 export function formatTanStackStartTitle({
   site,

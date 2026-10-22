@@ -1,7 +1,7 @@
 import { useAuth } from "@clerk/expo";
 import { Redirect, Stack } from "expo-router";
 
-import { EmptyState, Screen } from "@/components/screen";
+import { EmptyState, Screen } from "#/components/screen";
 
 export default function ProtectedRoutesLayout() {
   const { isLoaded, isSignedIn } = useAuth();

@@ -84,7 +84,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { type client, orpc } from "@tsu-stack/api/client/tanstack-start/orpc";
 
-import { profileQueryKeys } from "@/pages/profile/api/get-profile.query";
+import { profileQueryKeys } from "./get-profile.query";
 
 export function createProfileMutationOptions() {
   return orpc.profile.create.mutationOptions();

@@ -1,7 +1,7 @@
 import { type RouterClient } from "@orpc/server";
 
-import { healthRouter } from "#@/routers/health/index";
-import { privateRouter } from "#@/routers/private/index";
+import { healthRouter } from "#/routers/health/index";
+import { privateRouter } from "#/routers/private/index";
 
 export const appRouter = {
   health: healthRouter,

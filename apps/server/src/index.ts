@@ -25,7 +25,7 @@ import {
   type HonoLogVariables
 } from "@tsu-stack/logger/server/hono/middleware";
 
-import "#@/shared/lib/logger";
+import "#/shared/lib/logger";
 
 const serverHostname = hostname();
 

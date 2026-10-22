@@ -1,4 +1,4 @@
-import { protectedProcedure } from "#@/lib/procedures/factory";
+import { protectedProcedure } from "#/lib/procedures/factory";
 
 export const privateRouter = {
   data: protectedProcedure

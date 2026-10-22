@@ -2,7 +2,7 @@
   "name": "@tsu-stack/api",
   "type": "module",
   "imports": {
-    "#@/*": "./src/*.ts"
+    "#/*": "./src/*.ts"
   },
   "exports": {
     "./*": {

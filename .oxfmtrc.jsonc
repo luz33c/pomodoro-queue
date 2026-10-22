@@ -30,23 +30,23 @@
         "groupName": "@tsu-stack"
       },
       {
-        "elementNamePattern": ["@/pages/**"],
+        "elementNamePattern": ["#/pages/**"],
         "groupName": "pages"
       },
       {
-        "elementNamePattern": ["@/widgets/**"],
+        "elementNamePattern": ["#/widgets/**"],
         "groupName": "widgets"
       },
       {
-        "elementNamePattern": ["@/features/**"],
+        "elementNamePattern": ["#/features/**"],
         "groupName": "features"
       },
       {
-        "elementNamePattern": ["@/entities/**"],
+        "elementNamePattern": ["#/entities/**"],
         "groupName": "entities"
       },
       {
-        "elementNamePattern": ["@/shared/**"],
+        "elementNamePattern": ["#/shared/**"],
         "groupName": "shared"
       }
     ],
@@ -64,7 +64,7 @@
       "style",
       "unknown"
     ],
-    "internalPattern": ["@/", "#@/", "~/", "~~/", "#"],
+    "internalPattern": ["#"],
     "sortSideEffects": true
   },
   "sortPackageJson": true,

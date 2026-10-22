@@ -1,7 +1,7 @@
 import { initLogger as initEvlogLogger, log as evlogLog } from "evlog";
 import { createHttpLogDrain, type HttpLogDrainOptions } from "evlog/http";
 
-import { LOG_SERVICES } from "#@/constants/services";
+import { LOG_SERVICES } from "#/constants/services";
 
 type ClientLoggerConfig = {
   batchedTransport?: HttpLogDrainOptions;

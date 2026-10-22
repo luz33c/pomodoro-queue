@@ -1,1 +1,1 @@
-export * from "#@/assets/utils";
+export * from "#/assets/utils";

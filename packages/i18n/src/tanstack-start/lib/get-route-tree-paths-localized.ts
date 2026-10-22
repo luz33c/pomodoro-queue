@@ -1,7 +1,7 @@
 import { type AnyRoute } from "@tanstack/react-router";
 
-import { baseLocale, locales } from "#@/paraglide/runtime";
-import { type StripLocalePrefix } from "#@/tanstack-start/types/index";
+import { baseLocale, locales } from "#/paraglide/runtime";
+import { type StripLocalePrefix } from "#/tanstack-start/types/index";
 
 /**
  * Represents a node in the TanStack Router route tree structure

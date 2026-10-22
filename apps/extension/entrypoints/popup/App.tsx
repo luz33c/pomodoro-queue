@@ -10,7 +10,7 @@ import { QueryClientProvider, useQuery } from "@tanstack/react-query";
 
 import { ENV_EXTENSION } from "@tsu-stack/env/extension/env";
 
-import { orpc, queryClient } from "@/utils/orpc";
+import { orpc, queryClient } from "#/utils/orpc";
 
 import "./App.css";
 

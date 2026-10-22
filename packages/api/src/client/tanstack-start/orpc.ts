@@ -8,8 +8,8 @@ import { createIsomorphicFn } from "@tanstack/react-start";
 import { ENV_WEB_ISOMORPHIC } from "@tsu-stack/env/web/env.isomorphic";
 import { createLogger } from "@tsu-stack/logger/server";
 
-import { getClerkAuthToken } from "#@/client/tanstack-start/clerk-auth";
-import { appRouter } from "#@/routers/index";
+import { getClerkAuthToken } from "#/client/tanstack-start/clerk-auth";
+import { appRouter } from "#/routers/index";
 
 const getORPCClient = createIsomorphicFn()
   .server(() =>

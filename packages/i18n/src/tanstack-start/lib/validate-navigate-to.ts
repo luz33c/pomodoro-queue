@@ -1,8 +1,8 @@
 import { type AnyRoute } from "@tanstack/react-router";
 
-import { type LocalizedRouteInfo } from "#@/tanstack-start/lib/get-route-tree-paths-localized";
-import { getRouteTreePathsLocalized } from "#@/tanstack-start/lib/get-route-tree-paths-localized";
-import { type NavigateTo } from "#@/tanstack-start/types/index";
+import { type LocalizedRouteInfo } from "#/tanstack-start/lib/get-route-tree-paths-localized";
+import { getRouteTreePathsLocalized } from "#/tanstack-start/lib/get-route-tree-paths-localized";
+import { type NavigateTo } from "#/tanstack-start/types/index";
 
 type AbsoluteNavigateTo = Extract<NavigateTo, `/${string}`>;
 

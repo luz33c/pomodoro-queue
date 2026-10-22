@@ -1,10 +1,10 @@
 import { type NavigateOptions } from "@tanstack/react-router";
 import { useNavigate as rawUseNavigate } from "@tanstack/react-router";
 
-import { baseLocale, getLocale } from "#@/paraglide/runtime";
-import { LOCALE_ROUTE_PREFIX } from "#@/tanstack-start/constants/index";
-import { stripLocalePrefix } from "#@/tanstack-start/lib/strip-locale-prefix";
-import { type LocalizedNavigate, type NavigateProps } from "#@/tanstack-start/types/index";
+import { baseLocale, getLocale } from "#/paraglide/runtime";
+import { LOCALE_ROUTE_PREFIX } from "#/tanstack-start/constants/index";
+import { stripLocalePrefix } from "#/tanstack-start/lib/strip-locale-prefix";
+import { type LocalizedNavigate, type NavigateProps } from "#/tanstack-start/types/index";
 
 /**
  * Re-applies the `/{-$locale}` route prefix to a locale-stripped app path.

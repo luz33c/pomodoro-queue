@@ -1,4 +1,4 @@
-import { normalizeCanonicalPath } from "#@/tanstack-start/utils/normalize-canonical-path";
+import { normalizeCanonicalPath } from "#/tanstack-start/utils/normalize-canonical-path";
 
 export function getLocalizedCanonicalPath({
   baseLocale,
