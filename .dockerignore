@@ -22,6 +22,10 @@
 **/coverage
 **/.cache
 **/.parcel-cache
+# Electrobun: Hutch devkit projection, config loader temp dir, packaged desktop output
+**/.hutch
+**/.cottontail-tmp
+**/artifacts
 
 # -----------------------------
 # Logs

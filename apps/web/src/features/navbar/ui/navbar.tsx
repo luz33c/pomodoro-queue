@@ -1,16 +1,21 @@
 import { Link } from "@tsu-stack/i18n/tanstack-start/components/link";
-import { Button } from "@tsu-stack/ui/components/button";
+import { buttonVariants } from "@tsu-stack/ui/components/button";
+import { ThemeSwitcher } from "@tsu-stack/ui/components/theme-switcher";
 import { useScroll } from "@tsu-stack/ui/hooks/use-scroll.hook";
 import { cn } from "@tsu-stack/ui/lib/utils";
 
 import { LocaleSwitcher } from "#/shared/ui/locale-switcher";
 import { LogoWordmark } from "#/shared/ui/logo";
-import { ThemeSwitcher } from "#/shared/ui/theme-switcher";
 
 import { navLinks } from "#/features/navbar/config/nav-links.config";
 
 import { MobileNav } from "./mobile-nav";
 import { UserDropdown } from "./user-dropdown";
+
+const navLinkClassName = cn(
+  buttonVariants({ size: "sm", variant: "ghost" }),
+  "hover:text-foreground"
+);
 
 export function Navbar() {
   const scrolled = useScroll(10);
@@ -32,18 +37,19 @@ export function Navbar() {
           {navLinks.map((link) => {
             const label = link.label();
 
-            return (
-              <Button asChild key={link.href ?? link.to} size="sm" variant="ghost">
-                {link.href ? (
-                  <a className="hover:text-foreground" target="_blank" href={link.href}>
-                    {label}
-                  </a>
-                ) : (
-                  <Link className="hover:text-foreground" to={link.to}>
-                    {label}
-                  </Link>
-                )}
-              </Button>
+            return link.href ? (
+              <a
+                className={navLinkClassName}
+                key={link.href}
+                target={link.target ?? "_blank"}
+                href={link.href}
+              >
+                {label}
+              </a>
+            ) : (
+              <Link className={navLinkClassName} key={link.to} to={link.to}>
+                {label}
+              </Link>
             );
           })}
           <LocaleSwitcher />

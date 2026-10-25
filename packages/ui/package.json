@@ -10,6 +10,8 @@
   "exports": {
     "./*": "./*.ts",
     "./styles/globals.css": "./styles/globals.css",
+    "./styles/fonts.css": "./styles/fonts.css",
+    "./styles/theme.css": "./styles/theme.css",
     "./components/*": "./components/*.tsx"
   },
   "scripts": {
@@ -17,12 +19,12 @@
     "ui": "pnpm dlx shadcn@latest"
   },
   "dependencies": {
+    "@base-ui/react": "catalog:",
     "@lonik/oh-image": "catalog:",
     "class-variance-authority": "catalog:",
     "clsx": "catalog:",
     "lucide-react": "catalog:",
     "next-themes": "catalog:",
-    "radix-ui": "catalog:",
     "sonner": "catalog:",
     "std-env": "catalog:",
     "tailwind-merge": "catalog:",

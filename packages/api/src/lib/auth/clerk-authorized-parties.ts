@@ -7,5 +7,11 @@ function getConfiguredParties() {
 }
 
 export function getClerkAuthorizedParties() {
-  return [...new Set([new URL(ENV_SERVER.VITE_WEB_URL).origin, ...getConfiguredParties()])];
+  return [
+    ...new Set([
+      new URL(ENV_SERVER.VITE_WEB_URL).origin,
+      new URL(ENV_SERVER.VITE_APP_URL).origin,
+      ...getConfiguredParties()
+    ])
+  ];
 }

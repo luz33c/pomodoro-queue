@@ -1,10 +1,15 @@
-import { Outlet, createFileRoute } from "@tanstack/react-router";
+import { Outlet, createFileRoute, redirect as routerRedirect } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { redirect } from "@tsu-stack/i18n/tanstack-start/lib/redirect";
 import { validateNavigateTo } from "@tsu-stack/i18n/tanstack-start/lib/validate-navigate-to";
 
-import { getClerkAuthState } from "#/features/auth/index";
+import {
+  getAppHomeUrl,
+  getClerkAuthState,
+  isAppRedirectUrl,
+  toAppRedirectUrl
+} from "#/features/auth/index";
 
 import { routeTree } from "#/routeTree.gen";
 
@@ -13,14 +18,22 @@ const guestSearchSchema = z.object({
     .string()
     .optional()
     .catch(undefined)
-    .transform((val) =>
-      validateNavigateTo({
-        fallbackTo: "/",
-        routeTree,
-        shouldIncludeRoute: (route) => !route.id.includes("(guest)"),
-        to: val
-      })
-    )
+    .transform((val) => {
+      // Without a destination, authentication leads into the product
+      if (!val) {
+        return getAppHomeUrl();
+      }
+
+      return (
+        toAppRedirectUrl(val) ??
+        validateNavigateTo({
+          fallbackTo: "/",
+          routeTree,
+          shouldIncludeRoute: (route) => !route.id.includes("(guest)"),
+          to: val
+        })
+      );
+    })
 });
 
 export const Route = createFileRoute("/{-$locale}/(centered-layout)/(guest)")({
@@ -29,10 +42,14 @@ export const Route = createFileRoute("/{-$locale}/(centered-layout)/(guest)")({
   beforeLoad: async ({ search }) => {
     const authState = await getClerkAuthState();
 
-    // `redirect` is always NavigateTo (never undefined) thanks to schema transform & i18n path validation util
+    // `redirect` is always an app URL or a validated site path, never undefined, thanks to the schema transform
     const redirectTo = search.redirect;
 
     if (authState.isAuthenticated && authState.userId) {
+      if (isAppRedirectUrl(redirectTo)) {
+        throw routerRedirect({ href: redirectTo });
+      }
+
       throw redirect({
         to: redirectTo
       });

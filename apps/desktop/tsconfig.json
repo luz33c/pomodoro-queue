@@ -1,0 +1,9 @@
+{
+  "extends": ["@tsu-stack/tsconfig/tsconfig.base.json", "./.hutch/devkit/tsconfig.json"],
+  "compilerOptions": {
+    // The devkit tsconfig still sets baseUrl, which TypeScript 7 removed; its paths keep resolving without it.
+    "baseUrl": null,
+    "types": ["bun"]
+  },
+  "include": ["src/**/*.ts", "electrobun.config.ts"]
+}

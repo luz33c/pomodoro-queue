@@ -1,0 +1,19 @@
+{
+  "name": "@tsu-stack/desktop",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "postinstall": "electrobun prepare",
+    "dev:desktop": "electrobun dev --watch",
+    "build:canary": "pnpm --dir ../.. --filter @tsu-stack/app run build:desktop && electrobun build --env=canary",
+    "build:stable": "pnpm --dir ../.. --filter @tsu-stack/app run build:desktop && electrobun build --env=stable",
+    "typecheck": "electrobun prepare && tsc --noEmit"
+  },
+  "devDependencies": {
+    "@tsu-stack/app": "workspace:*",
+    "@tsu-stack/tsconfig": "workspace:*",
+    "@types/bun": "catalog:",
+    "electrobun": "catalog:",
+    "typescript": "catalog:"
+  }
+}

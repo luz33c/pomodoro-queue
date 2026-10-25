@@ -28,10 +28,17 @@ export function LocaleSwitcher({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button aria-label="Switch language" className={className} size={size} variant={variant}>
-          <Languages aria-hidden="true" size={18} />
-        </Button>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            aria-label="Switch language"
+            className={className}
+            size={size}
+            variant={variant}
+          />
+        }
+      >
+        <Languages aria-hidden="true" size={18} />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {locales.map((locale) => {

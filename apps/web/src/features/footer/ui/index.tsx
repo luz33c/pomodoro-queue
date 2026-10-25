@@ -3,21 +3,28 @@ import { FaGithub } from "react-icons/fa";
 import { m } from "@tsu-stack/i18n/messages";
 import { type LinkProps } from "@tsu-stack/i18n/tanstack-start/components/link";
 import { Link } from "@tsu-stack/i18n/tanstack-start/components/link";
-import { Button } from "@tsu-stack/ui/components/button";
+import { buttonVariants } from "@tsu-stack/ui/components/button";
 import { Image } from "@tsu-stack/ui/components/image";
 import { cn } from "@tsu-stack/ui/lib/utils";
 
+import { getAppUrl } from "#/shared/lib/app-url";
 import { LogoWordmark } from "#/shared/ui/logo";
 
 import { appConfig } from "#/config/app.config";
 
 type FooterLink =
-  | { label: () => string; href: LinkProps["href"]; to?: never }
+  | {
+      label: () => string;
+      href: LinkProps["href"];
+      // External links open in a new tab unless they stay inside the product
+      target?: "_blank" | "_self";
+      to?: never;
+    }
   | { label: () => string; href?: never; to: LinkProps["to"] };
 
 const navLinks: FooterLink[] = [
   { label: () => m.footer__playground(), to: "/playground" },
-  { label: () => m.footer__dashboard(), to: "/dashboard" },
+  { href: getAppUrl("/dashboard"), label: () => m.footer__dashboard(), target: "_self" },
   { label: () => m.footer__privacy_policy(), to: "/privacy-policy" },
   { label: () => m.footer__terms_of_service(), to: "/terms-of-service" }
 ];
@@ -54,11 +61,14 @@ export function Footer({
               const labelText = label();
 
               return (
-                <Button asChild key={href} size="icon-sm" variant="ghost">
-                  <Link aria-label={labelText} href={href}>
-                    {icon}
-                  </Link>
-                </Button>
+                <Link
+                  aria-label={labelText}
+                  className={buttonVariants({ size: "icon-sm", variant: "ghost" })}
+                  href={href}
+                  key={href}
+                >
+                  {icon}
+                </Link>
               );
             })}
           </div>
@@ -72,7 +82,11 @@ export function Footer({
               return (
                 <li key={link.href ?? link.to}>
                   {link.href ? (
-                    <a className="hover:text-foreground" target="_blank" href={link.href}>
+                    <a
+                      className="hover:text-foreground"
+                      target={link.target ?? "_blank"}
+                      href={link.href}
+                    >
                       {label}
                     </a>
                   ) : (

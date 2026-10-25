@@ -1,6 +1,7 @@
+import { mergeProps } from "@base-ui/react/merge-props";
+import { useRender } from "@base-ui/react/use-render";
 import { type VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
-import { Slot } from "radix-ui";
 import * as React from "react";
 
 import { cn } from "#/lib/utils";
@@ -23,58 +24,54 @@ const spinnerVariants = cva("relative block opacity-[0.65]", {
 
 export type SpinnerProps = {
   loading?: boolean;
-  asChild?: boolean;
   block?: boolean;
-} & React.HTMLAttributes<HTMLSpanElement> &
+} & useRender.ComponentProps<"span"> &
   VariantProps<typeof spinnerVariants>;
 
-const Spinner = React.forwardRef<HTMLSpanElement, SpinnerProps>(
-  ({ className, size, loading = true, block = false, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot.Root : "span";
+function Spinner({
+  className,
+  size,
+  loading = true,
+  block = false,
+  render,
+  ...props
+}: SpinnerProps) {
+  const classNameInput = cn("bg-current", className);
 
-    const classNameInput = cn("bg-current", className);
+  const [bgColorClass, filteredClassName] = React.useMemo(() => {
+    const bgClass = classNameInput?.match(DARK_CLASS_REGEX) ?? [];
+    const filteredClasses = classNameInput?.replace(DARK_CLASS_REGEX, "").trim();
 
-    const [bgColorClass, filteredClassName] = React.useMemo(() => {
-      const bgClass = classNameInput?.match(DARK_CLASS_REGEX) ?? [];
-      const filteredClasses = classNameInput?.replace(DARK_CLASS_REGEX, "").trim();
+    return [bgClass, filteredClasses];
+  }, [classNameInput]);
 
-      return [bgClass, filteredClasses];
-    }, [classNameInput]);
+  const spinner = useRender({
+    defaultTagName: "span",
+    render,
+    props: mergeProps<"span">(props, {
+      className: cn("relative -left-0.25", spinnerVariants({ className: filteredClassName, size })),
+      children: Array.from({ length: 8 }).map((_, i) => (
+        <span
+          className="animate-spinner-leaf-fade absolute top-0 left-1/2 h-full w-[12.5%]"
+          key={i}
+          style={{
+            animationDelay: `${-(7 - i) * 100}ms`,
+            transform: `rotate(${i * 45}deg)`
+          }}
+        >
+          <span className={cn("block h-[30%] w-full rounded-full", bgColorClass)}></span>
+        </span>
+      ))
+    })
+  });
 
-    if (!loading) return null;
+  if (!loading) return null;
 
-    const spinner = (
-      <Comp
-        className={cn(
-          "relative -left-0.25",
-          spinnerVariants({ className: filteredClassName, size })
-        )}
-        ref={ref}
-        {...props}
-      >
-        {Array.from({ length: 8 }).map((_, i) => (
-          <span
-            className="animate-spinner-leaf-fade absolute top-0 left-1/2 h-full w-[12.5%]"
-            key={i}
-            style={{
-              animationDelay: `${-(7 - i) * 100}ms`,
-              transform: `rotate(${i * 45}deg)`
-            }}
-          >
-            <span className={cn("block h-[30%] w-full rounded-full", bgColorClass)}></span>
-          </span>
-        ))}
-      </Comp>
-    );
-
-    if (block) {
-      return <div className="grid h-96 w-full place-items-center">{spinner}</div>;
-    }
-
-    return spinner;
+  if (block) {
+    return <div className="grid h-96 w-full place-items-center">{spinner}</div>;
   }
-);
 
-Spinner.displayName = "Spinner";
+  return spinner;
+}
 
 export { Spinner };

@@ -7,7 +7,7 @@ import { resolvePublicAssetUrl } from "@tsu-stack/core/assets";
 import { m } from "@tsu-stack/i18n/messages";
 import { Link } from "@tsu-stack/i18n/tanstack-start/components/link";
 import { type To } from "@tsu-stack/i18n/tanstack-start/types";
-import { Button } from "@tsu-stack/ui/components/button";
+import { Button, buttonVariants } from "@tsu-stack/ui/components/button";
 import { useIsClient } from "@tsu-stack/ui/hooks/use-is-client.hook";
 
 import { generateAppSeo } from "#/shared/lib/seo";
@@ -108,12 +108,12 @@ function PlaygroundPage() {
           >
             {m.playground_page__test_toast()}
           </Button>
-          <Button variant="outline" asChild>
-            <Link to={"/not-found" as To}>{m.playground_page__visit_not_found_page()}</Link>
-          </Button>
-          <Button variant="destructive" asChild>
-            <Link to="/error">{m.playground_page__visit_error_page()}</Link>
-          </Button>
+          <Link className={buttonVariants({ variant: "outline" })} to={"/not-found" as To}>
+            {m.playground_page__visit_not_found_page()}
+          </Link>
+          <Link className={buttonVariants({ variant: "destructive" })} to="/error">
+            {m.playground_page__visit_error_page()}
+          </Link>
         </div>
       </section>
     </Container>

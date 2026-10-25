@@ -1,31 +1,24 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
-import { type ButtonProps } from "@tsu-stack/ui/components/button";
-import { Button } from "@tsu-stack/ui/components/button";
+import { type ButtonProps } from "#/components/button";
+import { Button } from "#/components/button";
+
 export { ThemeProvider } from "next-themes";
 
 type ThemeSwitcherProps = {
   className?: string;
 } & ButtonProps;
 
+/** Toggles between light and dark from the theme currently on screen, including a system-resolved one. */
 export function ThemeSwitcher({ variant = "ghost", size = "icon", className }: ThemeSwitcherProps) {
-  const { theme, setTheme } = useTheme();
-
-  const changeThemeValue =
-    theme === "dark"
-      ? "light"
-      : theme === "light"
-        ? "dark"
-        : typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "light"
-          : "dark";
+  const { resolvedTheme, setTheme } = useTheme();
 
   return (
     <Button
       variant={variant}
       size={size}
-      onClick={() => setTheme(changeThemeValue)}
+      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
       aria-label="Toggle theme"
       className={className}
     >

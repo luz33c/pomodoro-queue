@@ -26,10 +26,11 @@ FROM installer AS builder
 
 COPY . .
 
-ARG SOURCE_COMMIT VITE_SERVER_URL VITE_WEB_URL VITE_CLERK_PUBLISHABLE_KEY CLERK_SECRET_KEY VITE_IMGPROXY_URL VITE_IMGPROXY_SIGNATURE DATABASE_URL
+ARG SOURCE_COMMIT VITE_SERVER_URL VITE_WEB_URL VITE_APP_URL VITE_CLERK_PUBLISHABLE_KEY CLERK_SECRET_KEY VITE_IMGPROXY_URL VITE_IMGPROXY_SIGNATURE DATABASE_URL
 ENV SOURCE_COMMIT=${SOURCE_COMMIT} \
     VITE_SERVER_URL=${VITE_SERVER_URL} \
     VITE_WEB_URL=${VITE_WEB_URL} \
+    VITE_APP_URL=${VITE_APP_URL} \
     VITE_CLERK_PUBLISHABLE_KEY=${VITE_CLERK_PUBLISHABLE_KEY} \
     CLERK_SECRET_KEY=${CLERK_SECRET_KEY} \
     VITE_IMGPROXY_URL=${VITE_IMGPROXY_URL} \
@@ -40,6 +41,9 @@ ENV SOURCE_COMMIT=${SOURCE_COMMIT} \
 RUN pnpm run test:unit:run
 # RUN pnpm run test:e2e:run
 
+# When VITE_APP_URL points under VITE_WEB_URL (for example .../app), server.ts also serves the product app,
+# so build it here; otherwise apps/app ships as its own service and this step is skipped.
+RUN case "${VITE_APP_URL}" in "${VITE_WEB_URL%/}"/*) pnpm --filter @tsu-stack/app run build ;; esac
 RUN pnpm --filter @tsu-stack/web run build
 RUN pnpm --filter @tsu-stack/web deploy --prod --legacy /prod/web
 

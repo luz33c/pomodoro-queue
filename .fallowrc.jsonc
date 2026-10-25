@@ -1,6 +1,15 @@
 {
   "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
-  "entry": ["apps/web/src/start.ts", "scripts/*.ts", "packages/i18n/**/*.ts"],
+  "entry": [
+    "apps/web/src/start.ts",
+    "apps/app/src/main.tsx",
+    "apps/app/server.ts",
+    "apps/app/vite.config.ts",
+    "apps/desktop/src/bun/index.ts",
+    "apps/desktop/electrobun.config.ts",
+    "scripts/*.ts",
+    "packages/i18n/**/*.ts"
+  ],
   "ignorePatterns": [
     "**/*.generated.ts",
     "**/*.d.ts",
@@ -20,6 +29,8 @@
     "@tanstack/eslint-plugin-router",
     "eslint-plugin-fsd-lint",
     "eslint-plugin-react-hooks",
+    // Consumed as a build output, not imported: apps/desktop copies its dist/desktop, apps/web serves its dist/web
+    "@tsu-stack/app",
     // Tooling invoked from package scripts instead of imported by source files
     "oxfmt",
     "oxlint"

@@ -11,9 +11,12 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuLinkItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@tsu-stack/ui/components/dropdown-menu";
+
+import { getAppUrl } from "#/shared/lib/app-url";
 
 import { NavbarAvatar } from "./navbar-avatar";
 import { NavbarUnauthenticatedButtons } from "./navbar-unauthenticated-buttons";
@@ -48,38 +51,34 @@ export function UserDropdown() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button aria-label="Open account menu" size="icon" variant="ghost">
-          <UserSquare aria-hidden="true" />
-        </Button>
+      <DropdownMenuTrigger
+        render={<Button aria-label="Open account menu" size="icon" variant="ghost" />}
+      >
+        <UserSquare aria-hidden="true" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="max-w-sm min-w-fit">
-        <DropdownMenuLabel className="flex items-start gap-3">
-          <NavbarAvatar avatarImgSrc={user.imageUrl} name={name} email={email} />
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem asChild className="cursor-pointer">
-            <Link to="/dashboard">
-              <BarChart2 aria-hidden="true" className="opacity-60" size={16} />
-              <span>{m.user_dropdown__dashboard()}</span>
-            </Link>
-          </DropdownMenuItem>
+          <DropdownMenuLabel className="flex items-start gap-3">
+            <NavbarAvatar avatarImgSrc={user.imageUrl} name={name} email={email} />
+          </DropdownMenuLabel>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem asChild className="cursor-pointer">
-            <Link to="/privacy-policy">
-              <Lock aria-hidden="true" className="opacity-60" size={16} />
-              <span>{m.user_dropdown__privacy_policy()}</span>
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild className="cursor-pointer">
-            <Link to="/terms-of-service">
-              <FileText aria-hidden="true" className="opacity-60" size={16} />
-              <span>{m.user_dropdown__terms_of_service()}</span>
-            </Link>
-          </DropdownMenuItem>
+          <DropdownMenuLinkItem className="cursor-pointer" href={getAppUrl("/dashboard")}>
+            <BarChart2 aria-hidden="true" className="opacity-60" size={16} />
+            <span>{m.user_dropdown__dashboard()}</span>
+          </DropdownMenuLinkItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuLinkItem className="cursor-pointer" render={<Link to="/privacy-policy" />}>
+            <Lock aria-hidden="true" className="opacity-60" size={16} />
+            <span>{m.user_dropdown__privacy_policy()}</span>
+          </DropdownMenuLinkItem>
+          <DropdownMenuLinkItem className="cursor-pointer" render={<Link to="/terms-of-service" />}>
+            <FileText aria-hidden="true" className="opacity-60" size={16} />
+            <span>{m.user_dropdown__terms_of_service()}</span>
+          </DropdownMenuLinkItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer" variant="destructive" onClick={handleSignOut}>

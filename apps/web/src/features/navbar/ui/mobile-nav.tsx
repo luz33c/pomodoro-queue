@@ -4,13 +4,13 @@ import { LogOut, Menu, X } from "lucide-react";
 import React from "react";
 
 import { Link } from "@tsu-stack/i18n/tanstack-start/components/link";
-import { Button } from "@tsu-stack/ui/components/button";
+import { Button, buttonVariants } from "@tsu-stack/ui/components/button";
 import { Portal, PortalBackdrop } from "@tsu-stack/ui/components/portal";
 import { Skeleton } from "@tsu-stack/ui/components/skeleton";
+import { ThemeSwitcher } from "@tsu-stack/ui/components/theme-switcher";
 import { cn } from "@tsu-stack/ui/lib/utils";
 
 import { LocaleSwitcher } from "#/shared/ui/locale-switcher";
-import { ThemeSwitcher } from "#/shared/ui/theme-switcher";
 
 import { navLinks } from "#/features/navbar/config/nav-links.config";
 
@@ -50,17 +50,16 @@ export function MobileNav() {
                 const label = link.label();
 
                 return (
-                  <Button
+                  <Link
                     onClick={onNavigate}
-                    asChild
-                    className="w-full justify-start"
+                    className={cn(buttonVariants({ variant: "ghost" }), "w-full justify-start")}
                     key={link.href ?? link.to}
-                    variant="ghost"
+                    {...(link.href
+                      ? { href: link.href, target: link.target ?? "_blank" }
+                      : { to: link.to })}
                   >
-                    <Link {...(link.href ? { href: link.href } : { to: link.to })}>
-                      <span className="max-sm:-ms-2">{label}</span>
-                    </Link>
-                  </Button>
+                    <span className="max-sm:-ms-2">{label}</span>
+                  </Link>
                 );
               })}
             </div>
@@ -93,16 +92,22 @@ function MobileNavAuth({ onNavigate }: { onNavigate: () => void }) {
   if (!isSignedIn) {
     return (
       <div className="mt-12 flex flex-col gap-2">
-        <Button onClick={onNavigate} asChild className="w-full" variant="outline">
-          <Link to="/sign-in" search={redirect ? { redirect } : undefined}>
-            Sign In
-          </Link>
-        </Button>
-        <Button onClick={onNavigate} className="w-full" light="skeuomorphic" asChild>
-          <Link to="/create-an-account" search={redirect ? { redirect } : undefined}>
-            Get Started
-          </Link>
-        </Button>
+        <Link
+          onClick={onNavigate}
+          className={cn(buttonVariants({ variant: "outline" }), "w-full")}
+          to="/sign-in"
+          search={redirect ? { redirect } : undefined}
+        >
+          Sign In
+        </Link>
+        <Link
+          onClick={onNavigate}
+          className={cn(buttonVariants({ light: "skeuomorphic" }), "w-full")}
+          to="/create-an-account"
+          search={redirect ? { redirect } : undefined}
+        >
+          Get Started
+        </Link>
       </div>
     );
   }

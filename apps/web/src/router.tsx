@@ -80,8 +80,9 @@ export function getRouter() {
 }
 
 declare module "@tanstack/react-router" {
-  // @ts-expect-error - module augmentation to add our custom RouterAppContext to TanStack Router's createRouter generic
-  type Register = {
+  // Module augmentation has to merge into the library's interface, which a type alias cannot do
+  // oxlint-disable-next-line typescript/consistent-type-definitions
+  interface Register {
     router: ReturnType<typeof getRouter>;
-  };
+  }
 }

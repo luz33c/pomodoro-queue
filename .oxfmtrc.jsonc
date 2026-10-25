@@ -18,6 +18,10 @@
     ".wrangler",
     ".netlify",
     "dist",
+    // Electrobun generated: Hutch devkit projection, config loader temp dir, packaged output
+    ".hutch/",
+    ".cottontail-tmp/",
+    "artifacts/",
     // Vendored agent skills and their lockfile are managed by the `skills` CLI
     ".agents/skills/",
     ".claude/skills/",

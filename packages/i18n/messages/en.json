@@ -87,5 +87,17 @@
   "auth__sign_up_failed": "Sign up failed",
   "auth__sign_up_successful": "Sign up successful",
   "auth__name_min_length": "Name must be at least 2 characters",
-  "auth__passwords_no_match": "Passwords do not match"
+  "auth__passwords_no_match": "Passwords do not match",
+  "app_shell__dashboard": "Dashboard",
+  "app_shell__website": "Website",
+  "app_shell__api_docs": "API Docs",
+  "app_shell__sign_out": "Sign out",
+  "app_shell__open_menu": "Open menu",
+  "desktop_sign_in__title": "Desktop sign-in is coming soon",
+  "desktop_sign_in__description": "The desktop app cannot sign in yet. Use the website to sign in for now.",
+  "desktop_sign_in__open_website": "Open the website",
+  "desktop_sign_in__api_status": "API status",
+  "desktop_sign_in__api_checking": "Checking...",
+  "desktop_sign_in__api_live": "Live",
+  "desktop_sign_in__api_unavailable": "Unavailable"
 }

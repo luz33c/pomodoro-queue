@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { m } from "@tsu-stack/i18n/messages";
 import { Link } from "@tsu-stack/i18n/tanstack-start/components/link";
 import { log } from "@tsu-stack/logger/client";
-import { Button } from "@tsu-stack/ui/components/button";
+import { Button, buttonVariants } from "@tsu-stack/ui/components/button";
 import {
   Empty,
   EmptyContent,
@@ -68,12 +68,10 @@ export function DefaultErrorPage({ error, reset }: ErrorComponentProps) {
         </EmptyHeader>
         <EmptyContent>
           <div className="flex gap-2">
-            <Button light="skeuomorphic" asChild>
-              <Link to="/">
-                <Home data-icon="inline-start" />
-                {m.error_500__go_home()}
-              </Link>
-            </Button>
+            <Link className={buttonVariants({ light: "skeuomorphic" })} to="/">
+              <Home data-icon="inline-start" />
+              {m.error_500__go_home()}
+            </Link>
 
             <Button onClick={handleRefresh} variant="outline">
               <RefreshCw data-icon="inline-start" />

@@ -14,6 +14,10 @@
     "build/",
     "worker-configuration.d.ts",
     "scripts/",
+    // Electrobun generated: Hutch devkit projection, config loader temp dir, packaged output
+    ".hutch/",
+    ".cottontail-tmp/",
+    "artifacts/",
     "*.md",
     // Vendored agent skills are managed by the `skills` CLI
     ".agents/skills/",
@@ -127,6 +131,102 @@
           {
             "rootPath": "/apps/web/src/",
             "tsconfigPath": "./apps/web/tsconfig.json",
+            "alias": { "value": "#", "withSlash": true },
+            "layers": {
+              "app": { "pattern": "routes" },
+              "pages": { "pattern": "pages" },
+              "widgets": { "pattern": "widgets" },
+              "features": { "pattern": "features" },
+              "entities": { "pattern": "entities" },
+              "shared": { "pattern": "shared" }
+            },
+            "ignoreImportPatterns": ["\\.css$"]
+          }
+        ],
+        "fsd/no-global-store-imports": "error"
+      }
+    },
+    {
+      "files": ["apps/app/src/**/*.ts", "apps/app/src/**/*.tsx"],
+      "jsPlugins": [{ "name": "fsd", "specifier": "eslint-plugin-fsd-lint" }],
+      "rules": {
+        "fsd/forbidden-imports": [
+          "error",
+          {
+            "rootPath": "/apps/app/src/",
+            "tsconfigPath": "./apps/app/tsconfig.json",
+            "alias": { "value": "#", "withSlash": false },
+            "layers": {
+              "app": { "pattern": "routes" },
+              "pages": { "pattern": "pages" },
+              "widgets": { "pattern": "widgets" },
+              "features": { "pattern": "features" },
+              "entities": { "pattern": "entities" },
+              "shared": { "pattern": "shared" }
+            },
+            "ignoreImportPatterns": ["\\.css$"]
+          }
+        ],
+        "fsd/no-relative-imports": [
+          "error",
+          {
+            "rootPath": "/apps/app/src/",
+            "tsconfigPath": "./apps/app/tsconfig.json",
+            "alias": { "value": "#", "withSlash": true },
+            "layers": {
+              "app": { "pattern": "routes" },
+              "pages": { "pattern": "pages" },
+              "widgets": { "pattern": "widgets" },
+              "features": { "pattern": "features" },
+              "entities": { "pattern": "entities" },
+              "shared": { "pattern": "shared" }
+            },
+            "ignoreImportPatterns": ["\\.css$"],
+            "allowSameSlice": true
+          }
+        ],
+        "fsd/no-public-api-sidestep": [
+          "error",
+          {
+            "rootPath": "/apps/app/src/",
+            "tsconfigPath": "./apps/app/tsconfig.json",
+            "alias": { "value": "#", "withSlash": true },
+            "layers": {
+              "app": { "pattern": "routes" },
+              "pages": { "pattern": "pages" },
+              "widgets": { "pattern": "widgets" },
+              "features": { "pattern": "features" },
+              "entities": { "pattern": "entities" },
+              "shared": { "pattern": "shared" }
+            },
+            "ignoreImportPatterns": ["\\.css$"]
+          }
+        ],
+        "fsd/no-cross-slice-dependency": [
+          "error",
+          {
+            "rootPath": "/apps/app/src/",
+            "tsconfigPath": "./apps/app/tsconfig.json",
+            "alias": { "value": "#", "withSlash": true },
+            "layers": {
+              "app": { "pattern": "routes" },
+              "pages": { "pattern": "pages" },
+              "widgets": { "pattern": "widgets" },
+              "features": { "pattern": "features" },
+              "entities": { "pattern": "entities" },
+              "shared": { "pattern": "shared" }
+            },
+            "ignoreImportPatterns": ["\\.css$"],
+            "allowTypeImports": false,
+            "excludeLayers": ["shared"],
+            "featuresOnly": false
+          }
+        ],
+        "fsd/no-ui-in-business-logic": [
+          "error",
+          {
+            "rootPath": "/apps/app/src/",
+            "tsconfigPath": "./apps/app/tsconfig.json",
             "alias": { "value": "#", "withSlash": true },
             "layers": {
               "app": { "pattern": "routes" },

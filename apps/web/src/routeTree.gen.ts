@@ -17,7 +17,6 @@ import { Route as Char123LocaleChar125rootLayoutRouteRouteImport } from './route
 import { Route as ApiHealthLiveRouteImport } from './routes/[_]api/health/live'
 import { Route as Char123LocaleChar125centeredLayoutguestRouteRouteImport } from './routes/{-$locale}/(centered-layout)/(guest)/route'
 import { Route as Char123LocaleChar125rootLayoutIndexRouteImport } from './routes/{-$locale}/(root-layout)/index'
-import { Route as Char123LocaleChar125rootLayoutauthRouteRouteImport } from './routes/{-$locale}/(root-layout)/(auth)/route'
 import { Route as Char123LocaleChar125rootLayoutErrorIndexRouteImport } from './routes/{-$locale}/(root-layout)/error/index'
 import { Route as Char123LocaleChar125rootLayoutPlaygroundIndexRouteImport } from './routes/{-$locale}/(root-layout)/playground/index'
 import { Route as Char123LocaleChar125rootLayoutPrivacyPolicyIndexRouteImport } from './routes/{-$locale}/(root-layout)/privacy-policy/index'
@@ -26,7 +25,6 @@ import { Route as Char123LocaleChar125centeredLayoutguestCreateAnAccountIndexRou
 import { Route as Char123LocaleChar125centeredLayoutguestCreateAnAccountSplatRouteImport } from './routes/{-$locale}/(centered-layout)/(guest)/create-an-account/$'
 import { Route as Char123LocaleChar125centeredLayoutguestSignInIndexRouteImport } from './routes/{-$locale}/(centered-layout)/(guest)/sign-in/index'
 import { Route as Char123LocaleChar125centeredLayoutguestSignInSplatRouteImport } from './routes/{-$locale}/(centered-layout)/(guest)/sign-in/$'
-import { Route as Char123LocaleChar125rootLayoutauthDashboardIndexRouteImport } from './routes/{-$locale}/(root-layout)/(auth)/dashboard/index'
 
 const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
   id: '/robots.txt',
@@ -68,11 +66,6 @@ const Char123LocaleChar125rootLayoutIndexRoute =
   Char123LocaleChar125rootLayoutIndexRouteImport.update({
     id: '/',
     path: '/',
-    getParentRoute: () => Char123LocaleChar125rootLayoutRouteRoute,
-  } as any)
-const Char123LocaleChar125rootLayoutauthRouteRoute =
-  Char123LocaleChar125rootLayoutauthRouteRouteImport.update({
-    id: '/(auth)',
     getParentRoute: () => Char123LocaleChar125rootLayoutRouteRoute,
   } as any)
 const Char123LocaleChar125rootLayoutErrorIndexRoute =
@@ -127,15 +120,9 @@ const Char123LocaleChar125centeredLayoutguestSignInSplatRoute =
     path: '/sign-in/$',
     getParentRoute: () => Char123LocaleChar125centeredLayoutguestRouteRoute,
   } as any)
-const Char123LocaleChar125rootLayoutauthDashboardIndexRoute =
-  Char123LocaleChar125rootLayoutauthDashboardIndexRouteImport.update({
-    id: '/dashboard/',
-    path: '/dashboard/',
-    getParentRoute: () => Char123LocaleChar125rootLayoutauthRouteRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
-  '/{-$locale}': typeof Char123LocaleChar125rootLayoutauthRouteRouteWithChildren
+  '/{-$locale}': typeof Char123LocaleChar125centeredLayoutguestRouteRouteWithChildren
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_api/health/live': typeof ApiHealthLiveRoute
@@ -148,7 +135,6 @@ export interface FileRoutesByFullPath {
   '/{-$locale}/sign-in/$': typeof Char123LocaleChar125centeredLayoutguestSignInSplatRoute
   '/{-$locale}/create-an-account/': typeof Char123LocaleChar125centeredLayoutguestCreateAnAccountIndexRoute
   '/{-$locale}/sign-in/': typeof Char123LocaleChar125centeredLayoutguestSignInIndexRoute
-  '/{-$locale}/dashboard/': typeof Char123LocaleChar125rootLayoutauthDashboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/{-$locale}': typeof Char123LocaleChar125rootLayoutIndexRoute
@@ -163,7 +149,6 @@ export interface FileRoutesByTo {
   '/{-$locale}/sign-in/$': typeof Char123LocaleChar125centeredLayoutguestSignInSplatRoute
   '/{-$locale}/create-an-account': typeof Char123LocaleChar125centeredLayoutguestCreateAnAccountIndexRoute
   '/{-$locale}/sign-in': typeof Char123LocaleChar125centeredLayoutguestSignInIndexRoute
-  '/{-$locale}/dashboard': typeof Char123LocaleChar125rootLayoutauthDashboardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -173,7 +158,6 @@ export interface FileRoutesById {
   '/{-$locale}/(centered-layout)': typeof Char123LocaleChar125centeredLayoutRouteRouteWithChildren
   '/{-$locale}/(root-layout)': typeof Char123LocaleChar125rootLayoutRouteRouteWithChildren
   '/{-$locale}/(centered-layout)/(guest)': typeof Char123LocaleChar125centeredLayoutguestRouteRouteWithChildren
-  '/{-$locale}/(root-layout)/(auth)': typeof Char123LocaleChar125rootLayoutauthRouteRouteWithChildren
   '/_api/health/live': typeof ApiHealthLiveRoute
   '/{-$locale}/(root-layout)/': typeof Char123LocaleChar125rootLayoutIndexRoute
   '/{-$locale}/(root-layout)/error/': typeof Char123LocaleChar125rootLayoutErrorIndexRoute
@@ -184,7 +168,6 @@ export interface FileRoutesById {
   '/{-$locale}/(centered-layout)/(guest)/sign-in/$': typeof Char123LocaleChar125centeredLayoutguestSignInSplatRoute
   '/{-$locale}/(centered-layout)/(guest)/create-an-account/': typeof Char123LocaleChar125centeredLayoutguestCreateAnAccountIndexRoute
   '/{-$locale}/(centered-layout)/(guest)/sign-in/': typeof Char123LocaleChar125centeredLayoutguestSignInIndexRoute
-  '/{-$locale}/(root-layout)/(auth)/dashboard/': typeof Char123LocaleChar125rootLayoutauthDashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -202,7 +185,6 @@ export interface FileRouteTypes {
     | '/{-$locale}/sign-in/$'
     | '/{-$locale}/create-an-account/'
     | '/{-$locale}/sign-in/'
-    | '/{-$locale}/dashboard/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/{-$locale}'
@@ -217,7 +199,6 @@ export interface FileRouteTypes {
     | '/{-$locale}/sign-in/$'
     | '/{-$locale}/create-an-account'
     | '/{-$locale}/sign-in'
-    | '/{-$locale}/dashboard'
   id:
     | '__root__'
     | '/{-$locale}'
@@ -226,7 +207,6 @@ export interface FileRouteTypes {
     | '/{-$locale}/(centered-layout)'
     | '/{-$locale}/(root-layout)'
     | '/{-$locale}/(centered-layout)/(guest)'
-    | '/{-$locale}/(root-layout)/(auth)'
     | '/_api/health/live'
     | '/{-$locale}/(root-layout)/'
     | '/{-$locale}/(root-layout)/error/'
@@ -237,7 +217,6 @@ export interface FileRouteTypes {
     | '/{-$locale}/(centered-layout)/(guest)/sign-in/$'
     | '/{-$locale}/(centered-layout)/(guest)/create-an-account/'
     | '/{-$locale}/(centered-layout)/(guest)/sign-in/'
-    | '/{-$locale}/(root-layout)/(auth)/dashboard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -305,13 +284,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char123LocaleChar125rootLayoutIndexRouteImport
       parentRoute: typeof Char123LocaleChar125rootLayoutRouteRoute
     }
-    '/{-$locale}/(root-layout)/(auth)': {
-      id: '/{-$locale}/(root-layout)/(auth)'
-      path: ''
-      fullPath: '/{-$locale}'
-      preLoaderRoute: typeof Char123LocaleChar125rootLayoutauthRouteRouteImport
-      parentRoute: typeof Char123LocaleChar125rootLayoutRouteRoute
-    }
     '/{-$locale}/(root-layout)/error/': {
       id: '/{-$locale}/(root-layout)/error/'
       path: '/error'
@@ -368,13 +340,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char123LocaleChar125centeredLayoutguestSignInSplatRouteImport
       parentRoute: typeof Char123LocaleChar125centeredLayoutguestRouteRoute
     }
-    '/{-$locale}/(root-layout)/(auth)/dashboard/': {
-      id: '/{-$locale}/(root-layout)/(auth)/dashboard/'
-      path: '/dashboard'
-      fullPath: '/{-$locale}/dashboard/'
-      preLoaderRoute: typeof Char123LocaleChar125rootLayoutauthDashboardIndexRouteImport
-      parentRoute: typeof Char123LocaleChar125rootLayoutauthRouteRoute
-    }
   }
 }
 
@@ -417,23 +382,7 @@ const Char123LocaleChar125centeredLayoutRouteRouteWithChildren =
     Char123LocaleChar125centeredLayoutRouteRouteChildren,
   )
 
-interface Char123LocaleChar125rootLayoutauthRouteRouteChildren {
-  Char123LocaleChar125rootLayoutauthDashboardIndexRoute: typeof Char123LocaleChar125rootLayoutauthDashboardIndexRoute
-}
-
-const Char123LocaleChar125rootLayoutauthRouteRouteChildren: Char123LocaleChar125rootLayoutauthRouteRouteChildren =
-  {
-    Char123LocaleChar125rootLayoutauthDashboardIndexRoute:
-      Char123LocaleChar125rootLayoutauthDashboardIndexRoute,
-  }
-
-const Char123LocaleChar125rootLayoutauthRouteRouteWithChildren =
-  Char123LocaleChar125rootLayoutauthRouteRoute._addFileChildren(
-    Char123LocaleChar125rootLayoutauthRouteRouteChildren,
-  )
-
 interface Char123LocaleChar125rootLayoutRouteRouteChildren {
-  Char123LocaleChar125rootLayoutauthRouteRoute: typeof Char123LocaleChar125rootLayoutauthRouteRouteWithChildren
   Char123LocaleChar125rootLayoutIndexRoute: typeof Char123LocaleChar125rootLayoutIndexRoute
   Char123LocaleChar125rootLayoutErrorIndexRoute: typeof Char123LocaleChar125rootLayoutErrorIndexRoute
   Char123LocaleChar125rootLayoutPlaygroundIndexRoute: typeof Char123LocaleChar125rootLayoutPlaygroundIndexRoute
@@ -443,8 +392,6 @@ interface Char123LocaleChar125rootLayoutRouteRouteChildren {
 
 const Char123LocaleChar125rootLayoutRouteRouteChildren: Char123LocaleChar125rootLayoutRouteRouteChildren =
   {
-    Char123LocaleChar125rootLayoutauthRouteRoute:
-      Char123LocaleChar125rootLayoutauthRouteRouteWithChildren,
     Char123LocaleChar125rootLayoutIndexRoute:
       Char123LocaleChar125rootLayoutIndexRoute,
     Char123LocaleChar125rootLayoutErrorIndexRoute:

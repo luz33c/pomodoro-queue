@@ -3,7 +3,11 @@
  * 
  * You will need to choose what languages & weights you will support.
  *
- * IMPORTANT: Next, you will need to preload the files listed in each @font-face src in __root.tsx
+ * IMPORTANT: Every app that imports this file must list the @fontsource packages below in its own dependencies.
+ * Vite resolves these url() specifiers from the importing app's stylesheet, not from packages/ui.
+ *
+ * IMPORTANT: Next, you will need to preload the files listed in each @font-face src in the app's root route
+ * (apps/web/src/routes/__root.tsx)
  * as <link rel="preload" as="font" type="font/woff2" crossorigin> to ensure the fonts are loaded as early as possible.
  *
  * If you don't preload the fonts, they will be loaded later, causing a flash of the fallback font and potential layout shifts when the font finally loads.

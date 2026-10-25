@@ -23,12 +23,13 @@ import {
   useLocale
 } from "@tsu-stack/i18n/tanstack-start/components/locale-provider";
 import { Toaster } from "@tsu-stack/ui/components/sonner";
+import { ThemeProvider } from "@tsu-stack/ui/components/theme-switcher";
 
+import { getAppOrigin } from "#/shared/lib/app-url";
 import { generateAppSeo } from "#/shared/lib/seo";
 import { LoggerProvider } from "#/shared/providers/logger-provider";
 import { ProgressProvider } from "#/shared/providers/progress.provider";
 import appCss from "#/shared/styles/app.css?url";
-import { ThemeProvider } from "#/shared/ui/theme-switcher";
 
 import { DefaultErrorPage } from "#/pages/default-error/index";
 
@@ -162,7 +163,11 @@ function RootDocumentInner({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <ClerkProvider publishableKey={ENV_WEB_ISOMORPHIC.VITE_CLERK_PUBLISHABLE_KEY}>
+        {/* Without the app origin, Clerk treats the post-sign-in redirect into apps/app as unsafe and falls back */}
+        <ClerkProvider
+          allowedRedirectOrigins={[getAppOrigin()]}
+          publishableKey={ENV_WEB_ISOMORPHIC.VITE_CLERK_PUBLISHABLE_KEY}
+        >
           <ClerkApiAuthBridge />
           <LoggerProvider>
             {/* We place the progress provider here otherwise we will get "Cannot render a <style> outside the main document" error */}

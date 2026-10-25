@@ -4,6 +4,7 @@
  * Naming convention:
  * - `web__server`: TanStack Start / web SSR logs
  * - `web__client`: browser logs sent through the Hono ingest endpoint
+ * - `app__client`: apps/app browser and desktop logs sent through the same ingest endpoint
  * - `server`: standalone Hono server logs
  * - `default`: fallback when a service is not explicitly selected
  *
@@ -14,6 +15,7 @@
  * `@tsu-stack/logger/client` or `@tsu-stack/logger/server`.
  */
 export const LOG_SERVICES = Object.freeze({
+  APP_CLIENT: "app__client",
   DEFAULT: "default",
   SERVER: "server",
   WEB_CLIENT: "web__client",

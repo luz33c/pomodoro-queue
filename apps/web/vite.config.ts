@@ -53,6 +53,29 @@ function getPortFromUrl(url: string, fallback: number): number {
   return port ? Number(port) : fallback;
 }
 
+// Matches APP_DEV_PORT in apps/app/vite.config.ts
+const APP_DEV_PORT = 3002;
+
+/**
+ * When VITE_APP_URL points under this site, forward that path to the app's own dev server, matching
+ * the deployment where server.ts serves the app's build there. Otherwise `{-$locale}` would 404 it.
+ */
+function getAppDevProxy() {
+  const webUrl = new URL(ENV_WEB_ISOMORPHIC.VITE_WEB_URL);
+  const appUrl = new URL(ENV_WEB_ISOMORPHIC.VITE_APP_URL);
+  const webBasePath = webUrl.pathname.replace(/\/$/, "");
+  const appBasePath = appUrl.pathname.replace(/\/$/, "");
+
+  if (appUrl.origin !== webUrl.origin || !appBasePath.startsWith(`${webBasePath}/`)) {
+    return undefined;
+  }
+
+  const escapedAppBasePath = appBasePath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return {
+    [`^${escapedAppBasePath}(?:/|\\?|$)`]: { target: `http://localhost:${APP_DEV_PORT}`, ws: true }
+  };
+}
+
 export default defineConfig({
   /**
    * FIXME: This is needed for prerendering to work in Docker Compose builds
@@ -72,7 +95,8 @@ export default defineConfig({
     __BUILD_SOURCE_COMMIT__: JSON.stringify(ENV_WEB_SERVER.SOURCE_COMMIT)
   },
   server: {
-    port: getPortFromUrl(ENV_WEB_ISOMORPHIC.VITE_WEB_URL, 3000)
+    port: getPortFromUrl(ENV_WEB_ISOMORPHIC.VITE_WEB_URL, 3000),
+    proxy: getAppDevProxy()
   },
   plugins: [
     devtools({

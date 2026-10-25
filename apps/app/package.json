@@ -1,0 +1,66 @@
+{
+  "name": "@tsu-stack/app",
+  "private": true,
+  "files": [
+    "dist/web",
+    "server.ts"
+  ],
+  "type": "module",
+  "imports": {
+    "#/shared/providers/*": "./src/shared/providers/*.tsx",
+    "#/shared/ui/*": "./src/shared/ui/*.tsx",
+    "#/*.css": "./src/*.css",
+    "#/*": "./src/*.ts"
+  },
+  "scripts": {
+    "build": "dotenvx run -f ../../packages/env/.env -- vite build",
+    "build:desktop": "dotenvx run -f ../../packages/env/.env -- vite build --mode desktop",
+    "check": "tsc --noEmit",
+    "prebuild": "pnpm --dir ../.. run i18n:ensure",
+    "prebuild:desktop": "pnpm --dir ../.. run i18n:ensure",
+    "predev": "pnpm --dir ../.. run i18n:ensure",
+    "predev:desktop": "pnpm --dir ../.. run i18n:ensure",
+    "dev": "dotenvx run -f ../../packages/env/.env -- vite",
+    "dev:desktop": "dotenvx run -f ../../packages/env/.env -- vite --mode desktop",
+    "start": "cross-env NODE_ENV=production dotenvx run -f ../../packages/env/.env -- node server.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hono/node-server": "catalog:",
+    "hono": "catalog:"
+  },
+  "devDependencies": {
+    "@babel/core": "catalog:",
+    "@clerk/react": "catalog:",
+    "@dotenvx/dotenvx": "catalog:",
+    "@fontsource-variable/geist": "catalog:",
+    "@fontsource-variable/geist-mono": "catalog:",
+    "@fontsource/instrument-serif": "catalog:",
+    "@orpc/client": "catalog:",
+    "@orpc/tanstack-query": "catalog:",
+    "@rolldown/plugin-babel": "catalog:",
+    "@tailwindcss/vite": "catalog:",
+    "@tanstack/react-query": "catalog:",
+    "@tanstack/react-router": "catalog:",
+    "@tanstack/router-plugin": "catalog:",
+    "@tsu-stack/api": "workspace:*",
+    "@tsu-stack/env": "workspace:*",
+    "@tsu-stack/i18n": "workspace:*",
+    "@tsu-stack/logger": "workspace:*",
+    "@tsu-stack/tsconfig": "workspace:*",
+    "@tsu-stack/ui": "workspace:*",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "babel-plugin-react-compiler": "catalog:",
+    "cross-env": "catalog:",
+    "lucide-react": "catalog:",
+    "next-themes": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}
