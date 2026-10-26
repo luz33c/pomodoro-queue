@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as authRouteRouteImport } from './routes/(auth)/route'
 import { Route as authDashboardIndexRouteImport } from './routes/(auth)/dashboard/index'
+import { Route as authTodosIndexRouteImport } from './routes/(auth)/todos/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -27,27 +28,35 @@ const authDashboardIndexRoute = authDashboardIndexRouteImport.update({
   path: '/dashboard/',
   getParentRoute: () => authRouteRoute,
 } as any)
+const authTodosIndexRoute = authTodosIndexRouteImport.update({
+  id: '/todos/',
+  path: '/todos/',
+  getParentRoute: () => authRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard/': typeof authDashboardIndexRoute
+  '/todos/': typeof authTodosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof authDashboardIndexRoute
+  '/todos': typeof authTodosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/(auth)': typeof authRouteRouteWithChildren
   '/(auth)/dashboard/': typeof authDashboardIndexRoute
+  '/(auth)/todos/': typeof authTodosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard/'
+  fullPaths: '/' | '/dashboard/' | '/todos/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard'
-  id: '__root__' | '/' | '/(auth)' | '/(auth)/dashboard/'
+  to: '/' | '/dashboard' | '/todos'
+  id: '__root__' | '/' | '/(auth)' | '/(auth)/dashboard/' | '/(auth)/todos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -78,15 +87,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authDashboardIndexRouteImport
       parentRoute: typeof authRouteRoute
     }
+    '/(auth)/todos/': {
+      id: '/(auth)/todos/'
+      path: '/todos'
+      fullPath: '/todos/'
+      preLoaderRoute: typeof authTodosIndexRouteImport
+      parentRoute: typeof authRouteRoute
+    }
   }
 }
 
 interface authRouteRouteChildren {
   authDashboardIndexRoute: typeof authDashboardIndexRoute
+  authTodosIndexRoute: typeof authTodosIndexRoute
 }
 
 const authRouteRouteChildren: authRouteRouteChildren = {
   authDashboardIndexRoute: authDashboardIndexRoute,
+  authTodosIndexRoute: authTodosIndexRoute,
 }
 
 const authRouteRouteWithChildren = authRouteRoute._addFileChildren(

@@ -15,12 +15,17 @@ export async function getTodo({ id, ownerId }: TodoKey, executor: DbExecutor = d
   return (await executor.query.todo.findFirst({ where: { id, ownerId } })) ?? null;
 }
 
+/** Synced clients send their own id; a replay of an existing id writes nothing and returns null. */
 export async function createTodo(
-  { ownerId, title }: Pick<NewTodo, "ownerId" | "title">,
+  { id, ownerId, title }: Pick<NewTodo, "id" | "ownerId" | "title">,
   executor: DbExecutor = db
 ) {
-  const [row] = await executor.insert(todo).values({ ownerId, title }).returning();
-  return row;
+  const [row] = await executor
+    .insert(todo)
+    .values({ id, ownerId, title })
+    .onConflictDoNothing({ target: todo.id })
+    .returning();
+  return row ?? null;
 }
 
 export async function updateTodo(

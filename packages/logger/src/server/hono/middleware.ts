@@ -5,6 +5,7 @@ import {
   type EvlogVariables
 } from "evlog/hono";
 import { type MiddlewareHandler } from "hono";
+import { bodyLimit } from "hono/body-limit";
 import { createMiddleware } from "hono/factory";
 import { HTTPException } from "hono/http-exception";
 
@@ -60,20 +61,23 @@ export function honoLoggerMiddleware(options?: HonoLoggerMiddlewareOptions): Mid
 export function honoLogIngestionMiddleware(
   options: HonoLogIngestionOptions = {}
 ): MiddlewareHandler {
-  const maxPayloadBytes = options.maxPayloadBytes ?? 64 * 1024;
-
-  return createMiddleware(async (c) => {
-    const contentLength = Number(c.req.header("content-length") ?? 0);
-    if (contentLength > maxPayloadBytes) {
+  // Counts the bytes actually read, so a chunked request without Content-Length is capped too
+  const limitBody = bodyLimit({
+    maxSize: options.maxPayloadBytes ?? 64 * 1024,
+    onError: () => {
       throw new HTTPException(413, { message: "Log payload is too large" });
     }
+  });
 
+  return createMiddleware(async (c) => {
     let body: unknown;
-    try {
-      body = await c.req.json();
-    } catch {
-      throw new HTTPException(400, { message: "Invalid JSON body" });
-    }
+    await limitBody(c, async () => {
+      try {
+        body = await c.req.json();
+      } catch {
+        throw new HTTPException(400, { message: "Invalid JSON body" });
+      }
+    });
 
     const batch = normalizeBatch(body);
     for (const payload of batch) {

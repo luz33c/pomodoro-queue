@@ -156,7 +156,7 @@
       .flow {
         position: relative;
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: 16px;
       }
 
@@ -478,24 +478,29 @@
         <div>
           <span class="tag">🧸 ELI5 版 · 根据当前代码阅读</span>
           <h1>这是一个<br />“会长大的<br />多端积木城”</h1>
-          <p class="lead">同一套后端积木，给网站、手机 App 和浏览器扩展一起用。</p>
+          <p class="lead">同一套后端积木，给网站、产品 App、手机和浏览器扩展一起用。</p>
         </div>
         <div class="hero-art" aria-label="积木城插图">
           <span class="mascot">🦊</span>
-          <span class="speech">我不用重复造三座城！</span>
+          <span class="speech">产品界面还能装进桌面壳！</span>
         </div>
       </header>
 
       <section>
         <h2>先看：东西怎么走？</h2>
         <p class="subhead">
-          用户从三扇门进来，带着登录小票；中间的服务员检查后，才去拿数据库里的东西。
+          用户有多个入口；需要登录的 API 请求，要先经过服务端身份检查。桌面登录仍在等待接入。
         </p>
         <div class="flow">
           <article class="node blue">
             <span class="icon">🖥️</span>
-            <h3>网站</h3>
-            <p>TanStack Start<br />会先在服务器画页面</p>
+            <h3>网站与登录</h3>
+            <p>TanStack Start<br />营销、SEO 和登录页<br />支持服务器渲染</p>
+          </article>
+          <article class="node green">
+            <span class="icon">💻</span>
+            <h3>产品 App</h3>
+            <p>Vite + React SPA<br />浏览器与 Electrobun 桌面共用<br />桌面暂显示登录占位</p>
           </article>
           <article class="node purple">
             <span class="icon">📱</span>
@@ -515,7 +520,7 @@
               >🪪</span
             >
             <strong>Clerk = 登录小票机</strong>
-            <p>三个端用同一个账号；请求会带上它发的令牌。</p>
+            <p>已接入的客户端用 Clerk 登录；产品 App 浏览器版回网站登录，桌面登录尚未接入。</p>
           </article>
 
           <div class="drop-arrow" aria-hidden="true">↓</div>
@@ -524,7 +529,7 @@
             <span class="icon">🚪</span>
             <div>
               <h3>独立 API 服务：Hono + oRPC</h3>
-              <p>统一入口：验身份、写日志、给出类型安全的接口；也能生成 OpenAPI 文档。</p>
+              <p>受保护的接口校验身份，公开接口无需登录；共享类型、日志和 OpenAPI 文档。</p>
             </div>
             <span class="pill">/rpc · /docs</span>
           </article>
@@ -538,16 +543,16 @@
               <p>Drizzle 是翻译官：把 TypeScript 的要求变成数据库听得懂的话。</p>
             </article>
             <article class="legacy card legacy">
-              <h3>🧳 旧行李：Better Auth</h3>
-              <p>旧登录表和 <code>/auth/*</code> 还在，作为兼容入口；现在的主登录路线是 Clerk。</p>
+              <h3>🔐 Clerk 管账号</h3>
+              <p>当前 schema 已移除旧认证表。历史迁移保留，新增迁移负责清理数据库中的旧表。</p>
             </article>
           </div>
         </div>
         <div class="callout">
           <span class="icon">✨</span>
           <p>
-            <strong>网站有一个小特权</strong>服务器正在画网页时，可以直接调用共享 API
-            路由；浏览器、手机和扩展才会通过网络访问 <code>/rpc</code>。
+            <strong>网站有一个小特权</strong>服务器正在画网页时，可以直接调用共享 API 路由；产品 App
+            在客户端画页面，经网络访问 <code>/rpc</code>，手机和扩展也走网络。
           </p>
         </div>
       </section>
@@ -566,7 +571,16 @@
                 <span class="folder-name">apps/</span>
                 <span class="comment">可以直接运行的产品</span>
                 <ul>
-                  <li><span class="folder-name">web/</span> <span class="comment">网页</span></li>
+                  <li>
+                    <span class="folder-name">web/</span> <span class="comment">网站与登录</span>
+                  </li>
+                  <li>
+                    <span class="folder-name">app/</span> <span class="comment">产品 SPA</span>
+                  </li>
+                  <li>
+                    <span class="folder-name">desktop/</span>
+                    <span class="comment">装载产品界面的桌面壳</span>
+                  </li>
                   <li>
                     <span class="folder-name">server/</span> <span class="comment">API 服务</span>
                   </li>
@@ -584,8 +598,7 @@
                 <span class="comment">可重复使用的积木</span>
                 <ul>
                   <li>
-                    <span class="folder-name">api/</span>, <span class="folder-name">db/</span>,
-                    <span class="folder-name">auth/</span>
+                    <span class="folder-name">api/</span>, <span class="folder-name">db/</span>
                   </li>
                   <li>
                     <span class="folder-name">core/</span>, <span class="folder-name">env/</span>,
@@ -637,7 +650,7 @@
               <span class="icon">📦</span>
               <div>
                 <h3>Docker</h3>
-                <p>“搬家箱”：网页、API、Postgres 一起启动。</p>
+                <p>“搬家箱”：分别运行网站、产品 App 静态服务、API 和 Postgres。</p>
               </div>
             </article>
           </div>
@@ -645,10 +658,11 @@
       </section>
 
       <section>
-        <h2>网页里面再分五层</h2>
+        <h2>网站与产品界面的常用分层</h2>
         <p class="subhead">
-          网页采用 Feature-Sliced
-          Design（FSD）：上面的大东西可以用下面的小东西，反过来不行。这样积木不容易缠在一起。
+          网站和产品 App 采用 Feature-Sliced
+          Design（FSD）：上面的大东西可以用下面的小东西，反过来不行。这里展示常用层，业务实体可放在
+          entities 层。
         </p>
         <div class="layers">
           <article class="layer blue">
@@ -676,7 +690,7 @@
           <span class="step">🗄️ db<br />存什么？</span><span class="arrow">→</span>
           <span class="step">🧠 core<br />共同规则</span><span class="arrow">→</span>
           <span class="step">🚪 api<br />对外接口</span><span class="arrow">→</span>
-          <span class="step">🖥️ web<br />页面显示</span>
+          <span class="step">💻 app / web<br />页面显示</span>
         </div>
       </section>
 
@@ -691,7 +705,7 @@
           <article class="card purple">
             <span class="icon">🔐</span>
             <h3>少漏门锁</h3>
-            <p>鉴权只集中在 API 入口检查，三个客户端用同一种令牌。</p>
+            <p>界面守卫负责引导登录，受保护的 API 仍会独立校验身份；不能只靠页面拦住访问。</p>
           </article>
           <article class="card yellow">
             <span class="icon">🧭</span>
@@ -708,9 +722,10 @@
             <span class="pill">已经有的地基</span>
             <h3>多端骨架是通的</h3>
             <ul>
-              <li>网页支持 SSR、国际化、SEO、React Query</li>
+              <li>网站支持 SSR 与 SEO，产品 App 是独立 SPA；两者共用 UI 与国际化资源</li>
+              <li>产品 App 同时构建浏览器版和桌面版，桌面壳已接入，登录仍为占位</li>
               <li>手机和扩展会调用同一套 oRPC API</li>
-              <li>Docker 会按“迁移数据库 → API → 网页”顺序启动</li>
+              <li>Docker 中 API 等迁移完成，网站等 API 健康；产品 App 静态服务独立启动</li>
               <li>日志、健康检查、环境变量都有独立积木</li>
             </ul>
           </article>
@@ -719,7 +734,7 @@
             <h3>这更像高级模板</h3>
             <ul>
               <li>当前共享 API 只有健康检查和受保护的示例数据</li>
-              <li>数据库 schema 目前主要是旧 Better Auth 表</li>
+              <li>当前 schema 已移除旧认证表，尚未添加业务表</li>
               <li><code>core</code> 目前主要放健康检查和资源工具</li>
               <li>真正的业务领域模块还等着加入</li>
             </ul>
@@ -730,9 +745,9 @@
       <section class="summary">
         <h2>一句话结论</h2>
         <p>
-          <strong>这是一个“网页 + 手机 + 扩展共用后端”的 TypeScript 单仓库地基。</strong
-          >架构先把路、门锁和积木仓库搭好；下一步加业务时，照着“数据库 → 共同规则 → API →
-          页面”这条路走就不容易乱。
+          <strong>这是一个网站、产品 App、手机与扩展共用后端的 TypeScript 单仓库。</strong>产品 App
+          的同一套界面可在浏览器或桌面壳中运行，桌面登录尚未接入。添加业务时，沿着“数据库 → 共同规则
+          → API → 页面”分工实现。
         </p>
       </section>
 

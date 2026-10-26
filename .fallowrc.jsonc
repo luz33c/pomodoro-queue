@@ -5,6 +5,10 @@
     "apps/app/src/main.tsx",
     "apps/app/server.ts",
     "apps/app/vite.config.ts",
+    // TanStack Start loads the router itself and the route files through the generated route tree
+    "apps/preview-ui/src/router.tsx",
+    "apps/preview-ui/src/routes/**/*.tsx",
+    "apps/preview-ui/vite.config.ts",
     "apps/desktop/src/bun/index.ts",
     "apps/desktop/electrobun.config.ts",
     "scripts/*.ts",

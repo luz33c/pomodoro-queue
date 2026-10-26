@@ -4,6 +4,8 @@ services:
   postgres:
     image: postgres:18-alpine
     container_name: tsu-stack-db-dev-postgres
+    # Electric reads the logical replication stream
+    command: ["postgres", "-c", "wal_level=logical"]
     environment:
       POSTGRES_DB: tsu-stack
       POSTGRES_USER: postgres
@@ -13,5 +15,22 @@ services:
     volumes:
       - tsu-stack-db-dev-postgres-dev:/var/lib/postgresql
 
+  electric:
+    image: electricsql/electric:1.8.1
+    container_name: tsu-stack-db-dev-electric
+    environment:
+      DATABASE_URL: postgresql://postgres:changeme@postgres:5432/tsu-stack?sslmode=disable
+      ELECTRIC_STORAGE_DIR: /var/lib/electric/persistent
+      # Local development only: shape requests need no secret
+      ELECTRIC_INSECURE: "true"
+    ports:
+      # Electric listens on 3000 inside the container; 3000 on the host belongs to apps/web
+      - "${ELECTRIC_PORT:-3605}:3000"
+    volumes:
+      - tsu-stack-db-dev-electric-dev:/var/lib/electric/persistent
+    depends_on:
+      - postgres
+
 volumes:
   tsu-stack-db-dev-postgres-dev:
+  tsu-stack-db-dev-electric-dev:

@@ -1,0 +1,906 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>【历史归档】桌面端计划详解</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: oklch(0.1471 0.0047 54.2);
+        --fg: oklch(0.9274 0.0063 55.66);
+        --muted: oklch(0.7114 0.0113 56.21);
+        --card: oklch(0.194 0.0063 55.99);
+        --card-2: oklch(0.2282 0.008 56);
+        --border: oklch(0.2682 0.0095 56.24);
+        --code: oklch(0.1021 0.0032 54.78);
+        --ok: oklch(0.78 0.14 150);
+        --warn: oklch(0.83 0.13 80);
+        --bad: oklch(0.72 0.17 25);
+        --web: oklch(0.78 0.09 240);
+        --desk: oklch(0.8 0.11 300);
+        --pkg: oklch(0.86 0.1 85);
+        --radius: 0.5rem;
+      }
+      @media (prefers-color-scheme: light) {
+        :root {
+          color-scheme: light;
+          --bg: oklch(1 0 0);
+          --fg: oklch(0.2682 0.0095 56.24);
+          --muted: oklch(0.4449 0.012 59.58);
+          --card: oklch(0.991 0.0016 54.37);
+          --card-2: oklch(0.9753 0.0032 55.37);
+          --border: oklch(0.9274 0.0063 55.66);
+          --code: oklch(0.9753 0.0032 55.37);
+          --ok: oklch(0.52 0.14 150);
+          --warn: oklch(0.58 0.14 65);
+          --bad: oklch(0.56 0.2 27);
+          --web: oklch(0.5 0.13 245);
+          --desk: oklch(0.5 0.16 300);
+          --pkg: oklch(0.55 0.13 70);
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font:
+          15px/1.65 "Geist",
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          "PingFang SC",
+          "Microsoft YaHei",
+          sans-serif;
+      }
+      .wrap {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 40px 24px 72px;
+      }
+      h1,
+      h2 {
+        font-family: "Instrument Serif", ui-serif, Georgia, "Songti SC", serif;
+        font-weight: 400;
+        letter-spacing: 0.01em;
+      }
+      h1 {
+        font-size: clamp(30px, 5vw, 44px);
+        line-height: 1.15;
+        margin: 0 0 14px;
+      }
+      h2 {
+        font-size: clamp(24px, 3.4vw, 30px);
+        margin: 60px 0 6px;
+      }
+      h2 .no {
+        font-family: "Geist Mono", ui-monospace, Menlo, monospace;
+        font-size: 0.5em;
+        color: var(--muted);
+        vertical-align: middle;
+        margin-right: 10px;
+        letter-spacing: 0.06em;
+      }
+      h3 {
+        font-size: 15.5px;
+        margin: 0 0 8px;
+        font-weight: 600;
+        line-height: 1.4;
+      }
+      p {
+        margin: 0 0 8px;
+      }
+      ul {
+        margin: 6px 0 0;
+        padding-left: 18px;
+      }
+      li {
+        margin: 4px 0;
+      }
+      a {
+        color: inherit;
+      }
+      .eyebrow {
+        font-family: "Geist Mono", ui-monospace, Menlo, monospace;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+      .lead {
+        color: var(--muted);
+        max-width: 820px;
+      }
+      .lead strong,
+      .sub strong,
+      .punch strong {
+        color: var(--fg);
+        font-weight: 600;
+      }
+      .sub {
+        color: var(--muted);
+        margin-bottom: 18px;
+        max-width: 820px;
+      }
+      code {
+        font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.85em;
+        background: var(--code);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 1px 5px;
+        overflow-wrap: anywhere;
+      }
+      .card {
+        min-width: 0;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: calc(var(--radius) * 1.5);
+        padding: 16px 18px;
+      }
+      .pill {
+        display: inline-block;
+        font-size: 12px;
+        padding: 1px 8px;
+        border-radius: 6px;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+      }
+      .pill.ok {
+        color: var(--ok);
+        background: color-mix(in oklch, var(--ok) 13%, transparent);
+      }
+      .pill.warn {
+        color: var(--warn);
+        background: color-mix(in oklch, var(--warn) 13%, transparent);
+      }
+      .pill.bad {
+        color: var(--bad);
+        background: color-mix(in oklch, var(--bad) 13%, transparent);
+      }
+      .pill.neutral {
+        color: var(--muted);
+        border: 1px solid var(--border);
+      }
+      .punch {
+        margin-top: 16px;
+        padding: 12px 16px;
+        border-left: 3px solid var(--pkg);
+        background: color-mix(in oklch, var(--pkg) 8%, transparent);
+        border-radius: 0 var(--radius) var(--radius) 0;
+      }
+
+      pre.tree {
+        margin: 0;
+        font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12.5px;
+        line-height: 1.75;
+        background: var(--code);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 14px 16px;
+        overflow-x: auto;
+      }
+      pre.tree .c {
+        color: var(--muted);
+      }
+      pre.tree .web {
+        color: var(--web);
+      }
+      pre.tree .desk {
+        color: var(--desk);
+      }
+      pre.tree .pkg {
+        color: var(--pkg);
+      }
+      pre.tree .hl {
+        display: inline-block;
+        background: color-mix(in oklch, var(--pkg) 18%, transparent);
+        border-radius: 4px;
+        padding: 0 6px;
+        margin: 0 -6px;
+      }
+      pre.tree .add {
+        color: var(--ok);
+      }
+      pre.tree .del {
+        color: var(--bad);
+      }
+
+      /* dependency */
+      .dep {
+        display: grid;
+        grid-template-columns: 1fr 1.15fr 1fr;
+        gap: 14px;
+      }
+      .node {
+        min-width: 0;
+        border-radius: calc(var(--radius) * 1.5);
+        border: 1px solid var(--border);
+        background: var(--card);
+        padding: 14px 16px;
+      }
+      .node .tag {
+        font-family: "Geist Mono", ui-monospace, Menlo, monospace;
+        font-size: 11.5px;
+        letter-spacing: 0.04em;
+        margin-bottom: 6px;
+      }
+      .node.web {
+        border-top: 3px solid var(--web);
+      }
+      .node.web .tag {
+        color: var(--web);
+      }
+      .node.desk {
+        border-top: 3px solid var(--desk);
+      }
+      .node.desk .tag {
+        color: var(--desk);
+      }
+      .node.pkg {
+        border-top: 3px solid var(--pkg);
+        background: color-mix(in oklch, var(--pkg) 6%, var(--card));
+      }
+      .node.pkg .tag {
+        color: var(--pkg);
+      }
+      .node .row {
+        display: flex;
+        gap: 8px;
+        align-items: baseline;
+        font-size: 13.5px;
+        padding: 5px 0;
+        border-top: 1px dashed var(--border);
+      }
+      .node .row:first-of-type {
+        border-top: none;
+      }
+      .node .row code {
+        flex: none;
+      }
+      .node .row span {
+        color: var(--muted);
+      }
+      .dep-arrows {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1fr 1.15fr 1fr;
+        gap: 14px;
+        text-align: center;
+        font-family: "Geist Mono", ui-monospace, Menlo, monospace;
+        font-size: 12.5px;
+        color: var(--muted);
+      }
+      .dep-down {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+      }
+      .chip {
+        font-size: 12.5px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: var(--card-2);
+        max-width: 100%;
+        overflow-wrap: anywhere;
+      }
+      .chip.mono {
+        font-family: "Geist Mono", ui-monospace, Menlo, monospace;
+        font-size: 12px;
+      }
+
+      .two {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr));
+        gap: 16px;
+      }
+      .tree-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .tree-head .pill {
+        flex: none;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+        border: 1px solid var(--border);
+        border-radius: calc(var(--radius) * 1.5);
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 640px;
+        font-size: 13.5px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+      th {
+        font-weight: 600;
+        background: var(--card-2);
+        white-space: nowrap;
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+      td.mono {
+        font-family: "Geist Mono", ui-monospace, Menlo, monospace;
+        font-size: 12.5px;
+      }
+      .ok-t {
+        color: var(--ok);
+      }
+      .warn-t {
+        color: var(--warn);
+      }
+      .bad-t {
+        color: var(--bad);
+      }
+
+      .steps-mini {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        counter-reset: s;
+      }
+      .steps-mini li {
+        counter-increment: s;
+        position: relative;
+        padding: 7px 0 7px 32px;
+        border-top: 1px dashed var(--border);
+        font-size: 13.5px;
+        margin: 0;
+      }
+      .steps-mini li:first-child {
+        border-top: none;
+      }
+      .steps-mini li::before {
+        content: counter(s);
+        position: absolute;
+        left: 0;
+        top: 7px;
+        width: 22px;
+        height: 22px;
+        border-radius: 999px;
+        display: grid;
+        place-items: center;
+        font-family: "Geist Mono", ui-monospace, Menlo, monospace;
+        font-size: 11.5px;
+        background: var(--card-2);
+        border: 1px solid var(--border);
+      }
+
+      .phases {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+        gap: 14px;
+      }
+      .phase .ph-n {
+        font-family: "Geist Mono", ui-monospace, Menlo, monospace;
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+      .phase .see {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed var(--border);
+        font-size: 13.5px;
+      }
+      .phase .see b {
+        font-weight: 600;
+      }
+      .phase.spike {
+        border-style: dashed;
+      }
+
+      .review {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+        gap: 14px;
+      }
+      .review ul {
+        list-style: none;
+        padding: 0;
+      }
+      .review li {
+        padding-left: 22px;
+        position: relative;
+        font-size: 13.5px;
+      }
+      .review li::before {
+        position: absolute;
+        left: 0;
+        top: 0;
+        font-weight: 600;
+      }
+      .review .yes li::before {
+        content: "✓";
+        color: var(--ok);
+      }
+      .review .todo li::before {
+        content: "?";
+        color: var(--warn);
+      }
+      .review .fix {
+        grid-column: 1 / -1;
+      }
+
+      footer {
+        margin-top: 56px;
+        font-size: 12.5px;
+        color: var(--muted);
+        border-top: 1px solid var(--border);
+        padding-top: 14px;
+      }
+
+      @media (max-width: 820px) {
+        .dep,
+        .dep-arrows {
+          grid-template-columns: 1fr;
+        }
+        .dep-arrows {
+          display: none;
+        }
+      }
+      @media (max-width: 560px) {
+        .wrap {
+          padding: 28px 16px 56px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <aside
+      aria-label="历史归档说明"
+      style="
+        margin: 20px;
+        padding: 16px 20px;
+        border: 2px solid #b58b43;
+        border-radius: 8px;
+        background: #292218;
+        color: #f7e4bd;
+        font-size: 15px;
+        line-height: 1.7;
+      "
+    >
+      <strong>已被方案 C 替代；历史讨论不代表当前实现。</strong><br />
+      本页为归档的方案讨论，保留起草时的设计、示例和决策背景。A、B 未采纳，早期 C
+      部署讨论也已被当前实现说明替代。<br />
+      当前入口：<a
+        href="../../desktop-plan-c-product-app.md"
+        style="color: #f7e4bd; text-decoration: underline"
+        >方案 C 实现说明</a
+      >
+      ·
+      <a
+        href="../../show-me-desktop-plan-c-final.html"
+        style="color: #f7e4bd; text-decoration: underline"
+        >方案 C 当前图解</a
+      >
+      · <a href="./README.md" style="color: #f7e4bd; text-decoration: underline">归档索引</a>
+    </aside>
+    <div class="wrap">
+      <div class="eyebrow">
+        tsu-stack · apps/desktop · 方案 B 运行时详解（配合 desktop-architecture-plan.html）
+      </div>
+      <h1>方案 B · 共享包 + Electrobun 本地包：它在运行时是怎么跑的</h1>
+      <p class="lead">
+        总览页回答"改哪些文件"。这一页回答<strong
+          >"同一份页面代码，为什么能同时在 SSR 的 web 和 <code>views://</code> 里跑"</strong
+        >：依赖方向、两端的调用路径、注入机制、hash
+        路由、语言覆盖、开发与打包循环，最后是对照仓库代码的核对结果。
+      </p>
+
+      <!-- 1 -->
+      <h2><span class="no">01</span>依赖只有一个方向</h2>
+      <p class="sub">
+        两个应用都往下依赖共享包；共享包再往下只依赖 ui、i18n 的 messages，以及 api
+        的类型入口。它不知道 TanStack Start、不知道 Clerk、也不知道谁在用它。
+      </p>
+      <div class="dep">
+        <div class="node web">
+          <div class="tag">apps/web · TanStack Start · SSR</div>
+          <div class="row"><code>routes/…/dashboard</code><span>守卫、SEO 留在这里</span></div>
+          <div class="row">
+            <code>pages/dashboard</code><span>薄包装：Container + 共享页面</span>
+          </div>
+          <div class="row"><code>router.tsx</code><span>注入同构 oRPC 客户端</span></div>
+        </div>
+        <div class="node pkg">
+          <div class="tag">packages/app · @tsu-stack/app</div>
+          <div class="row"><code>api/client.ts</code><span>configureAppApi / getAppOrpc</span></div>
+          <div class="row"><code>api/queries/*</code><span>查询选项工厂 + hook</span></div>
+          <div class="row"><code>ui/dashboard/*</code><span>页面主体，两端共用</span></div>
+        </div>
+        <div class="node desk">
+          <div class="tag">apps/desktop · Electrobun 2.x</div>
+          <div class="row"><code>src/bun/index.ts</code><span>主进程：开窗口、外链</span></div>
+          <div class="row"><code>src/view/*</code><span>Vite SPA · hash 路由</span></div>
+          <div class="row"><code>view/shared/api/orpc.ts</code><span>注入纯客户端 oRPC</span></div>
+        </div>
+        <div class="dep-arrows">
+          <div>→ 引用页面 · 注入客户端 →</div>
+          <div>↓ 只依赖下面这些 ↓</div>
+          <div>← 引用页面 · 注入客户端 ←</div>
+        </div>
+        <div class="dep-down">
+          <span class="chip mono">@tsu-stack/ui</span>
+          <span class="chip mono">@tsu-stack/i18n/messages</span>
+          <span class="chip mono">@tsu-stack/api/routers/types（只有类型，构建时擦除）</span>
+          <span class="chip mono">react · @tanstack/react-query · @orpc/tanstack-query</span>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <h2><span class="no">02</span>同一个 DashboardPage，两端各自怎么走到它</h2>
+      <p class="sub">
+        高亮的那一行是同一份代码。差异全部在"包装层"：守卫、SEO、布局、客户端实现。页面本身没有一行
+        <code>if desktop</code>。
+      </p>
+      <div class="two">
+        <div class="card">
+          <div class="tree-head">
+            <h3>web：一次 <code>/dashboard</code> 请求</h3>
+            <span class="pill neutral">SSR</span>
+          </div>
+          <pre class="tree"><span class="web">GET /dashboard</span>
+  start.ts: clerkMiddleware()                 <span class="c">← 不变</span>
+  (auth)/route.tsx beforeLoad
+    getClerkAuthState()  <span class="c">server function，守卫留在 web</span>
+  dashboard/index.tsx
+    head() → generateAppSeo()                 <span class="c">← SEO 留在 web</span>
+    component: pages/dashboard                <span class="c">← web 薄包装</span>
+      &lt;Container&gt;                             <span class="c">← web 自己的布局</span>
+        <span class="hl pkg">&lt;DashboardPage&gt;  @tsu-stack/app</span>
+          useGetPrivateDataQuery()
+            getAppOrpc()  <span class="c">→ router.tsx 注入的同构客户端</span>
+              服务端分支: createRouterClient(appRouter) + Clerk auth()
+              客户端分支: RPCLink → /rpc + Bearer</pre>
+        </div>
+        <div class="card">
+          <div class="tree-head">
+            <h3>desktop：窗口启动</h3>
+            <span class="pill neutral">views://</span>
+          </div>
+          <pre class="tree"><span class="desk">electrobun 主进程 src/bun/index.ts</span>
+  resolveViewUrl()
+    dev 渠道且 :5180 在线 → http://localhost:5180
+    否则              → views://mainview/index.html
+  new BrowserWindow({ url })
+    view/main.tsx
+      shared/api/orpc.ts    <span class="c">RPCLink → DESKTOP_SERVER_URL/rpc；configureAppApi</span>
+      shared/i18n/locale.ts <span class="c">overwriteGetLocale(() =&gt; 设置里的语言)</span>
+      &lt;RouterProvider history=createHashHistory()&gt;
+        &lt;RootLayout&gt;                          <span class="c">← 桌面自己的外壳</span>
+          "/"          → &lt;HomeScreen&gt;  useGetHealthLiveQuery()
+          "/dashboard" → &lt;DashboardScreen&gt;
+                           未登录 → 占位
+                           已登录 → <span class="hl pkg">&lt;DashboardPage&gt;  同一份代码</span></pre>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <h2><span class="no">03</span>注入机制：模块级函数，不是 Context</h2>
+      <div class="two">
+        <div class="card">
+          <pre class="tree"><span class="pkg">packages/app/src/api/client.ts</span>
+  let appOrpc = null
+  configureAppApi({ orpc })   <span class="c">// 应用启动时调一次</span>
+  getAppOrpc()                <span class="c">// 查询里取；没配置就抛明确错误</span>
+
+<span class="pkg">packages/app/src/api/queries/get-private-data.ts</span>
+  getPrivateDataQueryOptions() = getAppOrpc().private.data.queryOptions()
+  useGetPrivateDataQuery()     = useQuery(上面的选项)
+
+<span class="web">web</span>      router.tsx 顶层            configureAppApi({ orpc })  <span class="c">同构客户端</span>
+<span class="desk">desktop</span>  view/shared/api/orpc.ts 末尾 configureAppApi({ orpc })  <span class="c">纯客户端</span></pre>
+        </div>
+        <div class="card">
+          <h3>为什么这样设计</h3>
+          <ul>
+            <li>
+              存的是<strong>客户端实例</strong>，不是用户会话。web
+              的同构客户端在服务端每次调用都重新走 Clerk 的
+              <code>auth()</code>，请求之间不会串数据。
+            </li>
+            <li>
+              写法沿用仓库已有的
+              <code>setClerkAuthTokenGetter</code
+              >（<code>packages/api/src/client/tanstack-start/clerk-auth.ts</code>），也符合
+              zustand.md 里"不默认用 React Context"的约定。
+            </li>
+            <li>
+              页面不再直接引用 <code>@tsu-stack/api/client/tanstack-start/orpc</code>：那个模块含
+              <code>createIsomorphicFn</code>、Clerk 的服务端 <code>auth()</code> 和
+              <code>appRouter</code>，离开 Start 编译器会把服务端代码带进浏览器包。
+            </li>
+            <li>以后接登录时，再加一个同样形态的 <code>configureAppSession()</code>。</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <h2><span class="no">04</span>路由：views:// 下为什么必须用 hash</h2>
+      <p class="sub">
+        打包后窗口加载的是一个文件。pushState 会把地址改成一个不存在的文件路径，刷新就找不到；hash
+        路由永远停留在 <code>index.html</code>。
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>场景</th>
+              <th>地址</th>
+              <th>刷新后</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>打包后首屏</td>
+              <td class="mono">views://mainview/index.html</td>
+              <td class="ok-t">正常</td>
+            </tr>
+            <tr>
+              <td>pushState 路由</td>
+              <td class="mono">views://mainview/dashboard</td>
+              <td class="bad-t">找不到文件，Electrobun 没有文档化的回退</td>
+            </tr>
+            <tr>
+              <td>hash 路由（计划采用）</td>
+              <td class="mono">views://mainview/index.html#/dashboard</td>
+              <td class="ok-t">文件永远是 index.html</td>
+            </tr>
+            <tr>
+              <td>开发时</td>
+              <td class="mono">http://localhost:5180/#/dashboard</td>
+              <td class="ok-t">正常；但源是 http://localhost，不是 views://</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="punch">
+        路由表用<strong>代码式</strong>（<code>routes/tree.ts</code> 只有 <code>/</code> 和
+        <code>/dashboard</code>），不引入 router 插件和生成文件。web 那边不受影响，仍是 Start
+        的文件路由。
+      </p>
+
+      <!-- 5 -->
+      <h2><span class="no">05</span>语言：不重新编译，运行时覆盖</h2>
+      <div class="two">
+        <div class="card">
+          <pre
+            class="tree"
+          >packages/i18n 编译产物   <span class="c">策略 ["url", "baseLocale"]，两端共用同一份</span>
+  ├── <span class="web">web</span>      URL 里的 /de 决定语言                 <span class="c">← 不变</span>
+  └── <span class="desk">desktop</span>  URL 永远是 index.html → url 策略只能得到 baseLocale
+               view/shared/i18n/locale.ts
+                 overwriteGetLocale(() =&gt; 设置里的语言 ?? 系统语言)
+               messages m.* 原样复用</pre>
+        </div>
+        <div class="card">
+          <h3>为什么不给桌面端单独编译一套策略</h3>
+          <ul>
+            <li>
+              Paraglide 的 Vite 插件把策略编译进
+              <code>packages/i18n/src/paraglide</code
+              >，这个目录是共享的。两个应用用不同策略编译会互相覆盖，同时开 dev 时还会来回打架。
+            </li>
+            <li>
+              现有的 <code>LocaleProvider</code> 本来就是用
+              <code>overwriteGetLocale</code> 在客户端覆盖的，桌面端只是换了"语言从哪来"。
+            </li>
+            <li>
+              已核对：产物里导出 <code>overwriteGetLocale</code> 和
+              <code>overwriteSetLocale</code>。
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 6 -->
+      <h2><span class="no">06</span>开发循环与打包流程</h2>
+      <div class="two">
+        <div class="card">
+          <h3><code>pnpm run dev:desktop</code></h3>
+          <ol class="steps-mini">
+            <li><code>predev</code>：构建 <code>@tsu-stack/i18n</code></li>
+            <li><code>dev:view</code>：Vite 在 <code>:5180</code> 起 view，带 HMR</li>
+            <li>
+              <code>dev:shell</code>：<code>electrobun dev --watch</code> 启动主进程（dev 渠道）
+            </li>
+            <li>主进程 <code>HEAD http://localhost:5180</code> 成功 → 窗口打开 dev server</li>
+            <li>改共享包或 view → 热更新；改主进程 → 自动重启</li>
+          </ol>
+          <p style="margin-top: 12px">
+            <span class="pill warn">注意</span> 开发时页面的源是
+            <code>http://localhost</code>，和打包后的 <code>views://</code> 不同。Origin
+            相关的行为（CORS、授权方）必须用打包产物验证。
+          </p>
+        </div>
+        <div class="card">
+          <h3><code>pnpm run build:desktop</code></h3>
+          <ol class="steps-mini">
+            <li>
+              <code>build:view</code>：<code>vite build</code>（<code>base: "./"</code>）→
+              <code>apps/desktop/dist/view</code>
+            </li>
+            <li><code>electrobun build --env=stable</code>：打包 bun 主进程</li>
+            <li>
+              <code>copy</code>：<code>dist/view</code> → <code>Resources/app/views/mainview</code>
+            </li>
+            <li>输出 <code>build/</code> 与 <code>artifacts/</code>，只能构建当前平台</li>
+            <li>运行时：渠道 ≠ dev → 窗口加载 <code>views://mainview/index.html#/</code></li>
+          </ol>
+          <p style="margin-top: 12px">
+            <span class="pill neutral">为什么不用 Electrobun 自带打包器</span> 它跑不了 Tailwind
+            v4、Paraglide 这些 Vite 插件，所以视图一律 Vite 构建再 copy，参考仓库也是这么做的。
+          </p>
+        </div>
+      </div>
+
+      <!-- 7 -->
+      <h2><span class="no">07</span>四个阶段分别交付什么</h2>
+      <div class="phases">
+        <div class="card phase spike">
+          <div class="ph-n">Phase 0 · Spike · 1–2 天</div>
+          <h3>先把不确定的事变成决策</h3>
+          <ul>
+            <li>pnpm 11 + Node 24 + TS 7 下跑通 <code>electrobun dev</code></li>
+            <li>Vite view + Tailwind v4 在系统 webview / CEF 下的渲染</li>
+            <li>hash 路由切换与刷新</li>
+            <li>调 <code>health.live</code>，记录 Origin</li>
+          </ul>
+          <div class="see">
+            <b>你会看到</b>：一份决策记录（renderer、API 通道、TS 版本、dev 脚本）。代码可以丢。
+          </div>
+        </div>
+        <div class="card phase">
+          <div class="ph-n">Phase 1 · 共享包 · 1–2 天</div>
+          <h3>页面搬家，web 不变</h3>
+          <ul>
+            <li>新建 <code>packages/app</code></li>
+            <li>客户端注入 + 两个查询</li>
+            <li>dashboard 主体搬进包，web 改成薄包装</li>
+          </ul>
+          <div class="see">
+            <b>你会看到</b>：web 的 <code>/dashboard</code>、<code>/de/dashboard</code>
+            行为与样式完全一样，只是代码换了地方。
+          </div>
+        </div>
+        <div class="card phase">
+          <div class="ph-n">Phase 2 · 桌面 · 2–3 天</div>
+          <h3>窗口里出现同一个页面</h3>
+          <ul>
+            <li><code>ENV_DESKTOP</code></li>
+            <li>view：路由、oRPC、语言、主题</li>
+            <li>首页 API 状态；dashboard 登录占位</li>
+            <li>主进程：URL 切换、外链</li>
+          </ul>
+          <div class="see">
+            <b>你会看到</b>：<code>dev:desktop</code> 能热更新；<code>build:stable</code> 启动后首页
+            API 状态为 Live。
+          </div>
+        </div>
+        <div class="card phase">
+          <div class="ph-n">Phase 3 · 工程化 · 约 1 天</div>
+          <h3>收尾</h3>
+          <ul>
+            <li>根脚本、catalog</li>
+            <li>忽略配置、fallow 入口</li>
+            <li><code>.agents/desktop.md</code>、<code>packages/app/AGENTS.md</code> 等文档</li>
+          </ul>
+          <div class="see">
+            <b>你会看到</b>：<code>pnpm run check</code> 通过（运行前先征得你同意）。
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 -->
+      <h2><span class="no">08</span>对照仓库代码的核对结果</h2>
+      <div class="review">
+        <div class="card yes">
+          <h3>已确认存在，计划可直接用</h3>
+          <ul>
+            <li>
+              <code>@orpc/tanstack-query</code> 1.15 导出 <code>RouterUtils</code> 类型（<code
+                >AppOrpc</code
+              >
+              用它）
+            </li>
+            <li><code>@tanstack/react-router</code> 1.170 导出 <code>createHashHistory</code></li>
+            <li>
+              Paraglide 产物导出 <code>overwriteGetLocale</code> / <code>overwriteSetLocale</code>
+            </li>
+            <li>
+              <code>@tsu-stack/api/routers/types</code>
+              已是为客户端包准备的纯类型入口（extension、native 在用）
+            </li>
+            <li>
+              <code>packages/db/AGENTS.md</code> 先例存在，<code>packages/app/AGENTS.md</code>
+              照它写
+            </li>
+            <li>
+              <code>#/ui/*</code> → <code>.tsx</code> 单独一条映射，和
+              <code>packages/ui</code> 的做法一致
+            </li>
+          </ul>
+        </div>
+        <div class="card todo">
+          <h3>只能靠 Spike 验证</h3>
+          <ul>
+            <li><code>Updater.localInfo.channel()</code>：来自参考仓库，官方文档没写</li>
+            <li>
+              外链拦截用 <code>navigationRules</code> 还是导航事件 + <code>Utils.openExternal</code>
+            </li>
+            <li><code>views://</code> 请求实际带的 Origin 头 → 决定 API 直连还是主进程代发</li>
+            <li>
+              devkit 的 tsconfig 与 TS 7 是否兼容；不兼容就像 <code>apps/native</code> 一样钉 TS 6
+            </li>
+            <li><code>dev:view</code> 与 <code>dev:shell</code> 的启动先后</li>
+          </ul>
+        </div>
+        <div class="card fix">
+          <div class="tree-head">
+            <h3>建议调整一处：desktop 拆成两个 tsconfig</h3>
+            <span class="pill warn">建议</span>
+          </div>
+          <p class="sub" style="margin-bottom: 10px">
+            计划里 <code>apps/desktop</code> 只有一个 <code>tsconfig.json</code> 并继承 devkit
+            配置。但 <code>src/bun</code> 要 Bun 类型，<code>src/view</code> 要
+            <code>vite/client</code> 和 DOM 类型，混在一起容易互相污染；拆开后 devkit 与 TS 7
+            的兼容问题也只影响 <code>src/bun</code> 这一半。
+          </p>
+          <pre class="tree"> apps/desktop/
+<span class="del">-├── tsconfig.json              # 继承 base + devkit，覆盖整个包</span>
+<span class="add">+├── tsconfig.json              # 只做引用：references → src/bun、src/view</span>
+ └── src/
+     ├── bun/
+<span class="add">+    │   ├── tsconfig.json      # base + .hutch/devkit/tsconfig.json，types: bun</span>
+     │   └── index.ts
+     └── view/
+<span class="add">+        ├── tsconfig.json      # base，types: vite/client</span>
+         └── …</pre>
+        </div>
+      </div>
+      <p class="punch" style="margin-top: 18px">
+        提醒：计划的决策 9 把 web 的 <code>/dashboard</code> 留在原地，没有迁到
+        <code>/app/*</code>。这和"产品区将来独立成应用"的方向不冲突——<code>packages/app</code>
+        里的页面到时可以原样搬过去。
+      </p>
+
+      <footer>
+        配套文档：<a href="./desktop-architecture-plan.md"
+          ><code>desktop-architecture-plan.md</code></a
+        >（配置与代码草图）·
+        <a href="./desktop-architecture-plan.html"><code>desktop-architecture-plan.html</code></a
+        >（总览）·
+        <a href="./desktop-architecture-options.html"
+          ><code>desktop-architecture-options.html</code></a
+        >（三条路线对比）· 草案 · 2026-10-22 · 起草时尚未实施；现已归档
+      </footer>
+    </div>
+  </body>
+</html>

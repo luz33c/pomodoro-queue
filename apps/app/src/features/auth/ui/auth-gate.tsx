@@ -1,11 +1,9 @@
 import { useEffect } from "react";
 
 import { useAppAuth } from "#/shared/host/auth";
-import { host } from "#/shared/host/index";
+import { dataMode } from "#/shared/host/persistence";
 import { getWebSignInUrl } from "#/shared/host/sign-in";
 import { SpinnerScreen } from "#/shared/ui/spinner-screen";
-
-import { DesktopSignInPlaceholder } from "./desktop-sign-in-placeholder";
 
 /** Sign-in lives on the website; replace() keeps this page out of history so Back does not bounce. */
 function RedirectToWebSignIn() {
@@ -16,16 +14,23 @@ function RedirectToWebSignIn() {
   return <SpinnerScreen />;
 }
 
-/** Client-side guard for every signed-in route. */
+/**
+ * Client-side guard for every route in the app shell. Cloud data needs a signed-in user;
+ * local data needs no account, so pages that call private APIs check sign-in themselves.
+ */
 export function AuthGate({ children }: { children: React.ReactNode }) {
   const { isLoaded, isSignedIn } = useAppAuth();
+
+  if (dataMode === "local") {
+    return <>{children}</>;
+  }
 
   if (!isLoaded) {
     return <SpinnerScreen />;
   }
 
   if (!isSignedIn) {
-    return host === "desktop" ? <DesktopSignInPlaceholder /> : <RedirectToWebSignIn />;
+    return <RedirectToWebSignIn />;
   }
 
   return <>{children}</>;

@@ -8,5 +8,9 @@ export const ENV_NATIVE = createEnv({
   },
   clientPrefix: "EXPO_PUBLIC_",
   emptyStringAsUndefined: true,
-  runtimeEnv: process.env
+  // Expo inlines only static `process.env.EXPO_PUBLIC_*` reads; the whole `process.env` is empty in release builds
+  runtimeEnv: {
+    EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY,
+    EXPO_PUBLIC_SERVER_URL: process.env.EXPO_PUBLIC_SERVER_URL
+  }
 });

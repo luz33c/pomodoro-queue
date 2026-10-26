@@ -16,6 +16,10 @@ function getErrorMessage(error: unknown, fallback: string) {
   return fallback;
 }
 
+function findEmailCodeFactor(signIn: ReturnType<typeof useSignIn>["signIn"]) {
+  return signIn.supportedSecondFactors.find((factor) => factor.strategy === "email_code");
+}
+
 export default function SignInScreen() {
   const router = useRouter();
   const { errors, fetchStatus, signIn } = useSignIn();
@@ -24,9 +28,7 @@ export default function SignInScreen() {
   const [code, setCode] = useState("");
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
-  const emailCodeFactor = signIn.supportedSecondFactors.find(
-    (factor) => factor.strategy === "email_code"
-  );
+  const emailCodeFactor = findEmailCodeFactor(signIn);
   const requiresEmailCode =
     signIn.status === "needs_client_trust" ||
     (signIn.status === "needs_second_factor" && !!emailCodeFactor);
@@ -58,9 +60,11 @@ export default function SignInScreen() {
       }
 
       if (signIn.status === "needs_second_factor" || signIn.status === "needs_client_trust") {
-        if (emailCodeFactor) {
+        // Read the factors from the attempt `password()` just created; this render's value predates it
+        const factor = findEmailCodeFactor(signIn);
+        if (factor) {
           await signIn.mfa.sendEmailCode();
-          setStatusMessage(`We sent a verification code to ${emailCodeFactor.safeIdentifier}.`);
+          setStatusMessage(`We sent a verification code to ${factor.safeIdentifier}.`);
           return;
         }
 

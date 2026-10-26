@@ -1,5 +1,17 @@
 # Better Auth 到 Clerk 接入说明
 
+## 当前状态
+
+Clerk 已成为 Web、Native、Extension 和 API 的唯一认证提供方。`packages/auth`、旧 `/auth/*` 路由、Better Auth 依赖和 `BETTER_AUTH_SECRET` 配置已移除，OpenAPI 只保留 Clerk Bearer 认证说明。
+
+当前 Drizzle schema 已移除 `user`、`account`、`session`、`verification` 四张旧认证表及其关系定义，尚未添加业务表。数据库连接、健康检查和迁移能力继续保留。新增清理迁移负责按外键依赖顺序删除四张旧表；原有迁移及快照保持不变，保留已有数据库的升级路径。
+
+各环境是否已完成删表，以该数据库实际应用的迁移记录为准。生产 Server 会在启动时执行待应用迁移，Compose 也有独立迁移服务，因此发布前必须确认目标库的数据处置和迁移进度。如果旧库尚未应用 `20260827094050_cloudy_argent`，其中的账号 issuer 回填可能因旧 OAuth 账号或重复身份而失败；应先处理这一前置迁移，不能修改历史迁移或伪造已应用记录来跳过。
+
+当前开发约定见 [认证指南](.agents/auth.md)。下文保留此前接入过程的历史记录，其中“保留兼容入口”等描述不再代表当前运行时状态。
+
+## 初次接入记录
+
 本文档记录本项目这次将主登录体系从 Better Auth 切到 Clerk 的过程。
 
 这次调整不是删除 Better Auth，而是让 `apps/web` 和 `packages/api` 的主认证链路使用 Clerk。Better Auth 的数据库表、`packages/auth` 包、以及 server 上的 `/auth/*` 兼容接口都保留。

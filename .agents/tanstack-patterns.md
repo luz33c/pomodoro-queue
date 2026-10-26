@@ -12,6 +12,14 @@ This guide is intentionally focused on TanStack Router and TanStack Start. For o
 
 The web app uses TanStack Start file-based routing. In this codebase, `routes/` acts as the FSD app layer.
 
+`apps/app` uses TanStack Router alone, without Start: file-based routes through `@tanstack/router-plugin`, client rendering only, browser history in the web host and hash history in the desktop host. The layers and segments below apply to it too, with these differences:
+
+- No `{-$locale}` segment; the locale is not part of the URL.
+- No server functions or SSR guards. `(auth)/route.tsx` wraps signed-in pages in a client-side `AuthGate`; see [Auth patterns](./auth.md#app-sign-in-round-trip).
+- Titles come from route `head()` and the root `<HeadContent />`.
+
+App-specific conventions live in [apps/app/AGENTS.md](../apps/app/AGENTS.md).
+
 ### FSD Layers
 
 | Layer    | Dir         | Purpose                                              |
@@ -46,8 +54,9 @@ segment-name/
 - `{-$locale}/` — i18n locale prefix (optional param, base locale omits it)
 - `(root-layout)/` — Navbar + Footer wrapper
 - `(centered-layout)/` — Centered content wrapper
-- `(auth)/` — Protected routes (auto-redirects to sign-in)
 - `(guest)/` — Guest-only routes (auto-redirects authenticated users)
+
+Web has no protected routes; signed-in product pages live in `apps/app` under its own `(auth)/` group.
 
 ### Adding a Route
 

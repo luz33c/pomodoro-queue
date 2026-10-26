@@ -9,13 +9,14 @@ The product app: a Vite + React + TanStack Router SPA. It has no TanStack Start,
 
 The web build can also be served by `apps/web` on the website's origin: point `VITE_APP_URL` under `VITE_WEB_URL` (for example `https://example.com/app`) and rebuild. `apps/web/server.ts` then serves `dist/web` there, and in development Web's Vite proxies that path to this app's dev server on `:3002`. One build serves one address.
 
-Background and deployment options: [docs/desktop-plan-c-product-app.md](../../docs/desktop-plan-c-product-app.md). Desktop shell: [Desktop](../../.agents/desktop.md).
+Current architecture, deployment options, and remaining work: [docs/desktop-plan-c-product-app.md](../../docs/desktop-plan-c-product-app.md). Desktop shell: [Desktop](../../.agents/desktop.md).
 
 ## Boundaries
 
-- Host differences live in `src/shared/host/`. Pages, widgets, and queries never branch on the host. The one exception is `features/auth`'s `AuthGate`, which picks the signed-out experience per host.
+- Host differences live in `src/shared/host/`. Pages, widgets, and queries never branch on the host. `AuthGate` branches on `dataMode` from `shared/host/persistence.ts` instead: `cloud` in the web host, `local` in the desktop host until desktop sign-in and sync exist. An entity picks its collection with the literal `import.meta.env.MODE === "desktop"`, because the bundler drops the desktop SQLite packages from the web build only when the dead branch sits in the same module.
 - Auth goes through `useAppAuth()` from `#/shared/host/auth`. Only `shared/host/auth.ts` and `shared/providers/auth-provider.tsx` import `@clerk/react`.
 - Data goes through oRPC with `#/shared/api/orpc`, typed by `@tsu-stack/api/routers/types` only. Requests carry a Bearer token and never rely on cookies, because `views://` cannot store them.
+- Synced data lives in TanStack DB collections in `entities/<name>/lib/`. In `cloud` mode a collection streams a server shape through `getShapeOptions()` and writes through oRPC, holding each optimistic change until its txid syncs back. In `local` mode it is a local-only collection persisted to the desktop shell's SQLite file. Pages read with `useLiveQuery` and write through the entity's functions. Rules for shapes and writes: [Sync](../../.agents/sync.md).
 - Never import `electrobun/*`, `apps/web`, or `apps/desktop`. Share code only through `packages/*`.
 - `server.ts` runs directly on Node.js 24 and imports only `hono`, `@hono/node-server`, and Node built-ins. Node does not strip types from the `@tsu-stack/*` sources in `node_modules`.
 - `dependencies` holds only what `server.ts` needs at runtime. Everything bundled into `dist` goes in `devDependencies`, so `pnpm deploy --prod` ships a minimal production directory.
@@ -24,7 +25,7 @@ Background and deployment options: [docs/desktop-plan-c-product-app.md](../../do
 
 The app follows the same FSD layers as `apps/web` (`routes → pages → widgets → features → entities → shared`), and Oxlint enforces them. See [TanStack patterns](../../.agents/tanstack-patterns.md) for segments.
 
-- `routes/` stays thin. `(auth)/route.tsx` wraps every signed-in page in `AuthGate` and `AppShell`.
+- `routes/` stays thin. `(auth)/route.tsx` wraps every page in `AuthGate` and `AppShell`. The gate requires sign-in only in `cloud` mode, so a page that calls a private API shows `DesktopSignInPlaceholder` itself when signed out, as the dashboard does.
 - `shared/config/app.ts` owns the app name, home path, and outbound URLs. Do not hard-code them.
 - `widgets/app-shell/config/nav-items.ts` lists product pages and outbound links. The header and the narrow-screen sheet render the same lists.
 - Queries live in the owning slice as `<slice>/api/<operation>.ts`, exporting `get*QueryOptions` and `useGet*Query`. File names carry no `.query` suffix. A mutation invalidates the affected query keys before it shows success.

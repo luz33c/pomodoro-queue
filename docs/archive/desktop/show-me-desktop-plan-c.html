@@ -1,0 +1,1502 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <title>【历史归档】方案 C · 独立产品应用与部署选择</title>
+    <style>
+      :root {
+        --bg: #171513;
+        --panel: #201e1b;
+        --raised: #282521;
+        --ink: #ede9e3;
+        --muted: #b7afa5;
+        --line: #403a33;
+        --code: #121110;
+        --purple: #cfb6f0;
+        --green: #a9ceb6;
+        --blue: #aec9e9;
+        --amber: #e4c18c;
+        --radius: 12px;
+        color-scheme: dark;
+        font-family:
+          "Geist",
+          -apple-system,
+          BlinkMacSystemFont,
+          "PingFang SC",
+          "Microsoft YaHei",
+          sans-serif;
+      }
+      @media (prefers-color-scheme: light) {
+        :root {
+          --bg: #faf8f5;
+          --panel: #fff;
+          --raised: #f0ece6;
+          --ink: #28231f;
+          --muted: #686057;
+          --line: #ddd5ca;
+          --code: #f4f0ea;
+          --purple: #7142a1;
+          --green: #33694c;
+          --blue: #35618a;
+          --amber: #8b5c21;
+          color-scheme: light;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 86px;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-size: 15px;
+        line-height: 1.7;
+      }
+      a {
+        color: inherit;
+        text-underline-offset: 4px;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      a:focus-visible,
+      button:focus-visible,
+      summary:focus-visible {
+        outline: 3px solid var(--purple);
+        outline-offset: 5px;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      h1 {
+        font-size: clamp(32px, 4.5vw, 56px);
+        line-height: 1.2;
+        letter-spacing: -0.035em;
+        font-weight: 550;
+      }
+      h2 {
+        font-size: clamp(22px, 3vw, 29px);
+        line-height: 1.35;
+        letter-spacing: -0.02em;
+        font-weight: 550;
+      }
+      h3 {
+        font-size: 17px;
+        line-height: 1.45;
+        font-weight: 600;
+      }
+      code,
+      pre,
+      .mono,
+      .eyebrow,
+      .section-no {
+        font-family: "Geist Mono", "SFMono-Regular", Consolas, monospace;
+      }
+      code {
+        font-size: 0.87em;
+        overflow-wrap: anywhere;
+      }
+      p code,
+      li code,
+      td code {
+        background: var(--code);
+        border-radius: 4px;
+        padding: 2px 5px;
+      }
+      small {
+        font-size: 12px;
+      }
+      .wrap {
+        max-width: 1176px;
+        padding: 0 28px;
+        margin: auto;
+      }
+      .top {
+        border-bottom: 1px solid var(--line);
+      }
+      .top .wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 64px;
+        gap: 16px;
+      }
+      .brand {
+        font-weight: 600;
+        letter-spacing: -0.03em;
+      }
+      .brand span {
+        color: var(--muted);
+        font-weight: 400;
+        margin-left: 10px;
+      }
+      .doc-status {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .hero {
+        padding: 58px 0 36px;
+      }
+      .eyebrow {
+        color: var(--purple);
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        margin-bottom: 18px;
+      }
+      .hero h1 em {
+        font-style: normal;
+        color: var(--purple);
+      }
+      .lead {
+        max-width: 840px;
+        margin-top: 22px;
+        font-size: 17px;
+        color: var(--muted);
+      }
+      .lead strong {
+        color: var(--ink);
+        font-weight: 500;
+      }
+      .facts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 25px;
+      }
+      .fact {
+        padding: 6px 12px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .fact b {
+        color: var(--ink);
+        font-weight: 500;
+      }
+      .nav {
+        position: sticky;
+        top: 0;
+        z-index: 4;
+        background: var(--bg);
+        border-block: 1px solid var(--line);
+      }
+      .nav-inner {
+        display: flex;
+        gap: 26px;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-block: 13px;
+      }
+      .nav a {
+        font-size: 12px;
+        color: var(--muted);
+        text-decoration: none;
+      }
+      .nav a:hover {
+        color: var(--ink);
+      }
+      section {
+        padding-top: 46px;
+      }
+      .section-head {
+        display: flex;
+        align-items: baseline;
+        gap: 14px;
+        margin-bottom: 10px;
+      }
+      .section-no {
+        color: var(--purple);
+        font-size: 12px;
+      }
+      .sub {
+        color: var(--muted);
+        max-width: 900px;
+        margin-bottom: 24px;
+      }
+      .grid2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .grid3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+      .card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--panel);
+        padding: 22px;
+        min-width: 0;
+      }
+      .card p {
+        color: var(--muted);
+        margin-top: 9px;
+        font-size: 14px;
+      }
+      .kicker {
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        font-size: 10px;
+        margin-bottom: 10px;
+      }
+      .purple {
+        color: var(--purple);
+      }
+      .green {
+        color: var(--green);
+      }
+      .blue {
+        color: var(--blue);
+      }
+      .amber {
+        color: var(--amber);
+      }
+      .boundary {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 24px;
+        background: var(--panel);
+      }
+      .source {
+        border: 1px solid var(--purple);
+        border-radius: 9px;
+        padding: 19px 24px;
+        max-width: 620px;
+        margin: 0 auto;
+        text-align: center;
+        background: color-mix(in srgb, var(--purple) 6%, var(--panel));
+      }
+      .source strong {
+        display: block;
+        color: var(--purple);
+        font-size: 22px;
+        margin-bottom: 4px;
+      }
+      .source p {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .branch-label {
+        text-align: center;
+        margin: 13px 0;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .builds {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 26px;
+      }
+      .build {
+        padding: 19px;
+        border: 1px solid var(--line);
+        border-top: 3px solid var(--green);
+        border-radius: 8px;
+      }
+      .build.desktop {
+        border-top-color: var(--blue);
+      }
+      .build .title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 10px;
+      }
+      .build p {
+        color: var(--muted);
+        font-size: 13px;
+        margin-top: 6px;
+      }
+      .build .output {
+        font-size: 16px;
+        color: var(--ink);
+      }
+      .mini-note {
+        margin-top: 16px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .selector {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+      .selector button {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 17px;
+        color: var(--muted);
+        background: var(--panel);
+        text-align: left;
+        line-height: 1.6;
+      }
+      .selector button strong {
+        display: block;
+        color: var(--ink);
+        font-size: 15px;
+        margin-bottom: 3px;
+      }
+      .selector button span {
+        font-size: 12px;
+      }
+      .selector button[aria-pressed="true"] {
+        border-color: var(--purple);
+        background: color-mix(in srgb, var(--purple) 8%, var(--panel));
+        box-shadow: inset 0 0 0 1px var(--purple);
+      }
+      .mode-panel {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        overflow: hidden;
+        background: var(--panel);
+      }
+      .mode-header {
+        padding: 21px 25px;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 20px;
+      }
+      .mode-header p {
+        margin-top: 5px;
+        color: var(--muted);
+        font-size: 13px;
+        max-width: 750px;
+      }
+      .badge {
+        padding: 3px 9px;
+        border-radius: 5px;
+        font-size: 11px;
+        border: 1px solid var(--line);
+        color: var(--purple);
+        flex-shrink: 0;
+      }
+      .topology {
+        display: grid;
+        grid-template-columns: 1fr 44px 1.2fr;
+        gap: 20px;
+        align-items: center;
+        padding: 26px;
+      }
+      .hosts,
+      .deployments {
+        display: grid;
+        gap: 12px;
+      }
+      .node {
+        padding: 16px 18px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--bg);
+      }
+      .node .node-label {
+        display: block;
+        color: var(--muted);
+        font-size: 11px;
+        margin-bottom: 5px;
+      }
+      .node code {
+        display: block;
+        font-size: 16px;
+        color: var(--green);
+      }
+      .node.site code {
+        color: var(--ink);
+      }
+      .node small {
+        color: var(--muted);
+        display: block;
+        margin-top: 4px;
+      }
+      .arrows {
+        color: var(--muted);
+        text-align: center;
+        display: grid;
+        gap: 75px;
+        font-size: 22px;
+      }
+      .deployment {
+        border: 1px dashed var(--line);
+        border-radius: 9px;
+        padding: 17px;
+      }
+      .deployment > b {
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .deployment .node {
+        margin-top: 10px;
+        padding: 11px 14px;
+      }
+      .deployment .node code {
+        font-size: 14px;
+      }
+      .bridge-label {
+        padding: 0 26px 22px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .runtime-bar {
+        padding: 18px 25px;
+        background: var(--raised);
+        border-top: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        flex-wrap: wrap;
+        font-size: 13px;
+      }
+      .runtime-bar .arrow {
+        color: var(--muted);
+      }
+      .runtime-bar code {
+        color: var(--amber);
+      }
+      .config-row {
+        padding: 22px 25px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .config-row dt {
+        color: var(--muted);
+        font-size: 11px;
+        margin-bottom: 6px;
+      }
+      .config-row dd {
+        margin: 0;
+        font-family: "Geist Mono", monospace;
+        font-size: 13px;
+        overflow-wrap: anywhere;
+      }
+      .mode-takeaway {
+        padding: 16px 25px;
+        border-top: 1px solid var(--line);
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .note {
+        border-left: 2px solid var(--purple);
+        padding: 12px 18px;
+        background: color-mix(in srgb, var(--purple) 5%, var(--bg));
+        color: var(--muted);
+        font-size: 13px;
+        margin-top: 18px;
+      }
+      .note strong {
+        color: var(--ink);
+        font-weight: 500;
+      }
+      .table-wrap {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 720px;
+        font-size: 13px;
+      }
+      th,
+      td {
+        text-align: left;
+        vertical-align: top;
+        padding: 15px 19px;
+        border-bottom: 1px solid var(--line);
+      }
+      th {
+        background: var(--raised);
+        font-weight: 500;
+      }
+      td {
+        background: var(--panel);
+      }
+      td:first-child {
+        width: 21%;
+        color: var(--muted);
+      }
+      tr:last-child td {
+        border-bottom: 0;
+      }
+      .flow {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-bottom: 18px;
+        counter-reset: step;
+      }
+      .flow .step {
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        padding: 18px;
+        background: var(--panel);
+        min-width: 0;
+      }
+      .flow .step::before {
+        counter-increment: step;
+        content: "0" counter(step);
+        display: block;
+        font-family: monospace;
+        color: var(--purple);
+        font-size: 12px;
+        margin-bottom: 10px;
+      }
+      .flow strong {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 6px;
+        font-weight: 500;
+      }
+      .flow p {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .compact-list {
+        list-style: none;
+        margin: 14px 0 0;
+        padding: 0;
+      }
+      .compact-list li {
+        padding: 9px 0;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .compact-list b {
+        color: var(--ink);
+        font-weight: 500;
+      }
+      .tree {
+        margin: 14px 0 0;
+        padding: 17px;
+        border-radius: 7px;
+        background: var(--code);
+        font-size: 12px;
+        line-height: 1.9;
+        overflow-x: auto;
+      }
+      .tree .comment {
+        color: var(--muted);
+      }
+      .recommend {
+        padding: 28px;
+        border: 1px solid var(--purple);
+        border-radius: var(--radius);
+        background: color-mix(in srgb, var(--purple) 5%, var(--panel));
+      }
+      .recommend p {
+        margin-top: 12px;
+        color: var(--muted);
+      }
+      .recommend strong {
+        color: var(--ink);
+        font-weight: 500;
+      }
+      .recommend .grid2 {
+        margin-top: 22px;
+      }
+      .recommend .card {
+        background: var(--bg);
+      }
+      .tasks {
+        display: grid;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      .task {
+        display: grid;
+        grid-template-columns: 30px 1fr;
+        gap: 12px;
+        padding: 13px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .task > span {
+        color: var(--purple);
+        font: 12px/2 monospace;
+      }
+      .task b {
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .task p {
+        color: var(--muted);
+        font-size: 13px;
+        margin-top: 3px;
+      }
+      details {
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        padding: 16px 20px;
+        margin-top: 18px;
+      }
+      summary {
+        cursor: pointer;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      details ul {
+        margin: 15px 0 0;
+        padding-left: 20px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      details li {
+        padding: 4px 0;
+      }
+      .refs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 20px;
+        margin-top: 15px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      footer {
+        margin-top: 45px;
+        padding: 22px 0 35px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 12px;
+      }
+      footer p + p {
+        margin-top: 8px;
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+        border: 0;
+      }
+      @media (max-width: 760px) {
+        .wrap {
+          padding-inline: 18px;
+        }
+        .hero {
+          padding-top: 35px;
+        }
+        .top .wrap {
+          align-items: flex-start;
+          justify-content: center;
+          flex-direction: column;
+          gap: 2px;
+          padding-block: 12px;
+        }
+        .grid3,
+        .grid2,
+        .builds {
+          grid-template-columns: 1fr;
+        }
+        .boundary {
+          padding: 16px;
+        }
+        .selector {
+          gap: 7px;
+        }
+        .selector button {
+          padding: 12px 10px;
+        }
+        .selector button strong {
+          font-size: 13px;
+        }
+        .selector button span {
+          font-size: 10px;
+        }
+        .mode-header {
+          padding: 18px;
+          flex-direction: column;
+          gap: 10px;
+        }
+        .topology {
+          padding: 18px;
+          grid-template-columns: 1fr;
+          gap: 14px;
+        }
+        .hosts {
+          grid-template-columns: 1fr 1fr;
+        }
+        .node {
+          padding: 12px;
+        }
+        .node code {
+          font-size: 12px;
+        }
+        .arrows {
+          display: block;
+          transform: rotate(90deg);
+          line-height: 1;
+        }
+        .arrows span + span {
+          display: none;
+        }
+        .bridge-label {
+          padding-inline: 18px;
+        }
+        .config-row {
+          padding: 18px;
+          grid-template-columns: 1fr;
+          gap: 13px;
+        }
+        .runtime-bar,
+        .mode-takeaway {
+          padding: 16px 18px;
+        }
+        .flow {
+          grid-template-columns: 1fr 1fr;
+        }
+        .recommend {
+          padding: 20px;
+        }
+        .lead {
+          font-size: 15px;
+        }
+        .nav-inner {
+          gap: 20px;
+        }
+      }
+      @media (max-width: 390px) {
+        .selector {
+          grid-template-columns: 1fr;
+        }
+        .selector button {
+          display: flex;
+          gap: 9px;
+          align-items: baseline;
+        }
+        .flow {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+      @media print {
+        .nav,
+        .selector {
+          display: none;
+        }
+        body {
+          font-size: 11px;
+        }
+        section {
+          break-inside: avoid;
+        }
+        .wrap {
+          max-width: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <aside
+      aria-label="历史归档说明"
+      style="
+        margin: 20px;
+        padding: 16px 20px;
+        border: 2px solid #b58b43;
+        border-radius: 8px;
+        background: #292218;
+        color: #f7e4bd;
+        font-size: 15px;
+        line-height: 1.7;
+      "
+    >
+      <strong>已被方案 C 替代；历史讨论不代表当前实现。</strong><br />
+      本页为归档的方案讨论，保留起草时的设计、示例和决策背景。A、B 未采纳，早期 C
+      部署讨论也已被当前实现说明替代。<br />
+      当前入口：<a
+        href="../../desktop-plan-c-product-app.md"
+        style="color: #f7e4bd; text-decoration: underline"
+        >方案 C 实现说明</a
+      >
+      ·
+      <a
+        href="../../show-me-desktop-plan-c-final.html"
+        style="color: #f7e4bd; text-decoration: underline"
+        >方案 C 当前图解</a
+      >
+      · <a href="./README.md" style="color: #f7e4bd; text-decoration: underline">归档索引</a>
+    </aside>
+    <header class="top">
+      <div class="wrap">
+        <div class="brand">tsu-stack <span>/ Architecture notes</span></div>
+        <div class="doc-status">方案 C · 讨论稿 · 2026-10-23</div>
+      </div>
+    </header>
+    <main>
+      <div class="wrap hero">
+        <div class="eyebrow">PLAN C / INDEPENDENT PRODUCT APP</div>
+        <h1>一个产品应用，<br /><em>部署位置可以自由选择。</em></h1>
+        <p class="lead">
+          <strong>可以放在 <code>app.xx.com</code>，也可以挂在 <code>xx.com/app</code>。</strong
+          ><br />产品区自己拥有页面、路由与构建。浏览器加载静态站，桌面加载本地包；两端共用产品代码。
+        </p>
+        <div class="facts">
+          <span class="fact"><b>1 套</b> 产品路由与业务界面</span
+          ><span class="fact"><b>2 个</b> 构建目标：Web / Desktop</span
+          ><span class="fact"><b>3 种</b> 浏览器部署方式</span
+          ><span class="fact">登录注册留在 Web</span>
+        </div>
+      </div>
+      <nav class="nav" aria-label="本页目录">
+        <div class="wrap nav-inner">
+          <a href="#boundary">01 应用边界</a><a href="#deployment">02 切换部署方式</a
+          ><a href="#comparison">03 域名与路径</a><a href="#auth">04 登录与 API</a
+          ><a href="#structure">05 目录与构建</a><a href="#decision">06 建议与落地</a>
+        </div>
+      </nav>
+      <div class="wrap">
+        <section id="boundary">
+          <div class="section-head">
+            <span class="section-no">01</span>
+            <h2>独立的是产品应用，Web 托管只是一个选项</h2>
+          </div>
+          <p class="sub">
+            浏览器里的产品界面不需要经过 TanStack Start 渲染。它仍然需要业务
+            API、Clerk，以及你决定保留在 Web 上的登录入口。
+          </p>
+          <div class="boundary">
+            <div class="source">
+              <strong class="mono">apps/app</strong>
+              <p>
+                Vite + React + TanStack Router<br />产品路由 · 页面 · AppShell · 查询 · 样式 ·
+                宿主集成
+              </p>
+            </div>
+            <div class="branch-label">↓ 同一份源码，分别构建 ↓</div>
+            <div class="builds">
+              <div class="build">
+                <div class="title">
+                  <h3 class="green">浏览器版</h3>
+                  <code>build:web</code>
+                </div>
+                <p class="output"><code>dist/web</code> → 静态托管</p>
+                <p>可以由 Web Node、独立静态服务器或 CDN 提供。拥有自己的 browser history 路由。</p>
+              </div>
+              <div class="build desktop">
+                <div class="title">
+                  <h3 class="blue">桌面版</h3>
+                  <code>build:desktop</code>
+                </div>
+                <p class="output"><code>dist/desktop</code> → Electrobun copy</p>
+                <p>
+                  <code>views://mainview/index.html#/dashboard</code><br />本地 UI + hash
+                  history。桌面会话交接以后单独规划。
+                </p>
+              </div>
+            </div>
+            <p class="mini-note">
+              共享产品逻辑；资源路径、history、认证入口、外链及原生能力等宿主差异集中处理。两端并非字节完全相同的一份构建产物。
+            </p>
+          </div>
+          <div class="grid3" style="margin-top: 16px">
+            <article class="card">
+              <div class="kicker">Build independence</div>
+              <h3>能独立构建</h3>
+              <p>
+                产品应用有自己的入口和构建命令，不引用 <code>apps/web/src</code>。它仍属于
+                monorepo，可引用共享包。
+              </p>
+            </article>
+            <article class="card">
+              <div class="kicker">Runtime independence</div>
+              <h3>能独立托管</h3>
+              <p>
+                部署静态产物即可运行浏览器界面，无须产品专属的 Start / Node 渲染服务。业务数据仍从
+                API 获取。
+              </p>
+            </article>
+            <article class="card">
+              <div class="kicker">Release independence</div>
+              <h3>可独立发布</h3>
+              <p>
+                独立静态部署可分别发布、回滚。如果把产物装进同一个 Web
+                镜像，发布周期就会随镜像绑定。
+              </p>
+            </article>
+          </div>
+        </section>
+        <section id="deployment">
+          <div class="section-head">
+            <span class="section-no">02</span>
+            <h2>点选一种部署方式，看请求实际走向</h2>
+          </div>
+          <p class="sub">
+            以下域名均为示例。三种方式都属于方案 C，改变的是托管和发布关系，产品页面无需复制三份。
+          </p>
+          <div class="selector" role="group" aria-label="部署方式">
+            <button
+              type="button"
+              data-mode="bundled"
+              aria-pressed="false"
+              aria-controls="mode-panel"
+            >
+              <strong>① 随 Web 镜像</strong><span>xx.com/app · 一起发布</span>
+            </button>
+            <button type="button" data-mode="path" aria-pressed="false" aria-controls="mode-panel">
+              <strong>② 同域独立托管</strong><span>xx.com/app · 分别发布</span>
+            </button>
+            <button
+              type="button"
+              data-mode="subdomain"
+              aria-pressed="true"
+              aria-controls="mode-panel"
+            >
+              <strong>③ 独立子域</strong><span>app.xx.com · 分别发布</span>
+            </button>
+          </div>
+          <div id="mode-panel" class="mode-panel">
+            <div class="mode-header">
+              <div>
+                <h3 id="mode-title">③ 独立子域 · 产品拥有自己的静态站</h3>
+                <p id="mode-description">
+                  网站与产品分别托管。产品页面加载、导航和 API 请求不经 Web 的 Start
+                  服务；未登录时仍可跳转到网站登录。
+                </p>
+              </div>
+              <span class="badge" id="mode-badge">独立产品入口</span>
+            </div>
+            <div class="topology" aria-label="访问地址到部署单元的映射">
+              <div class="hosts">
+                <div class="node site">
+                  <span class="node-label">网站地址</span><code>xx.com</code
+                  ><small>营销页 / 登录注册</small>
+                </div>
+                <div class="node">
+                  <span class="node-label">产品地址</span
+                  ><code id="product-address">app.xx.com</code
+                  ><small>dashboard / projects / settings</small>
+                </div>
+              </div>
+              <div class="arrows" aria-hidden="true"><span>→</span><span>→</span></div>
+              <div class="deployments" id="deployment-nodes">
+                <div class="deployment">
+                  <b>部署单元 A · Web Node</b>
+                  <div class="node site">
+                    <code>apps/web</code><small>TanStack Start · SSR</small>
+                  </div>
+                </div>
+                <div class="deployment">
+                  <b>部署单元 B · 静态站 / CDN</b>
+                  <div class="node">
+                    <code>apps/app/dist/web</code><small>React SPA · HTML / JS / CSS</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="bridge-label" id="routing-detail">
+              入口按域名分流：xx.com → Web；app.xx.com → 产品静态站。
+            </p>
+            <div class="runtime-bar">
+              <strong>产品浏览器客户端</strong><span class="arrow">→ Bearer token / oRPC →</span
+              ><code>api.xx.com/rpc</code><span class="arrow">→</span><strong>apps/server</strong>
+            </div>
+            <dl class="config-row">
+              <div>
+                <dt>产品 URL · VITE_APP_URL（计划新增）</dt>
+                <dd id="config-url">https://app.xx.com</dd>
+              </div>
+              <div>
+                <dt>Vite base / Router basepath</dt>
+                <dd id="config-base">/ / /</dd>
+              </div>
+              <div>
+                <dt>Web 与产品的发布关系</dt>
+                <dd id="config-release">独立构建、发布与回滚</dd>
+              </div>
+            </dl>
+            <div class="mode-takeaway" id="mode-takeaway">
+              适合把网站和产品作为两个清晰入口来运营。增加一个域名与静态部署目标，根路径路由更直观。
+            </div>
+          </div>
+          <p id="mode-announcement" class="sr-only" role="status" aria-live="polite"></p>
+          <div class="note">
+            <strong>同一个域名，也可以独立部署。</strong>方式 ② 通过网关把
+            <code>/app/*</code> 交给独立静态站，其余请求交给
+            Web。浏览器看到的同源关系，与后面的服务器数量是两个不同问题。
+          </div>
+          <p class="mini-note">
+            桌面构建不随上方切换改变：始终复制 <code>dist/desktop</code> 到本地
+            <code>views://</code>。图中的 API 域名可换成现有 API 地址。
+          </p>
+        </section>
+        <section id="comparison">
+          <div class="section-head">
+            <span class="section-no">03</span>
+            <h2>app.xx.com 与 xx.com/app，差别在哪里？</h2>
+          </div>
+          <p class="sub">这里比较的是浏览器可见地址。两种形式均可承载同一个产品 SPA。</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">维度</th>
+                  <th scope="col"><code>https://xx.com/app/</code></th>
+                  <th scope="col"><code>https://app.xx.com/</code></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>与网站的关系</td>
+                  <td>同源：协议、域名、端口相同</td>
+                  <td>同站点、不同源：host 不同</td>
+                </tr>
+                <tr>
+                  <td>独立部署</td>
+                  <td>可以，网关按 <code>/app/*</code> 分流；也可随 Web 镜像</td>
+                  <td>可以，域名指向独立静态站；也能共用底层服务器</td>
+                </tr>
+                <tr>
+                  <td>产品路由与资源</td>
+                  <td>Vite <code>base: "/app/"</code><br />Router <code>basepath: "/app"</code></td>
+                  <td>Vite <code>base: "/"</code><br />Router <code>basepath: "/"</code></td>
+                </tr>
+                <tr>
+                  <td>深层路由刷新</td>
+                  <td>产品页面路径回退到产品 <code>index.html</code></td>
+                  <td>产品域的页面路径回退到 <code>index.html</code></td>
+                </tr>
+                <tr>
+                  <td>Clerk 登录会话</td>
+                  <td>两端使用同一个实例</td>
+                  <td>同一 production instance、正确配置根域时，支持跨子域共享</td>
+                </tr>
+                <tr>
+                  <td>主题 / 语言存储</td>
+                  <td>共享 origin 的 localStorage 空间；应用仍需约定键与同步方式</td>
+                  <td>各自的 localStorage；登录共享不会自动同步设置</td>
+                </tr>
+                <tr>
+                  <td>调用 api.xx.com</td>
+                  <td>跨源，需要 API 接受 <code>https://xx.com</code></td>
+                  <td>跨源，需要 API 接受 <code>https://app.xx.com</code></td>
+                </tr>
+                <tr>
+                  <td>网站 ↔ 产品导航</td>
+                  <td>两个应用之间整页跳转，进入产品后是 SPA 导航</td>
+                  <td>两个应用之间整页跳转，进入产品后是 SPA 导航</td>
+                </tr>
+                <tr>
+                  <td>主要取舍</td>
+                  <td>沿用同域入口；注意路径分流、资源前缀与 SPA 回退</td>
+                  <td>独立入口清楚；增加 DNS / TLS / 来源配置与一个部署目标</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="mini-note">
+            API 是否跨源，取决于 API 的实际 URL。若通过产品自身 origin 下的
+            <code>/rpc</code> 反向代理，两种部署都可对浏览器呈现同源 API。缺失 JS / CSS 文件应返回
+            404，API 路径不应被 SPA 回退吞掉。
+          </p>
+          <div class="refs">
+            <a
+              href="https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Same-origin_policy"
+              target="_blank"
+              rel="noreferrer"
+              >MDN · 同源规则 ↗</a
+            ><a
+              href="https://vite.dev/guide/build#public-base-path"
+              target="_blank"
+              rel="noreferrer"
+              >Vite · base 路径 ↗</a
+            >
+          </div>
+        </section>
+        <section id="auth">
+          <div class="section-head">
+            <span class="section-no">04</span>
+            <h2>登录页留在网站，产品仍然可以独立</h2>
+          </div>
+          <p class="sub">
+            以独立子域为例。已登录用户可以直接访问产品；没有可用会话时，再走下面的登录往返。
+          </p>
+          <div class="flow">
+            <div class="step">
+              <strong>访问产品</strong>
+              <p><code>app.xx.com/projects/123</code><br />产品先等待 Clerk 会话状态就绪。</p>
+            </div>
+            <div class="step">
+              <strong>转到网站登录</strong>
+              <p><code>xx.com/sign-in</code><br />携带经过校验的返回地址。</p>
+            </div>
+            <div class="step">
+              <strong>Clerk 建立会话</strong>
+              <p>网站和产品使用同一个 production instance，根域配置为 <code>xx.com</code>。</p>
+            </div>
+            <div class="step">
+              <strong>回到产品原页面</strong>
+              <p>恢复目标地址，产品读取会话，再携带 token 请求业务 API。</p>
+            </div>
+          </div>
+          <div class="grid2">
+            <article class="card">
+              <h3 class="green">同根域子域，可以共享会话</h3>
+              <p>
+                Clerk 官方支持根域与子域间的生产会话共享。<code>xx.com</code> 与
+                <code>app.xx.com</code> 通常不需要 satellite 多域方案。
+              </p>
+              <ul class="compact-list">
+                <li><b>实例与 DNS：</b>同一个生产实例、匹配的 publishable key，完成根域配置。</li>
+                <li><b>子域许可：</b>启用 Allowed subdomains 时，加入 <code>app.xx.com</code>。</li>
+                <li><b>登录回跳：</b>解析 URL 后校验 origin 与路径边界，保留原页面。</li>
+              </ul>
+            </article>
+            <article class="card">
+              <h3 class="amber">三个设置各管一件事</h3>
+              <ul class="compact-list">
+                <li><b>Clerk 子域 allowlist：</b>哪些子域可以访问 Clerk Frontend API。</li>
+                <li><b>业务 API CORS：</b>浏览器能否读取业务 API 的跨源响应。</li>
+                <li>
+                  <b>authorizedParties：</b>校验 session token 的授权方；不能用 CORS 成功替代鉴权。
+                </li>
+              </ul>
+              <p>
+                起草时的仓库让 CORS 与 authorizedParties
+                共用一个列表；当时的子域提案要求补入实际产品 origin；<code>/app</code> 路径不是新
+                origin。
+              </p>
+            </article>
+          </div>
+          <div class="note">
+            <strong>独立前端仍有服务依赖。</strong>产品 UI 可独立托管，但业务功能需要 API 与
+            Clerk；你把登录入口留在 Web，新登录流程仍依赖该入口可用。桌面的
+            <code>views://</code> 不属于这些 HTTPS 子域，会话交接保持后续单独设计。
+          </div>
+          <p class="mini-note">
+            迁移时保留用户切换后的 Query 缓存清理。共享会话不会自动共享 React
+            状态、QueryClient、主题或语言；本地开发实例的行为也不能代替生产域名验证。
+          </p>
+          <div class="refs">
+            <a
+              href="https://clerk.com/docs/guides/development/deployment/production#authentication-across-subdomains"
+              target="_blank"
+              rel="noreferrer"
+              >Clerk · 跨子域认证 ↗</a
+            ><a
+              href="https://clerk.com/docs/guides/dashboard/dns-domains/subdomain-allowlist"
+              target="_blank"
+              rel="noreferrer"
+              >Clerk · 子域许可 ↗</a
+            ><a
+              href="https://clerk.com/docs/guides/dashboard/dns-domains/satellite-domains"
+              target="_blank"
+              rel="noreferrer"
+              >Clerk · 不同根域的区别 ↗</a
+            >
+          </div>
+        </section>
+        <section id="structure">
+          <div class="section-head">
+            <span class="section-no">05</span>
+            <h2>目录保持独立，产物在部署时组合</h2>
+          </div>
+          <p class="sub">
+            现有 C 文档中的 <code>apps/web → @tsu-stack/app</code> 依赖用于把静态产物装进 Web
+            镜像。采用独立托管时，这条打包依赖可以省去。
+          </p>
+          <div class="grid2">
+            <article class="card">
+              <h3>应用各自负责什么</h3>
+              <pre class="tree">apps/
+├── web/        <span class="comment">营销、登录注册 · Start</span>
+├── app/        <span class="comment">产品应用 · Vite SPA</span>
+│   ├── src/
+│   │   ├── routes/  <span class="comment">产品路由</span>
+│   │   ├── pages/   <span class="comment">业务页面</span>
+│   │   └── shared/  <span class="comment">API、auth、host、样式</span>
+│   └── dist/
+│       ├── web/     <span class="comment">→ 静态托管</span>
+│       └── desktop/ <span class="comment">→ 桌面复制</span>
+├── desktop/    <span class="comment">主进程、窗口、原生能力</span>
+└── server/     <span class="comment">oRPC、鉴权、业务数据</span>
+packages/       <span class="comment">ui、i18n、core 等共享包</span></pre>
+            </article>
+            <article class="card">
+              <h3>独立子域的配置示例</h3>
+              <pre
+                class="tree"
+              ><span class="comment"># 起草时的规划示例，不代表当前环境变量配置</span>
+VITE_WEB_URL=https://xx.com
+VITE_APP_URL=https://app.xx.com
+VITE_SERVER_URL=https://api.xx.com
+
+<span class="comment"># 浏览器构建</span>
+base: "/"
+history: browser
+
+<span class="comment"># 桌面构建</span>
+base: "./"
+history: hash</pre>
+              <p>
+                <code>VITE_APP_URL</code> 是 C 计划新增配置。切换到同域路径时改为
+                <code>https://xx.com/app</code>，并同步资源 base、Router basepath 和入口路由规则。
+              </p>
+            </article>
+          </div>
+          <div class="note">
+            <strong>部署 URL 通常需要在构建前确定。</strong>Vite 的 <code>base</code> 与客户端
+            <code>VITE_*</code> 会在构建时写入产物。从
+            <code>/app</code> 改到子域根路径通常需要重新构建，单改容器运行环境变量不会重写已生成的
+            JS。
+          </div>
+          <p class="mini-note">
+            本页用根域网站示例。仓库本地默认的 <code>/web</code>、<code>/server</code>
+            不是固定架构。原草案的 Web Node 托管规则实际挂在 <code>/web/app</code>；若保留网站
+            <code>/web</code> 却要产品使用顶层 <code>/app</code>，还需调整入口挂载或反向代理。
+          </p>
+          <div class="refs">
+            <a href="https://vite.dev/guide/env-and-mode" target="_blank" rel="noreferrer"
+              >Vite · 构建环境变量 ↗</a
+            ><a href="https://vite.dev/guide/static-deploy" target="_blank" rel="noreferrer"
+              >Vite · 静态部署 ↗</a
+            >
+          </div>
+        </section>
+        <section id="decision">
+          <div class="section-head">
+            <span class="section-no">06</span>
+            <h2>我的建议：C 保持独立，入口按发布需求选择</h2>
+          </div>
+          <div class="recommend">
+            <h3 class="purple">如果你准备让产品独立发布，我倾向 app.xx.com</h3>
+            <p>
+              <strong>网站、产品、桌面各有明确边界，产品使用根路径。</strong
+              >起草时产品区只有一个较小的
+              dashboard，尚未形成大量路径兼容负担。采用独立静态托管后，产品更新无需重新发布营销站。
+            </p>
+            <div class="grid2">
+              <div class="card">
+                <h3>优先独立产品入口</h3>
+                <p>
+                  选 <code>app.xx.com</code>。增加子域和静态部署目标，配置好 Clerk、API 来源与回跳。
+                </p>
+              </div>
+              <div class="card">
+                <h3>优先少一个部署目标</h3>
+                <p>
+                  选随 Web 镜像的 <code>xx.com/app</code>。保留独立源码和构建，接受与 Web 一起发布。
+                </p>
+              </div>
+            </div>
+            <p style="font-size: 13px">
+              如果你既想要 <code>xx.com/app</code>，又想独立发布，选方式
+              ②。无需为了“独立”强制改变域名，也无需先把产品做成共享页面包。
+            </p>
+          </div>
+          <div class="tasks">
+            <div class="task">
+              <span>01</span>
+              <div>
+                <b>先做本地包技术验证</b>
+                <p>确认 Vite 资源、样式、hash 刷新与实际 Origin；不提前实现完整桌面登录。</p>
+              </div>
+            </div>
+            <div class="task">
+              <span>02</span>
+              <div>
+                <b>拆产品应用，完成浏览器链路</b>
+                <p>迁 dashboard，跑通选定部署位置、深链刷新、Web 登录往返和账户缓存清理。</p>
+              </div>
+            </div>
+            <div class="task">
+              <span>03</span>
+              <div>
+                <b>桌面复制产品产物，分别发布</b>
+                <p>
+                  产品 Web 构建、Web 网站构建与桌面打包各自可执行；Web
+                  部署无需下载桌面工具链。独立发布时保持 API 对已发布客户端的兼容。
+                </p>
+              </div>
+            </div>
+          </div>
+          <details>
+            <summary>这张图修订了原草案的哪些假设？</summary>
+            <ul>
+              <li>Web Node 托管是可选部署形态，独立产品应用不依赖它才能运行。</li>
+              <li>同域路径也能独立托管；子域与独立服务器并非一一对应。</li>
+              <li>
+                两端共享产品代码，宿主差异超过 base / history；桌面登录不预设只改一个 provider
+                就够。
+              </li>
+              <li>登录回跳需完整处理 URL 与来源边界，不能仅放行字符串前缀。</li>
+              <li>浏览器子域共享会话有官方支持，桌面自定义协议行为仍待实际验证。</li>
+              <li>
+                起草时仅更新本 HTML 的架构说明；该版本现已归档，当前 Markdown
+                与确认稿图解已另行维护。
+              </li>
+            </ul>
+          </details>
+        </section>
+        <footer>
+          <p>
+            历史依据：2026-10-23 的仓库结构、方案 C 草稿与当时核查的官方文档。
+            起草时应用拆分、域名配置和部署尚未实施；此后仓库已实现方案 C，本页不再描述当前进度。
+          </p>
+          <p>
+            <a href="../../desktop-plan-c-product-app.md">方案 C 当前实现说明</a> ·
+            <a href="./desktop-architecture-options.html">A / B / C 对比图</a> · HTML
+            无外部脚本或样式依赖，可离线打开；外部资料链接需要联网。
+          </p>
+        </footer>
+      </div>
+    </main>
+    <script>
+      const modes = {
+        bundled: {
+          title: "① 随 Web 镜像 · 一个部署单元托管两个应用",
+          description:
+            "产品先单独构建，再把静态产物装进 Web 镜像。Node 按路径返回产品文件，其余请求交给 Start。",
+          badge: "首发部署最少",
+          address: "xx.com/app",
+          url: "https://xx.com/app",
+          base: 'Vite "/app/" · Router "/app"',
+          release: "产品随 Web 镜像一起发布",
+          routing:
+            "入口进入同一 Web Node：/app/* → 产品静态文件；其余 → Start。这里假设网站挂在根路径。",
+          takeaway:
+            "源码和构建依然独立；当前托管方式把发布与回滚绑定到 Web 镜像。原草案使用 /web 前缀时，对应地址为 /web/app。",
+          units: [
+            {
+              title: "部署单元 A · 同一个 Web 镜像",
+              nodes: [
+                { name: "apps/web", detail: "Start · 营销与登录页面", site: true },
+                { name: "apps/app/dist/web", detail: "Node 静态托管 · 产品 SPA", site: false }
+              ]
+            }
+          ]
+        },
+        path: {
+          title: "② 同域独立托管 · 一个入口，两个部署单元",
+          description:
+            "网关 / 反向代理把产品路径交给独立静态站。网站与产品分别发布，浏览器看到的仍是同一个 origin。",
+          badge: "同域 + 独立发布",
+          address: "xx.com/app",
+          url: "https://xx.com/app",
+          base: 'Vite "/app/" · Router "/app"',
+          release: "独立构建、发布与回滚",
+          routing:
+            "网关按路径分流：/app/* → 产品静态站；其余 → Web Node。代理剥离前缀与否，需和静态源站目录匹配。",
+          takeaway:
+            "适合想保留 xx.com/app，又希望产品独立发布的情况。新增路径路由规则；外部资源路径和 SPA 回退必须一致。",
+          units: [
+            {
+              title: "部署单元 A · Web Node",
+              nodes: [{ name: "apps/web", detail: "TanStack Start · SSR", site: true }]
+            },
+            {
+              title: "部署单元 B · 独立静态站",
+              nodes: [
+                { name: "apps/app/dist/web", detail: "网关转发 /app/* · 产品 SPA", site: false }
+              ]
+            }
+          ]
+        },
+        subdomain: {
+          title: "③ 独立子域 · 产品拥有自己的静态站",
+          description:
+            "网站与产品分别托管。产品页面加载、导航和 API 请求不经 Web 的 Start 服务；未登录时仍可跳转到网站登录。",
+          badge: "独立产品入口",
+          address: "app.xx.com",
+          url: "https://app.xx.com",
+          base: 'Vite "/" · Router "/"',
+          release: "独立构建、发布与回滚",
+          routing: "入口按域名分流：xx.com → Web；app.xx.com → 产品静态站。",
+          takeaway:
+            "适合把网站和产品作为两个清晰入口来运营。增加一个域名与静态部署目标，根路径路由更直观。",
+          units: [
+            {
+              title: "部署单元 A · Web Node",
+              nodes: [{ name: "apps/web", detail: "TanStack Start · SSR", site: true }]
+            },
+            {
+              title: "部署单元 B · 静态站 / CDN",
+              nodes: [
+                { name: "apps/app/dist/web", detail: "React SPA · HTML / JS / CSS", site: false }
+              ]
+            }
+          ]
+        }
+      };
+      const fields = {
+        "mode-title": "title",
+        "mode-description": "description",
+        "mode-badge": "badge",
+        "product-address": "address",
+        "config-url": "url",
+        "config-base": "base",
+        "config-release": "release",
+        "routing-detail": "routing",
+        "mode-takeaway": "takeaway"
+      };
+      function selectMode(key, announce = true) {
+        const mode = modes[key];
+        document
+          .querySelectorAll("[data-mode]")
+          .forEach((button) =>
+            button.setAttribute("aria-pressed", String(button.dataset.mode === key))
+          );
+        Object.entries(fields).forEach(([id, field]) => {
+          document.getElementById(id).textContent = mode[field];
+        });
+        const container = document.getElementById("deployment-nodes");
+        container.replaceChildren(
+          ...mode.units.map((unit) => {
+            const box = document.createElement("div");
+            box.className = "deployment";
+            const title = document.createElement("b");
+            title.textContent = unit.title;
+            box.append(title);
+            unit.nodes.forEach((item) => {
+              const node = document.createElement("div");
+              node.className = item.site ? "node site" : "node";
+              const name = document.createElement("code");
+              name.textContent = item.name;
+              const detail = document.createElement("small");
+              detail.textContent = item.detail;
+              node.append(name, detail);
+              box.append(node);
+            });
+            return box;
+          })
+        );
+        if (announce)
+          document.getElementById("mode-announcement").textContent =
+            `已切换到${mode.title}。产品地址：${mode.url}。${mode.release}。`;
+      }
+      document
+        .querySelectorAll("[data-mode]")
+        .forEach((button) =>
+          button.addEventListener("click", () => selectMode(button.dataset.mode))
+        );
+      selectMode("subdomain", false);
+    </script>
+  </body>
+</html>

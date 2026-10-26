@@ -39,6 +39,9 @@ catalogs:
     '@dotenvx/dotenvx':
       specifier: 2.21.0
       version: 2.21.0
+    '@electric-sql/client':
+      specifier: 1.5.28
+      version: 1.5.28
     '@expo/log-box':
       specifier: 57.0.4
       version: 57.0.4
@@ -102,18 +105,33 @@ catalogs:
     '@tailwindcss/vite':
       specifier: 4.3.3
       version: 4.3.3
+    '@tanstack/db':
+      specifier: 0.15.2
+      version: 0.15.2
+    '@tanstack/db-sqlite-persistence-core':
+      specifier: 0.4.12
+      version: 0.4.12
     '@tanstack/devtools-a11y':
       specifier: 0.2.0
       version: 0.2.0
     '@tanstack/devtools-vite':
       specifier: 0.8.3
       version: 0.8.3
+    '@tanstack/electric-db-collection':
+      specifier: 0.6.3
+      version: 0.6.3
+    '@tanstack/electron-db-sqlite-persistence':
+      specifier: 0.2.13
+      version: 0.2.13
     '@tanstack/eslint-plugin-query':
       specifier: 5.104.0
       version: 5.104.0
     '@tanstack/eslint-plugin-router':
       specifier: 1.162.0
       version: 1.162.0
+    '@tanstack/react-db':
+      specifier: 0.5.12
+      version: 0.5.12
     '@tanstack/react-devtools':
       specifier: 0.10.10
       version: 0.10.10
@@ -391,6 +409,9 @@ importers:
       '@dotenvx/dotenvx':
         specifier: 'catalog:'
         version: 2.21.0
+      '@electric-sql/client':
+        specifier: 'catalog:'
+        version: 1.5.28
       '@fontsource-variable/geist':
         specifier: 'catalog:'
         version: 5.3.0
@@ -412,6 +433,18 @@ importers:
       '@tailwindcss/vite':
         specifier: 'catalog:'
         version: 4.3.3(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.50.0)(yaml@2.9.0))
+      '@tanstack/db':
+        specifier: 'catalog:'
+        version: 0.15.2(typescript@7.0.2)
+      '@tanstack/electric-db-collection':
+        specifier: 'catalog:'
+        version: 0.6.3(supports-color@8.1.1)(typescript@7.0.2)
+      '@tanstack/electron-db-sqlite-persistence':
+        specifier: 'catalog:'
+        version: 0.2.13(typescript@7.0.2)
+      '@tanstack/react-db':
+        specifier: 'catalog:'
+        version: 0.5.12(react@19.2.8)(typescript@7.0.2)
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.104.0(react@19.2.8)
@@ -424,6 +457,9 @@ importers:
       '@tsu-stack/api':
         specifier: workspace:*
         version: link:../../packages/api
+      '@tsu-stack/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@tsu-stack/env':
         specifier: workspace:*
         version: link:../../packages/env
@@ -469,6 +505,9 @@ importers:
       react-dom:
         specifier: 'catalog:'
         version: 19.2.8(react@19.2.8)
+      sonner:
+        specifier: 'catalog:'
+        version: 2.0.8(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       tailwindcss:
         specifier: 'catalog:'
         version: 4.3.3
@@ -481,6 +520,15 @@ importers:
 
   apps/desktop:
     devDependencies:
+      '@tanstack/db':
+        specifier: 'catalog:'
+        version: 0.15.2(typescript@7.0.2)
+      '@tanstack/db-sqlite-persistence-core':
+        specifier: 'catalog:'
+        version: 0.4.12(typescript@7.0.2)
+      '@tanstack/electron-db-sqlite-persistence':
+        specifier: 'catalog:'
+        version: 0.2.13(typescript@7.0.2)
       '@tsu-stack/app':
         specifier: workspace:*
         version: link:../app
@@ -648,6 +696,73 @@ importers:
       typescript:
         specifier: 6.0.3
         version: 6.0.3
+
+  apps/preview-ui:
+    dependencies:
+      '@fontsource-variable/geist':
+        specifier: 'catalog:'
+        version: 5.3.0
+      '@fontsource-variable/geist-mono':
+        specifier: 'catalog:'
+        version: 5.3.0
+      '@fontsource/instrument-serif':
+        specifier: 'catalog:'
+        version: 5.3.0
+      '@tanstack/react-router':
+        specifier: 'catalog:'
+        version: 1.170.41(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@tanstack/react-start':
+        specifier: 'catalog:'
+        version: 1.168.60(crossws@0.4.12(srvx@0.12.7))(esbuild@0.28.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(rolldown@1.2.5)(rollup@4.63.0)(supports-color@8.1.1)(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.50.0)(yaml@2.9.0))
+      '@tsu-stack/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      lucide-react:
+        specifier: 'catalog:'
+        version: 1.31.0(react@19.2.8)
+      react:
+        specifier: 'catalog:'
+        version: 19.2.8
+      react-dom:
+        specifier: 'catalog:'
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@babel/core':
+        specifier: 'catalog:'
+        version: 7.29.7(supports-color@8.1.1)
+      '@rolldown/plugin-babel':
+        specifier: 'catalog:'
+        version: 0.2.3(@babel/core@7.29.7(supports-color@8.1.1))(@babel/plugin-transform-runtime@7.29.7(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(@babel/runtime@7.29.7)(rolldown@1.2.5)(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.50.0)(yaml@2.9.0))
+      '@tailwindcss/vite':
+        specifier: 'catalog:'
+        version: 4.3.3(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.50.0)(yaml@2.9.0))
+      '@tsu-stack/tsconfig':
+        specifier: workspace:*
+        version: link:../../tools/tsconfig
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.13.3
+      '@types/react':
+        specifier: 'catalog:'
+        version: 19.2.18
+      '@types/react-dom':
+        specifier: 'catalog:'
+        version: 19.2.4(@types/react@19.2.18)
+      '@vitejs/plugin-react':
+        specifier: 'catalog:'
+        version: 6.0.5(@rolldown/plugin-babel@0.2.3(@babel/core@7.29.7(supports-color@8.1.1))(@babel/plugin-transform-runtime@7.29.7(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(@babel/runtime@7.29.7)(rolldown@1.2.5)(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.50.0)(yaml@2.9.0)))(babel-plugin-react-compiler@1.0.0)(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.50.0)(yaml@2.9.0))
+      babel-plugin-react-compiler:
+        specifier: 'catalog:'
+        version: 1.0.0
+      tailwindcss:
+        specifier: 'catalog:'
+        version: 4.3.3
+      typescript:
+        specifier: 'catalog:'
+        version: 7.0.2
+      vite:
+        specifier: 8.2.2
+        version: 8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.50.0)(yaml@2.9.0)
 
   apps/server:
     dependencies:
@@ -881,6 +996,9 @@ importers:
       '@clerk/tanstack-react-start':
         specifier: 'catalog:'
         version: 1.6.1(@tanstack/react-router@1.170.41(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@tanstack/react-start@1.168.60(crossws@0.4.12(srvx@0.12.7))(esbuild@0.28.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(supports-color@8.1.1)(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.50.0)(yaml@2.9.0)))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@electric-sql/client':
+        specifier: 'catalog:'
+        version: 1.5.28
       '@orpc/client':
         specifier: 'catalog:'
         version: 1.15.0
@@ -1793,6 +1911,10 @@ packages:
   '@egjs/hammerjs@2.0.17':
     resolution: {integrity: sha512-XQsZgjm2EcVUiZQf11UBJQfmZeEmOW8DpI1gsFeln6w0ae0ii4dMQEQ0kjl6DspdWX1aGY1/loyXnP0JS06e/A==}
     engines: {node: '>=0.8.0'}
+
+  '@electric-sql/client@1.5.28':
+    resolution: {integrity: sha512-b0cym3YWXL6PbQmEF0xDRsLt2xgXX46stvOSRAIXRPAP6dLZIHZL0o0HxeTdsZ27L3PbIg6Pw6KnyanRVGtWPA==}
+    hasBin: true
 
   '@emnapi/core@1.11.3':
     resolution: {integrity: sha512-zLpS5asjEb7lq8jYLq37N6XKaE41DIexlY1rF/z4/tIl3wo13Sqm28fRyfIsKZD+NZ8mM5RoKkpW/rBcuoSZSg==}
@@ -2737,6 +2859,9 @@ packages:
     resolution: {integrity: sha512-v8satFmBB+DqDzYohnm1u2JOvxx6Hl3pUvqzJvfs2Zk/ngZ1aRUhsWpXvwPkNeGN9c2NCm/38H29ZqXQUjf8dw==}
     peerDependencies:
       rollup: '>=2'
+
+  '@microsoft/fetch-event-source@2.0.1':
+    resolution: {integrity: sha512-W6CLUJ2eBMw3Rec70qrsEW0jOm/3twwJv21mrmj2yORiaVmVYGS4sSS5yUwvQc1ZlDLYGPnClVWmUUMagKNsfA==}
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     resolution: {integrity: sha512-oTXEIha4SsuXdTA4Iyskj0kpdx2yVXdhd75c2v3xGrHFfVMsbhTPZU/nMPL4sWKo4pBHm3aucLaqGlF696dTyQ==}
@@ -4586,6 +4711,21 @@ packages:
     peerDependencies:
       vite: 8.2.2
 
+  '@tanstack/db-ivm@0.2.0':
+    resolution: {integrity: sha512-AuMuGzVdWR5qzJPRYajmrUp95vMo0duvMZ0zBjMOvaI9rkh2GHZWCsJ/p7s81UN4Lep6HHJjahnYUF+XVL0+AQ==}
+    peerDependencies:
+      typescript: '>=4.7'
+
+  '@tanstack/db-sqlite-persistence-core@0.4.12':
+    resolution: {integrity: sha512-lGBkWTtnKB5ZE7rN87S3O1SSNNhGRDokHGil3UyR+YRcjk52JeZzVYufXJGs12I31L+6srTRM6/sWBUPg3e27Q==}
+    peerDependencies:
+      typescript: '>=4.7'
+
+  '@tanstack/db@0.15.2':
+    resolution: {integrity: sha512-s7CR8kOgkF1oPEGyKWItWHsg7U3hhQQu+k9CPjjAWwS6wzWVvjCbHbu/xnJvO1aPe7v3SBwo1tf6CMyKjNPNxg==}
+    peerDependencies:
+      typescript: '>=4.7'
+
   '@tanstack/devtools-a11y@0.2.0':
     resolution: {integrity: sha512-Lz5TDA4jY3eyeTiYtSxWH9YUZp9GBjhBaIhluOnKrvvKjx+GkhY9q/NYgQWuoePBdRv9/Dl+b7hllRCsDaXs8g==}
     engines: {node: '>=18'}
@@ -4706,6 +4846,14 @@ packages:
     peerDependencies:
       solid-js: '>=1.9.7'
 
+  '@tanstack/electric-db-collection@0.6.3':
+    resolution: {integrity: sha512-0OI+2vmCkhWEqsG6xCwaSXA9CWa2Ii3KpiNQR3zzGHBQhuLSqGJukU+y8FSxaRDpiIuY4rzccm1oCozzGnf0PQ==}
+
+  '@tanstack/electron-db-sqlite-persistence@0.2.13':
+    resolution: {integrity: sha512-IcuGGCug4Vpqf0pGHVVc5pjQzCE3tToaqU/MVU+BZLM3iEQYXlqJ5/jeiBVaI8DMRwTwLyhxbv5KqIXdPrMLQA==}
+    peerDependencies:
+      typescript: '>=4.7'
+
   '@tanstack/eslint-plugin-query@5.104.0':
     resolution: {integrity: sha512-WHStlNTKraESaAjeuZ0zJr+t3ZigZgAJ/FQX1sdLGSF+U0vXlHgcAoPqm27VixMRyXaFHCx9xBJiUmPNcxMpjQ==}
     peerDependencies:
@@ -4740,11 +4888,20 @@ packages:
     resolution: {integrity: sha512-y/xtNPNt/YeyoVxE/JCx+T7yjEzpezmbb+toK8DDD1P4m7Kzs5YR956+7OKexG3f8aXgC3rLZl7b1V+yNUSy5w==}
     engines: {node: '>=18'}
 
+  '@tanstack/pacer-lite@0.2.2':
+    resolution: {integrity: sha512-eQ1MyLKCHyXiH7NbdmB80W77OhiMgGBUb+qDx/8WMGbwg5Lf/NlfD0TfNYAqY77i8V3AxoDoYdICrQE5ADw4Yw==}
+    engines: {node: '>=18'}
+
   '@tanstack/query-core@5.104.0':
     resolution: {integrity: sha512-JrC2r/JQlXt7khBSdUpsgxNvybzOg+aITa+ARRMlP2AFo93Y8vIqz077rp+e61mJetSZ0T6AJbwW1JHer1vrPQ==}
 
   '@tanstack/query-devtools@5.104.0':
     resolution: {integrity: sha512-snKyFLVFC5LuNoyUTpyqCD2Z8cRlCWrAeO3xub0nGi81IMz8YAUWq2Z+XdpGSGT7bCxqVdOHUjyiA3CtDuBjfQ==}
+
+  '@tanstack/react-db@0.5.12':
+    resolution: {integrity: sha512-Sq5qtW/vJRzV3+vSFnr5dEk3GHOc/x7aG3lte6Y1wnC3GwsbnrBm1xy7XccPIvkeV8AU88Bo9QJwQXoElYqKLg==}
+    peerDependencies:
+      react: '>=18.0.0'
 
   '@tanstack/react-devtools@0.10.10':
     resolution: {integrity: sha512-hYH34MSVbajs1pUc22ftSapyKQp2gOh0w34a7ouYOdIcbXD6YPckSR2YpAWGq1rrs6N0l/rvV6LM/G1pgN5ARg==}
@@ -6952,6 +7109,10 @@ packages:
 
   fontfaceobserver@2.3.0:
     resolution: {integrity: sha512-6FPvD/IVyT4ZlNe7Wcn5Fb/4ChigpucKYSvD6a+0iMoLn2inpo711eyIcKjmDtE5XNcgAkSH9uN/nfAeZzHEfg==}
+
+  fractional-indexing@3.4.0:
+    resolution: {integrity: sha512-8J3glhz2rrpKG6KmI7wmJo3zH1VjeOpN+vTJSw1fOyO+Viqq3zX6/5NGh6oaZB2qIAYdOYuu5Dz9xp4faOO0Pg==}
+    engines: {node: ^14.13.1 || >=16.0.0}
 
   fresh@0.5.2:
     resolution: {integrity: sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q==}
@@ -10590,6 +10751,12 @@ snapshots:
     dependencies:
       '@types/hammerjs': 2.0.46
 
+  '@electric-sql/client@1.5.28':
+    dependencies:
+      '@microsoft/fetch-event-source': 2.0.1
+    optionalDependencies:
+      '@rollup/rollup-darwin-arm64': 4.63.0
+
   '@emnapi/core@1.11.3':
     dependencies:
       '@emnapi/wasi-threads': 1.2.3
@@ -11596,6 +11763,8 @@ snapshots:
       vfile: 6.0.3
     transitivePeerDependencies:
       - supports-color
+
+  '@microsoft/fetch-event-source@2.0.1': {}
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     optional: true
@@ -14069,6 +14238,24 @@ snapshots:
       tailwindcss: 4.3.3
       vite: 8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.50.0)(yaml@2.9.0)
 
+  '@tanstack/db-ivm@0.2.0(typescript@7.0.2)':
+    dependencies:
+      fractional-indexing: 3.4.0
+      typescript: 7.0.2
+
+  '@tanstack/db-sqlite-persistence-core@0.4.12(typescript@7.0.2)':
+    dependencies:
+      '@standard-schema/spec': 1.1.0
+      '@tanstack/db': 0.15.2(typescript@7.0.2)
+      typescript: 7.0.2
+
+  '@tanstack/db@0.15.2(typescript@7.0.2)':
+    dependencies:
+      '@standard-schema/spec': 1.1.0
+      '@tanstack/db-ivm': 0.2.0(typescript@7.0.2)
+      '@tanstack/pacer-lite': 0.2.2
+      typescript: 7.0.2
+
   '@tanstack/devtools-a11y@0.2.0(@types/react@19.2.18)(csstype@3.2.3)(preact@10.29.8)(react@19.2.8)(solid-js@1.9.15)':
     dependencies:
       '@tanstack/devtools-ui': 0.7.0(csstype@3.2.3)(solid-js@1.9.15)
@@ -14177,6 +14364,21 @@ snapshots:
       - csstype
       - utf-8-validate
 
+  '@tanstack/electric-db-collection@0.6.3(supports-color@8.1.1)(typescript@7.0.2)':
+    dependencies:
+      '@electric-sql/client': 1.5.28
+      '@standard-schema/spec': 1.1.0
+      '@tanstack/db': 0.15.2(typescript@7.0.2)
+      debug: 4.4.3(supports-color@8.1.1)
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
+
+  '@tanstack/electron-db-sqlite-persistence@0.2.13(typescript@7.0.2)':
+    dependencies:
+      '@tanstack/db-sqlite-persistence-core': 0.4.12(typescript@7.0.2)
+      typescript: 7.0.2
+
   '@tanstack/eslint-plugin-query@5.104.0(eslint@10.9.1(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)':
     dependencies:
       '@typescript-eslint/utils': 8.71.0(eslint@10.9.1(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
@@ -14224,6 +14426,8 @@ snapshots:
 
   '@tanstack/pacer-lite@0.1.1': {}
 
+  '@tanstack/pacer-lite@0.2.2': {}
+
   '@tanstack/query-core@5.104.0': {}
 
   '@tanstack/query-devtools@5.104.0(csstype@3.2.3)':
@@ -14241,6 +14445,13 @@ snapshots:
       superjson: 2.2.6
     transitivePeerDependencies:
       - csstype
+
+  '@tanstack/react-db@0.5.12(react@19.2.8)(typescript@7.0.2)':
+    dependencies:
+      '@tanstack/db': 0.15.2(typescript@7.0.2)
+      react: 19.2.8
+    transitivePeerDependencies:
+      - typescript
 
   '@tanstack/react-devtools@0.10.10(@neodrag/core@3.0.0-next.11)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(bufferutil@4.1.0)(csstype@3.2.3)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(solid-js@1.9.15)(utf-8-validate@6.0.6)':
     dependencies:
@@ -16381,6 +16592,8 @@ snapshots:
   flow-enums-runtime@0.0.6: {}
 
   fontfaceobserver@2.3.0: {}
+
+  fractional-indexing@3.4.0: {}
 
   fresh@0.5.2: {}
 

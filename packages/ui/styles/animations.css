@@ -1,4 +1,8 @@
 @theme inline {
+  /* Infinite loops: apply them with motion-safe: so reduced-motion users get a still frame */
+  --animate-shimmer-text: shimmer-text 1.4s linear infinite;
+  --animate-pixel-on: pixel-on 650ms ease-in-out infinite;
+
   @keyframes spinner-leaf-fade {
     0%,
     100% {
@@ -8,10 +12,48 @@
       opacity: 1;
     }
   }
+
+  /* Sweeps the highlight of text-shimmer across the text */
+  @keyframes shimmer-text {
+    from {
+      background-position: 150% center;
+    }
+    to {
+      background-position: -50% center;
+    }
+  }
+
+  /* One cell of a pixel-grid loader: brighten, hold, dim */
+  @keyframes pixel-on {
+    0%,
+    100% {
+      opacity: 0.15;
+    }
+    18%,
+    42% {
+      opacity: 1;
+    }
+    62% {
+      opacity: 0.15;
+    }
+  }
 }
 
 @layer utilities {
   .animate-spinner-leaf-fade {
     animation: spinner-leaf-fade 800ms linear infinite;
   }
+}
+
+/* Muted text with a brighter band; pair with motion-safe:animate-shimmer-text to move the band */
+@utility text-shimmer {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-muted-foreground) 35%,
+    var(--color-foreground) 50%,
+    var(--color-muted-foreground) 65%
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  color: transparent;
 }

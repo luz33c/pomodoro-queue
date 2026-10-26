@@ -10,6 +10,9 @@
     "typecheck": "electrobun prepare && tsc --noEmit"
   },
   "devDependencies": {
+    "@tanstack/db": "catalog:",
+    "@tanstack/db-sqlite-persistence-core": "catalog:",
+    "@tanstack/electron-db-sqlite-persistence": "catalog:",
     "@tsu-stack/app": "workspace:*",
     "@tsu-stack/tsconfig": "workspace:*",
     "@types/bun": "catalog:",

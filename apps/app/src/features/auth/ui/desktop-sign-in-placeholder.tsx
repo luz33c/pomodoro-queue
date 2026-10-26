@@ -11,7 +11,7 @@ export function DesktopSignInPlaceholder() {
   const healthLive = useGetHealthLiveQuery();
 
   return (
-    <Container className="flex min-h-svh max-w-md flex-col justify-center gap-6">
+    <Container className="flex max-w-md flex-col gap-6 py-16">
       <div className="flex flex-col gap-2">
         <h1 className="font-display text-4xl">{m.desktop_sign_in__title()}</h1>
         <p className="text-muted-foreground">{m.desktop_sign_in__description()}</p>

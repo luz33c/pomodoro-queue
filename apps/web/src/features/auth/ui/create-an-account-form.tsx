@@ -2,6 +2,7 @@ import { SignUp } from "@clerk/tanstack-react-start";
 
 import { m } from "@tsu-stack/i18n/messages";
 import { Link } from "@tsu-stack/i18n/tanstack-start/components/link";
+import { useLocale } from "@tsu-stack/i18n/tanstack-start/components/locale-provider";
 import { FieldDescription } from "@tsu-stack/ui/components/field";
 import { cn } from "@tsu-stack/ui/lib/utils";
 
@@ -22,6 +23,8 @@ export function CreateAnAccountForm({
   className,
   ...props
 }: React.ComponentProps<"div"> & { redirectTo?: AuthRedirectTarget }) {
+  const { locale } = useLocale();
+
   return (
     <Container className={cn("flex max-w-md flex-col items-center gap-6", className)} {...props}>
       <div className="flex flex-col items-center gap-2 text-center">
@@ -32,10 +35,10 @@ export function CreateAnAccountForm({
       </div>
 
       <SignUp
-        forceRedirectUrl={toClerkRedirectUrl(redirectTo)}
-        path={toClerkAppPath("/create-an-account")}
-        signInForceRedirectUrl={toClerkRedirectUrl(redirectTo)}
-        signInUrl={toClerkAuthPath("/sign-in", redirectTo)}
+        forceRedirectUrl={toClerkRedirectUrl(redirectTo, locale)}
+        path={toClerkAppPath("/create-an-account", locale)}
+        signInForceRedirectUrl={toClerkRedirectUrl(redirectTo, locale)}
+        signInUrl={toClerkAuthPath("/sign-in", redirectTo, locale)}
       />
 
       <FieldDescription className="px-6 text-center">

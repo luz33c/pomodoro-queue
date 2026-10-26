@@ -1,4 +1,4 @@
-import { type ErrorComponentProps } from "@tanstack/react-router";
+import { type ErrorComponentProps, useRouter } from "@tanstack/react-router";
 import { Home, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -26,7 +26,9 @@ function normalizeError(error: unknown): Error {
   return error instanceof Error ? error : new Error(String(error));
 }
 
-export function DefaultErrorPage({ error, reset }: ErrorComponentProps) {
+export function DefaultErrorPage({ error }: ErrorComponentProps) {
+  const router = useRouter();
+
   useEffect(() => {
     const normalizedError = normalizeError(error);
     const errorKey = `${normalizedError.name}:${normalizedError.message}:${normalizedError.stack ?? ""}`;
@@ -48,7 +50,8 @@ export function DefaultErrorPage({ error, reset }: ErrorComponentProps) {
   }, [error]);
 
   const handleRefresh = () => {
-    reset();
+    // reset() only re-renders the boundary; invalidate() also re-runs the failed loaders
+    void router.invalidate();
   };
 
   // Could also send to external service

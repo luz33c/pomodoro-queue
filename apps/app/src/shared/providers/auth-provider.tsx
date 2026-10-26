@@ -5,11 +5,12 @@ import { useEffect, useRef } from "react";
 import { ENV_APP } from "@tsu-stack/env/app/env";
 
 import { setAuthTokenGetter } from "#/shared/api/auth-token";
+import { resetUserScopedCollections } from "#/shared/api/user-scoped-collections";
 import { appConfig } from "#/shared/config/app";
 import { useAppAuth } from "#/shared/host/auth";
 import { host } from "#/shared/host/index";
 
-/** Hands the current token getter to the oRPC client and drops cached private data when the user changes. */
+/** Hands the current token getter to the API clients and drops cached private data when the user changes. */
 function ApiAuthBridge() {
   const { getToken, isLoaded, userId } = useAppAuth();
   const queryClient = useQueryClient();
@@ -30,6 +31,7 @@ function ApiAuthBridge() {
 
     if (previousUserId.current !== undefined && previousUserId.current !== userId) {
       queryClient.clear();
+      void resetUserScopedCollections();
     }
 
     previousUserId.current = userId;

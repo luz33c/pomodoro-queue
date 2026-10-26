@@ -15,6 +15,7 @@
   "dependencies": {
     "@clerk/backend": "catalog:",
     "@clerk/tanstack-react-start": "catalog:",
+    "@electric-sql/client": "catalog:",
     "@orpc/client": "catalog:",
     "@orpc/server": "catalog:",
     "@orpc/tanstack-query": "catalog:",

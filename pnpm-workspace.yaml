@@ -24,6 +24,7 @@ catalog:
   "@commitlint/cli": 21.2.2
   "@commitlint/config-conventional": 21.2.2
   "@dotenvx/dotenvx": 2.21.0
+  "@electric-sql/client": 1.5.28
   "@expo/log-box": 57.0.4
   "@expo/metro-runtime": 57.0.14
   "@fontsource-variable/geist": 5.3.0
@@ -45,11 +46,16 @@ catalog:
   "@rolldown/plugin-babel": 0.2.3
   "@t3-oss/env-core": 0.13.11
   "@tailwindcss/vite": 4.3.3
+  "@tanstack/db": 0.15.2
+  "@tanstack/db-sqlite-persistence-core": 0.4.12
   "@tanstack/devtools-a11y": 0.2.0
   "@tanstack/devtools-vite": 0.8.3
+  "@tanstack/electric-db-collection": 0.6.3
+  "@tanstack/electron-db-sqlite-persistence": 0.2.13
   "@tanstack/eslint-plugin-query": 5.104.0
   "@tanstack/eslint-plugin-router": 1.162.0
   "@tanstack/query-core": 5.104.0
+  "@tanstack/react-db": 0.5.12
   "@tanstack/react-devtools": 0.10.10
   "@tanstack/react-form": 1.33.5
   "@tanstack/react-form-devtools": 0.2.34

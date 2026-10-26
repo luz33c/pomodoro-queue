@@ -1,4 +1,4 @@
-import { type ErrorComponentProps, Link } from "@tanstack/react-router";
+import { type ErrorComponentProps, Link, useRouter } from "@tanstack/react-router";
 import { Home, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
@@ -25,7 +25,9 @@ function normalizeError(error: unknown): Error {
   return error instanceof Error ? error : new Error(String(error));
 }
 
-export function DefaultErrorPage({ error, reset }: ErrorComponentProps) {
+export function DefaultErrorPage({ error }: ErrorComponentProps) {
+  const router = useRouter();
+
   useEffect(() => {
     const normalizedError = normalizeError(error);
     const errorKey = `${normalizedError.name}:${normalizedError.message}:${normalizedError.stack ?? ""}`;
@@ -46,6 +48,11 @@ export function DefaultErrorPage({ error, reset }: ErrorComponentProps) {
     });
   }, [error]);
 
+  const handleRefresh = () => {
+    // reset() only re-renders the boundary; invalidate() also re-runs the failed loaders
+    void router.invalidate();
+  };
+
   return (
     <div className="grid min-h-svh place-items-center p-4">
       <Empty>
@@ -65,7 +72,7 @@ export function DefaultErrorPage({ error, reset }: ErrorComponentProps) {
               {m.error_500__go_home()}
             </Link>
 
-            <Button onClick={reset} variant="outline">
+            <Button onClick={handleRefresh} variant="outline">
               <RefreshCw data-icon="inline-start" />
               {m.error_500__try_again()}
             </Button>

@@ -1,5 +1,5 @@
 import { type LinkProps } from "@tanstack/react-router";
-import { LayoutDashboard, type LucideIcon } from "lucide-react";
+import { LayoutDashboard, ListTodo, type LucideIcon } from "lucide-react";
 
 import { m } from "@tsu-stack/i18n/messages";
 
@@ -24,6 +24,11 @@ export const navItems: NavItem[] = [
     icon: LayoutDashboard,
     label: () => m.app_shell__dashboard(),
     to: "/dashboard"
+  },
+  {
+    icon: ListTodo,
+    label: () => m.app_shell__todos(),
+    to: "/todos"
   }
 ];
 

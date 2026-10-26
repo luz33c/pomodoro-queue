@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>产品 App 与桌面端：当前架构</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: oklch(0.1471 0.0047 54.2);
+        --fg: oklch(0.9274 0.0063 55.66);
+        --muted: oklch(0.7114 0.0113 56.21);
+        --card: oklch(0.194 0.0063 55.99);
+        --border: oklch(0.2682 0.0095 56.24);
+        --code: oklch(0.1021 0.0032 54.78);
+        --ok: oklch(0.78 0.14 150);
+        --warn: oklch(0.83 0.13 80);
+        --web: oklch(0.78 0.09 240);
+        --app: oklch(0.86 0.1 85);
+        --desk: oklch(0.8 0.11 300);
+        --srv: oklch(0.78 0.12 160);
+      }
+      @media (prefers-color-scheme: light) {
+        :root {
+          color-scheme: light;
+          --bg: oklch(1 0 0);
+          --fg: oklch(0.2682 0.0095 56.24);
+          --muted: oklch(0.4449 0.012 59.58);
+          --card: oklch(0.991 0.0016 54.37);
+          --border: oklch(0.9274 0.0063 55.66);
+          --code: oklch(0.9753 0.0032 55.37);
+          --ok: oklch(0.52 0.14 150);
+          --warn: oklch(0.58 0.14 65);
+          --web: oklch(0.5 0.13 245);
+          --app: oklch(0.55 0.13 70);
+          --desk: oklch(0.5 0.16 300);
+          --srv: oklch(0.5 0.13 160);
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-padding-top: 72px;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font:
+          15px/1.7 "Geist",
+          system-ui,
+          -apple-system,
+          "PingFang SC",
+          "Microsoft YaHei",
+          sans-serif;
+      }
+      .wrap {
+        max-width: 1160px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      header {
+        padding: 42px 0 24px;
+      }
+      h1,
+      h2 {
+        font-family: "Instrument Serif", Georgia, "Songti SC", serif;
+        font-weight: 400;
+      }
+      h1 {
+        font-size: clamp(30px, 5vw, 46px);
+        line-height: 1.2;
+        margin: 0 0 16px;
+      }
+      h2 {
+        font-size: clamp(24px, 3.4vw, 31px);
+        margin: 0 0 10px;
+      }
+      h3 {
+        font-size: 16px;
+        margin: 0 0 8px;
+      }
+      p {
+        margin: 0 0 10px;
+      }
+      ul,
+      ol {
+        margin: 6px 0 0;
+        padding-left: 20px;
+      }
+      li {
+        margin: 5px 0;
+      }
+      a {
+        color: inherit;
+        text-underline-offset: 3px;
+      }
+      a:focus-visible {
+        outline: 2px solid var(--app);
+        outline-offset: 4px;
+      }
+      section {
+        padding-top: 44px;
+      }
+      .eyebrow,
+      .tag {
+        font:
+          12px "Geist Mono",
+          monospace;
+        letter-spacing: 0.06em;
+      }
+      .eyebrow,
+      .sub {
+        color: var(--muted);
+      }
+      .eyebrow {
+        margin-bottom: 12px;
+      }
+      .sub {
+        max-width: 900px;
+      }
+      code,
+      pre {
+        font-family: "Geist Mono", ui-monospace, Menlo, monospace;
+      }
+      code {
+        font-size: 0.86em;
+        background: var(--code);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 1px 5px;
+        overflow-wrap: anywhere;
+      }
+      .toc {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: var(--bg);
+        border-block: 1px solid var(--border);
+      }
+      .toc .wrap {
+        display: flex;
+        gap: 24px;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-block: 12px;
+      }
+      .toc a {
+        color: var(--muted);
+        font-size: 13px;
+        text-decoration: none;
+      }
+      .toc a:hover {
+        color: var(--fg);
+      }
+      .grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 430px), 1fr));
+      }
+      .apps {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+      }
+      .card {
+        min-width: 0;
+        padding: 18px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+      }
+      .card p:last-child {
+        margin-bottom: 0;
+      }
+      .node {
+        border-top: 3px solid var(--accent);
+      }
+      .node .tag {
+        color: var(--accent);
+        margin-bottom: 8px;
+      }
+      .web {
+        --accent: var(--web);
+      }
+      .app {
+        --accent: var(--app);
+      }
+      .desk {
+        --accent: var(--desk);
+      }
+      .srv {
+        --accent: var(--srv);
+      }
+      .badge {
+        display: inline-block;
+        padding: 2px 9px;
+        border-radius: 6px;
+        font-size: 12px;
+        margin: 0 6px 6px 0;
+      }
+      .ok {
+        color: var(--ok);
+        background: color-mix(in oklch, var(--ok) 12%, transparent);
+      }
+      .warn {
+        color: var(--warn);
+        background: color-mix(in oklch, var(--warn) 12%, transparent);
+      }
+      .note {
+        border-left: 3px solid var(--app);
+        padding: 12px 16px;
+        margin-top: 18px;
+        background: var(--card);
+      }
+      .diagram {
+        margin-top: 16px;
+      }
+      pre {
+        font-size: 12.5px;
+        line-height: 1.85;
+        overflow-x: auto;
+        margin: 0;
+        padding: 18px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--code);
+      }
+      .table-wrap {
+        overflow-x: auto;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        margin-top: 16px;
+      }
+      table {
+        width: 100%;
+        min-width: 680px;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      caption {
+        text-align: left;
+        padding: 12px;
+        font-weight: 600;
+        background: var(--card);
+      }
+      th,
+      td {
+        padding: 12px;
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+        vertical-align: top;
+      }
+      th {
+        background: var(--card);
+      }
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+      footer {
+        margin-top: 48px;
+        padding: 24px 0 36px;
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 13px;
+      }
+      @media (max-width: 600px) {
+        .wrap {
+          padding-inline: 16px;
+        }
+        .card {
+          padding: 15px;
+        }
+        section {
+          padding-top: 32px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="wrap">
+      <div class="eyebrow">CURRENT ARCHITECTURE · 2026-10-25</div>
+      <h1>一份产品界面，浏览器与桌面两个宿主</h1>
+      <p class="sub">
+        <code>apps/app</code> 已从网站拆出为独立 SPA；<code>apps/desktop</code>
+        已接入它的桌面构建产物。 本页按当前源码整理，替代原来的“方案 C 最终计划”。
+      </p>
+      <span class="badge ok">App 拆分与桌面壳已落地</span>
+      <span class="badge warn">桌面登录仍为占位</span>
+      <span class="badge warn">生产发布准备未完成</span>
+    </header>
+    <nav class="toc" aria-label="页面目录">
+      <div class="wrap">
+        <a href="#architecture">应用边界</a>
+        <a href="#hosts">两个宿主</a>
+        <a href="#auth">认证与 API</a>
+        <a href="#deploy">部署方式</a>
+        <a href="#commands">开发与构建</a>
+        <a href="#status">完成范围与证据</a>
+      </div>
+    </nav>
+    <main class="wrap">
+      <section id="architecture">
+        <h2>01 · 应用边界</h2>
+        <div class="apps grid">
+          <article class="card node web">
+            <div class="tag">apps/web</div>
+            <h3>网站与登录入口</h3>
+            <p>TanStack Start；负责公开页面、SSR、登录注册和校验后的 App 回跳。</p>
+          </article>
+          <article class="card node app">
+            <div class="tag">apps/app</div>
+            <h3>产品界面</h3>
+            <p>
+              Vite + React + TanStack Router SPA；包含 Dashboard、认证门禁与
+              AppShell。浏览器和桌面共用源码。
+            </p>
+          </article>
+          <article class="card node desk">
+            <div class="tag">apps/desktop</div>
+            <h3>原生窗口与打包</h3>
+            <p>
+              Electrobun 2.x 薄壳；Bun 主进程负责窗口、加载地址和外链。通过 copy 加载 App 产物。
+            </p>
+          </article>
+          <article class="card node srv">
+            <div class="tag">apps/server + packages/api</div>
+            <h3>业务 API</h3>
+            <p>Hono + oRPC；由服务端验证身份。App 在两个宿主下都直接请求 API。</p>
+          </article>
+        </div>
+        <div class="diagram">
+          <pre aria-label="同一份 App 源码的两种构建目标">
+apps/app/src
+  ├─ vite build ───────────────→ dist/web ─────────→ 浏览器
+  │                                                ↑
+  │                                  App 静态服务 或 Web 静态挂载
+  └─ vite build --mode desktop → dist/desktop
+                                  └─ Electrobun copy → views/mainview → 桌面窗口
+
+浏览器 / 桌面窗口 ── oRPC（有 token 时带 Bearer）──→ API</pre>
+        </div>
+        <p class="note">
+          App 页面不导入 Electrobun，也不导入其他应用源码。宿主差异集中在
+          <code>src/shared/host/</code>；<code>AuthGate</code> 是选择未登录界面的例外。 共享
+          UI、字体、主题与文案来自 <code>packages/*</code>。
+        </p>
+      </section>
+
+      <section id="hosts">
+        <h2>02 · 两个宿主的实际差异</h2>
+        <div class="table-wrap">
+          <table>
+            <caption>
+              构建时通过 Vite mode 选择宿主
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">维度</th>
+                <th scope="col">浏览器</th>
+                <th scope="col">桌面</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">产物</th>
+                <td><code>dist/web</code></td>
+                <td><code>dist/desktop</code></td>
+              </tr>
+              <tr>
+                <th scope="row">地址与路由</th>
+                <td>Browser history；basepath 来自 <code>VITE_APP_URL</code></td>
+                <td>
+                  Hash history；相对资源路径；打包入口 <code>views://mainview/index.html</code>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">开发服务</th>
+                <td>
+                  默认 <code>localhost:3002/app</code>；同源挂载时由 Web 转发到 <code>:3002</code>
+                </td>
+                <td>
+                  Desktop mode 的 <code>localhost:3003</code>；dev 渠道探测失败时回退到打包页面
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">未登录</th>
+                <td>跳到 Web 登录，并携带原页面地址</td>
+                <td>显示登录占位与公开 API 状态；当前无法进入受保护产品页面</td>
+              </tr>
+              <tr>
+                <th scope="row">外链</th>
+                <td>新标签页，带 <code>noopener noreferrer</code></td>
+                <td>由壳拦截并交给系统浏览器；不依赖 <code>target="_blank"</code></td>
+              </tr>
+              <tr>
+                <th scope="row">语言</th>
+                <td colspan="2">
+                  App 路由无语言前缀；启动时按 localStorage → navigator.languages →
+                  默认语言选择；切换语言后刷新
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note">
+          <code>views://</code> 没有深层路径的 HTML 回退，所以桌面使用 hash 路由。 Web 与 App 的
+          next-themes 使用相同默认存储 key，同源挂载时共享主题存储，不同 origin 时隔离。 Web 语言由
+          URL 决定，App 语言按上表选择，两者不会自动同步；桌面存储也受 WebView 隔离影响。
+        </p>
+      </section>
+
+      <section id="auth">
+        <h2>03 · 浏览器登录已接线，桌面登录尚未接入</h2>
+        <div class="grid">
+          <article class="card">
+            <span class="badge ok">浏览器代码已接入</span>
+            <h3>网站负责登录，产品 App 消费会话</h3>
+            <ol>
+              <li><code>AuthGate</code> 等待 Clerk 就绪；未登录时跳转 Web 登录页。</li>
+              <li>
+                Web 校验回跳 URL：origin 必须等于 App 来源，路径必须在 App basepath
+                内，按路径段判断。
+              </li>
+              <li>
+                登录成功后回到原 App 页面；App 每次 API 请求通过 <code>getToken()</code> 获取 Bearer
+                token。
+              </li>
+              <li>
+                退出后返回网站；用户身份改变时，现有桥接组件调用 <code>queryClient.clear()</code>。
+              </li>
+            </ol>
+            <p class="sub">真实生产域名下的会话共享，仍需要匹配的 Clerk 配置和运行验证。</p>
+          </article>
+          <article class="card">
+            <span class="badge warn">桌面认证占位</span>
+            <h3>窗口已能运行，尚无桌面会话</h3>
+            <ul>
+              <li><code>useDesktopAuth()</code> 固定返回已加载、未登录和空 token。</li>
+              <li>
+                桌面不挂载、不初始化 <code>ClerkProvider</code>；这不等于已验证 Clerk
+                代码全部从产物移除。
+              </li>
+              <li>占位页调用公开的 <code>health.live</code>，并提供打开网站的链接。</li>
+              <li>浏览器登录后的会话交接、桌面 token 存储与刷新仍未实现。</li>
+            </ul>
+          </article>
+        </div>
+        <p class="note">
+          API 自动允许 Web 与 App 的来源；桌面打包和开发来源通过
+          <code>CLERK_AUTHORIZED_PARTIES</code> 配置为 <code>views://mainview</code> 与
+          <code>http://localhost:3003</code>。目前没有主进程代发 API 的桥接层。
+        </p>
+      </section>
+
+      <section id="deploy">
+        <h2>04 · 浏览器版有两种已实现的服务入口</h2>
+        <p class="sub">示例地址用来说明配置；实际部署尚未选定正式生产域名。</p>
+        <div class="grid">
+          <article class="card">
+            <h3>独立 App 服务</h3>
+            <pre>
+Web → https://example.com
+App → https://app.example.com</pre>
+            <ul>
+              <li>
+                <code>apps/app/server.ts</code> 提供静态文件、SPA 页面回退和
+                <code>/_health</code>；有 basepath 时健康路由也在其下。
+              </li>
+              <li>缺失的带扩展名资源返回 404；带 hash 的构建资源使用长缓存。</li>
+              <li><code>apps/app/Dockerfile</code> 与两份 Compose 配置均已有 App 服务。</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>挂在 Web 的同源路径</h3>
+            <pre>
+Web → https://example.com
+App → https://example.com/app</pre>
+            <ul>
+              <li><code>VITE_APP_URL</code> 与 Web 同源，且 App 路径位于 Web basepath 下。</li>
+              <li>
+                Web 的 Dockerfile 按配置构建 App；<code>apps/web/server.ts</code> 在 Start 前服务
+                App 产物。
+              </li>
+              <li>
+                开发时 Web Vite 已转发 App 路径到 <code>:3002</code>，包括首页后直接带
+                <code>?query</code> 的请求。
+              </li>
+              <li>Compose 的独立 App 服务不会自动消失；使用 Web 挂载时按部署方式选择服务。</li>
+            </ul>
+          </article>
+        </div>
+        <p class="note">
+          一份
+          <code>dist/web</code>
+          对应一个地址。<code>VITE_APP_URL</code>、<code>VITE_SERVER_URL</code>、
+          <code>VITE_WEB_URL</code>、<code>VITE_CLERK_PUBLISHABLE_KEY</code>
+          在构建时进入前端；更换地址后需要重新构建。 桌面发布也必须使用生产值。
+        </p>
+        <p class="sub">
+          外置网关也可将 App 路径转发到独立 App 服务，但仓库未提供网关配置。 同源镜像构建仍按原始
+          URL 字符串前缀判断，尚未统一为运行时的 URL 规范化判定；请保持地址写法一致。
+        </p>
+      </section>
+
+      <section id="commands">
+        <h2>05 · 当前开发与构建命令</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">命令（仓库根目录）</th>
+                <th scope="col">实际行为</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"><code>pnpm run dev</code></th>
+                <td>
+                  确保 i18n 产物，然后启动 i18n watch、server、web、app；不启动 desktop、extension
+                  或 native。
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><code>pnpm run dev:desktop</code></th>
+                <td>
+                  先构建 App 桌面产物，再并行启动 <code>:3003</code> 与
+                  <code>electrobun dev --watch</code>。API 服务需另外运行。
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><code>pnpm --filter @tsu-stack/app run build</code></th>
+                <td>构建浏览器版到 <code>apps/app/dist/web</code>。</td>
+              </tr>
+              <tr>
+                <th scope="row"><code>pnpm run build:desktop</code></th>
+                <td>
+                  构建 i18n、App 桌面版，再由 Electrobun 构建当前平台的 stable
+                  包；不代表产物已签名或可正式发布。
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><code>pnpm --filter @tsu-stack/desktop run build:canary</code></th>
+                <td>构建当前平台的 canary 包，用于检查真实 <code>views://</code> 环境行为。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note">
+          开发服务器加载成功时，Vite 为 App 界面提供热更新；<code>--watch</code>
+          负责主进程变动后的重新构建与启动。 dev 页面来源是 HTTP，不能替代打包产物的
+          <code>views://</code> 来源验证。
+        </p>
+      </section>
+
+      <section id="status">
+        <h2>06 · 完成范围与验证证据</h2>
+        <div class="grid">
+          <article class="card">
+            <span class="badge ok">当前代码事实</span>
+            <h3>已落地</h3>
+            <ul>
+              <li>App 独立 SPA、两种构建、宿主层、Dashboard 与 Web 登录回跳。</li>
+              <li>App 静态服务、Docker/Compose，以及 Web 同源挂载和开发代理。</li>
+              <li>Electrobun Bun 主进程、跨目录 copy、导航限制、系统浏览器外链和开发/打包脚本。</li>
+              <li>共享主题字体、FSD 约束和应用开发约定。</li>
+            </ul>
+          </article>
+          <article class="card">
+            <span class="badge warn">仍未完成</span>
+            <h3>正式发布前的工作</h3>
+            <ul>
+              <li>桌面登录与会话生命周期。</li>
+              <li>
+                正式 identifier、生产域名与发布版本；当前为
+                <code>dev.tsu-stack.desktop.spike</code>、<code>0.0.0</code>。
+              </li>
+              <li>图标、签名、公证、<code>release.baseUrl</code> 与各平台 CI。</li>
+              <li>生产 Clerk 会话共享、实际部署验收，以及 Windows/Linux 等平台验证。</li>
+            </ul>
+          </article>
+        </div>
+        <p class="note">
+          <a href="../.agents/desktop.md">桌面约定</a>记录了 2026-10-24 在 macOS arm64
+          上的历史实验： 跨目录 copy、TS 7、<code>views://</code> origin、hash 路由及 API
+          预检已验证，故不再列为待选架构问题。 2026-10-25 的定向验证已通过：15 个文件格式检查、35
+          个代理边界用例及 Web 包的
+          <code>tsc --noEmit</code
+          >，并核对了图文链接与锚点。本轮未运行全仓检查、构建、完整测试套件或浏览器、容器、桌面交互验收；历史记录不代表当前快照全部通过。
+        </p>
+      </section>
+    </main>
+    <footer class="wrap">
+      当前架构说明：<a href="desktop-plan-c-product-app.md">desktop-plan-c-product-app.md</a> · App
+      开发约定：<a href="../apps/app/AGENTS.md">apps/app/AGENTS.md</a> · 桌面约定与历史实验：<a
+        href="../.agents/desktop.md"
+        >.agents/desktop.md</a
+      ><br />
+      本页是当前实现的图解；出现差异时以源码为准，工程细节维护在对应约定文件中。
+    </footer>
+  </body>
+</html>

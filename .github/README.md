@@ -257,7 +257,7 @@ Database CLI commands (`db:generate`, `db:migrate`, `db:push`, and `db:studio`) 
 
 This scope is specific to database tooling. The application DB singleton, Server, and Web SSR retain their existing environment requirements.
 
-Clerk is the only active authentication provider. The legacy authentication tables and their migrations are retained pending a decision about existing data; see the [migration record](../BETTER_AUTH_TO_CLERK.md#当前状态).
+Clerk is the only authentication provider. The current Drizzle schema contains no legacy authentication tables or business tables. An appended cleanup migration drops the four legacy authentication tables, while historical migrations remain intact. The API server applies pending migrations at production startup; review the data impact before deploying this cleanup to an existing database. See the [migration record](../BETTER_AUTH_TO_CLERK.md#当前状态).
 
 ### Server
 
@@ -267,10 +267,13 @@ For the Hono server, use the following environment variables:
 | ---------------------------- | -------- | ------------- | ------------------------------------------------------------------------------------------------ |
 | `VITE_SERVER_URL`            | ✅       | -             | Base URL for the server. May also include a subpath if needed, ex: `https://example.com/server`. |
 | `VITE_WEB_URL`               | ✅       | -             | Base URL for the web app. May also include a subpath if needed, ex: `https://example.com/web`.   |
+| `VITE_APP_URL`               | ✅       | -             | Base URL for the product app. Its origin is trusted for CORS and Clerk automatically.            |
 | `CLERK_SECRET_KEY`           | ✅       | -             | Clerk secret key used to verify Clerk sessions and bearer tokens server-side.                    |
 | `VITE_CLERK_PUBLISHABLE_KEY` | ✅       | -             | Clerk publishable key. Safe for the browser and required by Clerk client components.             |
-| `CLERK_AUTHORIZED_PARTIES`   | ❌       | -             | Comma-separated extra Clerk `azp` / authorized party origins, e.g. `chrome-extension://<id>`.    |
+| `CLERK_AUTHORIZED_PARTIES`   | ❌       | -             | Extra `azp` / CORS origins, e.g. `chrome-extension://<id>`, desktop `views://mainview`.          |
 | `DATABASE_URL`               | ✅       | -             | PostgreSQL connection string.                                                                    |
+| `ELECTRIC_URL`               | ❌       | -             | Electric sync service that `GET /shape` forwards to. Unset in production, `/shape` returns 503.  |
+| `ELECTRIC_SECRET`            | ❌       | -             | The `ELECTRIC_SECRET` set on the Electric service. Not needed for the local dev container.       |
 | `ENABLE_OPEN_API_DOCS`       | ❌       | `false`       | Enable OpenAPI `/docs` endpoint.                                                                 |
 
 ### Web
@@ -281,11 +284,38 @@ For the web app, use the following environment variables:
 | ---------------------------- | -------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | `VITE_SERVER_URL`            | ✅       | -             | Base URL for the server. May also include a subpath if needed, ex: `https://example.com/server`.                                    |
 | `VITE_WEB_URL`               | ✅       | -             | Base URL for the web app. May also include a subpath if needed, ex: `https://example.com/web`.                                      |
+| `VITE_APP_URL`               | ✅       | -             | Base URL for the product app. Sign-in accepts redirects back into it, and the navbar links to it.                                   |
 | `CLERK_SECRET_KEY`           | ✅       | -             | Clerk secret key used by TanStack Start middleware. Do not expose it with a `VITE_` prefix.                                         |
 | `VITE_CLERK_PUBLISHABLE_KEY` | ✅       | -             | Clerk publishable key used by the browser Clerk provider.                                                                           |
 | `DATABASE_URL`               | ✅       | -             | PostgreSQL connection string.                                                                                                       |
 | `VITE_IMGPROXY_URL`          | ❌       | -             | URL for image optimization. You'll need to deploy your own [imgproxy](https://hub.docker.com/r/darthsim/imgproxy/) container first. |
 | `VITE_IMGPROXY_SIGNATURE`    | ❌       | `_`           | imgproxy signature path segment. Use `insecure` or a precomputed signature if your imgproxy setup requires it.                      |
+
+### App
+
+For the product app (`apps/app`, a Vite SPA served by its own `server.ts`), use the following environment variables. All of them are compiled into the bundle, so a deployment needs the production values at build time:
+
+| Variable Name                | Required | Default Value | Description                                                                                              |
+| ---------------------------- | -------- | ------------- | -------------------------------------------------------------------------------------------------------- |
+| `VITE_APP_URL`               | ✅       | -             | Base URL for the app. Its path becomes the Vite base and router basepath, ex: `https://app.example.com`. |
+| `VITE_SERVER_URL`            | ✅       | -             | Base URL for the server.                                                                                 |
+| `VITE_WEB_URL`               | ✅       | -             | Base URL for the web app, where signed-out users are sent to sign in.                                    |
+| `VITE_CLERK_PUBLISHABLE_KEY` | ✅       | -             | Clerk publishable key used by the browser Clerk provider.                                                |
+
+Use the same root domain for the web app and the app in production so they share the Clerk session. `pnpm run dev` starts the app at `http://localhost:3002/app`.
+
+To serve the app from the web app's origin instead (for example `https://example.com/app`), set `VITE_APP_URL` under `VITE_WEB_URL` for every service and rebuild. The web launcher then serves the app's build at that path, the web Docker image builds it, and `pnpm run dev` proxies that path to the app's dev server.
+
+### Desktop
+
+`apps/desktop` is an Electrobun shell that packages the app's desktop build (`vite build --mode desktop`). It reads no environment variables of its own; the bundled app uses the App variables above, compiled in at build time, so release builds need production values. Add `views://mainview` (packaged) and `http://localhost:3003` (development) to `CLERK_AUTHORIZED_PARTIES` on the server.
+
+```bash
+pnpm run dev:desktop    # app desktop dev server on :3003 + electrobun dev --watch
+pnpm run build:desktop  # stable build for the current platform
+```
+
+The first Electrobun command downloads its toolchain (about 210 MB) into `~/.hutch`. See the [desktop guide](../.agents/desktop.md).
 
 ### Native
 

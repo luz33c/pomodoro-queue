@@ -2,11 +2,21 @@ import { m } from "@tsu-stack/i18n/messages";
 import { Spinner } from "@tsu-stack/ui/components/spinner";
 import { cn } from "@tsu-stack/ui/lib/utils";
 
+import { useAppAuth } from "#/shared/host/auth";
 import { Container } from "#/shared/ui/container";
+
+import { DesktopSignInPlaceholder } from "#/features/auth/index";
 
 import { useGetPrivateDataQuery } from "#/pages/dashboard/api/get-private-data";
 
+/** The private RPC needs an account. Only local data mode, which skips sign-in, reaches this page signed out. */
 export function DashboardPage() {
+  const { isSignedIn } = useAppAuth();
+
+  return isSignedIn ? <PrivateDataDashboard /> : <DesktopSignInPlaceholder />;
+}
+
+function PrivateDataDashboard() {
   const privateData = useGetPrivateDataQuery();
 
   return (

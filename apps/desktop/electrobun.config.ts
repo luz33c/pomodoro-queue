@@ -15,6 +15,12 @@ export default {
     bun: {
       entrypoint: "src/bun/index.ts"
     },
+    views: {
+      // The main window's preload: exposes window.tsuDesktop to apps/app
+      "webview-bridge": {
+        entrypoint: "src/bun/webview-bridge.ts"
+      }
+    },
     copy: {
       "../app/dist/desktop": "views/mainview"
     },

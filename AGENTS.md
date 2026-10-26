@@ -1,6 +1,6 @@
 # tsu-stack
 
-Opinionated full-stack TypeScript monorepo: TanStack Start + Hono + oRPC + Drizzle + Clerk + Paraglide.js (i18n), running on Node.js 24 and managed with pnpm.
+Opinionated full-stack TypeScript monorepo: TanStack Start (website) + a TanStack Router SPA (product app, also packaged as an Electrobun desktop app) + Hono + oRPC + Drizzle + Clerk + Paraglide.js (i18n), running on Node.js 24 and managed with pnpm.
 
 ## Start Here
 
@@ -26,8 +26,11 @@ Pick the most specific file for the task. Use links within that file instead of 
 
 ### App And Frameworks
 
+- [Product app](apps/app/AGENTS.md) for the `apps/app` SPA: its web and desktop hosts, host seam, auth gate, page layout, and commands.
+- [Desktop](.agents/desktop.md) for the `apps/desktop` Electrobun shell: toolchain, main process, `views://` behavior, navigation policy, and packaging.
+- [Preview UI](apps/preview-ui/AGENTS.md) for the `apps/preview-ui` gallery of composite components in `packages/ui` and its scripted demo.
 - [TanStack patterns](.agents/tanstack-patterns.md) for route structure, `beforeLoad`, layouts, and route-level preloading.
-- [API fetching patterns](.agents/api-fetching-patterns.md) for slice-local TanStack Query and oRPC client wrappers in `apps/web`.
+- [API fetching patterns](.agents/api-fetching-patterns.md) for slice-local TanStack Query and oRPC client wrappers in `apps/web` and `apps/app`.
 - [Zustand state management](.agents/zustand.md) for complex client-owned state shared across components, and for avoiding React Context as the default mutable state tool.
 - [oRPC patterns](.agents/orpc.md) for server procedures, router shape, typed errors, and request-scoped handler logging.
 - [Auth patterns](.agents/auth.md) for Clerk architecture, token handling, and protected/guest route rules.
@@ -39,13 +42,15 @@ Pick the most specific file for the task. Use links within that file instead of 
 - [Core package patterns](.agents/core.md) for shared domain contracts in `packages/core`, file roles, and propagation into API and web code.
 - [Database package](packages/db/AGENTS.md) for schema files, relations, table-level query functions, and `@tsu-stack/db` entry points.
 - [Media storage and uploads](.agents/media-storage.md) for preemptive S3 object conventions, first-implementation workflow, delete policy, and storage env configuration.
+- [Sync](.agents/sync.md) for Electric shapes, the `/shape` proxy, txid-returning writes, synced-table rules, and shape versioning.
 - [UI guidelines](.agents/ui.md) for app UI composition, extraction decisions, and `packages/ui` boundaries.
 - [TypeScript conventions](.agents/typescript.md) for schema placement, import boundaries, and `lib/` vs `utils/`.
 - [Environment variables](.agents/environment-variables.md) for env scoping, validation, and Docker propagation.
 
 ## Task Entry Points
 
-- UI work: Start with [UI guidelines](.agents/ui.md). Add [TanStack patterns](.agents/tanstack-patterns.md) when the task touches route/file placement, loaders, or page composition. Add [Zustand state management](.agents/zustand.md) when client state must be accessed from different components.
+- UI work: Start with [UI guidelines](.agents/ui.md). Add [Preview UI](apps/preview-ui/AGENTS.md) when adding or changing a composite component in `packages/ui`. Add [TanStack patterns](.agents/tanstack-patterns.md) when the task touches route/file placement, loaders, or page composition. Add [Zustand state management](.agents/zustand.md) when client state must be accessed from different components.
+- Product app or desktop work: Start with [Product app](apps/app/AGENTS.md). Add [Desktop](.agents/desktop.md) for the shell, packaging, or `views://` behavior, and [Auth patterns](.agents/auth.md) for the sign-in round trip with Web.
 - Shared client state: Start with [Zustand state management](.agents/zustand.md). Do not use React Context unless the user explicitly asks for it.
 - Bugfix: Start with the owning domain doc from the index above, then use [Workflow](.agents/workflow.md) for user-directed validation timing. Add [Core package patterns](.agents/core.md) when the fix touches shared enums, schemas, formatters, defaults, or other cross-package contracts. Add [Logging](.agents/logging.md) or [Testing](.agents/testing.md) only when the task explicitly calls for them or their policies require them.
 - Uploads or object storage: Start with [Media storage and uploads](.agents/media-storage.md). Use it even for the first storage feature in this repo, then update it in the same change once the real provider, env surface, and asset purposes are known. Add [Core package patterns](.agents/core.md) when changing shared upload contracts, [oRPC patterns](.agents/orpc.md) when wiring route handlers, and [Environment variables](.agents/environment-variables.md) when storage config changes.

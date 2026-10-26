@@ -13,7 +13,7 @@ import { MobileNav } from "./mobile-nav";
 import { NavMenu, ShellLinks } from "./nav-menu";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
-  const { signOut } = useAppAuth();
+  const { isSignedIn, signOut } = useAppAuth();
 
   return (
     <div className="flex min-h-svh flex-col">
@@ -30,14 +30,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <ShellLinks className="hidden md:flex" orientation="horizontal" />
             <LocaleSwitcher size="icon-sm" />
             <ThemeSwitcher size="icon-sm" />
-            <Button
-              aria-label={m.app_shell__sign_out()}
-              onClick={() => void signOut()}
-              size="icon-sm"
-              variant="ghost"
-            >
-              <LogOut aria-hidden="true" />
-            </Button>
+            {/* Local data mode opens the shell without an account */}
+            {isSignedIn && (
+              <Button
+                aria-label={m.app_shell__sign_out()}
+                onClick={() => void signOut()}
+                size="icon-sm"
+                variant="ghost"
+              >
+                <LogOut aria-hidden="true" />
+              </Button>
+            )}
           </div>
         </div>
       </header>
