@@ -33,23 +33,25 @@
 
 ### 已知问题
 
-提交前代码审查发现、尚未修复的问题。标"待确认"的机制成立，但触发条件还没核实完。
+提交前代码审查发现、尚未修复的问题，已逐条对照代码和依赖库源码核实。标"待确认"的机制成立，但要靠请求乱序或特定配置才会触发。
 
-- **高**：shape 流没有配 `onError`（`apps/app/src/shared/api/shape-options.ts`）。任何一次 401 或其他 4xx（token 过期、电脑睡醒后 token 还没刷新）都会让 Electric 同步永久停止，直到刷新页面。之后的写入在服务端成功，但前端等 txid 超时（15 秒）后回滚并提示"已撤销"，用户重试会生成重复的 todo。
-- **高**：等 txid 超时被当成写入失败（`apps/app/src/entities/todo/lib/todo-collection.ts`）。Electric 慢或挂掉、或者生产环境没配 `ELECTRIC_URL`（`/shape` 一直 503）时，同样会出现"服务端已写入、前端显示撤销"和重复数据。没配 `ELECTRIC_URL` 时 Todos 页一直转圈，服务器也不报错。
-- **中**：Todos 页只处理异步失败。collection 处于错误状态、要改的行已被别的设备删除等情况下，新增、勾选、删除会同步抛错，用户看不到提示，输入框也不清空（`apps/app/src/pages/todos/ui/todos-page.tsx`）。
-- **中（待确认）**：同一用户会话内切换账号时，`resetUserScopedCollections()` 清理仍被页面使用的 collection，页面可能继续显示上一个账号的 todo。
+- **高**：shape 流没有配 `onError`（`apps/app/src/shared/api/shape-options.ts`）。任何一次 401 或其他 4xx（token 过期、电脑睡醒后 token 还没刷新）都会让 Electric 同步永久停止，直到刷新页面。首次同步就失败时，collection 进入错误状态，页面显示空列表，之后的新增会直接抛错。
+- **高**：等 txid 超时（15 秒）被当成写入失败（`apps/app/src/entities/todo/lib/todo-collection.ts`）。最常见的触发是写入后 15 秒内切到别的标签页：Electric 在页面隐藏时暂停同步流，等不到 txid 就回滚并提示"已撤销"，但服务端其实已经写入，回到页面后数据又出现。Electric 慢或挂掉、上一条的同步流已停止、生产环境没配 `ELECTRIC_URL`（`/shape` 一直 503，页面一直转圈、服务器不报错）也一样。每次新增都生成新 id，用户重试会写出重复的 todo。
+- **中**：Todos 页只处理异步失败。collection 处于错误状态时，新增会同步抛错，用户看不到提示，输入框也不清空（`apps/app/src/pages/todos/ui/todos-page.tsx`）。
 - **中（待确认）**：写入没有按行排队。新建后马上删除或勾选、快速连点复选框时，请求可能乱序到达服务器，删掉的 todo 会重新出现，或勾选状态回跳。
-- **中**：`/docs` 默认关闭后，网站导航和 App 里的 "API Docs" 链接默认 404。
+- **中**：`/docs` 默认关闭后，网站导航和 App 里的 "API Docs" 链接默认 404。改动前 `/docs` 实际上不受开关控制，一直可访问。开关打开时，`/docs/`（带末尾斜杠）也会 404。
 - **中**：`/shape` 的失败不留服务端记录：请求日志排除了 `/shape/**`，代理吞掉了连不上 Electric 的错误。
 - **低**：`ELECTRIC_URL` 带路径前缀时前缀会被丢掉（`new URL("/v1/shape", ELECTRIC_URL)`）。
-- **低（潜在）**：桌面端 RPC 编解码只给普通对象和数组里的 Date 打标记。bigint 会让请求超时，NaN 变成 null，查询条件对象里的 Date 变成字符串。目前 `TodoRow` 用不到这些类型。
-- **低**：Bun SQLite 没设 `busy_timeout`。第二个进程打开同一个数据库文件时，写入会立即报 `SQLITE_BUSY`，不会等待。
-- **低**：桌面桥的类型在 `apps/app` 和 `apps/desktop` 各声明一份。桥没装上时会静默退回内存 collection，重启后数据丢失且没有提示。
+- **低（待确认）**：`timestamptz` 用 `new Date(value)` 解析（Electric 官方示例的写法）。如果 Electric 发的是 Postgres 文本格式（空格分隔、`+00` 时区），Safari 能否解析取决于引擎。
+- **低**：在非 localhost 的纯 http 地址打开 web 版（比如局域网 IP）时，`crypto.randomUUID` 不存在，新增 todo 会抛错。可改用 `@tanstack/react-db` 导出的 `safeRandomUUID`。桌面端的 `views://` 是安全上下文，不受影响。
+- **低（待确认）**：同一页面内切换账号时，`resetUserScopedCollections()` 清理仍被页面使用的 collection，页面会继续显示上一个账号的 todo。目前没有能触发的路径（没有启用 Clerk 多会话）。
+- **低（潜在）**：桌面端 RPC 编解码只给普通对象和数组里的 Date 打标记。bigint 会让请求超时，NaN 变成 null，查询条件对象里的 Date 变成字符串。当前的 eager 模式和 `TodoRow` 用不到这些。
+- **低**：Bun SQLite 没设 `busy_timeout`。另一个进程（比如数据库工具）持有写锁时，写入会立即报 `SQLITE_BUSY`，不会等待。
+- **低**：桌面桥的类型在 `apps/app` 和 `apps/desktop` 各声明一份，两边改名时类型检查发现不了。桥没装上时会静默退回内存 collection，重启后数据丢失且没有提示。
 - **低**：代理把 Electric 的 `cache-control: public` 原样转发，只靠 `Vary: Authorization` 防止串号。忽略 `Vary` 的 CDN 缓存可能把一个用户的数据返回给另一个用户。
 - **清理项**：桌面端 driver 和持久化适配器里有从 Node 版带过来、没被用到的代码；`@tanstack/db` 的直接依赖没被导入；`maxLength={500}` 重复了 `packages/core` 里的标题上限；两个 chat 组件重复定义了 `ADDED_TEXT`；`apps/server/Dockerfile` 只给 Electric 变量加了 `ARG`，没加 `ENV`。
 
 ### 本次未验证
 
-- 除 commit 时 pre-commit 钩子跑的 `pnpm run check` 外，没有构建或跑测试。
+- commit 时 pre-commit 钩子跑的 `pnpm run check`（格式、lint、全部项目的类型检查）已通过。没有构建，也没有跑测试。
 - 没有实测 Electric 端到端同步、桌面端 SQLite 桥和 Docker 部署。
