@@ -52,7 +52,7 @@ export function UserDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        render={<Button aria-label="Open account menu" size="icon" variant="ghost" />}
+        render={<Button aria-label={m.user_dropdown__open_menu()} size="icon" variant="ghost" />}
       >
         <UserSquare aria-hidden="true" />
       </DropdownMenuTrigger>

@@ -1,22 +1,23 @@
 # apps/preview-ui
 
-A live gallery of the composite components in `packages/ui/components/<category>/`, plus a scripted demo that composes them. It is a TanStack Start app with no env, auth, API, or i18n. Base components (the flat files in `packages/ui/components/`) are not listed.
+A live gallery of the composite components in `packages/ui/components/<category>/`, plus scripted demos that compose them. It is a TanStack Start app with no env, auth, API, or i18n. Base components (the flat files in `packages/ui/components/`) are not listed.
 
-| Route   | Rendering                  | Purpose                                                        |
-| ------- | -------------------------- | -------------------------------------------------------------- |
-| `/`     | Server-rendered, hydrated  | Gallery: one card per composite component, grouped by category |
-| `/demo` | Client only (`ssr: false`) | A chat that answers with a scripted run of the chat components |
+| Route            | Rendering                  | Purpose                                                                       |
+| ---------------- | -------------------------- | ----------------------------------------------------------------------------- |
+| `/`              | Server-rendered, hydrated  | Gallery: one card per composite component, grouped by category                |
+| `/demo`          | Client only (`ssr: false`) | A chat that answers with a scripted run of the chat components                |
+| `/demo/practice` | Client only (`ssr: false`) | A short lesson built from the word-input and shadowing components, in 4 steps |
 
 ## Adding A Component
 
 1. Write the component in `packages/ui/components/<category>/<name>.tsx`, following [Composite components](../../.agents/ui.md#composite-components).
-2. Add `src/pages/gallery/demos/<category>/<name>.tsx` exporting one demo component. The code panel shows this file as the usage example, so keep it readable: import from `@tsu-stack/ui/...`, keep fixtures inline, and run any playback timers here rather than in the component.
+2. Add `src/pages/gallery/demos/<category>/<name>.tsx` exporting one demo component. The code panel shows this file as the usage example, so keep it readable: import from `@tsu-stack/ui/...`, keep fixtures inline, and run any playback timers here rather than in the component. Timer logic that several demos share, such as the fake audio in `src/shared/lib/use-shadowing-simulation.ts`, lives in `src/shared/lib`.
 3. Register it in `src/pages/gallery/demos/catalog.ts`: import the demo, its source with `./<category>/<name>.tsx?raw`, and the component source with `@tsu-stack/ui/components/<category>/<name>?raw`, then add a `defineDemo(...)` entry. `defineDemo` rejects variants the demo's `variant` prop does not accept. Array order is nav order.
 4. A new category gets its own `catalog` entry and its own `demos/<category>/` folder.
 
 ## Conventions
 
-- The gallery renders on the server, so a demo must produce the same markup on the server and in the browser: no `window`, `Date.now()`, or random values during render, and timers start in effects. `/demo` renders only in the browser.
+- The gallery renders on the server, so a demo must produce the same markup on the server and in the browser: no `window`, `Date.now()`, or random values during render, and timers start in effects or event handlers. The `/demo` pages render only in the browser.
 - Import components only from `@tsu-stack/ui`. Never import `apps/*`; business-bound components live in `apps/app` and are not previewed here.
 - Copy is plain English without Paraglide; this is a development tool.
 - Folders follow the FSD layers of `apps/app` (`routes → pages → shared`), without an Oxlint FSD override.

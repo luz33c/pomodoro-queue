@@ -1,10 +1,10 @@
-import { Link } from "@tanstack/react-router";
-import { ArrowLeft, ArrowUp } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-import { Button, buttonVariants } from "@tsu-stack/ui/components/button";
+import { Button } from "@tsu-stack/ui/components/button";
 import { Input } from "@tsu-stack/ui/components/input";
-import { ThemeSwitcher } from "@tsu-stack/ui/components/theme-switcher";
+
+import { DemoHeader } from "#/shared/ui/demo-header";
 
 import { FIRST_PROMPT } from "#/pages/demo/model/scripted-run";
 
@@ -35,14 +35,7 @@ export function DemoPage() {
 
   return (
     <div className="flex h-dvh flex-col bg-muted/30">
-      <header className="flex items-center justify-between gap-4 border-b bg-background px-4 py-2.5">
-        <Link to="/" className={buttonVariants({ size: "sm", variant: "ghost" })}>
-          <ArrowLeft />
-          Components
-        </Link>
-        <span className="text-sm font-medium">Demo</span>
-        <ThemeSwitcher />
-      </header>
+      <DemoHeader />
 
       <main className="min-h-0 flex-1 overflow-y-auto">
         <div className="mx-auto flex max-w-2xl flex-col gap-10 px-4 py-10">

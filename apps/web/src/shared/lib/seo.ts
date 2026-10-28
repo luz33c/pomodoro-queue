@@ -1,4 +1,5 @@
 import { resolvePublicAssetUrl } from "@tsu-stack/core/assets";
+import { type Locale } from "@tsu-stack/i18n/runtime";
 import {
   generateTanStackStartSeo,
   type GenerateTanStackStartSeoParams,
@@ -7,6 +8,9 @@ import {
 } from "@tsu-stack/seo";
 
 import { appConfig } from "#/config/app.config";
+
+// Open Graph wants language_TERRITORY; adding a locale fails to compile until it is listed here
+const openGraphLocales = { en: "en_US", zh: "zh_CN" } satisfies Record<Locale, string>;
 
 const site = {
   applicationName: appConfig.site.longName,
@@ -22,6 +26,7 @@ const site = {
     }
   ],
   defaultTitle: appConfig.site.longName,
+  openGraphLocales,
   siteName: appConfig.site.longName,
   titleTemplate: `%s | ${appConfig.site.shortName}`
 } satisfies TanStackStartSeoSite;

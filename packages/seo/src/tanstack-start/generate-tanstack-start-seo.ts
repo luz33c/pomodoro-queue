@@ -38,6 +38,11 @@ export function generateTanStackStartSeo({
     : undefined;
   const canonicalUrl = links?.find((link) => link.rel === "canonical")?.href;
   const robotsContent = robots ? formatTanStackStartRobotsContent(robots) : undefined;
+  // Base-locale pages pass no locale, but they still have one
+  const pageLocale = alternates?.locale ?? alternates?.baseLocale;
+  const openGraphLocale = pageLocale
+    ? (site.openGraphLocales?.[pageLocale] ?? pageLocale)
+    : undefined;
   const primaryImage = resolvedImages?.[0];
 
   const meta: TanStackStartSeoMetaTag[] = [
@@ -89,9 +94,9 @@ export function generateTanStackStartSeo({
           property: "og:site_name"
         }
       : undefined,
-    alternates?.locale
+    openGraphLocale
       ? {
-          content: alternates.locale,
+          content: openGraphLocale,
           property: "og:locale"
         }
       : undefined,

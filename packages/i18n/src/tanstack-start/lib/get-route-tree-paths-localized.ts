@@ -33,7 +33,7 @@ type BaseRouteInfo = {
 export type LocalizedRouteInfo = {
   /** TanStack Router generated route ID */
   id: AnyRoute["id"];
-  /** The locale code (e.g., 'en', 'de') */
+  /** The locale code (e.g., 'en', 'zh') */
   locale: (typeof locales)[number];
   /** Full path with trailing slash preserved */
   fullPath: string;
@@ -98,16 +98,16 @@ const PATH_REGEX = /^\/+/;
  *
  * This function takes routes from the TanStack Router route tree and creates
  * locale-specific versions by replacing the {-$locale} placeholder with actual
- * locale codes (e.g., 'en', 'de'). The base locale routes have no prefix.
+ * locale codes (e.g., 'en', 'zh'). The base locale routes have no prefix.
  *
  * @returns Array of localized routes with their IDs, locale codes, and paths
  *
  * @example
- * // For route: '/{-$locale}/dashboard' with locales ['en', 'de'] and baseLocale 'en'
+ * // For route: '/{-$locale}/dashboard' with locales ['en', 'zh'] and baseLocale 'en'
  * // Returns:
  * // [
  * //   { id: '/{-$locale}/(root-layout)/(auth)/dashboard/', locale: 'en', path: '/dashboard', fullPath: '/dashboard' },
- * //   { id: '/{-$locale}/(root-layout)/(auth)/dashboard/', locale: 'de', path: '/de/dashboard', fullPath: '/de/dashboard' }
+ * //   { id: '/{-$locale}/(root-layout)/(auth)/dashboard/', locale: 'zh', path: '/zh/dashboard', fullPath: '/zh/dashboard' }
  * // ]
  */
 export function getRouteTreePathsLocalized(routeTree: AnyRoute): Array<LocalizedRouteInfo> {
@@ -134,7 +134,7 @@ export function getRouteTreePathsLocalized(routeTree: AnyRoute): Array<Localized
         // Remove {-$locale} for base locale: {-$locale}/path → /path
         localizedPath = route.path.replace("{-$locale}", "");
       } else {
-        // Replace {-$locale} with locale: {-$locale}/path → de/path
+        // Replace {-$locale} with locale: {-$locale}/path → zh/path
         localizedPath = route.path.replace("{-$locale}", locale);
       }
 

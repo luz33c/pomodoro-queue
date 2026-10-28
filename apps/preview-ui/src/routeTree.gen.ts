@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DemoIndexRouteImport } from './routes/demo/index'
+import { Route as DemoPracticeRouteImport } from './routes/demo/practice'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,30 +23,39 @@ const DemoIndexRoute = DemoIndexRouteImport.update({
   path: '/demo/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DemoPracticeRoute = DemoPracticeRouteImport.update({
+  id: '/demo/practice',
+  path: '/demo/practice',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/demo/practice': typeof DemoPracticeRoute
   '/demo/': typeof DemoIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/demo/practice': typeof DemoPracticeRoute
   '/demo': typeof DemoIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/demo/practice': typeof DemoPracticeRoute
   '/demo/': typeof DemoIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/demo/'
+  fullPaths: '/' | '/demo/practice' | '/demo/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/demo'
-  id: '__root__' | '/' | '/demo/'
+  to: '/' | '/demo/practice' | '/demo'
+  id: '__root__' | '/' | '/demo/practice' | '/demo/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DemoPracticeRoute: typeof DemoPracticeRoute
   DemoIndexRoute: typeof DemoIndexRoute
 }
 
@@ -65,11 +75,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/demo/practice': {
+      id: '/demo/practice'
+      path: '/demo/practice'
+      fullPath: '/demo/practice'
+      preLoaderRoute: typeof DemoPracticeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DemoPracticeRoute: DemoPracticeRoute,
   DemoIndexRoute: DemoIndexRoute,
 }
 export const routeTree = rootRouteImport

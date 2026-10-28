@@ -33,7 +33,7 @@ export function LocaleSwitcher({
       <DropdownMenuTrigger
         render={
           <Button
-            aria-label="Switch language"
+            aria-label={m.locale_switcher__label()}
             className={className}
             size={size}
             variant={variant}

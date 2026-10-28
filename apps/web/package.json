@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@bprogress/react": "catalog:",
+    "@clerk/localizations": "catalog:",
     "@clerk/tanstack-react-start": "catalog:",
     "@fontsource-variable/geist": "catalog:",
     "@fontsource-variable/geist-mono": "catalog:",

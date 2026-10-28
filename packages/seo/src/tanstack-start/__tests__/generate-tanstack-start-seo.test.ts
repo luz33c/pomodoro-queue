@@ -413,6 +413,39 @@ describe("generateTanStackStartSeo", () => {
       });
     });
 
+    it("maps og:locale through site.openGraphLocales", () => {
+      const result = createSubject({
+        alternates: {
+          baseLocale: "en",
+          canonicalPath: "/guides",
+          locale: "ja",
+          locales: ["en", "ja"] as const
+        },
+        site: { ...baseSite, openGraphLocales: { en: "en_US", ja: "ja_JP" } }
+      });
+
+      expect(getMetaByProperty(result.meta, "og:locale")).toEqual({
+        content: "ja_JP",
+        property: "og:locale"
+      });
+    });
+
+    it("emits the base locale as og:locale when the page passes no locale", () => {
+      const result = createSubject({
+        alternates: {
+          baseLocale: "en",
+          canonicalPath: "/guides",
+          locales: ["en", "ja"] as const
+        },
+        site: { ...baseSite, openGraphLocales: { en: "en_US", ja: "ja_JP" } }
+      });
+
+      expect(getMetaByProperty(result.meta, "og:locale")).toEqual({
+        content: "en_US",
+        property: "og:locale"
+      });
+    });
+
     it("serializes robots directives in a stable, crawler-friendly order", () => {
       const result = createSubject({
         robots: {

@@ -3,6 +3,7 @@ import { useRouter, useRouterState } from "@tanstack/react-router";
 import { LogOut, Menu, X } from "lucide-react";
 import React from "react";
 
+import { m } from "@tsu-stack/i18n/messages";
 import { Link } from "@tsu-stack/i18n/tanstack-start/components/link";
 import { Button, buttonVariants } from "@tsu-stack/ui/components/button";
 import { Portal, PortalBackdrop } from "@tsu-stack/ui/components/portal";
@@ -27,7 +28,7 @@ export function MobileNav() {
       <Button
         aria-controls="mobile-menu"
         aria-expanded={open}
-        aria-label="Toggle menu"
+        aria-label={m.navbar__toggle_menu()}
         className="md:hidden"
         onClick={() => setOpen(!open)}
         size="icon"
@@ -98,7 +99,7 @@ function MobileNavAuth({ onNavigate }: { onNavigate: () => void }) {
           to="/sign-in"
           search={redirect ? { redirect } : undefined}
         >
-          Sign In
+          {m.navbar__sign_in()}
         </Link>
         <Link
           onClick={onNavigate}
@@ -106,7 +107,7 @@ function MobileNavAuth({ onNavigate }: { onNavigate: () => void }) {
           to="/create-an-account"
           search={redirect ? { redirect } : undefined}
         >
-          Get Started
+          {m.navbar__get_started()}
         </Link>
       </div>
     );
@@ -123,7 +124,7 @@ function MobileNavAuth({ onNavigate }: { onNavigate: () => void }) {
       </div>
       <Button className="w-full" variant="destructive" onClick={handleSignOut}>
         <LogOut aria-hidden="true" size={16} />
-        Logout
+        {m.user_dropdown__logout()}
       </Button>
     </div>
   );

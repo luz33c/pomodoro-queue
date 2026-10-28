@@ -56,6 +56,11 @@ export type TanStackStartSeoSite = {
   defaultImages?: TanStackStartSeoImage[];
   defaultTitle: string;
   defaultTwitterCard?: "app" | "player" | "summary" | "summary_large_image";
+  /**
+   * og:locale per locale code. Open Graph expects `language_TERRITORY` (`en_US`), while URLs and
+   * hreflang keep the plain code. A locale without an entry is emitted as-is.
+   */
+  openGraphLocales?: Readonly<Record<string, string>>;
   siteName?: string;
   titleTemplate?: string;
   twitterCreator?: string;

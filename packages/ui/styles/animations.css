@@ -2,6 +2,8 @@
   /* Infinite loops: apply them with motion-safe: so reduced-motion users get a still frame */
   --animate-shimmer-text: shimmer-text 1.4s linear infinite;
   --animate-pixel-on: pixel-on 650ms ease-in-out infinite;
+  /* One-shot wrong-answer feedback; hooks/use-shake.ts times its class to this length */
+  --animate-shake: shake 500ms ease-in-out;
 
   @keyframes spinner-leaf-fade {
     0%,
@@ -20,6 +22,27 @@
     }
     to {
       background-position: -50% center;
+    }
+  }
+
+  /* Side-to-side wobble for a wrong key or a wrong pick */
+  @keyframes shake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+      transform: translateX(-5px);
+    }
+    20%,
+    40%,
+    60%,
+    80% {
+      transform: translateX(5px);
     }
   }
 

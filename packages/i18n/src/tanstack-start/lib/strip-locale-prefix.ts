@@ -2,12 +2,12 @@ import { locales } from "#/paraglide/runtime";
 
 /**
  * Strips the locale prefix from a path if present.
- * Handles both actual locale values (e.g., /de/dashboard) and the route pattern (/{-$locale}/dashboard)
- * Recursively removes duplicate locale prefixes (e.g., /de/de/dashboard => /dashboard)
+ * Handles both actual locale values (e.g., /zh/dashboard) and the route pattern (/{-$locale}/dashboard)
+ * Recursively removes duplicate locale prefixes (e.g., /zh/zh/dashboard => /dashboard)
  *
  * @example
- * stripLocalePrefix('/de/dashboard') // => '/dashboard'
- * stripLocalePrefix('/de/de/dashboard') // => '/dashboard'
+ * stripLocalePrefix('/zh/dashboard') // => '/dashboard'
+ * stripLocalePrefix('/zh/zh/dashboard') // => '/dashboard'
  * stripLocalePrefix('/dashboard') // => '/dashboard'
  * stripLocalePrefix('/{-$locale}/dashboard') // => '/dashboard'
  */
@@ -23,7 +23,7 @@ export function stripLocalePrefix(path: string): string {
     cleanPath = cleanPath.replace("/{-$locale}", "") || "/";
   }
 
-  // Handle actual locale values: /de/..., /en/..., etc.
+  // Handle actual locale values: /zh/..., /en/..., etc.
   // Keep stripping until no more locale prefixes are found
   let changed = true;
   while (changed) {

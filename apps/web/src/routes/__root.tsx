@@ -1,3 +1,4 @@
+import { zhCN } from "@clerk/localizations";
 import { ClerkProvider, useAuth as useClerkAuth } from "@clerk/tanstack-react-start";
 import geistMonoCyrillic from "@fontsource-variable/geist-mono/files/geist-mono-cyrillic-wght-normal.woff2?url";
 import geistMonoLatinExt from "@fontsource-variable/geist-mono/files/geist-mono-latin-ext-wght-normal.woff2?url";
@@ -18,6 +19,7 @@ import { Fragment, useEffect, useRef } from "react";
 import { setClerkAuthTokenGetter } from "@tsu-stack/api/client/tanstack-start/clerk-auth";
 import { resolvePublicAssetUrl } from "@tsu-stack/core/assets";
 import { ENV_WEB_ISOMORPHIC } from "@tsu-stack/env/web/env.isomorphic";
+import { type Locale } from "@tsu-stack/i18n/runtime";
 import {
   LocaleProvider,
   useLocale
@@ -32,6 +34,9 @@ import { ProgressProvider } from "#/shared/providers/progress.provider";
 import appCss from "#/shared/styles/app.css?url";
 
 import { DefaultErrorPage } from "#/pages/default-error/index";
+
+// Copy for Clerk's prebuilt sign-in and sign-up cards; a locale without an entry gets Clerk's English
+const CLERK_LOCALIZATIONS: Partial<Record<Locale, typeof zhCN>> = { zh: zhCN };
 
 // Root route with shared context for the entire app, inject them in router.tsx
 type RouterAppContext = {
@@ -166,6 +171,7 @@ function RootDocumentInner({ children }: { children: React.ReactNode }) {
         {/* Without the app origin, Clerk treats the post-sign-in redirect into apps/app as unsafe and falls back */}
         <ClerkProvider
           allowedRedirectOrigins={[getAppOrigin()]}
+          localization={CLERK_LOCALIZATIONS[locale]}
           publishableKey={ENV_WEB_ISOMORPHIC.VITE_CLERK_PUBLISHABLE_KEY}
         >
           <ClerkApiAuthBridge />
