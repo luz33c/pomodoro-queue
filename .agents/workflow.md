@@ -65,6 +65,10 @@ For UI component selection, shadcn install decisions, and visual coherence rules
 
 Follow [Testing policy](./testing.md). Do not add or run tests unless requested, except when an existing task explicitly calls for them.
 
+## Worktrees
+
+Work in the main checkout. Do not create git worktrees or start sessions in a worktree unless the user asks for one.
+
 ## Commits
 
 Use Conventional Commit format. The tracked pre-commit hook runs `pnpm run check` without modifying or restaging files; do not rely on it as hidden validation when the user has not approved checks.
