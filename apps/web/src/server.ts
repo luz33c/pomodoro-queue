@@ -1,4 +1,9 @@
-import handler from "@tanstack/react-start/server-entry";
+import {
+  createStartHandler,
+  defaultStreamHandler,
+  handleStartError
+} from "@tanstack/react-start/server";
+import { createServerEntry } from "@tanstack/react-start/server-entry";
 
 import { ENV_WEB_SERVER } from "@tsu-stack/env/web/env.server";
 import { paraglideMiddleware } from "@tsu-stack/i18n/server";
@@ -18,22 +23,23 @@ initLogger({
   }
 });
 
-export default {
-  async fetch(req: Request): Promise<Response> {
-    const url = new URL(req.url);
-    const requestLog = createRequestLogger({
-      method: req.method,
-      path: url.pathname
-    });
+// The raw handler rethrows the original error, so the catch below can report it
+const startHandler = createStartHandler(defaultStreamHandler);
 
+export default createServerEntry({
+  async fetch(request, opts) {
     try {
-      const response = await paraglideMiddleware(req, () => handler.fetch(req));
-      requestLog.emit({ status: response.status });
-      return response;
+      // Pass the original request on: a cloned one would start a separate request context
+      return await paraglideMiddleware(request, () => startHandler(request, opts));
     } catch (error) {
+      // Start's request middleware logs each request; this reports errors that escape Start
+      const requestLog = createRequestLogger({
+        method: request.method,
+        path: new URL(request.url).pathname
+      });
       requestLog.error(error instanceof Error ? error : new Error(String(error)));
       requestLog.emit();
-      throw error;
+      return handleStartError(error);
     }
   }
-};
+});

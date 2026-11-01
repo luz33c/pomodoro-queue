@@ -38,10 +38,11 @@ export const startInstance = createStart(() => {
     ],
     // for API routes
     requestMiddleware: [
-      clerkMiddleware(),
+      // Clerk asks for CSRF checks before its own middleware
       createCsrfMiddleware({
         filter: (ctx) => ctx.handlerType === "serverFn"
       }),
+      clerkMiddleware(),
       tanstackStartRequestLoggerMiddleware({
         context: {
           environment: __BUILD_NODE_ENV__,

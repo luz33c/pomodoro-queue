@@ -213,11 +213,3 @@ function getRealIpFromHeaders(headers: Headers): string | undefined {
 function normalizeIp(ip: string | undefined): string | undefined {
   return ip?.replace(IPV6_PREFIX_REGEX, "");
 }
-
-declare module "@tanstack/react-start" {
-  // @ts-expect-error - module augmentation to add our custom RouterAppContext to TanStack Router's createRouter generic
-  type Register = {
-    functionMiddleware: readonly [ReturnType<typeof tanstackStartServerFnLoggerMiddleware>];
-    requestMiddleware: readonly [ReturnType<typeof tanstackStartRequestLoggerMiddleware>];
-  };
-}
