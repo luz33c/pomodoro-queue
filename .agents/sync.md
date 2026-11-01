@@ -4,14 +4,14 @@ Postgres, through `packages/db`, stays the source of truth. Reads stream to clie
 
 ## Pieces
 
-| Piece                                | Where                                          | Role                                                                                      |
-| ------------------------------------ | ---------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| Electric 1.8.1                       | `electric` service in the compose files        | Reads Postgres logical replication and serves shapes over HTTP. Only the server calls it. |
-| `GET /shape/:name/:version`          | `apps/server/src/index.ts`                     | Verifies the Clerk bearer token, resolves the shape, and forwards to Electric.            |
-| Shape registry                       | `packages/api/src/lib/electric/shapes.ts`      | Fixes each shape's table, columns, and `where`. Clients never send them.                  |
-| Shape proxy                          | `packages/api/src/lib/electric/shape-proxy.ts` | Passes only Electric protocol params, binds the user id to `$1`, and adds the secret.     |
-| `SHAPE_VERSIONS`, `TxidOutputSchema` | `packages/core/src/sync/`                      | Shared shape versions and the write result contract.                                      |
-| `getCurrentTxid`                     | `packages/db/src/txid.ts`                      | Reads `pg_current_xact_id()` inside the write transaction.                                |
+| Piece                                | Where                                   | Role                                                                                      |
+| ------------------------------------ | --------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Electric 1.8.1                       | `electric` service in the compose files | Reads Postgres logical replication and serves shapes over HTTP. Only the server calls it. |
+| `GET /shape/:name/:version`          | `packages/api/src/server/shape.ts`      | Verifies the Clerk bearer token, resolves the shape, and forwards to Electric.            |
+| Shape registry                       | `packages/api/src/sync/shapes.ts`       | Fixes each shape's table, columns, and `where`. Clients never send them.                  |
+| Shape proxy                          | `packages/api/src/server/shape.ts`      | Passes only Electric protocol params, binds the user id to `$1`, and adds the secret.     |
+| `SHAPE_VERSIONS`, `TxidOutputSchema` | `packages/core/src/sync/`               | Shared shape versions and the write result contract.                                      |
+| `getCurrentTxid`                     | `packages/db/src/txid.ts`               | Reads `pg_current_xact_id()` inside the write transaction.                                |
 
 ## Synced Tables
 
@@ -39,7 +39,7 @@ Postgres, through `packages/db`, stays the source of truth. Reads stream to clie
 - Each synced entity has one collection in `apps/app/src/entities/<name>/lib/`, chosen by data mode (see [apps/app/AGENTS.md](../apps/app/AGENTS.md) for why the check is a literal build-mode comparison).
 - `cloud` (web host): `electricCollectionOptions` with `getShapeOptions(name)`, which builds the versioned shape URL, sends a fresh Bearer token per request, maps snake_case columns to camelCase, and parses `timestamptz` to `Date`. Handlers call the oRPC procedure and `await collection.utils.awaitTxId(txid)` for every non-null txid, so optimistic rows stay until the write streams back. Register the collection with `registerUserScopedCollection` so a user change drops its rows.
 - `local` (desktop host, for now): `persistedCollectionOptions` without a sync adapter, stored in the desktop shell's SQLite file. Give it its own collection id (`todo-local`), separate from the cloud one.
-- The row schema lives in `packages/core` (`TodoRowSchema`) and is the collection's `schema`. `packages/api/src/lib/electric/shapes.ts` stops compiling when the Drizzle row and the core row drift apart.
+- The row schema lives in `packages/core` (`TodoRowSchema`) and is the collection's `schema`. `packages/api/src/sync/shapes.ts` stops compiling when the Drizzle row and the core row drift apart.
 - A local-only collection throws when its stored `schemaVersion` does not match. Local rows have no server copy, so plan a local migration before changing their shape.
 
 ## Environment And Local Dev

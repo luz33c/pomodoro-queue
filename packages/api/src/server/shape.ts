@@ -2,7 +2,8 @@ import { ELECTRIC_PROTOCOL_QUERY_PARAMS } from "@electric-sql/client";
 
 import { ENV_SERVER } from "@tsu-stack/env/server/env";
 
-import { type ResolvedShape } from "#/lib/electric/shapes";
+import { authenticateClerkRequest } from "#/server/clerk";
+import { type ResolvedShape, resolveShape } from "#/sync/shapes";
 
 /** Response headers the Electric client reads. Cross-origin callers see them only when CORS exposes them. */
 export const ELECTRIC_EXPOSED_HEADERS = [
@@ -28,7 +29,7 @@ function shouldDropUpstreamHeader(name: string) {
  * Forwards a shape request to Electric. The table, columns, and owner filter come from the server;
  * the client only contributes Electric's protocol parameters such as `offset`, `handle`, and `live`.
  */
-export async function proxyShape(
+async function proxyShape(
   request: Request,
   shape: ResolvedShape,
   userId: string
@@ -73,4 +74,23 @@ export async function proxyShape(
     status: response.status,
     statusText: response.statusText
   });
+}
+
+/** Serves `GET /shape/:name/:version`: checks the Clerk bearer token, then forwards the shape. */
+export async function handleShapeRequest(
+  request: Request,
+  name: string,
+  version: string
+): Promise<Response> {
+  const auth = await authenticateClerkRequest(request);
+  if (!auth) {
+    return Response.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  const shape = resolveShape(name, version);
+  if (!shape) {
+    return Response.json({ message: "Unknown shape" }, { status: 404 });
+  }
+
+  return proxyShape(request, shape, auth.userId);
 }

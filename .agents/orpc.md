@@ -15,9 +15,24 @@ This guide is intentionally repo-specific. It documents the current preferred wa
 - Prefer type-safe oRPC errors from procedure definition through client handling.
 - Keep TanStack Query wrapper structure in [API fetching patterns](./api-fetching-patterns.md), not in this file.
 
+## Package Layout
+
+`packages/api/src` is split by role. Imports only point down the table:
+
+| Folder     | Holds                                                                                     | Imported by           |
+| ---------- | ----------------------------------------------------------------------------------------- | --------------------- |
+| `client/`  | `types.ts`, the type-only entry for app, native, and extension; `tanstack-start/` for web | apps                  |
+| `server/`  | `rpc.ts`, `openapi.ts`, `shape.ts`, `create-context.ts`, and `clerk.ts`                   | `apps/server`         |
+| `routers/` | One folder per slice; `routers/index.ts` assembles them into `appRouter`                  | `client/`, `server/`  |
+| `sync/`    | `shapes.ts`, the Electric shape registry; see [Sync](./sync.md)                           | `server/`             |
+| `orpc/`    | `context.ts` and `procedures.ts`, the base every procedure builds on                      | `routers/`, `server/` |
+
+- `package.json` exports only `./client/*` and `./server/*`, so apps cannot import `routers/`, `sync/`, or `orpc/` directly.
+- Code that several slices need lives in the slice that owns the concept. Infrastructure goes in `orpc/` (building procedures), `server/` (the HTTP edge), or a top-level folder named for the integration, such as `sync/`. There is no `lib/` folder.
+
 ## Server Route Shape
 
-Define routes with the shared procedure factories from `packages/api/src/lib/procedures/factory.ts`.
+Define routes with the shared procedure factories from `packages/api/src/orpc/procedures.ts`.
 
 - Use `publicProcedure` for public read operations.
 - Use `protectedProcedure` for authenticated operations.
@@ -25,9 +40,10 @@ Define routes with the shared procedure factories from `packages/api/src/lib/pro
 - Define `input(...)` and `output(...)` schemas explicitly with Zod.
 - Prefer returning repo-native shapes directly instead of renaming fields unless there is a strong product reason.
 
-Typical shape:
+Typical shape, one procedure per file:
 
 ```ts
+// packages/api/src/routers/example/procedures/by-id.ts
 const exampleInputSchema = z.object({
   id: z.string().min(1)
 });
@@ -37,18 +53,16 @@ const exampleOutputSchema = z.object({
   name: z.string()
 });
 
-export const exampleRouter = {
-  byId: publicProcedure
-    .route({
-      description: "Get an example by ID",
-      method: "GET"
-    })
-    .input(exampleInputSchema)
-    .output(exampleOutputSchema.nullable())
-    .handler(async ({ input, context, errors }) => {
-      // ...
-    })
-};
+export const byId = publicProcedure
+  .route({
+    description: "Get an example by ID",
+    method: "GET"
+  })
+  .input(exampleInputSchema)
+  .output(exampleOutputSchema.nullable())
+  .handler(async ({ input, context, errors }) => {
+    // ...
+  });
 ```
 
 ## Errors
@@ -56,6 +70,7 @@ export const exampleRouter = {
 Prefer type-safe oRPC errors with `.errors(...)` on the procedure base.
 
 - Define expected errors up front.
+- Declare on each procedure only the errors it can throw. Define an error that several procedures share once, in the slice's `errors.ts`, and pass it by name: `.errors({ TODO_NOT_FOUND })`.
 - Use `errors.MY_ERROR()` in handlers.
 - Use `data` schemas only for fields the client truly needs, and never include sensitive information.
 - Reserve thrown unknown errors for truly unexpected cases.
@@ -126,26 +141,28 @@ When a handler genuinely needs a durable outcome log, use one wide terminal even
 - Group related procedures in a slice router, for example `profileRouter`.
 - Prefer straightforward names like `byId`, `search`, `edit`, `create`, `remove`.
 - Use the table-level query functions from `@tsu-stack/db/queries` for reusable reads and writes, and add new ones there per [Database package](../packages/db/AGENTS.md).
-- Keep DB access that serves only one procedure close to the handler. If it grows, colocate it beside the router in sibling files such as `queries.ts` or `utils.ts`. Do not push one-off router helpers into `packages/api/src/lib/` by default.
+- Keep DB access that serves only one procedure close to the handler. If it grows, colocate it in the slice in sibling files such as `queries.ts` or `utils.ts`, not outside the slice.
 - Convert server-only values to transport-safe output values at the edge, for example `Date` → ISO string.
 - Keep handler logic linear and shallow. If the flow grows, extract helpers.
 
 ## Router Folder Shape
 
-The default slice-local router shape is:
+Each slice is a folder under `packages/api/src/routers/`:
 
 ```text
 packages/api/src/routers/<slice>/
-  index.ts
-  queries.ts
+  index.ts        assembles the slice router from procedures/
+  procedures/
+    <key>.ts      one procedure per file
+  errors.ts       optional: errors that several procedures share
+  queries.ts      optional: DB access that serves only this slice
 ```
 
-Use sibling files for helpers that are only used by that router.
-
-- `index.ts` owns the public router definition.
+- `index.ts` imports the procedures and exports `<slice>Router`, for example `export const todoRouter = { create, update, remove }`. It holds no handler code.
+- Name each procedure file after its router key in kebab-case, and export the key in camelCase: `procedures/by-id.ts` exports `byId`. Use `remove` instead of `delete`, which is not a valid binding, and avoid the keys oRPC reserves: `then`, `bind`, `call`, `apply`, `valueOf`, `toString`, `toJSON`.
 - `queries.ts` owns slice-local DB readers, aggregations, transport shaping helpers, and similar reusable helpers for that router.
-- `utils.ts` or `constants.ts` are fine when the helper is still router-local and not shared elsewhere.
-- Promote code into `packages/api/src/lib/` only when it is reused across multiple routers or is truly infrastructure-level.
+- `utils.ts`, `constants.ts`, or a file named for its job, such as `health/checks.ts`, are fine when the helper is still router-local.
+- Nest a sub-router as a nested slice folder with its own `index.ts` and `procedures/`.
 
 ## Shared Contracts
 
@@ -153,7 +170,7 @@ When an oRPC input or output schema represents a shared domain contract, source 
 
 - Follow [Core package patterns](./core.md) for shared enums, filters, categories, transport-safe shapes, and defaults consumed outside one router.
 - Keep router-local helper queries and transport-only shapes next to the router.
-- Keep cross-router or infrastructure helpers in `lib/` only when that reuse is real.
+- Move a helper out of its slice only when the reuse is real; [Package Layout](#package-layout) says where it goes.
 
 ## Client Error Handling
 

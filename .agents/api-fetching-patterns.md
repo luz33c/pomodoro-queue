@@ -2,7 +2,7 @@
 
 Use this when adding or refactoring TanStack Query code in `apps/web` or `apps/app` slices.
 
-`apps/app` follows the same shape with two differences: it imports `orpc` and `client` from `#/shared/api/orpc` (a browser-only client typed by `@tsu-stack/api/routers/types`), and its query files carry no role suffix (`pages/dashboard/api/get-private-data.ts`, exporting `useGetPrivateDataQuery`).
+`apps/app` follows the same shape with two differences: it imports `orpc` and `client` from `#/shared/api/orpc` (a browser-only client typed by `@tsu-stack/api/client/types`), and its query files carry no role suffix (`pages/dashboard/api/get-private-data.ts`, exporting `useGetPrivateDataQuery`).
 
 ## Goals
 

@@ -80,7 +80,7 @@ packages/core/src/media-asset/
 packages/db/src/schema/
   media-asset.ts
 
-packages/api/src/lib/storage/
+packages/api/src/storage/
   index.ts
   media-asset/index.ts
 ```
@@ -91,9 +91,9 @@ Default responsibilities:
 - `packages/core/src/media-asset/types.ts`: `mediaAssetSchema`, upload request and response schemas, and inferred types
 - `packages/core/src/media-asset/utils.ts`: pure key, prefix, and schema-derived helpers only
 - `packages/db/src/schema/media-asset.ts`: persistence schema, indexes, and persisted enums when needed
-- `packages/api/src/lib/storage/index.ts`: configured `files` client only
-- `packages/api/src/lib/storage/media-asset/index.ts`: `createMediaAssetUpload`, `completeMediaAssetUpload`, `deleteMediaAssetObject`, and other infrastructure-level storage helpers
-- oRPC procedures: keep them in the owning slice router per [oRPC patterns](./orpc.md); do not create routers under `lib/storage`
+- `packages/api/src/storage/index.ts`: configured `files` client only
+- `packages/api/src/storage/media-asset/index.ts`: `createMediaAssetUpload`, `completeMediaAssetUpload`, `deleteMediaAssetObject`, and other infrastructure-level storage helpers
+- oRPC procedures: keep them in the owning slice router per [oRPC patterns](./orpc.md); do not create routers under `storage/`
 - `apps/web`: keep upload mutations and UI in the owning feature slice; extract shared browser helpers only when more than one slice uses them
 
 ## Implementation Order
@@ -103,8 +103,8 @@ When implementing storage for the first time, prefer this order unless the task 
 1. Add shared constants, schemas, and pure helpers under `packages/core/src/media-asset/` following [Core package patterns](./core.md).
 2. Add `packages/db/src/schema/media-asset.ts`, then generate and apply the migration following [Workflow](./workflow.md).
 3. Add storage env validation and runtime config following [Environment variables](./environment-variables.md).
-4. Add the configured `files` client in `packages/api/src/lib/storage/index.ts`.
-5. Add storage lifecycle helpers in `packages/api/src/lib/storage/media-asset/index.ts`.
+4. Add the configured `files` client in `packages/api/src/storage/index.ts`.
+5. Add storage lifecycle helpers in `packages/api/src/storage/media-asset/index.ts`.
 6. Wire the owning oRPC procedures from the nearest slice router instead of inventing a new global storage router.
 7. Add the web upload mutation and UI in the owning feature slice.
 
@@ -160,7 +160,7 @@ Keep URL derivation out of the persisted asset schema.
 
 - For public or CDN-backed assets, prefer the storage client's own resolver, for example `await files.url(asset.key)`, so the read path follows the configured adapter behavior.
 - For signed-download assets, mint a short-lived URL on demand from the storage adapter when the read path needs it.
-- If an API response needs to expose a URL, resolve it in that read path or in `packages/api/src/lib/storage/media-asset/index.ts` instead of persisting it on `media_asset`.
+- If an API response needs to expose a URL, resolve it in that read path or in `packages/api/src/storage/media-asset/index.ts` instead of persisting it on `media_asset`.
 - Do not persist a field like `publicUrl` on `media_asset`; delivery policy can change without requiring row backfills.
 
 Example read-side URL resolution:

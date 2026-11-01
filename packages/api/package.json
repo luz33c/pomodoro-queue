@@ -5,8 +5,11 @@
     "#/*": "./src/*.ts"
   },
   "exports": {
-    "./*": {
-      "default": "./src/*.ts"
+    "./client/*": {
+      "default": "./src/client/*.ts"
+    },
+    "./server/*": {
+      "default": "./src/server/*.ts"
     }
   },
   "scripts": {
@@ -17,8 +20,11 @@
     "@clerk/tanstack-react-start": "catalog:",
     "@electric-sql/client": "catalog:",
     "@orpc/client": "catalog:",
+    "@orpc/json-schema": "catalog:",
+    "@orpc/openapi": "catalog:",
     "@orpc/server": "catalog:",
     "@orpc/tanstack-query": "catalog:",
+    "@orpc/zod": "catalog:",
     "@tanstack/react-start": "catalog:",
     "@tsu-stack/core": "workspace:*",
     "@tsu-stack/db": "workspace:*",
@@ -29,7 +35,6 @@
   "devDependencies": {
     "@tsu-stack/tsconfig": "workspace:*",
     "@types/node": "catalog:",
-    "hono": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:"
   }

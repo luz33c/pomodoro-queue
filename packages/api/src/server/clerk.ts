@@ -1,16 +1,29 @@
 import { createClerkClient } from "@clerk/backend";
-import { type Context as HonoContext } from "hono";
 
 import { ENV_SERVER } from "@tsu-stack/env/server/env";
-import { type RequestLogger } from "@tsu-stack/logger/server";
 
-import { getClerkAuthorizedParties } from "#/lib/auth/clerk-authorized-parties";
-import { type ClerkContextAuth, type OrpcContext } from "#/lib/context/types";
+import { type ClerkContextAuth } from "#/orpc/context";
 
 const clerkClient = createClerkClient({
   publishableKey: ENV_SERVER.VITE_CLERK_PUBLISHABLE_KEY,
   secretKey: ENV_SERVER.CLERK_SECRET_KEY
 });
+
+function getConfiguredParties() {
+  return ENV_SERVER.CLERK_AUTHORIZED_PARTIES.split(",")
+    .map((party) => party.trim())
+    .filter(Boolean);
+}
+
+export function getClerkAuthorizedParties() {
+  return [
+    ...new Set([
+      new URL(ENV_SERVER.VITE_WEB_URL).origin,
+      new URL(ENV_SERVER.VITE_APP_URL).origin,
+      ...getConfiguredParties()
+    ])
+  ];
+}
 
 function toClerkContextAuth(auth: { userId: string | null } | null): ClerkContextAuth | null {
   return auth?.userId ? { userId: auth.userId } : null;
@@ -22,21 +35,4 @@ export async function authenticateClerkRequest(request: Request): Promise<ClerkC
     authorizedParties: getClerkAuthorizedParties()
   });
   return toClerkContextAuth(requestState.toAuth());
-}
-
-export type CreateContextOptions = {
-  context: HonoContext;
-  logger: RequestLogger;
-};
-
-export async function createContext({
-  context,
-  logger
-}: CreateContextOptions): Promise<OrpcContext> {
-  const clerkAuth = await authenticateClerkRequest(context.req.raw);
-
-  return {
-    auth: clerkAuth,
-    logger
-  };
 }
