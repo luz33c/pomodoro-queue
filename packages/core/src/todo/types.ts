@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const TodoTitleSchema = z.string().trim().min(1).max(500);
 
-/** A todo as clients hold it: the `todo` shape's columns in camelCase, timestamps parsed to Date. */
+/** A todo as clients hold it: the `todo` table row with Date timestamps, as `todo.list` returns it. */
 export const TodoRowSchema = z.object({
   completed: z.boolean(),
   createdAt: z.date(),

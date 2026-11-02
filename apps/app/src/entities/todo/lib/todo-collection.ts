@@ -1,71 +1,66 @@
-import {
-  type ElectricCollectionUtils,
-  electricCollectionOptions
-} from "@tanstack/electric-db-collection";
 import { persistedCollectionOptions } from "@tanstack/electron-db-sqlite-persistence";
+import { queryCollectionOptions } from "@tanstack/query-db-collection";
 import { type Collection, createCollection, localOnlyCollectionOptions } from "@tanstack/react-db";
 
 import { type TodoRow, TodoRowSchema } from "@tsu-stack/core/todo";
 
-import { client } from "#/shared/api/orpc";
-import { getShapeOptions } from "#/shared/api/shape-options";
+import { client, orpc } from "#/shared/api/orpc";
+import { queryClient } from "#/shared/api/query-client";
 import { registerUserScopedCollection } from "#/shared/api/user-scoped-collections";
 import { getLocalPersistence } from "#/shared/host/persistence";
 
-// Electric collections key rows by string | number; the local ones match so either can back todoCollection
+// Query collections key rows by string | number; the local ones match so either can back todoCollection
 const getKey = (todo: TodoRow): string | number => todo.id;
 
-/** Holds each optimistic change until Electric streams back the transaction that wrote it. */
-async function awaitSynced(utils: ElectricCollectionUtils<TodoRow>, txids: Array<number | null>) {
-  // A null txid means the server wrote nothing, so there is no change to wait for
-  await Promise.all(txids.flatMap((txid) => (txid === null ? [] : [utils.awaitTxId(txid)])));
-}
-
+/**
+ * `todo.list` is the whole synced state: rows it no longer returns are removed. Writes apply the
+ * row the server returns, so a change shows up without fetching the whole list again. Changes from
+ * other devices arrive when the query refetches (window focus, reconnect, or invalidation).
+ */
 function createCloudTodoCollection() {
   const collection = createCollection(
-    electricCollectionOptions({
+    queryCollectionOptions({
       getKey,
       id: "todo",
       onDelete: async ({ collection, transaction }) => {
-        const results = await Promise.all(
+        await Promise.all(
           transaction.mutations.map((mutation) => client.todo.remove({ id: mutation.original.id }))
         );
-        await awaitSynced(
-          collection.utils,
-          results.map((result) => result.txid)
-        );
+        // A direct delete throws for a row the synced list no longer has; a refetch reconciles either way
+        await collection.utils.refetch();
+        return { refetch: false };
       },
       onInsert: async ({ collection, transaction }) => {
-        const results = await Promise.all(
+        const rows = await Promise.all(
           transaction.mutations.map((mutation) =>
             client.todo.create({ id: mutation.modified.id, title: mutation.modified.title })
           )
         );
-        await awaitSynced(
-          collection.utils,
-          results.map((result) => result.txid)
-        );
+        await collection.utils.writeUpsert(rows);
+        return { refetch: false };
       },
       onUpdate: async ({ collection, transaction }) => {
-        const results = await Promise.all(
-          transaction.mutations.map(async ({ changes, original }) =>
+        const rows = await Promise.all(
+          transaction.mutations.flatMap(({ changes, original }) =>
             // The server owns updatedAt; only these fields are writable
             changes.completed === undefined && changes.title === undefined
-              ? { txid: null }
-              : client.todo.update({
-                  completed: changes.completed,
-                  id: original.id,
-                  title: changes.title
-                })
+              ? []
+              : [
+                  client.todo.update({
+                    completed: changes.completed,
+                    id: original.id,
+                    title: changes.title
+                  })
+                ]
           )
         );
-        await awaitSynced(
-          collection.utils,
-          results.map((result) => result.txid)
-        );
+        await collection.utils.writeUpsert(rows);
+        return { refetch: false };
       },
-      schema: TodoRowSchema,
-      shapeOptions: getShapeOptions("todo")
+      queryClient,
+      queryFn: () => client.todo.list(),
+      queryKey: orpc.todo.list.queryKey(),
+      schema: TodoRowSchema
     })
   );
 

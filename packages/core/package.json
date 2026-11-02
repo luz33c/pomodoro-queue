@@ -9,7 +9,6 @@
     ".": "./src/index.ts",
     "./assets": "./src/assets/index.ts",
     "./health": "./src/health/index.ts",
-    "./sync": "./src/sync/index.ts",
     "./todo": "./src/todo/index.ts",
     "./*": "./src/*.ts"
   },

@@ -42,7 +42,7 @@ Pick the most specific file for the task. Use links within that file instead of 
 - [Core package patterns](.agents/core.md) for shared domain contracts in `packages/core`, file roles, and propagation into API and web code.
 - [Database package](packages/db/AGENTS.md) for schema files, relations, table-level query functions, and `@tsu-stack/db` entry points.
 - [Media storage and uploads](.agents/media-storage.md) for preemptive S3 object conventions, first-implementation workflow, delete policy, and storage env configuration.
-- [Sync](.agents/sync.md) for Electric shapes, the `/shape` proxy, txid-returning writes, synced-table rules, and shape versioning.
+- [Sync](.agents/sync.md) for TanStack DB query collections, `list` and write procedures for synced tables, and the desktop local collection.
 - [UI guidelines](.agents/ui.md) for app UI composition, extraction decisions, and `packages/ui` boundaries.
 - [TypeScript conventions](.agents/typescript.md) for schema placement, import boundaries, and `lib/` vs `utils/`.
 - [Environment variables](.agents/environment-variables.md) for env scoping, validation, and Docker propagation.

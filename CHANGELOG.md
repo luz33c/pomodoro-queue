@@ -2,6 +2,24 @@
 
 记录每批改动的内容、部署注意事项和已知问题。日期为提交日期。
 
+## 2026-11-02：Todos 改用 TanStack DB Query Collection，移除 Electric
+
+### 变更
+
+- **App**：云端 todo collection 从 `electricCollectionOptions` 换成 `queryCollectionOptions`（`@tanstack/query-db-collection` 1.4.8，与 `@tanstack/db` 0.15.2 配套）。读取调用 `todo.list`；新增和修改写回服务端返回的行，删除后重新拉取列表。其他设备的修改在切回页面、重新联网或失效时拉取。
+- **API**：新增 `todo.list`。`create`、`update` 返回存储后的行（重放的 create 返回已有行），`remove` 无返回值，不再返回 txid。
+- **移除**：`/shape` 路由与代理、shape 注册表、`packages/core` 的 `sync`（`SHAPE_VERSIONS`、`TxidOutputSchema`）、`getCurrentTxid`、CORS 暴露的 `electric-*` 头、依赖 `@electric-sql/client` 和 `@tanstack/electric-db-collection`。
+
+### 部署注意
+
+- 三个 compose 文件去掉了 `electric` 服务和它的数据卷，Postgres 不再以 `wal_level=logical` 启动。
+- Server 不再读取 `ELECTRIC_URL` 和 `ELECTRIC_SECRET`，可从部署环境删除。
+- 已有数据库里 Electric 建的复制槽 `electric_slot_default` 和 publication 不会自动删除。不活跃的复制槽会让 Postgres 一直保留 WAL，部署后执行一次：`SELECT pg_drop_replication_slot('electric_slot_default');`、`DROP PUBLICATION IF EXISTS electric_publication_default;`、`ALTER TABLE todo REPLICA IDENTITY DEFAULT;`。
+
+### 本次未验证
+
+- 改动后没有跑类型检查、构建或测试，也没有实测 todo 的增删改。
+
 ## 2026-10-26：Electric 同步的 Todos、桌面端本地 SQLite、preview-ui
 
 ### 新增

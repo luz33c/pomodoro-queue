@@ -22,13 +22,12 @@ This guide is intentionally repo-specific. It documents the current preferred wa
 | Folder     | Holds                                                                                     | Imported by           |
 | ---------- | ----------------------------------------------------------------------------------------- | --------------------- |
 | `client/`  | `types.ts`, the type-only entry for app, native, and extension; `tanstack-start/` for web | apps                  |
-| `server/`  | `rpc.ts`, `openapi.ts`, `shape.ts`, `create-context.ts`, and `clerk.ts`                   | `apps/server`         |
+| `server/`  | `rpc.ts`, `openapi.ts`, `create-context.ts`, and `clerk.ts`                               | `apps/server`         |
 | `routers/` | One folder per slice; `routers/index.ts` assembles them into `appRouter`                  | `client/`, `server/`  |
-| `sync/`    | `shapes.ts`, the Electric shape registry; see [Sync](./sync.md)                           | `server/`             |
 | `orpc/`    | `context.ts` and `procedures.ts`, the base every procedure builds on                      | `routers/`, `server/` |
 
-- `package.json` exports only `./client/*` and `./server/*`, so apps cannot import `routers/`, `sync/`, or `orpc/` directly.
-- Code that several slices need lives in the slice that owns the concept. Infrastructure goes in `orpc/` (building procedures), `server/` (the HTTP edge), or a top-level folder named for the integration, such as `sync/`. There is no `lib/` folder.
+- `package.json` exports only `./client/*` and `./server/*`, so apps cannot import `routers/` or `orpc/` directly.
+- Code that several slices need lives in the slice that owns the concept. Infrastructure goes in `orpc/` (building procedures), `server/` (the HTTP edge), or a top-level folder named for the integration. There is no `lib/` folder.
 
 ## Server Route Shape
 

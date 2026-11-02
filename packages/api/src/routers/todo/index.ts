@@ -1,11 +1,13 @@
 import { create } from "#/routers/todo/procedures/create";
+import { list } from "#/routers/todo/procedures/list";
 import { remove } from "#/routers/todo/procedures/remove";
 import { update } from "#/routers/todo/procedures/update";
 
-// Writes for the synced todo shape. Clients wait for the returned txid on the shape stream;
-// a null txid means nothing was written, so there is nothing to wait for.
+// Clients hold the list in a TanStack DB query collection: `list` fills it, and the writes return
+// the stored row so the collection applies it without fetching the whole list again
 export const todoRouter = {
   create,
-  update,
-  remove
+  list,
+  remove,
+  update
 };

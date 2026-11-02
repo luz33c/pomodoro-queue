@@ -42,9 +42,6 @@ catalogs:
     '@dotenvx/dotenvx':
       specifier: 2.21.0
       version: 2.21.0
-    '@electric-sql/client':
-      specifier: 1.5.28
-      version: 1.5.28
     '@expo/log-box':
       specifier: 57.0.4
       version: 57.0.4
@@ -120,9 +117,6 @@ catalogs:
     '@tanstack/devtools-vite':
       specifier: 0.8.3
       version: 0.8.3
-    '@tanstack/electric-db-collection':
-      specifier: 0.6.3
-      version: 0.6.3
     '@tanstack/electron-db-sqlite-persistence':
       specifier: 0.2.13
       version: 0.2.13
@@ -132,6 +126,9 @@ catalogs:
     '@tanstack/eslint-plugin-router':
       specifier: 1.162.0
       version: 1.162.0
+    '@tanstack/query-db-collection':
+      specifier: 1.4.8
+      version: 1.4.8
     '@tanstack/react-db':
       specifier: 0.5.12
       version: 0.5.12
@@ -412,9 +409,6 @@ importers:
       '@dotenvx/dotenvx':
         specifier: 'catalog:'
         version: 2.21.0
-      '@electric-sql/client':
-        specifier: 'catalog:'
-        version: 1.5.28
       '@fontsource-variable/geist':
         specifier: 'catalog:'
         version: 5.3.0
@@ -439,12 +433,12 @@ importers:
       '@tanstack/db':
         specifier: 'catalog:'
         version: 0.15.2(typescript@7.0.2)
-      '@tanstack/electric-db-collection':
-        specifier: 'catalog:'
-        version: 0.6.3(supports-color@8.1.1)(typescript@7.0.2)
       '@tanstack/electron-db-sqlite-persistence':
         specifier: 'catalog:'
         version: 0.2.13(typescript@7.0.2)
+      '@tanstack/query-db-collection':
+        specifier: 'catalog:'
+        version: 1.4.8(@tanstack/query-core@5.104.0)(typescript@7.0.2)
       '@tanstack/react-db':
         specifier: 'catalog:'
         version: 0.5.12(react@19.2.8)(typescript@7.0.2)
@@ -990,9 +984,6 @@ importers:
       '@clerk/tanstack-react-start':
         specifier: 'catalog:'
         version: 1.6.1(@tanstack/react-router@1.170.46(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@tanstack/react-start@1.169.4(esbuild@0.28.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(supports-color@8.1.1)(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.50.0)(yaml@2.9.0)))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      '@electric-sql/client':
-        specifier: 'catalog:'
-        version: 1.5.28
       '@orpc/client':
         specifier: 'catalog:'
         version: 1.15.0
@@ -1911,10 +1902,6 @@ packages:
   '@egjs/hammerjs@2.0.17':
     resolution: {integrity: sha512-XQsZgjm2EcVUiZQf11UBJQfmZeEmOW8DpI1gsFeln6w0ae0ii4dMQEQ0kjl6DspdWX1aGY1/loyXnP0JS06e/A==}
     engines: {node: '>=0.8.0'}
-
-  '@electric-sql/client@1.5.28':
-    resolution: {integrity: sha512-b0cym3YWXL6PbQmEF0xDRsLt2xgXX46stvOSRAIXRPAP6dLZIHZL0o0HxeTdsZ27L3PbIg6Pw6KnyanRVGtWPA==}
-    hasBin: true
 
   '@emnapi/core@1.11.3':
     resolution: {integrity: sha512-zLpS5asjEb7lq8jYLq37N6XKaE41DIexlY1rF/z4/tIl3wo13Sqm28fRyfIsKZD+NZ8mM5RoKkpW/rBcuoSZSg==}
@@ -2859,9 +2846,6 @@ packages:
     resolution: {integrity: sha512-v8satFmBB+DqDzYohnm1u2JOvxx6Hl3pUvqzJvfs2Zk/ngZ1aRUhsWpXvwPkNeGN9c2NCm/38H29ZqXQUjf8dw==}
     peerDependencies:
       rollup: '>=2'
-
-  '@microsoft/fetch-event-source@2.0.1':
-    resolution: {integrity: sha512-W6CLUJ2eBMw3Rec70qrsEW0jOm/3twwJv21mrmj2yORiaVmVYGS4sSS5yUwvQc1ZlDLYGPnClVWmUUMagKNsfA==}
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     resolution: {integrity: sha512-oTXEIha4SsuXdTA4Iyskj0kpdx2yVXdhd75c2v3xGrHFfVMsbhTPZU/nMPL4sWKo4pBHm3aucLaqGlF696dTyQ==}
@@ -4846,9 +4830,6 @@ packages:
     peerDependencies:
       solid-js: '>=1.9.7'
 
-  '@tanstack/electric-db-collection@0.6.3':
-    resolution: {integrity: sha512-0OI+2vmCkhWEqsG6xCwaSXA9CWa2Ii3KpiNQR3zzGHBQhuLSqGJukU+y8FSxaRDpiIuY4rzccm1oCozzGnf0PQ==}
-
   '@tanstack/electron-db-sqlite-persistence@0.2.13':
     resolution: {integrity: sha512-IcuGGCug4Vpqf0pGHVVc5pjQzCE3tToaqU/MVU+BZLM3iEQYXlqJ5/jeiBVaI8DMRwTwLyhxbv5KqIXdPrMLQA==}
     peerDependencies:
@@ -4894,6 +4875,12 @@ packages:
 
   '@tanstack/query-core@5.104.0':
     resolution: {integrity: sha512-JrC2r/JQlXt7khBSdUpsgxNvybzOg+aITa+ARRMlP2AFo93Y8vIqz077rp+e61mJetSZ0T6AJbwW1JHer1vrPQ==}
+
+  '@tanstack/query-db-collection@1.4.8':
+    resolution: {integrity: sha512-ysoX+BSYt6fbp0dPb/+vIe7wLlhPVXP0GKUP1sJ9FnbP2FkgxOzPzk2JDQsqlJweFl7P3z4kNViAyREJfbfc4w==}
+    peerDependencies:
+      '@tanstack/query-core': 5.104.0
+      typescript: '>=4.7'
 
   '@tanstack/query-devtools@5.104.0':
     resolution: {integrity: sha512-snKyFLVFC5LuNoyUTpyqCD2Z8cRlCWrAeO3xub0nGi81IMz8YAUWq2Z+XdpGSGT7bCxqVdOHUjyiA3CtDuBjfQ==}
@@ -10733,12 +10720,6 @@ snapshots:
     dependencies:
       '@types/hammerjs': 2.0.46
 
-  '@electric-sql/client@1.5.28':
-    dependencies:
-      '@microsoft/fetch-event-source': 2.0.1
-    optionalDependencies:
-      '@rollup/rollup-darwin-arm64': 4.63.0
-
   '@emnapi/core@1.11.3':
     dependencies:
       '@emnapi/wasi-threads': 1.2.3
@@ -11745,8 +11726,6 @@ snapshots:
       vfile: 6.0.3
     transitivePeerDependencies:
       - supports-color
-
-  '@microsoft/fetch-event-source@2.0.1': {}
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     optional: true
@@ -14346,16 +14325,6 @@ snapshots:
       - csstype
       - utf-8-validate
 
-  '@tanstack/electric-db-collection@0.6.3(supports-color@8.1.1)(typescript@7.0.2)':
-    dependencies:
-      '@electric-sql/client': 1.5.28
-      '@standard-schema/spec': 1.1.0
-      '@tanstack/db': 0.15.2(typescript@7.0.2)
-      debug: 4.4.3(supports-color@8.1.1)
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
-
   '@tanstack/electron-db-sqlite-persistence@0.2.13(typescript@7.0.2)':
     dependencies:
       '@tanstack/db-sqlite-persistence-core': 0.4.12(typescript@7.0.2)
@@ -14411,6 +14380,13 @@ snapshots:
   '@tanstack/pacer-lite@0.2.2': {}
 
   '@tanstack/query-core@5.104.0': {}
+
+  '@tanstack/query-db-collection@1.4.8(@tanstack/query-core@5.104.0)(typescript@7.0.2)':
+    dependencies:
+      '@standard-schema/spec': 1.1.0
+      '@tanstack/db': 0.15.2(typescript@7.0.2)
+      '@tanstack/query-core': 5.104.0
+      typescript: 7.0.2
 
   '@tanstack/query-devtools@5.104.0(csstype@3.2.3)':
     dependencies:

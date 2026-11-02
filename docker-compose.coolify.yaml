@@ -29,8 +29,6 @@ services:
         - "CLERK_SECRET_KEY=${CLERK_SECRET_KEY}"
         - "CLERK_AUTHORIZED_PARTIES=${CLERK_AUTHORIZED_PARTIES:-}"
         - "DATABASE_URL=postgresql://${SERVICE_USER_POSTGRESQL}:${SERVICE_PASSWORD_POSTGRESQL}@postgres:5432/${POSTGRES_DB:-tsu-stack}"
-        - "ELECTRIC_URL=http://electric:3000"
-        - "ELECTRIC_SECRET=${SERVICE_PASSWORD_ELECTRIC}"
     environment:
       - SERVICE_URL_SERVER_5000
       - "VITE_SERVER_URL=${SERVICE_URL_SERVER}"
@@ -40,8 +38,6 @@ services:
       - "CLERK_SECRET_KEY=${CLERK_SECRET_KEY}"
       - "CLERK_AUTHORIZED_PARTIES=${CLERK_AUTHORIZED_PARTIES:-}"
       - "DATABASE_URL=postgresql://${SERVICE_USER_POSTGRESQL}:${SERVICE_PASSWORD_POSTGRESQL}@postgres:5432/${POSTGRES_DB:-tsu-stack}"
-      - "ELECTRIC_URL=http://electric:3000"
-      - "ELECTRIC_SECRET=${SERVICE_PASSWORD_ELECTRIC}"
       - "ENABLE_OPEN_API_DOCS=${ENABLE_OPEN_API_DOCS:-false}"
     healthcheck:
       test:
@@ -118,33 +114,9 @@ services:
       timeout: 3s
       retries: 5
 
-  # Streams Postgres changes to clients; only the server reaches it, through GET /shape
-  electric:
-    image: electricsql/electric:1.8.1
-    container_name: tsu-stack-electric
-    environment:
-      - "DATABASE_URL=postgresql://${SERVICE_USER_POSTGRESQL}:${SERVICE_PASSWORD_POSTGRESQL}@postgres:5432/${POSTGRES_DB:-tsu-stack}?sslmode=disable"
-      - "ELECTRIC_SECRET=${SERVICE_PASSWORD_ELECTRIC}"
-      - "ELECTRIC_STORAGE_DIR=/var/lib/electric/persistent"
-    volumes:
-      - tsu-stack-electric-data:/var/lib/electric/persistent
-    healthcheck:
-      # 202 means still starting; only 200 is ready
-      test:
-        - CMD-SHELL
-        - "curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3000/v1/health | grep -q 200"
-      interval: 5s
-      timeout: 3s
-      retries: 20
-    depends_on:
-      postgres:
-        condition: service_healthy
-
   postgres:
     image: postgres:18-alpine
     container_name: tsu-stack-postgres
-    # Electric reads the logical replication stream
-    command: ["postgres", "-c", "wal_level=logical"]
     environment:
       - "POSTGRES_USER=${SERVICE_USER_POSTGRESQL}"
       - "POSTGRES_PASSWORD=${SERVICE_PASSWORD_POSTGRESQL}"
@@ -161,4 +133,3 @@ services:
 
 volumes:
   tsu-stack-pg-data:
-  tsu-stack-electric-data:

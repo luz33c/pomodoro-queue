@@ -272,8 +272,6 @@ For the Hono server, use the following environment variables:
 | `VITE_CLERK_PUBLISHABLE_KEY` | ✅       | -             | Clerk publishable key. Safe for the browser and required by Clerk client components.             |
 | `CLERK_AUTHORIZED_PARTIES`   | ❌       | -             | Extra `azp` / CORS origins, e.g. `chrome-extension://<id>`, desktop `views://mainview`.          |
 | `DATABASE_URL`               | ✅       | -             | PostgreSQL connection string.                                                                    |
-| `ELECTRIC_URL`               | ❌       | -             | Electric sync service that `GET /shape` forwards to. Unset in production, `/shape` returns 503.  |
-| `ELECTRIC_SECRET`            | ❌       | -             | The `ELECTRIC_SECRET` set on the Electric service. Not needed for the local dev container.       |
 | `ENABLE_OPEN_API_DOCS`       | ❌       | `false`       | Enable OpenAPI `/docs` endpoint.                                                                 |
 
 ### Web

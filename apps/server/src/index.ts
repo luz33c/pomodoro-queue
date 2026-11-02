@@ -10,7 +10,6 @@ import { getClerkAuthorizedParties } from "@tsu-stack/api/server/clerk";
 import { createContext } from "@tsu-stack/api/server/create-context";
 import { createDocsHandler, openApiHandler } from "@tsu-stack/api/server/openapi";
 import { rpcHandler } from "@tsu-stack/api/server/rpc";
-import { ELECTRIC_EXPOSED_HEADERS, handleShapeRequest } from "@tsu-stack/api/server/shape";
 import { migrateDatabase } from "@tsu-stack/db";
 import { ENV_SERVER } from "@tsu-stack/env/server/env";
 import { log, parseError } from "@tsu-stack/logger/server";
@@ -35,8 +34,6 @@ app.use(
     allowHeaders: ["Content-Type", "Authorization", "X-Request-Id", "X-Evlog-Source"],
     allowMethods: ["GET", "POST", "OPTIONS"],
     credentials: true,
-    // The Electric client reads its sync position from these response headers
-    exposeHeaders: ELECTRIC_EXPOSED_HEADERS,
     origin: getClerkAuthorizedParties()
   })
 );
@@ -44,8 +41,7 @@ app.use(
 app.use(
   "/*",
   honoLoggerMiddleware({
-    // Shape requests are long polls that every open client repeats
-    exclude: ["**/health/**", "**/_logs/ingest", "**/shape/**"],
+    exclude: ["**/health/**", "**/_logs/ingest"],
     enrich: (ctx) => {
       ctx.event.hostname = serverHostname;
     }
@@ -53,13 +49,6 @@ app.use(
 );
 
 app.post("/_logs/ingest", honoLogIngestionMiddleware());
-
-// Registered before the oRPC fallback below, so shape polls never build an oRPC context
-app.get("/shape/:name/:version", (c) => {
-  // Each user gets different rows; cors() already set Vary: Origin on the context
-  c.header("Vary", "Authorization", { append: true });
-  return handleShapeRequest(c.req.raw, c.req.param("name"), c.req.param("version"));
-});
 
 // The API reference is opt-in: without the flag, /docs is an unmatched path like any other
 if (ENV_SERVER.ENABLE_OPEN_API_DOCS) {

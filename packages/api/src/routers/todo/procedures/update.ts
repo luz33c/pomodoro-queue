@@ -1,6 +1,4 @@
-import { TxidOutputSchema } from "@tsu-stack/core/sync";
-import { TodoUpdateInputSchema } from "@tsu-stack/core/todo";
-import { db, getCurrentTxid } from "@tsu-stack/db";
+import { TodoRowSchema, TodoUpdateInputSchema } from "@tsu-stack/core/todo";
 import { updateTodo } from "@tsu-stack/db/queries";
 
 import { protectedProcedure } from "#/orpc/procedures";
@@ -10,17 +8,14 @@ export const update = protectedProcedure
   .errors({ TODO_NOT_FOUND })
   .route({ description: "Update a todo's title or completion", method: "POST" })
   .input(TodoUpdateInputSchema)
-  .output(TxidOutputSchema)
-  .handler(({ context, errors, input }) =>
-    db.transaction(async (tx) => {
-      const updated = await updateTodo(
-        { id: input.id, ownerId: context.auth.userId },
-        { completed: input.completed, title: input.title },
-        tx
-      );
-      if (!updated) {
-        throw errors.TODO_NOT_FOUND();
-      }
-      return { txid: await getCurrentTxid(tx) };
-    })
-  );
+  .output(TodoRowSchema)
+  .handler(async ({ context, errors, input }) => {
+    const updated = await updateTodo(
+      { id: input.id, ownerId: context.auth.userId },
+      { completed: input.completed, title: input.title }
+    );
+    if (!updated) {
+      throw errors.TODO_NOT_FOUND();
+    }
+    return updated;
+  });

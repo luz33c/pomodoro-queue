@@ -29,7 +29,7 @@ function toClerkContextAuth(auth: { userId: string | null } | null): ClerkContex
   return auth?.userId ? { userId: auth.userId } : null;
 }
 
-/** Verifies the request's Clerk bearer token. Also used by routes outside oRPC, such as the shape proxy. */
+/** Verifies the request's Clerk bearer token. */
 export async function authenticateClerkRequest(request: Request): Promise<ClerkContextAuth | null> {
   const requestState = await clerkClient.authenticateRequest(request, {
     authorizedParties: getClerkAuthorizedParties()

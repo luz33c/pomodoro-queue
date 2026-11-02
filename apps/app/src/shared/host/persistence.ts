@@ -7,7 +7,7 @@ import { host } from "#/shared/host/index";
 export type DataMode = "cloud" | "local";
 
 /**
- * Where entity collections keep their rows. The web host syncs with the cloud through Electric and oRPC.
+ * Where entity collections keep their rows. The web host reads and writes the cloud through oRPC.
  * The desktop host keeps rows on this machine until desktop sign-in and the sync toggle exist.
  * Entities repeat this check as a literal `import.meta.env.MODE` comparison when picking a collection,
  * so the web build can drop the SQLite packages.
