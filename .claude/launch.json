@@ -1,0 +1,41 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3002
+    },
+    {
+      "name": "app-start",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@tsu-stack/app", "run", "start"],
+      "port": 3002
+    },
+    {
+      "name": "web-start",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@tsu-stack/web", "run", "start"],
+      "port": 3601
+    },
+    {
+      "name": "server",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@tsu-stack/server", "run", "dev"],
+      "port": 3602
+    },
+    {
+      "name": "dev-desktop",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["run", "dev:desktop"],
+      "port": 3003
+    },
+    {
+      "name": "preview-ui",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["run", "dev:preview-ui"],
+      "port": 3004
+    }
+  ]
+}
