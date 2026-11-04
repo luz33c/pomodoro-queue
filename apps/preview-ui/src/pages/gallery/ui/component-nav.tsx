@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { cn } from "@tsu-stack/ui/lib/utils";
+import { cn } from "@uni-stack/ui/lib/utils";
 
 import { type DemoCategory } from "#/pages/gallery/demos/catalog";
 

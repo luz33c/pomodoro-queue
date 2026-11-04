@@ -1,4 +1,4 @@
-import { WordChoiceInput } from "@tsu-stack/ui/components/word-input/word-choice";
+import { WordChoiceInput } from "@uni-stack/ui/components/word-input/word-choice";
 
 export function WordChoiceInputDemo() {
   return (

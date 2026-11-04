@@ -1,4 +1,4 @@
-import { cn } from "@tsu-stack/ui/lib/utils";
+import { cn } from "@uni-stack/ui/lib/utils";
 
 export function Container({
   children,

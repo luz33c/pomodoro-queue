@@ -23,8 +23,8 @@ const appBasePath = appUrl.pathname.replace(/\/+$/, "");
 
 if (appUrl.origin === webUrl.origin && appBasePath.startsWith(`${basePath}/`)) {
   const appRoute = `${appBasePath.slice(basePath.length)}/*`;
-  // Resolves to node_modules/@tsu-stack/app in the production image and to apps/app locally.
-  const appDistUrl = new URL("./dist/web/", import.meta.resolve("@tsu-stack/app/package.json"));
+  // Resolves to node_modules/@uni-stack/app in the production image and to apps/app locally.
+  const appDistUrl = new URL("./dist/web/", import.meta.resolve("@uni-stack/app/package.json"));
   const appDist = fileURLToPath(appDistUrl);
   const appIndexHtml = await readFile(new URL("index.html", appDistUrl), "utf8");
 

@@ -14,10 +14,10 @@
   "rtl": false,
   "aliases": {
     "components": "#/shared/ui",
-    "utils": "@tsu-stack/ui/lib/utils",
-    "ui": "@tsu-stack/ui/components",
-    "lib": "@tsu-stack/ui/lib",
-    "hooks": "@tsu-stack/ui/hooks"
+    "utils": "@uni-stack/ui/lib/utils",
+    "ui": "@uni-stack/ui/components",
+    "lib": "@uni-stack/ui/lib",
+    "hooks": "@uni-stack/ui/hooks"
   },
   "menuColor": "default",
   "menuAccent": "subtle",

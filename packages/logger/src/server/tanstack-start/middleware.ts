@@ -133,7 +133,7 @@ async function withRequestLogging<T>(options: {
  *
  * @example
  * ```ts
- * import { tanstackStartServerFnLoggerMiddleware } from "@tsu-stack/logger/server/tanstack-start/middleware";
+ * import { tanstackStartServerFnLoggerMiddleware } from "@uni-stack/logger/server/tanstack-start/middleware";
  *
  * export const startInstance = createStart(() => ({
  *   functionMiddleware: [tanstackStartServerFnLoggerMiddleware()],
@@ -168,7 +168,7 @@ export function tanstackStartServerFnLoggerMiddleware(options: LoggerMiddlewareO
  *
  * @example
  * ```ts
- * import { tanstackStartRequestLoggerMiddleware } from "@tsu-stack/logger/server/tanstack-start/middleware";
+ * import { tanstackStartRequestLoggerMiddleware } from "@uni-stack/logger/server/tanstack-start/middleware";
  *
  * export const startInstance = createStart(() => ({
  *   requestMiddleware: [tanstackStartRequestLoggerMiddleware({ excludePaths: ["/health"] })],

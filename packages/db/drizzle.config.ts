@@ -1,6 +1,6 @@
 import { type Config } from "drizzle-kit";
 
-import { ENV_DATABASE } from "@tsu-stack/env/database/env";
+import { ENV_DATABASE } from "@uni-stack/env/database/env";
 
 export default {
   breakpoints: true,

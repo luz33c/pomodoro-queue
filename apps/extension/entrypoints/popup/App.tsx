@@ -8,7 +8,7 @@ import {
 } from "@clerk/chrome-extension";
 import { QueryClientProvider, useQuery } from "@tanstack/react-query";
 
-import { ENV_EXTENSION } from "@tsu-stack/env/extension/env";
+import { ENV_EXTENSION } from "@uni-stack/env/extension/env";
 
 import { orpc, queryClient } from "#/utils/orpc";
 

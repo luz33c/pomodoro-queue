@@ -1,6 +1,6 @@
-import { m } from "@tsu-stack/i18n/messages";
-import { buttonVariants } from "@tsu-stack/ui/components/button";
-import { cn } from "@tsu-stack/ui/lib/utils";
+import { m } from "@uni-stack/i18n/messages";
+import { buttonVariants } from "@uni-stack/ui/components/button";
+import { cn } from "@uni-stack/ui/lib/utils";
 
 import { appConfig } from "#/shared/config/app";
 import { Container } from "#/shared/ui/container";

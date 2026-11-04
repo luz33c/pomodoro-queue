@@ -35,7 +35,7 @@
     "eslint-plugin-fsd-lint",
     "eslint-plugin-react-hooks",
     // Consumed as a build output, not imported: apps/desktop copies its dist/desktop, apps/web serves its dist/web
-    "@tsu-stack/app",
+    "@uni-stack/app",
     // Tooling invoked from package scripts instead of imported by source files
     "oxfmt",
     "oxlint"

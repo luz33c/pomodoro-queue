@@ -1,4 +1,4 @@
-import { createRequestLogger, type RequestLogger } from "@tsu-stack/logger/server";
+import { createRequestLogger, type RequestLogger } from "@uni-stack/logger/server";
 
 import { type OrpcContext } from "#/orpc/context";
 import { authenticateClerkRequest } from "#/server/clerk";

@@ -1,6 +1,6 @@
 # SEO Patterns
 
-Use `@tsu-stack/seo` for TanStack Start route `head()` objects.
+Use `@uni-stack/seo` for TanStack Start route `head()` objects.
 
 ## Package Boundaries
 

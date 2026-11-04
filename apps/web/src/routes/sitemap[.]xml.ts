@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { getRouteTreePathsLocalized } from "@tsu-stack/i18n/tanstack-start/lib/get-route-tree-paths-localized";
-import { stripLocalePrefix } from "@tsu-stack/i18n/tanstack-start/lib/strip-locale-prefix";
-import { type NavigateTo } from "@tsu-stack/i18n/tanstack-start/types";
+import { getRouteTreePathsLocalized } from "@uni-stack/i18n/tanstack-start/lib/get-route-tree-paths-localized";
+import { stripLocalePrefix } from "@uni-stack/i18n/tanstack-start/lib/strip-locale-prefix";
+import { type NavigateTo } from "@uni-stack/i18n/tanstack-start/types";
 
 import { appConfig } from "#/config/app.config";
 import { routeTree } from "#/routeTree.gen";

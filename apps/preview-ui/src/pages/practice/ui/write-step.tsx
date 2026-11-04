@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-import { Button } from "@tsu-stack/ui/components/button";
-import { HintInput } from "@tsu-stack/ui/components/word-input/hint";
-import { type RecallStatus } from "@tsu-stack/ui/components/word-input/recall";
-import { RecallInput } from "@tsu-stack/ui/components/word-input/recall";
+import { Button } from "@uni-stack/ui/components/button";
+import { HintInput } from "@uni-stack/ui/components/word-input/hint";
+import { type RecallStatus } from "@uni-stack/ui/components/word-input/recall";
+import { RecallInput } from "@uni-stack/ui/components/word-input/recall";
 
 import { RECALL_ITEMS } from "#/pages/practice/model/lesson";
 

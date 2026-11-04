@@ -9,10 +9,10 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
-import { ENV_WEB_ISOMORPHIC } from "@tsu-stack/env/web/env.isomorphic";
-import { ENV_WEB_SERVER } from "@tsu-stack/env/web/env.server";
-import { locales } from "@tsu-stack/i18n/runtime";
-import { paraglideVitePlugin } from "@tsu-stack/i18n/vite/plugin";
+import { ENV_WEB_ISOMORPHIC } from "@uni-stack/env/web/env.isomorphic";
+import { ENV_WEB_SERVER } from "@uni-stack/env/web/env.server";
+import { locales } from "@uni-stack/i18n/runtime";
+import { paraglideVitePlugin } from "@uni-stack/i18n/vite/plugin";
 
 import { type FileRouteTypes } from "#/routeTree.gen";
 

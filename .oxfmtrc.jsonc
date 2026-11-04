@@ -30,8 +30,8 @@
   "sortImports": {
     "customGroups": [
       {
-        "elementNamePattern": ["@tsu-stack/**"],
-        "groupName": "@tsu-stack"
+        "elementNamePattern": ["@uni-stack/**"],
+        "groupName": "@uni-stack"
       },
       {
         "elementNamePattern": ["#/pages/**"],
@@ -57,7 +57,7 @@
     "groups": [
       "builtin",
       "external",
-      "@tsu-stack",
+      "@uni-stack",
       "shared",
       "entities",
       "features",

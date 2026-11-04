@@ -35,12 +35,12 @@ Pick the most specific file for the task. Use links within that file instead of 
 - [oRPC patterns](.agents/orpc.md) for server procedures, router shape, typed errors, and request-scoped handler logging.
 - [Auth patterns](.agents/auth.md) for Clerk architecture, token handling, and protected/guest route rules.
 - [i18n guidelines](.agents/i18n.md) for copy keys, locale file policy, and Paraglide codegen.
-- [SEO patterns](.agents/seo.md) for route `head()` usage and `@tsu-stack/seo` integration.
+- [SEO patterns](.agents/seo.md) for route `head()` usage and `@uni-stack/seo` integration.
 
 ### Shared Packages And Platform
 
 - [Core package patterns](.agents/core.md) for shared domain contracts in `packages/core`, file roles, and propagation into API and web code.
-- [Database package](packages/db/AGENTS.md) for schema files, relations, table-level query functions, and `@tsu-stack/db` entry points.
+- [Database package](packages/db/AGENTS.md) for schema files, relations, table-level query functions, and `@uni-stack/db` entry points.
 - [Media storage and uploads](.agents/media-storage.md) for preemptive S3 object conventions, first-implementation workflow, delete policy, and storage env configuration.
 - [Sync](.agents/sync.md) for TanStack DB query collections, `list` and write procedures for synced tables, and the desktop local collection.
 - [UI guidelines](.agents/ui.md) for app UI composition, extraction decisions, and `packages/ui` boundaries.

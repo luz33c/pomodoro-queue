@@ -1,4 +1,4 @@
-import { HealthLiveOutputSchema } from "@tsu-stack/core/health";
+import { HealthLiveOutputSchema } from "@uni-stack/core/health";
 
 import { publicProcedure } from "#/orpc/procedures";
 import { buildBaseHealth } from "#/routers/health/checks";

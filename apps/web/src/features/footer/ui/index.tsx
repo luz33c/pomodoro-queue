@@ -1,11 +1,11 @@
 import { FaGithub } from "react-icons/fa";
 
-import { m } from "@tsu-stack/i18n/messages";
-import { type LinkProps } from "@tsu-stack/i18n/tanstack-start/components/link";
-import { Link } from "@tsu-stack/i18n/tanstack-start/components/link";
-import { buttonVariants } from "@tsu-stack/ui/components/button";
-import { Image } from "@tsu-stack/ui/components/image";
-import { cn } from "@tsu-stack/ui/lib/utils";
+import { m } from "@uni-stack/i18n/messages";
+import { type LinkProps } from "@uni-stack/i18n/tanstack-start/components/link";
+import { Link } from "@uni-stack/i18n/tanstack-start/components/link";
+import { buttonVariants } from "@uni-stack/ui/components/button";
+import { Image } from "@uni-stack/ui/components/image";
+import { cn } from "@uni-stack/ui/lib/utils";
 
 import { getAppUrl } from "#/shared/lib/app-url";
 import { LogoWordmark } from "#/shared/ui/logo";

@@ -1,5 +1,5 @@
 {
-  "name": "@tsu-stack/env",
+  "name": "@uni-stack/env",
   "private": true,
   "type": "module",
   "imports": {
@@ -17,8 +17,8 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@tsu-stack/tsconfig": "workspace:*",
     "@types/node": "catalog:",
+    "@uni-stack/tsconfig": "workspace:*",
     "typescript": "catalog:",
     "vite": "catalog:"
   }

@@ -1,8 +1,8 @@
-import { Link } from "@tsu-stack/i18n/tanstack-start/components/link";
-import { buttonVariants } from "@tsu-stack/ui/components/button";
-import { ThemeSwitcher } from "@tsu-stack/ui/components/theme-switcher";
-import { useScroll } from "@tsu-stack/ui/hooks/use-scroll.hook";
-import { cn } from "@tsu-stack/ui/lib/utils";
+import { Link } from "@uni-stack/i18n/tanstack-start/components/link";
+import { buttonVariants } from "@uni-stack/ui/components/button";
+import { ThemeSwitcher } from "@uni-stack/ui/components/theme-switcher";
+import { useScroll } from "@uni-stack/ui/hooks/use-scroll.hook";
+import { cn } from "@uni-stack/ui/lib/utils";
 
 import { LocaleSwitcher } from "#/shared/ui/locale-switcher";
 import { LogoWordmark } from "#/shared/ui/logo";

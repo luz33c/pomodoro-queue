@@ -1,5 +1,5 @@
 {
-  "name": "@tsu-stack/extension",
+  "name": "@uni-stack/extension",
   "version": "0.0.0",
   "private": true,
   "description": "TSU Stack browser extension",
@@ -21,8 +21,8 @@
     "@orpc/client": "catalog:",
     "@orpc/tanstack-query": "catalog:",
     "@tanstack/react-query": "catalog:",
-    "@tsu-stack/api": "workspace:*",
-    "@tsu-stack/env": "workspace:*",
+    "@uni-stack/api": "workspace:*",
+    "@uni-stack/env": "workspace:*",
     "react": "catalog:",
     "react-dom": "catalog:"
   },

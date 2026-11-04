@@ -38,7 +38,7 @@ When a feature introduces shared contracts that should drive both API and fronte
 
 ## Step 4: Web Data Layer
 
-- Use oRPC's TanStack Query integration from `@tsu-stack/api/client/tanstack-start/orpc`.
+- Use oRPC's TanStack Query integration from `@uni-stack/api/client/tanstack-start/orpc`.
 - Follow [API fetching patterns](./api-fetching-patterns.md) for `*.query.ts`, `*.mutation.ts`, query keys, query options, and hook wrappers.
 - Keep `orpc` and TanStack Query wiring inside slice-local `api/` files, not inline in page components.
 

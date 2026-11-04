@@ -1,5 +1,5 @@
-import { ENV_WEB_ISOMORPHIC } from "@tsu-stack/env/web/env.isomorphic";
-import { baseLocale, locales } from "@tsu-stack/i18n/runtime";
+import { ENV_WEB_ISOMORPHIC } from "@uni-stack/env/web/env.isomorphic";
+import { baseLocale, locales } from "@uni-stack/i18n/runtime";
 
 const emailSupport = `support@${new URL(ENV_WEB_ISOMORPHIC.VITE_WEB_URL).host}`;
 

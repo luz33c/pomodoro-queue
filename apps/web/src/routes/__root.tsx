@@ -16,16 +16,16 @@ import { HeadContent, Scripts, createRootRouteWithContext } from "@tanstack/reac
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { Fragment, useEffect, useRef } from "react";
 
-import { setClerkAuthTokenGetter } from "@tsu-stack/api/client/tanstack-start/clerk-auth";
-import { resolvePublicAssetUrl } from "@tsu-stack/core/assets";
-import { ENV_WEB_ISOMORPHIC } from "@tsu-stack/env/web/env.isomorphic";
-import { type Locale } from "@tsu-stack/i18n/runtime";
+import { setClerkAuthTokenGetter } from "@uni-stack/api/client/tanstack-start/clerk-auth";
+import { resolvePublicAssetUrl } from "@uni-stack/core/assets";
+import { ENV_WEB_ISOMORPHIC } from "@uni-stack/env/web/env.isomorphic";
+import { type Locale } from "@uni-stack/i18n/runtime";
 import {
   LocaleProvider,
   useLocale
-} from "@tsu-stack/i18n/tanstack-start/components/locale-provider";
-import { Toaster } from "@tsu-stack/ui/components/sonner";
-import { ThemeProvider } from "@tsu-stack/ui/components/theme-switcher";
+} from "@uni-stack/i18n/tanstack-start/components/locale-provider";
+import { Toaster } from "@uni-stack/ui/components/sonner";
+import { ThemeProvider } from "@uni-stack/ui/components/theme-switcher";
 
 import { getAppOrigin } from "#/shared/lib/app-url";
 import { generateAppSeo } from "#/shared/lib/seo";

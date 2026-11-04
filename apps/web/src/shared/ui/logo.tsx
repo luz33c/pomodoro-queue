@@ -1,6 +1,6 @@
 import type React from "react";
 
-import { cn } from "@tsu-stack/ui/lib/utils";
+import { cn } from "@uni-stack/ui/lib/utils";
 
 import { appConfig } from "#/config/app.config";
 

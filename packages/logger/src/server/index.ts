@@ -48,7 +48,7 @@ let isInitialized = false;
  *
  * @example
  * ```ts
- * import { LOG_SERVICES, initLogger } from "@tsu-stack/logger/server";
+ * import { LOG_SERVICES, initLogger } from "@uni-stack/logger/server";
  *
  * initLogger({
  *   env: {
@@ -73,7 +73,7 @@ export function initLogger(config: ServerLoggerConfig = {}) {
  *
  * @example
  * ```ts
- * import { LOG_SERVICES } from "@tsu-stack/logger/server";
+ * import { LOG_SERVICES } from "@uni-stack/logger/server";
  *
  * initLogger({
  *   env: {
@@ -89,7 +89,7 @@ export { LOG_SERVICES };
  *
  * @example
  * ```ts
- * import { createLogger } from "@tsu-stack/logger/server";
+ * import { createLogger } from "@uni-stack/logger/server";
  *
  * const logger = createLogger({ operation: "sync_users" });
  * logger.set({ users: { processed: 42 } });
@@ -103,7 +103,7 @@ export const createLogger = createEvlogLogger;
  *
  * @example
  * ```ts
- * import { createRequestLogger } from "@tsu-stack/logger/server";
+ * import { createRequestLogger } from "@uni-stack/logger/server";
  *
  * const logger = createRequestLogger({ method: "GET", path: "/health" });
  * logger.emit({ status: 200 });
@@ -116,7 +116,7 @@ export const createRequestLogger = createEvlogRequestLogger;
  *
  * @example
  * ```ts
- * import { log } from "@tsu-stack/logger/server";
+ * import { log } from "@uni-stack/logger/server";
  *
  * log.info({ event: "server_started", port: 5000 });
  * log.error({ event: "rpc_handler_error", error });
@@ -129,7 +129,7 @@ export const log = evlog;
  *
  * @example
  * ```ts
- * import { createError } from "@tsu-stack/logger/server";
+ * import { createError } from "@uni-stack/logger/server";
  *
  * throw createError({
  *   message: "Checkout failed",
@@ -146,7 +146,7 @@ export const createError = createEvlogError;
  *
  * @example
  * ```ts
- * import { parseError } from "@tsu-stack/logger/server";
+ * import { parseError } from "@uni-stack/logger/server";
  *
  * const parsed = parseError(error);
  * return c.json({ message: parsed.message }, parsed.status);
@@ -159,7 +159,7 @@ export const parseError = parseEvlogError;
  *
  * @example
  * ```ts
- * import type { RequestLogger } from "@tsu-stack/logger/server";
+ * import type { RequestLogger } from "@uni-stack/logger/server";
  *
  * function addUserContext(logger: RequestLogger, userId: string) {
  *   logger.set({ user: { id: userId } });

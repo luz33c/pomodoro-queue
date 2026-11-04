@@ -17,7 +17,7 @@ const VALID_LEVELS = new Set<LogLevel>(["info", "error", "warn", "debug"]);
  * @example
  * ```ts
  * import { Hono } from "hono";
- * import { type HonoLogVariables } from "@tsu-stack/logger/server/hono/middleware";
+ * import { type HonoLogVariables } from "@uni-stack/logger/server/hono/middleware";
  *
  * const app = new Hono<HonoLogVariables>();
  * ```
@@ -35,7 +35,7 @@ type HonoLogIngestionOptions = {
  *
  * @example
  * ```ts
- * import { honoLoggerMiddleware } from "@tsu-stack/logger/server/hono/middleware";
+ * import { honoLoggerMiddleware } from "@uni-stack/logger/server/hono/middleware";
  *
  * app.use("/*", honoLoggerMiddleware());
  * app.get("/health", (c) => {
@@ -49,11 +49,11 @@ export function honoLoggerMiddleware(options?: HonoLoggerMiddlewareOptions): Mid
 }
 
 /**
- * Accept browser log events posted by `@tsu-stack/logger/client`.
+ * Accept browser log events posted by `@uni-stack/logger/client`.
  *
  * @example
  * ```ts
- * import { honoLogIngestionMiddleware } from "@tsu-stack/logger/server/hono/middleware";
+ * import { honoLogIngestionMiddleware } from "@uni-stack/logger/server/hono/middleware";
  *
  * app.post("/_logs/ingest", honoLogIngestionMiddleware());
  * ```

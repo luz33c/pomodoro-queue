@@ -2,16 +2,16 @@ import { type ErrorComponentProps, Link, useRouter } from "@tanstack/react-route
 import { Home, RefreshCw } from "lucide-react";
 import { useEffect } from "react";
 
-import { m } from "@tsu-stack/i18n/messages";
-import { log } from "@tsu-stack/logger/client";
-import { Button, buttonVariants } from "@tsu-stack/ui/components/button";
+import { m } from "@uni-stack/i18n/messages";
+import { log } from "@uni-stack/logger/client";
+import { Button, buttonVariants } from "@uni-stack/ui/components/button";
 import {
   Empty,
   EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyTitle
-} from "@tsu-stack/ui/components/empty";
+} from "@uni-stack/ui/components/empty";
 
 import { appConfig } from "#/shared/config/app";
 

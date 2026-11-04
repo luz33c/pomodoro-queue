@@ -1,4 +1,4 @@
-import { ENV_APP } from "@tsu-stack/env/app/env";
+import { ENV_APP } from "@uni-stack/env/app/env";
 
 type AppConfig = {
   /** Shown in the shell header and as the document title suffix. */

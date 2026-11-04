@@ -2,13 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
 
-import { orpc } from "@tsu-stack/api/client/tanstack-start/orpc";
-import { resolvePublicAssetUrl } from "@tsu-stack/core/assets";
-import { m } from "@tsu-stack/i18n/messages";
-import { Link } from "@tsu-stack/i18n/tanstack-start/components/link";
-import { type To } from "@tsu-stack/i18n/tanstack-start/types";
-import { Button, buttonVariants } from "@tsu-stack/ui/components/button";
-import { useIsClient } from "@tsu-stack/ui/hooks/use-is-client.hook";
+import { orpc } from "@uni-stack/api/client/tanstack-start/orpc";
+import { resolvePublicAssetUrl } from "@uni-stack/core/assets";
+import { m } from "@uni-stack/i18n/messages";
+import { Link } from "@uni-stack/i18n/tanstack-start/components/link";
+import { type To } from "@uni-stack/i18n/tanstack-start/types";
+import { Button, buttonVariants } from "@uni-stack/ui/components/button";
+import { useIsClient } from "@uni-stack/ui/hooks/use-is-client.hook";
 
 import { generateAppSeo } from "#/shared/lib/seo";
 import { useLogger } from "#/shared/providers/logger-provider";

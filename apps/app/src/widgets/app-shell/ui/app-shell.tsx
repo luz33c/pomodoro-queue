@@ -1,9 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
 
-import { m } from "@tsu-stack/i18n/messages";
-import { Button } from "@tsu-stack/ui/components/button";
-import { ThemeSwitcher } from "@tsu-stack/ui/components/theme-switcher";
+import { m } from "@uni-stack/i18n/messages";
+import { Button } from "@uni-stack/ui/components/button";
+import { ThemeSwitcher } from "@uni-stack/ui/components/theme-switcher";
 
 import { appConfig } from "#/shared/config/app";
 import { useAppAuth } from "#/shared/host/auth";

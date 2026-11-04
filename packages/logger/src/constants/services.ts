@@ -12,7 +12,7 @@
  * `web__server__todo`.
  *
  * Import these from the relevant logger facade:
- * `@tsu-stack/logger/client` or `@tsu-stack/logger/server`.
+ * `@uni-stack/logger/client` or `@uni-stack/logger/server`.
  */
 export const LOG_SERVICES = Object.freeze({
   APP_CLIENT: "app__client",

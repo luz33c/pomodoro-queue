@@ -1,10 +1,10 @@
 import { SignUp } from "@clerk/tanstack-react-start";
 
-import { m } from "@tsu-stack/i18n/messages";
-import { Link } from "@tsu-stack/i18n/tanstack-start/components/link";
-import { useLocale } from "@tsu-stack/i18n/tanstack-start/components/locale-provider";
-import { FieldDescription } from "@tsu-stack/ui/components/field";
-import { cn } from "@tsu-stack/ui/lib/utils";
+import { m } from "@uni-stack/i18n/messages";
+import { Link } from "@uni-stack/i18n/tanstack-start/components/link";
+import { useLocale } from "@uni-stack/i18n/tanstack-start/components/locale-provider";
+import { FieldDescription } from "@uni-stack/ui/components/field";
+import { cn } from "@uni-stack/ui/lib/utils";
 
 import { Container } from "#/shared/ui/container";
 import { LogoIcon } from "#/shared/ui/logo";

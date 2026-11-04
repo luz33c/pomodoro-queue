@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-import { type ThinkingRow, type ThinkingVariant } from "@tsu-stack/ui/components/chat/thinking";
-import { Thinking } from "@tsu-stack/ui/components/chat/thinking";
+import { type ThinkingRow, type ThinkingVariant } from "@uni-stack/ui/components/chat/thinking";
+import { Thinking } from "@uni-stack/ui/components/chat/thinking";
 
 type Trace = {
   label: string;

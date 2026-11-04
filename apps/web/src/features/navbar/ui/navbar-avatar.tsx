@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@tsu-stack/ui/components/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@uni-stack/ui/components/avatar";
 
 export function NavbarAvatar({
   avatarImgSrc,

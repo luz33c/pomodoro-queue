@@ -3,12 +3,12 @@ import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { m } from "@tsu-stack/i18n/messages";
-import { Button } from "@tsu-stack/ui/components/button";
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@tsu-stack/ui/components/empty";
-import { Input } from "@tsu-stack/ui/components/input";
-import { Spinner } from "@tsu-stack/ui/components/spinner";
-import { cn } from "@tsu-stack/ui/lib/utils";
+import { m } from "@uni-stack/i18n/messages";
+import { Button } from "@uni-stack/ui/components/button";
+import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@uni-stack/ui/components/empty";
+import { Input } from "@uni-stack/ui/components/input";
+import { Spinner } from "@uni-stack/ui/components/spinner";
+import { cn } from "@uni-stack/ui/lib/utils";
 
 import { Container } from "#/shared/ui/container";
 

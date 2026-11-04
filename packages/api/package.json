@@ -1,5 +1,5 @@
 {
-  "name": "@tsu-stack/api",
+  "name": "@uni-stack/api",
   "type": "module",
   "imports": {
     "#/*": "./src/*.ts"
@@ -25,15 +25,15 @@
     "@orpc/tanstack-query": "catalog:",
     "@orpc/zod": "catalog:",
     "@tanstack/react-start": "catalog:",
-    "@tsu-stack/core": "workspace:*",
-    "@tsu-stack/db": "workspace:*",
-    "@tsu-stack/env": "workspace:*",
-    "@tsu-stack/logger": "workspace:*",
+    "@uni-stack/core": "workspace:*",
+    "@uni-stack/db": "workspace:*",
+    "@uni-stack/env": "workspace:*",
+    "@uni-stack/logger": "workspace:*",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@tsu-stack/tsconfig": "workspace:*",
     "@types/node": "catalog:",
+    "@uni-stack/tsconfig": "workspace:*",
     "typescript": "catalog:",
     "vite": "catalog:"
   }

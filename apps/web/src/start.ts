@@ -1,11 +1,11 @@
 import { clerkMiddleware } from "@clerk/tanstack-react-start/server";
 import { createCsrfMiddleware, createStart } from "@tanstack/react-start";
 
-import { LOG_SERVICES, initLogger } from "@tsu-stack/logger/server";
+import { LOG_SERVICES, initLogger } from "@uni-stack/logger/server";
 import {
   tanstackStartRequestLoggerMiddleware,
   tanstackStartServerFnLoggerMiddleware
-} from "@tsu-stack/logger/server/tanstack-start/middleware";
+} from "@uni-stack/logger/server/tanstack-start/middleware";
 
 // We load it in vite.config.ts because they are originally from ENV_WEB_SERVER variables
 declare const __BUILD_SOURCE_COMMIT__: string;

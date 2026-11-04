@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { clearIdentity, setIdentity } from "@tsu-stack/logger/client";
+import { clearIdentity, setIdentity } from "@uni-stack/logger/client";
 
 import { useAppAuth } from "#/shared/host/auth";
 

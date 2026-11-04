@@ -1,5 +1,5 @@
 {
-  "name": "@tsu-stack/seo",
+  "name": "@uni-stack/seo",
   "private": true,
   "type": "module",
   "imports": {
@@ -13,8 +13,8 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@tsu-stack/tsconfig": "workspace:*",
     "@types/node": "catalog:",
+    "@uni-stack/tsconfig": "workspace:*",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }

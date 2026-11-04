@@ -1,4 +1,4 @@
-import { HintInput } from "@tsu-stack/ui/components/word-input/hint";
+import { HintInput } from "@uni-stack/ui/components/word-input/hint";
 
 export function HintInputDemo() {
   return (

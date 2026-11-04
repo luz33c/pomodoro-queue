@@ -1,4 +1,4 @@
-import { cn } from "@tsu-stack/ui/lib/utils";
+import { cn } from "@uni-stack/ui/lib/utils";
 
 type SegmentedControlProps<T extends string> = {
   /** Accessible name of the group */

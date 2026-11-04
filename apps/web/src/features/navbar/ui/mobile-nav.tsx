@@ -3,13 +3,13 @@ import { useRouter, useRouterState } from "@tanstack/react-router";
 import { LogOut, Menu, X } from "lucide-react";
 import React from "react";
 
-import { m } from "@tsu-stack/i18n/messages";
-import { Link } from "@tsu-stack/i18n/tanstack-start/components/link";
-import { Button, buttonVariants } from "@tsu-stack/ui/components/button";
-import { Portal, PortalBackdrop } from "@tsu-stack/ui/components/portal";
-import { Skeleton } from "@tsu-stack/ui/components/skeleton";
-import { ThemeSwitcher } from "@tsu-stack/ui/components/theme-switcher";
-import { cn } from "@tsu-stack/ui/lib/utils";
+import { m } from "@uni-stack/i18n/messages";
+import { Link } from "@uni-stack/i18n/tanstack-start/components/link";
+import { Button, buttonVariants } from "@uni-stack/ui/components/button";
+import { Portal, PortalBackdrop } from "@uni-stack/ui/components/portal";
+import { Skeleton } from "@uni-stack/ui/components/skeleton";
+import { ThemeSwitcher } from "@uni-stack/ui/components/theme-switcher";
+import { cn } from "@uni-stack/ui/lib/utils";
 
 import { LocaleSwitcher } from "#/shared/ui/locale-switcher";
 

@@ -1,4 +1,4 @@
-import { MeaningChoiceInput } from "@tsu-stack/ui/components/word-input/meaning-choice";
+import { MeaningChoiceInput } from "@uni-stack/ui/components/word-input/meaning-choice";
 
 export function MeaningChoiceInputDemo() {
   return (

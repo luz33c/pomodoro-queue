@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { HealthChecksSchema, HealthReadyOutputSchema } from "@tsu-stack/core/health";
+import { HealthChecksSchema, HealthReadyOutputSchema } from "@uni-stack/core/health";
 
 import { publicProcedure } from "#/orpc/procedures";
 import { buildBaseHealth, runServiceChecks } from "#/routers/health/checks";

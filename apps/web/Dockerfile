@@ -43,9 +43,9 @@ RUN pnpm run test:unit:run
 
 # When VITE_APP_URL points under VITE_WEB_URL (for example .../app), server.ts also serves the product app,
 # so build it here; otherwise apps/app ships as its own service and this step is skipped.
-RUN case "${VITE_APP_URL}" in "${VITE_WEB_URL%/}"/*) pnpm --filter @tsu-stack/app run build ;; esac
-RUN pnpm --filter @tsu-stack/web run build
-RUN pnpm --filter @tsu-stack/web deploy --prod --legacy /prod/web
+RUN case "${VITE_APP_URL}" in "${VITE_WEB_URL%/}"/*) pnpm --filter @uni-stack/app run build ;; esac
+RUN pnpm --filter @uni-stack/web run build
+RUN pnpm --filter @uni-stack/web deploy --prod --legacy /prod/web
 
 # =========================================================================== #
 

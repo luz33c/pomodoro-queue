@@ -1,6 +1,6 @@
 # Database Package
 
-`@tsu-stack/db` owns the PostgreSQL schema, relations, migrations, and table-level query functions. It uses Drizzle ORM v1 with relational queries v2 on the `postgres-js` driver and runs on the server only.
+`@uni-stack/db` owns the PostgreSQL schema, relations, migrations, and table-level query functions. It uses Drizzle ORM v1 with relational queries v2 on the `postgres-js` driver and runs on the server only.
 
 ## Layout
 
@@ -27,11 +27,11 @@ packages/db/
 
 | Import                  | Exports                                                                                      |
 | ----------------------- | -------------------------------------------------------------------------------------------- |
-| `@tsu-stack/db`         | `db`, `DbExecutor`, `checkIsDbReady`, `migrateDatabase`, and the `drizzle-orm/sql` operators |
-| `@tsu-stack/db/schema`  | tables and row types, for example `todo`, `Todo`, `NewTodo`                                  |
-| `@tsu-stack/db/queries` | table-level query functions, for example `listTodos`, `getTodo`                              |
+| `@uni-stack/db`         | `db`, `DbExecutor`, `checkIsDbReady`, `migrateDatabase`, and the `drizzle-orm/sql` operators |
+| `@uni-stack/db/schema`  | tables and row types, for example `todo`, `Todo`, `NewTodo`                                  |
+| `@uni-stack/db/queries` | table-level query functions, for example `listTodos`, `getTodo`                              |
 
-`client.ts` imports `@tanstack/react-start/server-only`, so `@tsu-stack/db` and `@tsu-stack/db/queries` must stay out of client bundles.
+`client.ts` imports `@tanstack/react-start/server-only`, so `@uni-stack/db` and `@uni-stack/db/queries` must stay out of client bundles.
 
 Inside the package, import through `#/` subpaths such as `#/client` and `#/schema/todo`, per [TypeScript conventions](../../.agents/typescript.md#module-resolution).
 

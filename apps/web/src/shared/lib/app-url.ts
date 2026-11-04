@@ -1,4 +1,4 @@
-import { ENV_WEB_ISOMORPHIC } from "@tsu-stack/env/web/env.isomorphic";
+import { ENV_WEB_ISOMORPHIC } from "@uni-stack/env/web/env.isomorphic";
 
 export function getAppOrigin() {
   return new URL(ENV_WEB_ISOMORPHIC.VITE_APP_URL).origin;

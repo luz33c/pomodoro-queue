@@ -1,6 +1,6 @@
-import { TodoCreateInputSchema, TodoRowSchema } from "@tsu-stack/core/todo";
-import { db } from "@tsu-stack/db";
-import { createTodo, getTodo } from "@tsu-stack/db/queries";
+import { TodoCreateInputSchema, TodoRowSchema } from "@uni-stack/core/todo";
+import { db } from "@uni-stack/db";
+import { createTodo, getTodo } from "@uni-stack/db/queries";
 
 import { protectedProcedure } from "#/orpc/procedures";
 import { TODO_ID_CONFLICT } from "#/routers/todo/errors";

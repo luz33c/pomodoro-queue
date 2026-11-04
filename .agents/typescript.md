@@ -43,7 +43,7 @@ If the frontend needs labels, options, or defaults for a shared enum, derive the
 
 ### Import Rules
 
-1. Across workspace projects, import by package name through the target's `exports`: `@tsu-stack/<package>/<subpath>`. `@tsu-stack/*` names are package exports, not path aliases.
+1. Across workspace projects, import by package name through the target's `exports`: `@uni-stack/<package>/<subpath>`. `@uni-stack/*` names are package exports, not path aliases.
 2. Inside a workspace project, import across folders with `#/`, for example `import { db } from "#/client"`. This applies to every package and app.
 3. Relative imports only reach the same folder or below (`./`), and only in three places:
    - `apps/web`, `apps/app`, and `apps/preview-ui`: inside one FSD slice, such as a slice's `index.ts` re-exporting its own `ui/` or a component importing a sibling. Anything that needs `../` uses `#/` instead; `import/no-relative-parent-imports` rejects `../`, and `fsd/no-relative-imports` rejects relative imports into another slice.
@@ -69,7 +69,7 @@ Each project declares `#/` in the `imports` field of its own `package.json`. Res
 - TypeScript and Metro resolve the mapped path literally, without adding extensions or `index`. Each rule names one extension, and a directory barrel is imported as `#/<dir>/index`.
 - A folder of `.tsx` files needs its own rule. In `apps/web` and `apps/app`, other `.tsx` files sit in slice `ui/` folders and are reached with `./` from their own slice, or from outside through the slice's `index.ts`.
 - shadcn `components.json` aliases use `#/` (`#/components`, `#/lib/utils`, `#/shared/ui`). The CLI writes extensionless imports, which resolve through the folder rules above.
-- Never declare `#/` in tsconfig `paths`. TypeScript applies `paths` to every file in the program, so an app's `#/*` path would also rewrite the `#/` imports of package sources the app compiles. The only tsconfig path left is `@tsu-stack/ui/*` in `apps/web`, kept for the shadcn CLI.
+- Never declare `#/` in tsconfig `paths`. TypeScript applies `paths` to every file in the program, so an app's `#/*` path would also rewrite the `#/` imports of package sources the app compiles. The only tsconfig path left is `@uni-stack/ui/*` in `apps/web`, kept for the shadcn CLI.
 
 ## `lib/` vs `utils/`
 
@@ -99,4 +99,4 @@ ESLint-style comments (`eslint-disable-*`) also work for compatibility.
 
 ## Import Sorting (auto-enforced by Oxfmt)
 
-Order: builtins → external → `@tsu-stack/*` → `#/shared` → `#/entities` → `#/features` → `#/widgets` → `#/pages` → other `#/` → relative → styles
+Order: builtins → external → `@uni-stack/*` → `#/shared` → `#/entities` → `#/features` → `#/widgets` → `#/pages` → other `#/` → relative → styles

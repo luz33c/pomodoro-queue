@@ -1,7 +1,7 @@
 import { type LinkProps } from "@tanstack/react-router";
 import { LayoutDashboard, ListTodo, type LucideIcon } from "lucide-react";
 
-import { m } from "@tsu-stack/i18n/messages";
+import { m } from "@uni-stack/i18n/messages";
 
 import { appConfig } from "#/shared/config/app";
 

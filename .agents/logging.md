@@ -1,6 +1,6 @@
 # Logging
 
-Use `evlog` through `@tsu-stack/logger` only. Do not install or import `evlog` directly from `apps/*` or feature packages; the logger package is the facade and adapter boundary.
+Use `evlog` through `@uni-stack/logger` only. Do not install or import `evlog` directly from `apps/*` or feature packages; the logger package is the facade and adapter boundary.
 
 The vendored evlog skills (`analyze-logs`, `review-logging-patterns`, `build-audit-logs`) describe upstream evlog; the facade and policy rules in this file take precedence. Do not run `evlog init` or `evlog agents`, which wire evlog directly into apps and rewrite AGENTS.md. To investigate runtime behavior, read the [local log files](#local-log-files) with `analyze-logs` before adding temporary logs.
 
@@ -95,7 +95,7 @@ Common causes:
 Prefer global error handling over per-catch logging in request code. In Hono, register one `app.onError` handler, log the thrown value with the request-scoped logger, parse it, then return a structured response.
 
 ```ts
-import { parseError } from "@tsu-stack/logger/server";
+import { parseError } from "@uni-stack/logger/server";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 
 app.onError((error, c) => {
@@ -119,7 +119,7 @@ app.onError((error, c) => {
 Use structured errors for intentional failures that should produce helpful responses:
 
 ```ts
-import { createError } from "@tsu-stack/logger/server";
+import { createError } from "@uni-stack/logger/server";
 
 throw createError({
   message: "Payment failed",
@@ -157,7 +157,7 @@ When using `setIdentity` on the client:
 
 Never log secrets, passwords, session tokens, authorization headers, raw cookies, raw request/response bodies, or full user/session objects.
 
-Use evlog's centralized `redact` configuration in `@tsu-stack/logger/server`; do not create one-off redaction helpers at individual callsites. If a new sensitive field family appears, add it to the shared logger redaction config instead of masking it manually in feature code.
+Use evlog's centralized `redact` configuration in `@uni-stack/logger/server`; do not create one-off redaction helpers at individual callsites. If a new sensitive field family appears, add it to the shared logger redaction config instead of masking it manually in feature code.
 
 Evlog redaction is a guardrail, not permission to log raw blobs. The server logger enables built-in PII masking and configured path redaction centrally, but agents should still choose safe fields up front.
 
@@ -191,10 +191,10 @@ When browser transport is enabled, remember that client logs are sent to the ser
 
 Outside production, the Hono API server mirrors every drained event to `apps/server/.evlog/logs/<date>.jsonl` as NDJSON and keeps the newest 7 daily files. That covers request events (the middleware excludes health and ingest routes), errors recorded by `app.onError`, and browser logs received at `/_logs/ingest`. Events are redacted before they are written, and `.evlog/` is gitignored.
 
-- Wire it only with `createLocalFileDrain()` from `@tsu-stack/logger/server/fs-drain`, and only from Node-only entry points such as `apps/server/src/shared/lib/logger.ts`. Do not import it from modules that are also bundled for the browser, such as `apps/web/src/start.ts`.
+- Wire it only with `createLocalFileDrain()` from `@uni-stack/logger/server/fs-drain`, and only from Node-only entry points such as `apps/server/src/shared/lib/logger.ts`. Do not import it from modules that are also bundled for the browser, such as `apps/web/src/start.ts`.
 - Never enable it in production.
 - The web SSR process does not write local files.
 
 ## Bootstrap Console
 
-Bootstrap/config packages such as `@tsu-stack/env` may use small `console.debug` statements because they are loaded before logger initialization and by Vite config. Do not route env bootstrap through `@tsu-stack/logger`.
+Bootstrap/config packages such as `@uni-stack/env` may use small `console.debug` statements because they are loaded before logger initialization and by Vite config. Do not route env bootstrap through `@uni-stack/logger`.

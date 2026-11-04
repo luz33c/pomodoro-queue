@@ -14,8 +14,8 @@ const LOCAL_LOG_MAX_FILES = 7;
  *
  * @example
  * ```ts
- * import { initLogger } from "@tsu-stack/logger/server";
- * import { createLocalFileDrain } from "@tsu-stack/logger/server/fs-drain";
+ * import { initLogger } from "@uni-stack/logger/server";
+ * import { createLocalFileDrain } from "@uni-stack/logger/server/fs-drain";
  *
  * initLogger({
  *   drain: isProduction ? undefined : createLocalFileDrain()

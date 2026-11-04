@@ -1,4 +1,4 @@
-# @tsu-stack/seo
+# @uni-stack/seo
 
 SEO helpers for TanStack Start route `head()` objects.
 
@@ -12,7 +12,7 @@ import {
   type GenerateTanStackStartSeoParams,
   type TanStackStartSeoAlternates,
   type TanStackStartSeoSite
-} from "@tsu-stack/seo";
+} from "@uni-stack/seo";
 ```
 
 ## What It Generates
@@ -34,7 +34,7 @@ import {
 Define a typed site config in the consuming app:
 
 ```ts
-import { type TanStackStartSeoSite } from "@tsu-stack/seo";
+import { type TanStackStartSeoSite } from "@uni-stack/seo";
 
 const site = {
   applicationName: "Example App",
@@ -62,7 +62,7 @@ import {
   type GenerateTanStackStartSeoParams,
   generateTanStackStartSeo,
   type TanStackStartSeoAlternates
-} from "@tsu-stack/seo";
+} from "@uni-stack/seo";
 
 type AppSeoOptions = Omit<GenerateTanStackStartSeoParams, "alternates" | "site"> & {
   alternates?: Omit<TanStackStartSeoAlternates, "baseLocale" | "locales">;

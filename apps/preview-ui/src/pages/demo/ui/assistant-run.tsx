@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
-import { LoadingState } from "@tsu-stack/ui/components/chat/loading-state";
-import { Thinking } from "@tsu-stack/ui/components/chat/thinking";
-import { ToolChips } from "@tsu-stack/ui/components/chat/tool-chips";
+import { LoadingState } from "@uni-stack/ui/components/chat/loading-state";
+import { Thinking } from "@uni-stack/ui/components/chat/thinking";
+import { ToolChips } from "@uni-stack/ui/components/chat/tool-chips";
 
 import { BEAT_DURATIONS_MS, TOOL_CALLS, describeRun } from "#/pages/demo/model/scripted-run";
 

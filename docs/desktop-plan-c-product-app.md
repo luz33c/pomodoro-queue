@@ -31,9 +31,9 @@ apps/server              Hono + oRPC，按请求验证身份并提供 API
 packages/ui、i18n、env   两个前端共享的组件、样式、文案和配置
 ```
 
-- App 的 API 客户端只从 `@tsu-stack/api/routers/types` 引用类型，浏览器运行时通过 HTTP 调用 API。
-- Desktop 在开发依赖中声明 `@tsu-stack/app`，通过 [Electrobun copy 配置](../apps/desktop/electrobun.config.ts) 消费 `../app/dist/desktop`。两者不互相导入应用源码。
-- Web 在生产依赖中声明 `@tsu-stack/app`，供 `pnpm deploy` 携带同源挂载需要的静态产物；Web 路由树不包含 App 页面。
+- App 的 API 客户端只从 `@uni-stack/api/routers/types` 引用类型，浏览器运行时通过 HTTP 调用 API。
+- Desktop 在开发依赖中声明 `@uni-stack/app`，通过 [Electrobun copy 配置](../apps/desktop/electrobun.config.ts) 消费 `../app/dist/desktop`。两者不互相导入应用源码。
+- Web 在生产依赖中声明 `@uni-stack/app`，供 `pnpm deploy` 携带同源挂载需要的静态产物；Web 路由树不包含 App 页面。
 - 网站进入 App 是整页导航。App 使用自己的布局，Web 的 Navbar 不包裹 App。
 
 ## 两种宿主
@@ -148,6 +148,6 @@ App 的四个构建变量以 [ENV_APP](../packages/env/src/app/env.ts) 为准：
 - macOS 签名、公证、更新发布地址和跨平台 CI；Windows、Linux 及较旧 macOS 尚无完整验收记录。
 - PWA、离线缓存与同步、preload 桥、原生菜单、托盘、通知和窗口状态保存均未实现，不应作为现有能力宣传。
 
-2026-10-25 定向验证：本次涉及的 15 个文件经 Oxfmt 格式化并通过格式检查；直接提取当前 `getAppDevProxy` 函数运行的 35 个路径与配置边界用例通过，覆盖查询参数、尾斜杠、相邻路径、特殊字符和非挂载配置；`pnpm --filter @tsu-stack/web run check`（`tsc --noEmit`）通过。当前及归档图文的本地链接与锚点也已核对。
+2026-10-25 定向验证：本次涉及的 15 个文件经 Oxfmt 格式化并通过格式检查；直接提取当前 `getAppDevProxy` 函数运行的 35 个路径与配置边界用例通过，覆盖查询参数、尾斜杠、相邻路径、特殊字符和非挂载配置；`pnpm --filter @uni-stack/web run check`（`tsc --noEmit`）通过。当前及归档图文的本地链接与锚点也已核对。
 
 本轮没有运行全仓检查、应用构建、完整测试套件或浏览器、容器、桌面交互验收。后续验证遵循[仓库工作流](../.agents/workflow.md)。

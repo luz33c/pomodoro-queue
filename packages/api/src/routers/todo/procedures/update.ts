@@ -1,5 +1,5 @@
-import { TodoRowSchema, TodoUpdateInputSchema } from "@tsu-stack/core/todo";
-import { updateTodo } from "@tsu-stack/db/queries";
+import { TodoRowSchema, TodoUpdateInputSchema } from "@uni-stack/core/todo";
+import { updateTodo } from "@uni-stack/db/queries";
 
 import { protectedProcedure } from "#/orpc/procedures";
 import { TODO_NOT_FOUND } from "#/routers/todo/errors";

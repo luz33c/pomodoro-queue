@@ -1,4 +1,4 @@
 {
-  "extends": "@tsu-stack/tsconfig/tsconfig.base.json",
+  "extends": "@uni-stack/tsconfig/tsconfig.base.json",
   "exclude": ["src/next-js-seo/**/*"]
 }

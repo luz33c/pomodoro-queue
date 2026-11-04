@@ -2,7 +2,7 @@ import { ClerkProvider } from "@clerk/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 
-import { ENV_APP } from "@tsu-stack/env/app/env";
+import { ENV_APP } from "@uni-stack/env/app/env";
 
 import { setAuthTokenGetter } from "#/shared/api/auth-token";
 import { resetUserScopedCollections } from "#/shared/api/user-scoped-collections";

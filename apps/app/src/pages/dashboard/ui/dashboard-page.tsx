@@ -1,6 +1,6 @@
-import { m } from "@tsu-stack/i18n/messages";
-import { Spinner } from "@tsu-stack/ui/components/spinner";
-import { cn } from "@tsu-stack/ui/lib/utils";
+import { m } from "@uni-stack/i18n/messages";
+import { Spinner } from "@uni-stack/ui/components/spinner";
+import { cn } from "@uni-stack/ui/lib/utils";
 
 import { useAppAuth } from "#/shared/host/auth";
 import { Container } from "#/shared/ui/container";

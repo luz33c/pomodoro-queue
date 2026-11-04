@@ -1,4 +1,4 @@
-import { TraceInput } from "@tsu-stack/ui/components/word-input/trace";
+import { TraceInput } from "@uni-stack/ui/components/word-input/trace";
 
 export function TraceInputDemo() {
   return (

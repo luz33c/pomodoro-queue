@@ -1,4 +1,4 @@
-import { Spinner } from "@tsu-stack/ui/components/spinner";
+import { Spinner } from "@uni-stack/ui/components/spinner";
 
 export function SpinnerScreen() {
   return (

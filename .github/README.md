@@ -161,11 +161,11 @@ The Web app uses TanStack Start's Vite build, which outputs static assets and pr
 To build and run the Web app locally:
 
 ```bash
-pnpm --filter @tsu-stack/web run build
-pnpm --filter @tsu-stack/web run start
+pnpm --filter @uni-stack/web run build
+pnpm --filter @uni-stack/web run start
 ```
 
-The Web Dockerfile packages the build and its production dependencies with `pnpm --filter @tsu-stack/web deploy --prod --legacy /prod/web`, copies that directory to `/app`, and starts `node /app/server.ts`. The deployed `node_modules` directory is required for dependencies that Vite leaves external.
+The Web Dockerfile packages the build and its production dependencies with `pnpm --filter @uni-stack/web deploy --prod --legacy /prod/web`, copies that directory to `/app`, and starts `node /app/server.ts`. The deployed `node_modules` directory is required for dependencies that Vite leaves external.
 
 ### Coolify
 
@@ -361,9 +361,9 @@ Since Hono is built on web standards, you can mount the Hono App into the TanSta
 // apps/web/package.json
 "dependencies": {
   // ...
-  "@tsu-stack/i18n": "workspace:*",
-  "@tsu-stack/server": "workspace:*", // add this to import the server app into the web app
-  "@tsu-stack/ui": "workspace:*",
+  "@uni-stack/i18n": "workspace:*",
+  "@uni-stack/server": "workspace:*", // add this to import the server app into the web app
+  "@uni-stack/ui": "workspace:*",
   // ...
 }
 ```
@@ -374,7 +374,7 @@ Then we can import our app from the server package.
 // apps/web/src/routes/server/$.ts
 import { createFileRoute } from "@tanstack/react-router";
 
-import { app } from "@tsu-stack/server";
+import { app } from "@uni-stack/server";
 
 export const Route = createFileRoute("/server/$")({
   server: {

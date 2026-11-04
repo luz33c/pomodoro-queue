@@ -2,7 +2,7 @@ import { persistedCollectionOptions } from "@tanstack/electron-db-sqlite-persist
 import { queryCollectionOptions } from "@tanstack/query-db-collection";
 import { type Collection, createCollection, localOnlyCollectionOptions } from "@tanstack/react-db";
 
-import { type TodoRow, TodoRowSchema } from "@tsu-stack/core/todo";
+import { type TodoRow, TodoRowSchema } from "@uni-stack/core/todo";
 
 import { client, orpc } from "#/shared/api/orpc";
 import { queryClient } from "#/shared/api/query-client";

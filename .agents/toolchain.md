@@ -51,7 +51,7 @@ The root `devEngines.runtime` entry pins Node.js 24.21.0. `pnpm install` downloa
 Paraglide output in `packages/i18n/src/paraglide` is shared by Web and App. During `pnpm run dev`, the i18n watcher and Web's Vite plugin already write it, so package scripts avoid starting more compiles into the same folder:
 
 - Package `predev`/`prebuild` scripts run the root `i18n:ensure`, which compiles only when the output is missing.
-- Root `build` and `build:desktop` compile once before any app builds, so builds never pick up stale messages. App has no Paraglide Vite plugin, so a standalone App build after editing messages needs `pnpm --filter @tsu-stack/i18n run build` first.
+- Root `build` and `build:desktop` compile once before any app builds, so builds never pick up stale messages. App has no Paraglide Vite plugin, so a standalone App build after editing messages needs `pnpm --filter @uni-stack/i18n run build` first.
 
 ## Native TypeScript
 
@@ -68,18 +68,18 @@ The Web production launcher at `apps/web/server.ts` also runs directly on Node.j
 ## Web Production Runtime
 
 - TanStack Start and Vite build to `apps/web/dist/client` and `apps/web/dist/server/server.js`; retain these default paths so Start's preview and prerendering can locate the handler.
-- `pnpm --filter @tsu-stack/web run start` runs the root `server.ts` with Node.js. Hono and `@hono/node-server` serve static files for GET/HEAD requests, then forward other requests to the Start handler with the configured base path intact.
+- `pnpm --filter @uni-stack/web run start` runs the root `server.ts` with Node.js. Hono and `@hono/node-server` serve static files for GET/HEAD requests, then forward other requests to the Start handler with the configured base path intact.
 - Keep sign-in and account creation out of the prerender list so session guards run for each request.
-- Vite's default dependency externalization is retained. The Web Dockerfile uses `pnpm --filter @tsu-stack/web deploy --prod --legacy /prod/web` after building, then copies the deployment to `/app`. Keep `dist` and `server.ts` in the Web package's `files` list and deploy the generated production `node_modules` alongside them.
+- Vite's default dependency externalization is retained. The Web Dockerfile uses `pnpm --filter @uni-stack/web deploy --prod --legacy /prod/web` after building, then copies the deployment to `/app`. Keep `dist` and `server.ts` in the Web package's `files` list and deploy the generated production `node_modules` alongside them.
 - Other platforms require their corresponding Start adapter and entry point. The default launcher and Docker image target Node.js.
 
 ## App Production Runtime
 
 - `apps/app` builds a static SPA to `apps/app/dist/web`. Its `server.ts` runs directly on Node.js 24 with erasable TypeScript, imports only `hono`, `@hono/node-server`, and Node built-ins, and serves under the path of `VITE_APP_URL`.
 - `server.ts` serves existing files with long-lived caching for `assets/`, returns 404 for missing paths with a file extension, falls back to `index.html` for page paths, and answers `/_health`.
-- The App Dockerfile builds, then runs `pnpm --filter @tsu-stack/app deploy --prod --legacy /prod/app`. Only `hono` and `@hono/node-server` are production dependencies; everything bundled into `dist` is a development dependency, so the image carries no frontend packages.
+- The App Dockerfile builds, then runs `pnpm --filter @uni-stack/app deploy --prod --legacy /prod/app`. Only `hono` and `@hono/node-server` are production dependencies; everything bundled into `dist` is a development dependency, so the image carries no frontend packages.
 - `VITE_*` values are compiled in. Rebuild the App to change `VITE_APP_URL` or any other client value.
-- Same-origin variant: when `VITE_APP_URL` points under `VITE_WEB_URL` (for example `https://example.com/app`), `apps/web/server.ts` serves the App's `dist/web` at that path before its own static files and the Start handler, with the same caching and 404 rules. The Web Dockerfile conditionally builds the App using a raw URL prefix check, so use consistent URL spellings at build time. `apps/web` depends on `@tsu-stack/app` so `pnpm deploy` ships the build. One App build serves one address; see the [current architecture](../docs/desktop-plan-c-product-app.md) for deployment constraints.
+- Same-origin variant: when `VITE_APP_URL` points under `VITE_WEB_URL` (for example `https://example.com/app`), `apps/web/server.ts` serves the App's `dist/web` at that path before its own static files and the Start handler, with the same caching and 404 rules. The Web Dockerfile conditionally builds the App using a raw URL prefix check, so use consistent URL spellings at build time. `apps/web` depends on `@uni-stack/app` so `pnpm deploy` ships the build. One App build serves one address; see the [current architecture](../docs/desktop-plan-c-product-app.md) for deployment constraints.
 - In development, Web's Vite proxies that path to the App dev server on `:3002` (HMR included), and the App dev server leaves `VITE_APP_URL`'s port to Web.
 
 ## Validation
@@ -90,7 +90,7 @@ Use the repository scripts instead of calling the underlying tools independently
 - `pnpm run fix` — apply formatting/lint fixes, then type-check
 - `pnpm run test:unit:run` — unit tests
 - `pnpm run test:e2e:run` — end-to-end tests
-- `pnpm --filter @tsu-stack/web run check:server` — Web production launcher smoke check
+- `pnpm --filter @uni-stack/web run check:server` — Web production launcher smoke check
 
 Run these commands only when the user requests or approves validation. Follow [Choice flows](./choice-flows.md) and [Workflow](./workflow.md) for the validation cadence.
 

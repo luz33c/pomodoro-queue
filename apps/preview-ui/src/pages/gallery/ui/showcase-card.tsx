@@ -1,7 +1,7 @@
 import { Check, Code2, Copy, RotateCcw } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { Button } from "@tsu-stack/ui/components/button";
+import { Button } from "@uni-stack/ui/components/button";
 
 import { SegmentedControl } from "#/shared/ui/segmented-control";
 

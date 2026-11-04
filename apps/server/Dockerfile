@@ -50,7 +50,7 @@ ENV SOURCE_COMMIT=${SOURCE_COMMIT} \
 RUN pnpm run test:unit:run
 # RUN pnpm run test:e2e:run
 
-RUN pnpm --filter @tsu-stack/server run build
+RUN pnpm --filter @uni-stack/server run build
 
 # =========================================================================== #
 

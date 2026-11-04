@@ -1,5 +1,5 @@
 {
-  "name": "@tsu-stack/ui",
+  "name": "@uni-stack/ui",
   "private": true,
   "type": "module",
   "imports": {
@@ -31,10 +31,10 @@
     "tw-animate-css": "catalog:"
   },
   "devDependencies": {
-    "@tsu-stack/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
+    "@uni-stack/tsconfig": "workspace:*",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
   },

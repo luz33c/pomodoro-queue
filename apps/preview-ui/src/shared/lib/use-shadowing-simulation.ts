@@ -6,7 +6,7 @@ import {
   type ShadowingCardProps,
   type ShadowingScore,
   type ShadowingToken
-} from "@tsu-stack/ui/components/shadowing/frame";
+} from "@uni-stack/ui/components/shadowing/frame";
 
 const VOICES = ["Samantha · US", "Daniel · UK"];
 

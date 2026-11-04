@@ -1,7 +1,7 @@
 import { cloneElement, type ReactElement, type SVGProps } from "react";
 
-import { m } from "@tsu-stack/i18n/messages";
-import { cn } from "@tsu-stack/ui/lib/utils";
+import { m } from "@uni-stack/i18n/messages";
+import { cn } from "@uni-stack/ui/lib/utils";
 
 type LogoType = {
   svg: ReactElement<SVGProps<SVGSVGElement>>;

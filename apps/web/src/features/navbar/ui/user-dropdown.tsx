@@ -2,9 +2,9 @@ import { useAuth as useClerkAuth, useUser } from "@clerk/tanstack-react-start";
 import { useRouter } from "@tanstack/react-router";
 import { FileText, BarChart2, Lock, LogOut, UserSquare } from "lucide-react";
 
-import { m } from "@tsu-stack/i18n/messages";
-import { Link } from "@tsu-stack/i18n/tanstack-start/components/link";
-import { Button } from "@tsu-stack/ui/components/button";
+import { m } from "@uni-stack/i18n/messages";
+import { Link } from "@uni-stack/i18n/tanstack-start/components/link";
+import { Button } from "@uni-stack/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +14,7 @@ import {
   DropdownMenuLinkItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger
-} from "@tsu-stack/ui/components/dropdown-menu";
+} from "@uni-stack/ui/components/dropdown-menu";
 
 import { getAppUrl } from "#/shared/lib/app-url";
 

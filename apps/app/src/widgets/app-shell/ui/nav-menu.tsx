@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 
-import { buttonVariants } from "@tsu-stack/ui/components/button";
-import { cn } from "@tsu-stack/ui/lib/utils";
+import { buttonVariants } from "@uni-stack/ui/components/button";
+import { cn } from "@uni-stack/ui/lib/utils";
 
 import { externalLinkProps } from "#/shared/host/external-link";
 

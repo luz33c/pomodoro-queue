@@ -2,9 +2,9 @@ import { type ErrorRouteComponent } from "@tanstack/react-router";
 import { createRouter as createTanStackRouter } from "@tanstack/react-router";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 
-import { ENV_WEB_ISOMORPHIC } from "@tsu-stack/env/web/env.isomorphic";
-import { LOG_SERVICES, initLog } from "@tsu-stack/logger/client";
-import { Spinner } from "@tsu-stack/ui/components/spinner";
+import { ENV_WEB_ISOMORPHIC } from "@uni-stack/env/web/env.isomorphic";
+import { LOG_SERVICES, initLog } from "@uni-stack/logger/client";
+import { Spinner } from "@uni-stack/ui/components/spinner";
 
 import { QueryClientProvider, getQueryClient } from "#/shared/providers/query-client.provider";
 

@@ -2,8 +2,8 @@ import { join } from "node:path";
 
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 
-import { ENV_SERVER } from "@tsu-stack/env/server/env";
-import { createLogger } from "@tsu-stack/logger/server";
+import { ENV_SERVER } from "@uni-stack/env/server/env";
+import { createLogger } from "@uni-stack/logger/server";
 
 import { db } from "#/client";
 

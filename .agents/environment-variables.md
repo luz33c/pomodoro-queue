@@ -14,7 +14,7 @@ All env vars live in `packages/env/.env` (copy from `.env.example`). Validated b
 | `ENV_WEB_SERVER`     | Web server-only                                                               |
 | `ENV_APP`            | Client-only (`apps/app` in both build modes, plus its `vite.config.ts`)       |
 
-Database CLI commands import `@tsu-stack/env/database/env` directly. This entry point must stay independent of `ENV_SERVER`, so database tools do not require Clerk credentials or application URL configuration. Both Compose `migrate` services receive only `DATABASE_URL`.
+Database CLI commands import `@uni-stack/env/database/env` directly. This entry point must stay independent of `ENV_SERVER`, so database tools do not require Clerk credentials or application URL configuration. Both Compose `migrate` services receive only `DATABASE_URL`.
 
 The application DB singleton and Server still use `ENV_SERVER`; this separation applies to database tooling, not application startup. All scopes continue to use the same `packages/env/.env` file.
 

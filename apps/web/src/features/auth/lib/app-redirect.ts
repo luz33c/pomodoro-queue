@@ -1,5 +1,5 @@
-import { ENV_WEB_ISOMORPHIC } from "@tsu-stack/env/web/env.isomorphic";
-import { type NavigateTo } from "@tsu-stack/i18n/tanstack-start/types";
+import { ENV_WEB_ISOMORPHIC } from "@uni-stack/env/web/env.isomorphic";
+import { type NavigateTo } from "@uni-stack/i18n/tanstack-start/types";
 
 import { getAppUrl } from "#/shared/lib/app-url";
 

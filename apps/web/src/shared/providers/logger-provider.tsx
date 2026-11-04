@@ -1,7 +1,7 @@
 import { useAuth as useClerkAuth } from "@clerk/tanstack-react-start";
 import { createContext, useContext, useEffect } from "react";
 
-import { clearIdentity, log, setIdentity } from "@tsu-stack/logger/client";
+import { clearIdentity, log, setIdentity } from "@uni-stack/logger/client";
 
 type LoggerContextValue = {
   logger: typeof log;

@@ -5,9 +5,9 @@ import {
 } from "@tanstack/react-start/server";
 import { createServerEntry } from "@tanstack/react-start/server-entry";
 
-import { ENV_WEB_SERVER } from "@tsu-stack/env/web/env.server";
-import { paraglideMiddleware } from "@tsu-stack/i18n/server";
-import { LOG_SERVICES, createRequestLogger, initLogger } from "@tsu-stack/logger/server";
+import { ENV_WEB_SERVER } from "@uni-stack/env/web/env.server";
+import { paraglideMiddleware } from "@uni-stack/i18n/server";
+import { LOG_SERVICES, createRequestLogger, initLogger } from "@uni-stack/logger/server";
 
 initLogger({
   env: {

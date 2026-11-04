@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import { Button } from "@tsu-stack/ui/components/button";
-import { type RecallStatus } from "@tsu-stack/ui/components/word-input/recall";
-import { RecallInput } from "@tsu-stack/ui/components/word-input/recall";
+import { Button } from "@uni-stack/ui/components/button";
+import { type RecallStatus } from "@uni-stack/ui/components/word-input/recall";
+import { RecallInput } from "@uni-stack/ui/components/word-input/recall";
 
 const WORD = "harmony";
 

@@ -40,8 +40,8 @@ function isBrowserRuntime() {
  * import {
  *   LOG_SERVICES,
  *   initLog,
- * } from "@tsu-stack/logger/client";
- * import { ENV_WEB_ISOMORPHIC } from "@tsu-stack/env/web/env.isomorphic";
+ * } from "@uni-stack/logger/client";
+ * import { ENV_WEB_ISOMORPHIC } from "@uni-stack/env/web/env.isomorphic";
  *
  * initLog({
  *   batchedTransport: {
@@ -81,7 +81,7 @@ export function initLog(config: ClientLoggerConfig = {}) {
  *
  * @example
  * ```ts
- * import { LOG_SERVICES } from "@tsu-stack/logger/client";
+ * import { LOG_SERVICES } from "@uni-stack/logger/client";
  *
  * initLog({ service: LOG_SERVICES.WEB_CLIENT });
  * ```
@@ -93,7 +93,7 @@ export { LOG_SERVICES };
  *
  * @example
  * ```ts
- * import { log } from "@tsu-stack/logger/client";
+ * import { log } from "@uni-stack/logger/client";
  *
  * log.info({ event: "page_view", path: location.pathname });
  * log.error({ event: "global_error_boundary", error });
@@ -111,7 +111,7 @@ export const log = {
  *
  * @example
  * ```ts
- * import { setIdentity } from "@tsu-stack/logger/client";
+ * import { setIdentity } from "@uni-stack/logger/client";
  *
  * setIdentity({ user: { id: user.id } });
  * ```
@@ -129,7 +129,7 @@ export function setIdentity(identity: LogEvent) {
  *
  * @example
  * ```ts
- * import { clearIdentity } from "@tsu-stack/logger/client";
+ * import { clearIdentity } from "@uni-stack/logger/client";
  *
  * clearIdentity();
  * ```

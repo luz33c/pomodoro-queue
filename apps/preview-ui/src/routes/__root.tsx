@@ -1,6 +1,6 @@
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
 
-import { ThemeProvider } from "@tsu-stack/ui/components/theme-switcher";
+import { ThemeProvider } from "@uni-stack/ui/components/theme-switcher";
 
 import appCss from "#/shared/styles/app.css?url";
 

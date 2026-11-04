@@ -10,19 +10,19 @@
     {
       "name": "app-start",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--filter", "@tsu-stack/app", "run", "start"],
+      "runtimeArgs": ["--filter", "@uni-stack/app", "run", "start"],
       "port": 3002
     },
     {
       "name": "web-start",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--filter", "@tsu-stack/web", "run", "start"],
+      "runtimeArgs": ["--filter", "@uni-stack/web", "run", "start"],
       "port": 3601
     },
     {
       "name": "server",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--filter", "@tsu-stack/server", "run", "dev"],
+      "runtimeArgs": ["--filter", "@uni-stack/server", "run", "dev"],
       "port": 3602
     },
     {

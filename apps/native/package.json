@@ -1,5 +1,5 @@
 {
-  "name": "@tsu-stack/native",
+  "name": "@uni-stack/native",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -24,8 +24,8 @@
     "@orpc/client": "catalog:",
     "@orpc/tanstack-query": "catalog:",
     "@tanstack/react-query": "catalog:",
-    "@tsu-stack/api": "workspace:*",
-    "@tsu-stack/env": "workspace:*",
+    "@uni-stack/api": "workspace:*",
+    "@uni-stack/env": "workspace:*",
     "expo": "catalog:",
     "expo-auth-session": "catalog:",
     "expo-constants": "catalog:",
@@ -48,9 +48,9 @@
   "devDependencies": {
     "@dotenvx/dotenvx": "catalog:",
     "@react-native/metro-config": "catalog:",
-    "@tsu-stack/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
+    "@uni-stack/tsconfig": "workspace:*",
     "typescript": "6.0.3"
   }
 }

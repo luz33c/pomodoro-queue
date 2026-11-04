@@ -1,5 +1,5 @@
-import { type ThinkingRow } from "@tsu-stack/ui/components/chat/thinking";
-import { type FileDiff, type ToolCall } from "@tsu-stack/ui/components/chat/tool-chips";
+import { type ThinkingRow } from "@uni-stack/ui/components/chat/thinking";
+import { type FileDiff, type ToolCall } from "@uni-stack/ui/components/chat/tool-chips";
 
 export const FIRST_PROMPT = "Add nested pages to the workspace sidebar.";
 

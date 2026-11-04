@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { m } from "@tsu-stack/i18n/messages";
+import { m } from "@uni-stack/i18n/messages";
 
 import { documentTitle } from "#/shared/lib/document-title";
 

@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 
-import { buttonVariants } from "@tsu-stack/ui/components/button";
+import { buttonVariants } from "@uni-stack/ui/components/button";
 
 export function NotFoundPage() {
   return (

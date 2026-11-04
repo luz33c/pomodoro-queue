@@ -1,5 +1,5 @@
 {
-  "name": "@tsu-stack/logger",
+  "name": "@uni-stack/logger",
   "private": true,
   "type": "module",
   "imports": {
@@ -22,8 +22,8 @@
     "hono": "catalog:"
   },
   "devDependencies": {
-    "@tsu-stack/tsconfig": "workspace:*",
     "@types/node": "catalog:",
+    "@uni-stack/tsconfig": "workspace:*",
     "typescript": "catalog:"
   }
 }

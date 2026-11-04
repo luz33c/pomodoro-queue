@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-import { TodoIdInputSchema } from "@tsu-stack/core/todo";
-import { deleteTodo } from "@tsu-stack/db/queries";
+import { TodoIdInputSchema } from "@uni-stack/core/todo";
+import { deleteTodo } from "@uni-stack/db/queries";
 
 import { protectedProcedure } from "#/orpc/procedures";
 

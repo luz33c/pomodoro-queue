@@ -6,7 +6,7 @@ import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import viteReact, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
-import { ENV_APP } from "@tsu-stack/env/app/env";
+import { ENV_APP } from "@uni-stack/env/app/env";
 
 // apps/desktop/src/main/ui/view-url.ts probes the same port in the dev channel
 const DESKTOP_DEV_PORT = 3003;

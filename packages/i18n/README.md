@@ -1,4 +1,4 @@
-# @tsu-stack/i18n
+# @uni-stack/i18n
 
 ## Usage
 
@@ -7,7 +7,7 @@
 We have to create a `src/server.ts` file with the following content:
 
 ```ts
-import { paraglideMiddleware } from "@tsu-stack/i18n/server";
+import { paraglideMiddleware } from "@uni-stack/i18n/server";
 import handler from "@tanstack/react-start/server-entry";
 
 export default {

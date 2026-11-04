@@ -1,9 +1,9 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
-import { Button } from "@tsu-stack/ui/components/button";
-import { ShadowingCompactCard } from "@tsu-stack/ui/components/shadowing/compact-card";
-import { ShadowingPlayerCard } from "@tsu-stack/ui/components/shadowing/player-card";
+import { Button } from "@uni-stack/ui/components/button";
+import { ShadowingCompactCard } from "@uni-stack/ui/components/shadowing/compact-card";
+import { ShadowingPlayerCard } from "@uni-stack/ui/components/shadowing/player-card";
 
 import { useShadowingSimulation } from "#/shared/lib/use-shadowing-simulation";
 import { SegmentedControl } from "#/shared/ui/segmented-control";

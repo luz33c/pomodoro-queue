@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 
-import { buttonVariants } from "@tsu-stack/ui/components/button";
-import { ThemeSwitcher } from "@tsu-stack/ui/components/theme-switcher";
+import { buttonVariants } from "@uni-stack/ui/components/button";
+import { ThemeSwitcher } from "@uni-stack/ui/components/theme-switcher";
 
 const DEMOS = [
   { label: "Chat", to: "/demo" },

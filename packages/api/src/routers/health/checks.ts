@@ -1,8 +1,8 @@
 import process from "node:process";
 
-import { type HealthCheckResult, type HealthStatus } from "@tsu-stack/core/health";
-import { checkIsDbReady } from "@tsu-stack/db";
-import { ENV_SERVER } from "@tsu-stack/env/server/env";
+import { type HealthCheckResult, type HealthStatus } from "@uni-stack/core/health";
+import { checkIsDbReady } from "@uni-stack/db";
+import { ENV_SERVER } from "@uni-stack/env/server/env";
 
 // #region Config
 

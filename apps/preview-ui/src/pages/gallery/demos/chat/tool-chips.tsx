@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-import { type FileDiff, type ToolCall } from "@tsu-stack/ui/components/chat/tool-chips";
-import { ToolChips } from "@tsu-stack/ui/components/chat/tool-chips";
+import { type FileDiff, type ToolCall } from "@uni-stack/ui/components/chat/tool-chips";
+import { ToolChips } from "@uni-stack/ui/components/chat/tool-chips";
 
 const CALLS: ToolCall[] = [
   {

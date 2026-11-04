@@ -1,8 +1,8 @@
 import { ArrowRight } from "lucide-react";
 import { Suspense, lazy } from "react";
 
-import { m } from "@tsu-stack/i18n/messages";
-import { Link } from "@tsu-stack/i18n/tanstack-start/components/link";
+import { m } from "@uni-stack/i18n/messages";
+import { Link } from "@uni-stack/i18n/tanstack-start/components/link";
 
 const Dithering = lazy(() =>
   import("@paper-design/shaders-react").then((mod) => {

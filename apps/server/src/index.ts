@@ -6,18 +6,18 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { type ContentfulStatusCode } from "hono/utils/http-status";
 
-import { getClerkAuthorizedParties } from "@tsu-stack/api/server/clerk";
-import { createContext } from "@tsu-stack/api/server/create-context";
-import { createDocsHandler, openApiHandler } from "@tsu-stack/api/server/openapi";
-import { rpcHandler } from "@tsu-stack/api/server/rpc";
-import { migrateDatabase } from "@tsu-stack/db";
-import { ENV_SERVER } from "@tsu-stack/env/server/env";
-import { log, parseError } from "@tsu-stack/logger/server";
+import { getClerkAuthorizedParties } from "@uni-stack/api/server/clerk";
+import { createContext } from "@uni-stack/api/server/create-context";
+import { createDocsHandler, openApiHandler } from "@uni-stack/api/server/openapi";
+import { rpcHandler } from "@uni-stack/api/server/rpc";
+import { migrateDatabase } from "@uni-stack/db";
+import { ENV_SERVER } from "@uni-stack/env/server/env";
+import { log, parseError } from "@uni-stack/logger/server";
 import {
   honoLogIngestionMiddleware,
   honoLoggerMiddleware,
   type HonoLogVariables
-} from "@tsu-stack/logger/server/hono/middleware";
+} from "@uni-stack/logger/server/hono/middleware";
 
 import "#/shared/lib/logger";
 

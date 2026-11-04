@@ -1,9 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 
-import { buttonVariants } from "@tsu-stack/ui/components/button";
-import { ThemeSwitcher } from "@tsu-stack/ui/components/theme-switcher";
-import { cn } from "@tsu-stack/ui/lib/utils";
+import { buttonVariants } from "@uni-stack/ui/components/button";
+import { ThemeSwitcher } from "@uni-stack/ui/components/theme-switcher";
+import { cn } from "@uni-stack/ui/lib/utils";
 
 import { catalog } from "#/pages/gallery/demos/catalog";
 
@@ -34,7 +34,7 @@ export function GalleryPage() {
             Composite components, live.
           </h1>
           <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground">
-            Built from the base components in <code className="font-mono">@tsu-stack/ui</code>.
+            Built from the base components in <code className="font-mono">@uni-stack/ui</code>.
           </p>
 
           <div className="mt-8 hidden min-h-0 flex-1 overflow-y-auto border-t border-dashed pt-6 lg:block">

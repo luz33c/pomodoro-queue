@@ -1,6 +1,6 @@
-import { ENV_WEB_ISOMORPHIC } from "@tsu-stack/env/web/env.isomorphic";
-import { m } from "@tsu-stack/i18n/messages";
-import { type LinkProps } from "@tsu-stack/i18n/tanstack-start/components/link";
+import { ENV_WEB_ISOMORPHIC } from "@uni-stack/env/web/env.isomorphic";
+import { m } from "@uni-stack/i18n/messages";
+import { type LinkProps } from "@uni-stack/i18n/tanstack-start/components/link";
 
 import { getAppUrl } from "#/shared/lib/app-url";
 

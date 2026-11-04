@@ -1,7 +1,7 @@
 import { createRouter } from "@tanstack/react-router";
 
-import { ENV_APP } from "@tsu-stack/env/app/env";
-import { LOG_SERVICES, initLog } from "@tsu-stack/logger/client";
+import { ENV_APP } from "@uni-stack/env/app/env";
+import { LOG_SERVICES, initLog } from "@uni-stack/logger/client";
 
 import { queryClient } from "#/shared/api/query-client";
 import { basepath, createHistory } from "#/shared/host/index";

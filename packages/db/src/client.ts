@@ -4,7 +4,7 @@ import { type PgAsyncDatabase } from "drizzle-orm/pg-core";
 import { drizzle, type PostgresJsQueryResultHKT } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
-import { ENV_SERVER } from "@tsu-stack/env/server/env";
+import { ENV_SERVER } from "@uni-stack/env/server/env";
 
 import { relations } from "#/schema/relations";
 

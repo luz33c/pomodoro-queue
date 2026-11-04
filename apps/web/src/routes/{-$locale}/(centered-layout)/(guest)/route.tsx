@@ -1,8 +1,8 @@
 import { Outlet, createFileRoute, redirect as routerRedirect } from "@tanstack/react-router";
 import { z } from "zod";
 
-import { redirect } from "@tsu-stack/i18n/tanstack-start/lib/redirect";
-import { validateNavigateTo } from "@tsu-stack/i18n/tanstack-start/lib/validate-navigate-to";
+import { redirect } from "@uni-stack/i18n/tanstack-start/lib/redirect";
+import { validateNavigateTo } from "@uni-stack/i18n/tanstack-start/lib/validate-navigate-to";
 
 import {
   getAppHomeUrl,

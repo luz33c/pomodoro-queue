@@ -1,5 +1,5 @@
 {
-  "name": "@tsu-stack/db",
+  "name": "@uni-stack/db",
   "private": true,
   "type": "module",
   "imports": {
@@ -17,15 +17,15 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@tsu-stack/logger": "workspace:*",
+    "@uni-stack/logger": "workspace:*",
     "drizzle-orm": "catalog:",
     "postgres": "catalog:"
   },
   "devDependencies": {
     "@dotenvx/dotenvx": "catalog:",
-    "@tsu-stack/env": "workspace:*",
-    "@tsu-stack/tsconfig": "workspace:*",
     "@types/node": "catalog:",
+    "@uni-stack/env": "workspace:*",
+    "@uni-stack/tsconfig": "workspace:*",
     "drizzle-kit": "catalog:",
     "typescript": "catalog:"
   },

@@ -1,9 +1,9 @@
 {
-  "extends": "@tsu-stack/tsconfig/tsconfig.base.json",
+  "extends": "@uni-stack/tsconfig/tsconfig.base.json",
   "compilerOptions": {
     "paths": {
-      // for shadcn CLI to resolve @tsu-stack/ui paths to the /packages/ui directory
-      "@tsu-stack/ui/*": ["../../packages/ui/*"]
+      // for shadcn CLI to resolve @uni-stack/ui paths to the /packages/ui directory
+      "@uni-stack/ui/*": ["../../packages/ui/*"]
     },
     "types": ["node", "vite/client", "mdx"],
 

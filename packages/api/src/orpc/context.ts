@@ -1,4 +1,4 @@
-import { type RequestLogger } from "@tsu-stack/logger/server";
+import { type RequestLogger } from "@uni-stack/logger/server";
 
 export type ClerkContextAuth = {
   userId: string;

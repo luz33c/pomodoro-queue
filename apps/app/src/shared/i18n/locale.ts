@@ -1,4 +1,4 @@
-import { baseLocale, locales, overwriteGetLocale } from "@tsu-stack/i18n/runtime";
+import { baseLocale, locales, overwriteGetLocale } from "@uni-stack/i18n/runtime";
 
 type Locale = (typeof locales)[number];
 

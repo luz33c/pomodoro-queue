@@ -33,9 +33,9 @@ ENV VITE_APP_URL=${VITE_APP_URL} \
     VITE_WEB_URL=${VITE_WEB_URL} \
     VITE_CLERK_PUBLISHABLE_KEY=${VITE_CLERK_PUBLISHABLE_KEY}
 
-RUN pnpm --filter @tsu-stack/app run build
+RUN pnpm --filter @uni-stack/app run build
 # Production dependencies are only what server.ts needs; the bundle is already in dist/web.
-RUN pnpm --filter @tsu-stack/app deploy --prod --legacy /prod/app
+RUN pnpm --filter @uni-stack/app deploy --prod --legacy /prod/app
 
 # =========================================================================== #
 

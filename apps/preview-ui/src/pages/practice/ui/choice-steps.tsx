@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { MeaningChoiceInput } from "@tsu-stack/ui/components/word-input/meaning-choice";
-import { WordChoiceInput } from "@tsu-stack/ui/components/word-input/word-choice";
+import { MeaningChoiceInput } from "@uni-stack/ui/components/word-input/meaning-choice";
+import { WordChoiceInput } from "@uni-stack/ui/components/word-input/word-choice";
 
 import { GAPS, MEANINGS, MEANING_OPTIONS } from "#/pages/practice/model/lesson";
 

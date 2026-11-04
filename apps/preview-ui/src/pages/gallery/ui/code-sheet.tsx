@@ -1,14 +1,14 @@
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
 
-import { Button } from "@tsu-stack/ui/components/button";
+import { Button } from "@uni-stack/ui/components/button";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle
-} from "@tsu-stack/ui/components/sheet";
+} from "@uni-stack/ui/components/sheet";
 
 import { SegmentedControl } from "#/shared/ui/segmented-control";
 

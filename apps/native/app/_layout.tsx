@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { ENV_NATIVE } from "@tsu-stack/env/native/env";
+import { ENV_NATIVE } from "@uni-stack/env/native/env";
 
 import { setClerkAuthTokenGetter } from "#/utils/clerk-auth";
 import { queryClient } from "#/utils/orpc";

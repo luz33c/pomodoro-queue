@@ -3,8 +3,8 @@ import { RPCLink } from "@orpc/client/fetch";
 import { createTanstackQueryUtils } from "@orpc/tanstack-query";
 import { QueryClient } from "@tanstack/react-query";
 
-import { type AppRouterClient } from "@tsu-stack/api/client/types";
-import { ENV_EXTENSION } from "@tsu-stack/env/extension/env";
+import { type AppRouterClient } from "@uni-stack/api/client/types";
+import { ENV_EXTENSION } from "@uni-stack/env/extension/env";
 
 type ClerkTokenResponse = {
   token: string | null;

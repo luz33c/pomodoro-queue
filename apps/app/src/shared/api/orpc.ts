@@ -2,8 +2,8 @@ import { createORPCClient } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
 import { createTanstackQueryUtils } from "@orpc/tanstack-query";
 
-import { type AppRouterClient } from "@tsu-stack/api/client/types";
-import { ENV_APP } from "@tsu-stack/env/app/env";
+import { type AppRouterClient } from "@uni-stack/api/client/types";
+import { ENV_APP } from "@uni-stack/env/app/env";
 
 import { getAuthToken } from "#/shared/api/auth-token";
 

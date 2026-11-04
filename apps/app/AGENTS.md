@@ -15,10 +15,10 @@ Current architecture, deployment options, and remaining work: [docs/desktop-plan
 
 - Host differences live in `src/shared/host/`. Pages, widgets, and queries never branch on the host. `AuthGate` branches on `dataMode` from `shared/host/persistence.ts` instead: `cloud` in the web host, `local` in the desktop host until desktop sign-in and sync exist. An entity picks its collection with the literal `import.meta.env.MODE === "desktop"`, because the bundler drops the desktop SQLite packages from the web build only when the dead branch sits in the same module.
 - Auth goes through `useAppAuth()` from `#/shared/host/auth`. Only `shared/host/auth.ts` and `shared/providers/auth-provider.tsx` import `@clerk/react`.
-- Data goes through oRPC with `#/shared/api/orpc`, typed by `@tsu-stack/api/client/types` only. Requests carry a Bearer token and never rely on cookies, because `views://` cannot store them.
+- Data goes through oRPC with `#/shared/api/orpc`, typed by `@uni-stack/api/client/types` only. Requests carry a Bearer token and never rely on cookies, because `views://` cannot store them.
 - Synced data lives in TanStack DB collections in `entities/<name>/lib/`. In `cloud` mode it is a query collection that reads the `list` procedure and writes through oRPC, applying the row each write returns. In `local` mode it is a local-only collection persisted to the desktop shell's SQLite file. Pages read with `useLiveQuery` and write through the entity's functions. Rules for collections and writes: [Sync](../../.agents/sync.md).
 - Never import `electrobun/*`, `apps/web`, or `apps/desktop`. Share code only through `packages/*`.
-- `server.ts` runs directly on Node.js 24 and imports only `hono`, `@hono/node-server`, and Node built-ins. Node does not strip types from the `@tsu-stack/*` sources in `node_modules`.
+- `server.ts` runs directly on Node.js 24 and imports only `hono`, `@hono/node-server`, and Node built-ins. Node does not strip types from the `@uni-stack/*` sources in `node_modules`.
 - `dependencies` holds only what `server.ts` needs at runtime. Everything bundled into `dist` goes in `devDependencies`, so `pnpm deploy --prod` ships a minimal production directory.
 
 ## Structure
@@ -33,13 +33,13 @@ The app follows the same FSD layers as `apps/web` (`routes → pages → widgets
 
 ## i18n
 
-- Messages come from `@tsu-stack/i18n/messages`, shared with `apps/web`. Add English keys only, following [i18n guidelines](../../.agents/i18n.md).
+- Messages come from `@uni-stack/i18n/messages`, shared with `apps/web`. Add English keys only, following [i18n guidelines](../../.agents/i18n.md).
 - Routes have no locale prefix. `shared/i18n/locale.ts` resolves the locale once at startup (`localStorage`, then `navigator.languages`, then `baseLocale`), and switching reloads the page.
 - Do not call Paraglide's `setLocale` or register its Vite plugin here. The compiled runtime is shared with `apps/web`, which compiles it with its URL strategy.
 
 ## Environment
 
-`ENV_APP` (`@tsu-stack/env/app/env`) validates `VITE_APP_URL`, `VITE_SERVER_URL`, `VITE_WEB_URL`, and `VITE_CLERK_PUBLISHABLE_KEY`. Vite compiles them into the bundle, so a desktop release build must run with production values.
+`ENV_APP` (`@uni-stack/env/app/env`) validates `VITE_APP_URL`, `VITE_SERVER_URL`, `VITE_WEB_URL`, and `VITE_CLERK_PUBLISHABLE_KEY`. Vite compiles them into the bundle, so a desktop release build must run with production values.
 
 ## Commands
 
@@ -47,10 +47,10 @@ The app follows the same FSD layers as `apps/web` (`routes → pages → widgets
 | ------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
 | `pnpm run dev` (root)                            | Web host at `http://localhost:3002/app`, with web, server, and i18n watch                          |
 | `pnpm run dev:desktop` (root)                    | Builds `dist/desktop`, then runs `vite --mode desktop` on `:3003` next to `electrobun dev --watch` |
-| `pnpm --filter @tsu-stack/app run build`         | Web build to `dist/web`                                                                            |
-| `pnpm --filter @tsu-stack/app run build:desktop` | Desktop build to `dist/desktop`                                                                    |
-| `pnpm --filter @tsu-stack/app run start`         | Serve `dist/web` with `server.ts`                                                                  |
-| `pnpm --filter @tsu-stack/app run typecheck`     | Type-check                                                                                         |
+| `pnpm --filter @uni-stack/app run build`         | Web build to `dist/web`                                                                            |
+| `pnpm --filter @uni-stack/app run build:desktop` | Desktop build to `dist/desktop`                                                                    |
+| `pnpm --filter @uni-stack/app run start`         | Serve `dist/web` with `server.ts`                                                                  |
+| `pnpm --filter @uni-stack/app run typecheck`     | Type-check                                                                                         |
 
 `src/routeTree.gen.ts` is generated by `@tanstack/router-plugin` during dev and build, and it is committed like `apps/web`'s. After adding a route file, run the dev server or a build once before type-checking.
 

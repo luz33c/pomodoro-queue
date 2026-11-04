@@ -1,8 +1,8 @@
 import { ArrowUp } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-import { Button } from "@tsu-stack/ui/components/button";
-import { Input } from "@tsu-stack/ui/components/input";
+import { Button } from "@uni-stack/ui/components/button";
+import { Input } from "@uni-stack/ui/components/input";
 
 import { DemoHeader } from "#/shared/ui/demo-header";
 

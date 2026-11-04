@@ -1,9 +1,9 @@
 import { FaGithub } from "react-icons/fa";
 
-import { m } from "@tsu-stack/i18n/messages";
-import { Link } from "@tsu-stack/i18n/tanstack-start/components/link";
-import { buttonVariants } from "@tsu-stack/ui/components/button";
-import { DecorIcon } from "@tsu-stack/ui/components/decor-icon";
+import { m } from "@uni-stack/i18n/messages";
+import { Link } from "@uni-stack/i18n/tanstack-start/components/link";
+import { buttonVariants } from "@uni-stack/ui/components/button";
+import { DecorIcon } from "@uni-stack/ui/components/decor-icon";
 
 export function CallToAction() {
   return (

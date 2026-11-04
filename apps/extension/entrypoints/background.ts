@@ -1,6 +1,6 @@
 import { createClerkClient } from "@clerk/chrome-extension/client";
 
-import { ENV_EXTENSION } from "@tsu-stack/env/extension/env";
+import { ENV_EXTENSION } from "@uni-stack/env/extension/env";
 
 type RuntimeRequest = {
   type?: string;

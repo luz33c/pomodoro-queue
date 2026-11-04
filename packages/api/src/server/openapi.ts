@@ -7,7 +7,7 @@ import { ORPCError, onError } from "@orpc/server";
 import { experimental_RethrowHandlerPlugin as RethrowHandlerPlugin } from "@orpc/server/plugins";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 
-import { ENV_SERVER } from "@tsu-stack/env/server/env";
+import { ENV_SERVER } from "@uni-stack/env/server/env";
 
 import { appRouter } from "#/routers/index";
 
@@ -38,8 +38,8 @@ export function createDocsHandler() {
           return {
             content: undefined,
             metaData: {
-              description: "Documentation for the @tsu-stack/server API.",
-              title: "@tsu-stack/server API Documentation"
+              description: "Documentation for the @uni-stack/server API.",
+              title: "@uni-stack/server API Documentation"
             },
             sources: [
               {
@@ -64,8 +64,8 @@ export function createDocsHandler() {
             }
           },
           info: {
-            description: `This is the API for @tsu-stack/server.\n## Usage\nProtected endpoints require a Clerk session token in the \`Authorization: Bearer <token>\` header.\n## Resources\n - [Official Website](${ENV_SERVER.VITE_WEB_URL})`,
-            title: "@tsu-stack/server API",
+            description: `This is the API for @uni-stack/server.\n## Usage\nProtected endpoints require a Clerk session token in the \`Authorization: Bearer <token>\` header.\n## Resources\n - [Official Website](${ENV_SERVER.VITE_WEB_URL})`,
+            title: "@uni-stack/server API",
             version: ENV_SERVER.SOURCE_COMMIT
           },
           servers: [

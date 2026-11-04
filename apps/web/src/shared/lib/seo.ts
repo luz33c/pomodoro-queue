@@ -1,11 +1,11 @@
-import { resolvePublicAssetUrl } from "@tsu-stack/core/assets";
-import { type Locale } from "@tsu-stack/i18n/runtime";
+import { resolvePublicAssetUrl } from "@uni-stack/core/assets";
+import { type Locale } from "@uni-stack/i18n/runtime";
 import {
   generateTanStackStartSeo,
   type GenerateTanStackStartSeoParams,
   type TanStackStartSeoAlternates,
   type TanStackStartSeoSite
-} from "@tsu-stack/seo";
+} from "@uni-stack/seo";
 
 import { appConfig } from "#/config/app.config";
 

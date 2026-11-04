@@ -1,15 +1,15 @@
 import { Link } from "@tanstack/react-router";
 import { Home } from "lucide-react";
 
-import { m } from "@tsu-stack/i18n/messages";
-import { buttonVariants } from "@tsu-stack/ui/components/button";
+import { m } from "@uni-stack/i18n/messages";
+import { buttonVariants } from "@uni-stack/ui/components/button";
 import {
   Empty,
   EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyTitle
-} from "@tsu-stack/ui/components/empty";
+} from "@uni-stack/ui/components/empty";
 
 import { appConfig } from "#/shared/config/app";
 

@@ -6,7 +6,7 @@ import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 import { Hono } from "hono";
 
-// Only hono and Node built-ins: Node does not strip types from the @tsu-stack/* sources in node_modules
+// Only hono and Node built-ins: Node does not strip types from the @uni-stack/* sources in node_modules
 const appUrl = new URL(process.env.VITE_APP_URL ?? "http://localhost:3002/app");
 const basePath = appUrl.pathname.replace(/\/+$/, "");
 const indexHtml = await readFile(new URL("./dist/web/index.html", import.meta.url), "utf8");

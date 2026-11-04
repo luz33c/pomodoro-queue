@@ -1,17 +1,17 @@
 import { Check, Languages } from "lucide-react";
 
-import { m } from "@tsu-stack/i18n/messages";
-import { locales } from "@tsu-stack/i18n/runtime";
-import { useLocale } from "@tsu-stack/i18n/tanstack-start/components/locale-provider";
-import { type ButtonProps } from "@tsu-stack/ui/components/button";
-import { Button } from "@tsu-stack/ui/components/button";
+import { m } from "@uni-stack/i18n/messages";
+import { locales } from "@uni-stack/i18n/runtime";
+import { useLocale } from "@uni-stack/i18n/tanstack-start/components/locale-provider";
+import { type ButtonProps } from "@uni-stack/ui/components/button";
+import { Button } from "@uni-stack/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger
-} from "@tsu-stack/ui/components/dropdown-menu";
-import { cn } from "@tsu-stack/ui/lib/utils";
+} from "@uni-stack/ui/components/dropdown-menu";
+import { cn } from "@uni-stack/ui/lib/utils";
 
 type LocaleSwitcherProps = {
   size?: ButtonProps["size"];

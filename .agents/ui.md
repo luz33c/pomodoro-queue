@@ -6,23 +6,23 @@ This file is the source of truth for app UI composition, extraction decisions, a
 
 ## Goals
 
-- Prefer existing primitives from `@tsu-stack/ui` before creating new app-local ones.
+- Prefer existing primitives from `@uni-stack/ui` before creating new app-local ones.
 - Keep `packages/ui` reusable and app-agnostic.
 - Keep route files thin and UI composition in pages, features, widgets, or `shared/ui`.
 - Extract shared UI only when reuse and app-agnostic boundaries are real.
 
 ## Default Sources
 
-- Prefer existing components from `@tsu-stack/ui/components/*` before creating new app-local primitives.
+- Prefer existing components from `@uni-stack/ui/components/*` before creating new app-local primitives.
 - Prefer app wrappers from `apps/web/src/shared/ui` when the app already owns routing, image, locale, or other app-specific integration details.
 - Use `lucide-react` for icons unless an existing asset or brand graphic is the better fit.
-- Use `@tsu-stack/ui/lib/utils` `cn(...)` for class composition.
-- Theme tokens (`@tsu-stack/ui/styles/theme.css`) and font faces (`@tsu-stack/ui/styles/fonts.css`) live in `packages/ui`; each app imports them from its own `app.css`. An app that imports `fonts.css` must also depend on the `@fontsource` packages it names, because Vite resolves those `url()` specifiers from the importing app's stylesheet.
+- Use `@uni-stack/ui/lib/utils` `cn(...)` for class composition.
+- Theme tokens (`@uni-stack/ui/styles/theme.css`) and font faces (`@uni-stack/ui/styles/fonts.css`) live in `packages/ui`; each app imports them from its own `app.css`. An app that imports `fonts.css` must also depend on the `@fontsource` packages it names, because Vite resolves those `url()` specifiers from the importing app's stylesheet.
 
 ## App Composition
 
 - Build page UI in `pages/`, composite sections in `widgets/` and `features/`, and app-level primitives in `shared/ui`.
-- Prefer composing `@tsu-stack/ui` primitives instead of duplicating styling across many leaf components.
+- Prefer composing `@uni-stack/ui` primitives instead of duplicating styling across many leaf components.
 - Keep route files thin. Put UI composition in page, feature, widget, or shared components, not in route files.
 
 ## Extraction Rule
@@ -42,7 +42,7 @@ Rules for composite components:
 
 - Base components never import from a category folder.
 - Drive them through props. The caller streams rows, flips the status, and owns playback timers; the component keeps only its own UI state, such as which rows are expanded.
-- Take copy through props with English defaults so apps can pass `m.*()` messages. Do not import `@tsu-stack/i18n`.
+- Take copy through props with English defaults so apps can pass `m.*()` messages. Do not import `@uni-stack/i18n`.
 - Put keyframes in `packages/ui/styles/animations.css` and apply infinite ones with `motion-safe:` (`motion-safe:animate-shimmer-text`). The reduced-motion rule in `globals.css` lives in the base layer, so it does not override utility classes or inline styles.
 - Code adapted from a third party keeps a header comment and an entry in `packages/ui/THIRD_PARTY_NOTICES.md`.
 - Every composite component has a demo in [apps/preview-ui](../apps/preview-ui/AGENTS.md).

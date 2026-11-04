@@ -1,16 +1,16 @@
 import { Menu } from "lucide-react";
 import { useState } from "react";
 
-import { m } from "@tsu-stack/i18n/messages";
-import { Button } from "@tsu-stack/ui/components/button";
-import { Separator } from "@tsu-stack/ui/components/separator";
+import { m } from "@uni-stack/i18n/messages";
+import { Button } from "@uni-stack/ui/components/button";
+import { Separator } from "@uni-stack/ui/components/separator";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger
-} from "@tsu-stack/ui/components/sheet";
+} from "@uni-stack/ui/components/sheet";
 
 import { appConfig } from "#/shared/config/app";
 

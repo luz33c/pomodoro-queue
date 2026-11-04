@@ -1,5 +1,5 @@
 {
-  "name": "@tsu-stack/i18n",
+  "name": "@uni-stack/i18n",
   "type": "module",
   "imports": {
     "#/paraglide/*": "./src/paraglide/*.js",
@@ -28,10 +28,10 @@
   "devDependencies": {
     "@inlang/cli": "catalog:",
     "@inlang/paraglide-js": "catalog:",
-    "@tsu-stack/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
+    "@uni-stack/tsconfig": "workspace:*",
     "typescript": "catalog:"
   }
 }

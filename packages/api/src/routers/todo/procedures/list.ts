@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-import { TodoRowSchema } from "@tsu-stack/core/todo";
-import { listTodos } from "@tsu-stack/db/queries";
+import { TodoRowSchema } from "@uni-stack/core/todo";
+import { listTodos } from "@uni-stack/db/queries";
 
 import { protectedProcedure } from "#/orpc/procedures";
 

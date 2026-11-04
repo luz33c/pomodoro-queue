@@ -1,5 +1,5 @@
 {
-  "name": "@tsu-stack/preview-ui",
+  "name": "@uni-stack/preview-ui",
   "private": true,
   "type": "module",
   "imports": {
@@ -19,7 +19,7 @@
     "@fontsource/instrument-serif": "catalog:",
     "@tanstack/react-router": "catalog:",
     "@tanstack/react-start": "catalog:",
-    "@tsu-stack/ui": "workspace:*",
+    "@uni-stack/ui": "workspace:*",
     "lucide-react": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:"
@@ -28,10 +28,10 @@
     "@babel/core": "catalog:",
     "@rolldown/plugin-babel": "catalog:",
     "@tailwindcss/vite": "catalog:",
-    "@tsu-stack/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
+    "@uni-stack/tsconfig": "workspace:*",
     "@vitejs/plugin-react": "catalog:",
     "babel-plugin-react-compiler": "catalog:",
     "tailwindcss": "catalog:",

@@ -139,7 +139,7 @@ When a handler genuinely needs a durable outcome log, use one wide terminal even
 
 - Group related procedures in a slice router, for example `profileRouter`.
 - Prefer straightforward names like `byId`, `search`, `edit`, `create`, `remove`.
-- Use the table-level query functions from `@tsu-stack/db/queries` for reusable reads and writes, and add new ones there per [Database package](../packages/db/AGENTS.md).
+- Use the table-level query functions from `@uni-stack/db/queries` for reusable reads and writes, and add new ones there per [Database package](../packages/db/AGENTS.md).
 - Keep DB access that serves only one procedure close to the handler. If it grows, colocate it in the slice in sibling files such as `queries.ts` or `utils.ts`, not outside the slice.
 - Convert server-only values to transport-safe output values at the edge, for example `Date` → ISO string.
 - Keep handler logic linear and shallow. If the flow grows, extract helpers.
@@ -189,7 +189,7 @@ import { isDefinedError } from "@orpc/client";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { type client, orpc } from "@tsu-stack/api/client/tanstack-start/orpc";
+import { type client, orpc } from "@uni-stack/api/client/tanstack-start/orpc";
 
 export function getEditProfileMutationOptions() {
   return orpc.profile.edit.mutationOptions({

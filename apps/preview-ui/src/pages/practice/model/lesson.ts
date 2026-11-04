@@ -1,4 +1,4 @@
-import { type ShadowingToken } from "@tsu-stack/ui/components/shadowing/frame";
+import { type ShadowingToken } from "@uni-stack/ui/components/shadowing/frame";
 
 /** Words of the lesson and their meaning in this text */
 export const MEANINGS = {

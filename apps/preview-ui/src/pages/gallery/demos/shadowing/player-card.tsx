@@ -1,5 +1,5 @@
-import { type ShadowingToken } from "@tsu-stack/ui/components/shadowing/frame";
-import { ShadowingPlayerCard } from "@tsu-stack/ui/components/shadowing/player-card";
+import { type ShadowingToken } from "@uni-stack/ui/components/shadowing/frame";
+import { ShadowingPlayerCard } from "@uni-stack/ui/components/shadowing/player-card";
 
 import { useShadowingSimulation } from "#/shared/lib/use-shadowing-simulation";
 

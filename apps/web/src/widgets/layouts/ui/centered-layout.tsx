@@ -1,4 +1,4 @@
-import { cn } from "@tsu-stack/ui/lib/utils";
+import { cn } from "@uni-stack/ui/lib/utils";
 
 import { Footer } from "#/features/footer/index";
 import { Navbar } from "#/features/navbar/index";

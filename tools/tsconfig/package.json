@@ -1,5 +1,5 @@
 {
-  "name": "@tsu-stack/tsconfig",
+  "name": "@uni-stack/tsconfig",
   "private": true,
   "type": "module",
   "publishConfig": {
