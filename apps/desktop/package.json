@@ -2,6 +2,9 @@
   "name": "@tsu-stack/desktop",
   "private": true,
   "type": "module",
+  "imports": {
+    "#shared/*": "./src/shared/*.ts"
+  },
   "scripts": {
     "postinstall": "electrobun prepare",
     "dev:desktop": "electrobun dev --watch",

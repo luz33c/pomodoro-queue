@@ -9,7 +9,8 @@
     "apps/preview-ui/src/router.tsx",
     "apps/preview-ui/src/routes/**/*.tsx",
     "apps/preview-ui/vite.config.ts",
-    "apps/desktop/src/bun/index.ts",
+    "apps/desktop/src/main/index.ts",
+    "apps/desktop/src/preload/index.ts",
     "apps/desktop/electrobun.config.ts",
     "scripts/*.ts",
     "packages/i18n/**/*.ts"

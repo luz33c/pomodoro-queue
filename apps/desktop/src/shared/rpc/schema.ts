@@ -1,16 +1,16 @@
 import { type ElectronIpcMainLike } from "@tanstack/electron-db-sqlite-persistence";
 import { type RPCSchema } from "electrobun/main";
 
-import { type RpcEncoded } from "./rpc-codec";
+import { type RpcEncoded } from "./codec";
 
 // TanStack's IPC envelopes are not exported directly, so derive them from the main-process handler type.
 type PersistenceListener = Parameters<ElectronIpcMainLike["handle"]>[1];
 export type PersistenceRequest = Parameters<PersistenceListener>[1];
 export type PersistenceResponse = Awaited<ReturnType<PersistenceListener>>;
 
-export type PersistenceCall = { channel: string; request: PersistenceRequest };
+type PersistenceCall = { channel: string; request: PersistenceRequest };
 
-/** RPC between the main process and the window's webview-bridge preload. */
+/** RPC between the main process and the window's preload. */
 export type DesktopRPC = {
   bun: RPCSchema<{
     requests: {

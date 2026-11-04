@@ -3,9 +3,10 @@
 import { type ElectronSQLitePersistenceOptions } from "@tanstack/electron-db-sqlite-persistence";
 import { Electroview } from "electrobun/view";
 
-import { decodeRpc, encodeRpc } from "./rpc-codec";
-import { type DesktopRPC, PERSISTENCE_RPC_TIMEOUT_MS } from "./rpc-schema";
+import { decodeRpc, encodeRpc } from "#shared/rpc/codec";
+import { type DesktopRPC, PERSISTENCE_RPC_TIMEOUT_MS } from "#shared/rpc/schema";
 
+// Same shape as DesktopBridge in apps/app/src/shared/host/desktop-bridge.ts; change both together
 type DesktopBridge = {
   sqliteInvoke: NonNullable<ElectronSQLitePersistenceOptions["invoke"]>;
 };

@@ -51,7 +51,7 @@ packages/ui、i18n、env   两个前端共享的组件、样式、文案和配�
 | 外链       | App 外链通常打开新标签页                   | 当前窗口导航被壳拦截，交给系统浏览器               |
 | API        | 每次请求从 token getter 获取 Bearer token  | 目前只请求无需登录的健康接口；私有数据等待认证接入 |
 
-桌面使用 hash 路由是因为 `views://` 没有服务端页面回退。外链处理仅把 HTTP、HTTPS 和 mailto 地址交给系统，并对重复事件去重；实现见 [external-links.ts](../apps/desktop/src/bun/external-links.ts)。
+桌面使用 hash 路由是因为 `views://` 没有服务端页面回退。外链处理仅把 HTTP、HTTPS 和 mailto 地址交给系统，并对重复事件去重；实现见 [navigation.ts](../apps/desktop/src/main/ui/navigation.ts)。
 
 App 的语言在启动时按 `localStorage → navigator.languages → baseLocale` 决定，切换后刷新；它复用 Web 编译的 Paraglide 消息，通过 `overwriteGetLocale` 覆盖语言读取。Web 的语言由 URL 决定，两者不会自动共享语言选择。
 
@@ -121,7 +121,7 @@ App 的四个构建变量以 [ENV_APP](../packages/env/src/app/env.ts) 为准：
 
 详细包级脚本见 [App package.json](../apps/app/package.json) 和 [Desktop package.json](../apps/desktop/package.json)。单独构建 App 前若修改了文案，需要先编译 i18n；`i18n:ensure` 只处理产物缺失。
 
-桌面当前仅在 dev channel 探测一次 `:3003`。请求失败就加载打包页面，本次窗口不会自动切回开发服务器；加载开发服务器时才有 Vite HMR。非 dev channel 直接使用打包页面。该启动策略保持现状，具体实现见 [view-url.ts](../apps/desktop/src/bun/view-url.ts)。
+桌面当前仅在 dev channel 探测一次 `:3003`。请求失败就加载打包页面，本次窗口不会自动切回开发服务器；加载开发服务器时才有 Vite HMR。非 dev channel 直接使用打包页面。该启动策略保持现状，具体实现见 [view-url.ts](../apps/desktop/src/main/ui/view-url.ts)。
 
 ## 已采纳的决策
 

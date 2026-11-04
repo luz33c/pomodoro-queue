@@ -13,12 +13,12 @@ export default {
   build: {
     mainProcess: "bun",
     bun: {
-      entrypoint: "src/bun/index.ts"
+      entrypoint: "src/main/index.ts"
     },
     views: {
       // The main window's preload: exposes window.tsuDesktop to apps/app
-      "webview-bridge": {
-        entrypoint: "src/bun/webview-bridge.ts"
+      preload: {
+        entrypoint: "src/preload/index.ts"
       }
     },
     copy: {

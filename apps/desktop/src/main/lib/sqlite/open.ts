@@ -5,12 +5,9 @@ import { join } from "node:path";
 import { exposeElectronSQLitePersistence } from "@tanstack/electron-db-sqlite-persistence/main";
 import { Utils } from "electrobun/main";
 
-import { createBunSQLitePersistence } from "./bun-sqlite-persistence";
-import {
-  type PersistenceCall,
-  type PersistenceRequest,
-  type PersistenceResponse
-} from "./rpc-schema";
+import { type PersistenceRequest, type PersistenceResponse } from "#shared/rpc/schema";
+
+import { createBunSQLitePersistence } from "./bun-persistence";
 
 const DATABASE_FILE_NAME = "tsu-app.sqlite";
 
@@ -37,7 +34,13 @@ export function openSQLitePersistence() {
     persistence: createBunSQLitePersistence({ database })
   });
 
-  function handle({ channel, request }: PersistenceCall): Promise<PersistenceResponse> {
+  function handle({
+    channel,
+    request
+  }: {
+    channel: string;
+    request: PersistenceRequest;
+  }): Promise<PersistenceResponse> {
     const listener = listeners.get(channel);
     if (!listener) {
       return Promise.reject(new Error(`No SQLite persistence handler for channel "${channel}"`));

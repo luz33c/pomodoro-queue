@@ -8,7 +8,7 @@ import { defineConfig } from "vite";
 
 import { ENV_APP } from "@tsu-stack/env/app/env";
 
-// apps/desktop/src/bun/view-url.ts probes the same port in the dev channel
+// apps/desktop/src/main/ui/view-url.ts probes the same port in the dev channel
 const DESKTOP_DEV_PORT = 3003;
 // Used when VITE_APP_URL has no port of its own to use; apps/web/vite.config.ts proxies its app path here
 const APP_DEV_PORT = 3002;

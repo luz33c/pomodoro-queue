@@ -48,7 +48,7 @@ If the frontend needs labels, options, or defaults for a shared enum, derive the
 3. Relative imports only reach the same folder or below (`./`), and only in three places:
    - `apps/web`, `apps/app`, and `apps/preview-ui`: inside one FSD slice, such as a slice's `index.ts` re-exporting its own `ui/` or a component importing a sibling. Anything that needs `../` uses `#/` instead; `import/no-relative-parent-imports` rejects `../`, and `fsd/no-relative-imports` rejects relative imports into another slice.
    - `apps/extension`: files and styles inside one entrypoint folder, such as `./App` and `./App.css`.
-   - `apps/desktop`: files in `src/bun/`. The Electrobun main-process bundler does not resolve `#/` (Bun reads `#/x` as a package named `#`), so `apps/desktop` declares no `#/` mapping. See [Desktop](./desktop.md).
+   - `apps/desktop`: every file in `src/` except imports of `src/shared/`. Electrobun's bundler does not resolve `#/`, so `apps/desktop` maps `#shared/*` instead of `#/*` and uses it only to reach `src/shared/` from `src/main/` and `src/preload/`. See [Desktop](./desktop.md).
 
 Packages and `apps/server` never use relative imports. `apps/server` runs package source directly on Node in development, and Node does not resolve extensionless relative paths.
 
@@ -64,6 +64,7 @@ Each project declares `#/` in the `imports` field of its own `package.json`. Res
 | `apps/preview-ui`                           | `"#/shared/ui/*": "./src/shared/ui/*.tsx"`, `"#/*.css": "./src/*.css"`, `"#/*": "./src/*.ts"`                                                           |
 | `apps/native`                               | `"#/components/*": "./components/*.tsx"`, `"#/*": "./*.ts"`                                                                                             |
 | `apps/extension`                            | `"#/*": "./*.ts"`                                                                                                                                       |
+| `apps/desktop`                              | `"#shared/*": "./src/shared/*.ts"` (no `#/`; see rule 3)                                                                                                |
 
 - TypeScript and Metro resolve the mapped path literally, without adding extensions or `index`. Each rule names one extension, and a directory barrel is imported as `#/<dir>/index`.
 - A folder of `.tsx` files needs its own rule. In `apps/web` and `apps/app`, other `.tsx` files sit in slice `ui/` folders and are reached with `./` from their own slice, or from outside through the slice's `index.ts`.

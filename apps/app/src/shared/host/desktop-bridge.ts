@@ -1,6 +1,6 @@
 import { type ElectronSQLitePersistenceOptions } from "@tanstack/electron-db-sqlite-persistence/renderer";
 
-/** Installed by the desktop shell's preload (apps/desktop/src/bun/webview-bridge.ts). */
+/** Installed by the desktop shell's preload (apps/desktop/src/preload/index.ts). */
 export type DesktopBridge = {
   sqliteInvoke: NonNullable<ElectronSQLitePersistenceOptions["invoke"]>;
 };

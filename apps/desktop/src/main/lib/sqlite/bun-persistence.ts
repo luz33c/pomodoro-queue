@@ -12,7 +12,7 @@ import {
   type SQLiteCoreAdapterOptions
 } from "@tanstack/db-sqlite-persistence-core";
 
-import { BunSQLiteDriver } from "./bun-sqlite-driver";
+import { BunSQLiteDriver } from "./bun-driver";
 
 type CoreSchemaMismatchPolicy = "sync-present-reset" | "sync-absent-error" | "reset";
 
