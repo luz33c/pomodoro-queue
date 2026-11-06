@@ -23,6 +23,14 @@ Default to user-directed validation. Do not run `pnpm run check`, `pnpm run fix`
 
 For markdown-only edits, small documentation tweaks, or other changes that cannot affect formatting, linting, typechecking, build output, or runtime behavior, still prompt the user through [Choice flows](./choice-flows.md) instead of silently skipping validation. Make "skip validation" the recommended choice, and do not run `pnpm run check` or `pnpm run fix` unless the user chooses a check/fix option. The tracked hooks run read-only checks (staged-file format and lint on commit, the full `pnpm run check` on push); if the user asks for a commit or push, explain that validation will run as part of it.
 
+## Format Every File You Write
+
+Agents write files without going through the editor's format-on-save, so format each file right after you create or edit it. This is not validation and needs no approval.
+
+- Claude Code and Codex do this automatically through project-scoped `PostToolUse` hooks: `.claude/settings.json` formats every file written with Write or Edit, and `.codex/hooks.json` runs `.codex/hooks/format-edited-files.mjs` on the files an `apply_patch` edit wrote. Codex loads the project hook only when this project is trusted, and asks for a one-time review in `/hooks` before it runs.
+- Files written by shell commands or scripts bypass both hooks, as do edits from any other agent. Run `pnpm exec oxfmt <files>` on those before finishing the turn.
+- `oxfmt` skips its ignored paths (such as `docs/`) and file types it does not handle, so passing every changed file is safe.
+
 ## Completion Claims
 
 - Do not report implementation, migration, validation, or cleanup work as complete until the relevant edits or commands have run and you have checked the resulting files or command output.

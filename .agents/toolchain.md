@@ -101,3 +101,4 @@ Tracked hooks live in `.githooks`. Both hooks are read-only; they do not rewrite
 - `pre-commit` runs `lint-staged --no-stash`: `oxfmt --check` and `oxlint --type-aware` on the staged files only, so unstaged or untracked work elsewhere in the tree does not block a commit.
 - `pre-push` runs the full `pnpm run check`, including every project's typecheck.
 - `oxfmt` ignores `docs/`, so design docs and generated `show-me` pages never block either hook.
+- Agents format the files they write as they go; see [Workflow](./workflow.md#format-every-file-you-write).
