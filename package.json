@@ -48,12 +48,17 @@
     "@tanstack/eslint-plugin-router": "catalog:",
     "eslint-plugin-fsd-lint": "catalog:",
     "eslint-plugin-react-hooks": "catalog:",
+    "lint-staged": "catalog:",
     "oxfmt": "catalog:",
     "oxlint": "catalog:",
     "oxlint-tsgolint": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "vitest": "catalog:"
+  },
+  "lint-staged": {
+    "*": "oxfmt --check --no-error-on-unmatched-pattern",
+    "*.{js,jsx,ts,tsx,mjs,cjs,mts,cts}": "oxlint --type-aware"
   },
   "commitlint": {
     "extends": [

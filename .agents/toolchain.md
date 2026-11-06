@@ -96,4 +96,8 @@ Run these commands only when the user requests or approves validation. Follow [C
 
 ## Git Hooks
 
-Tracked hooks live in `.githooks`. The pre-commit hook is read-only and runs the repository check; it does not rewrite or restage files. Run `pnpm run fix` explicitly when fixes are desired.
+Tracked hooks live in `.githooks`. Both hooks are read-only; they do not rewrite, stash, or restage files. Run `pnpm run fix` explicitly when fixes are desired.
+
+- `pre-commit` runs `lint-staged --no-stash`: `oxfmt --check` and `oxlint --type-aware` on the staged files only, so unstaged or untracked work elsewhere in the tree does not block a commit.
+- `pre-push` runs the full `pnpm run check`, including every project's typecheck.
+- `oxfmt` ignores `docs/`, so design docs and generated `show-me` pages never block either hook.

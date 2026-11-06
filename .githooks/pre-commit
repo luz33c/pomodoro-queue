@@ -1,4 +1,9 @@
 #!/usr/bin/env sh
 set -eu
 
-pnpm run check
+# Format-check and lint only the staged files, so unstaged or untracked work elsewhere
+# in the tree cannot block a commit. The full repository check runs on pre-push.
+# Read-only: no backup stash and no hiding of unstaged changes, so the working tree
+# is never touched while other tools may be editing it. A partially staged file is
+# checked as it is on disk.
+./node_modules/.bin/lint-staged --no-stash --no-hide-partially-staged

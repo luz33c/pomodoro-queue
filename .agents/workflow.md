@@ -21,7 +21,7 @@ Default to user-directed validation. Do not run `pnpm run check`, `pnpm run fix`
 
 `pnpm run check` invokes the repository's read-only Oxfmt, Oxlint, and type-check validation. `pnpm run fix` applies formatting and lint fixes before type-checking. Treat fix commands as explicit user-requested actions, not default handoff steps.
 
-For markdown-only edits, small documentation tweaks, or other changes that cannot affect formatting, linting, typechecking, build output, or runtime behavior, still prompt the user through [Choice flows](./choice-flows.md) instead of silently skipping validation. Make "skip validation" the recommended choice, and do not run `pnpm run check` or `pnpm run fix` unless the user chooses a check/fix option. The tracked pre-commit hook runs the same read-only check; if the user asks for a commit, explain that validation will run as part of the commit.
+For markdown-only edits, small documentation tweaks, or other changes that cannot affect formatting, linting, typechecking, build output, or runtime behavior, still prompt the user through [Choice flows](./choice-flows.md) instead of silently skipping validation. Make "skip validation" the recommended choice, and do not run `pnpm run check` or `pnpm run fix` unless the user chooses a check/fix option. The tracked hooks run read-only checks (staged-file format and lint on commit, the full `pnpm run check` on push); if the user asks for a commit or push, explain that validation will run as part of it.
 
 ## Completion Claims
 
@@ -71,4 +71,4 @@ Work in the main checkout. Do not create git worktrees or start sessions in a wo
 
 ## Commits
 
-Use Conventional Commit format. The tracked pre-commit hook runs `pnpm run check` without modifying or restaging files; do not rely on it as hidden validation when the user has not approved checks.
+Use Conventional Commit format. The tracked pre-commit hook formats-checks and lints only the staged files, and the pre-push hook runs the full `pnpm run check`; neither modifies or restages files. Do not rely on them as hidden validation when the user has not approved checks.

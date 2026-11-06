@@ -140,7 +140,7 @@ Here is a non-exhaustive list of the main technologies used in this project, alo
    - **Browser Extension**: WXT dev server
 
 > [!TIP]
-> Run `pnpm run fix` to apply formatting and lint fixes, then type-check your code. The tracked pre-commit hook runs the read-only `pnpm run check` command.
+> Run `pnpm run fix` to apply formatting and lint fixes, then type-check your code. The tracked pre-commit hook checks formatting and lint on staged files only, and the pre-push hook runs the full read-only `pnpm run check`.
 
 ### Running with Docker Locally
 
