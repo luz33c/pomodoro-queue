@@ -293,12 +293,13 @@ For the web app, use the following environment variables:
 
 For the product app (`apps/app`, a Vite SPA served by its own `server.ts`), use the following environment variables. All of them are compiled into the bundle, so a deployment needs the production values at build time:
 
-| Variable Name                | Required | Default Value | Description                                                                                              |
-| ---------------------------- | -------- | ------------- | -------------------------------------------------------------------------------------------------------- |
-| `VITE_APP_URL`               | ✅       | -             | Base URL for the app. Its path becomes the Vite base and router basepath, ex: `https://app.example.com`. |
-| `VITE_SERVER_URL`            | ✅       | -             | Base URL for the server.                                                                                 |
-| `VITE_WEB_URL`               | ✅       | -             | Base URL for the web app, where signed-out users are sent to sign in.                                    |
-| `VITE_CLERK_PUBLISHABLE_KEY` | ✅       | -             | Clerk publishable key used by the browser Clerk provider.                                                |
+| Variable Name                  | Required | Default Value | Description                                                                                                      |
+| ------------------------------ | -------- | ------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `VITE_APP_URL`                 | ✅       | -             | Base URL for the app. Its path becomes the Vite base and router basepath, ex: `https://app.example.com`.         |
+| `VITE_SERVER_URL`              | ✅       | -             | Base URL for the server.                                                                                         |
+| `VITE_WEB_URL`                 | ✅       | -             | Base URL for the web app, where signed-out users are sent to sign in.                                            |
+| `VITE_CLERK_PUBLISHABLE_KEY`   | ✅       | -             | Clerk publishable key used by the browser Clerk provider.                                                        |
+| `VITE_CLERK_DESKTOP_CLIENT_ID` | ❌       | -             | Client ID of the public Clerk OAuth application the desktop build signs in with. Unset disables desktop sign-in. |
 
 Use the same root domain for the web app and the app in production so they share the Clerk session. `pnpm run dev` starts the app at `http://localhost:3002/app`.
 

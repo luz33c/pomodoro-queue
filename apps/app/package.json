@@ -7,8 +7,12 @@
   ],
   "type": "module",
   "imports": {
-    "#/shared/providers/*": "./src/shared/providers/*.tsx",
-    "#/shared/ui/*": "./src/shared/ui/*.tsx",
+    "#/lib/host/runtime": {
+      "desktop": "./src/lib/host/desktop/index.ts",
+      "default": "./src/lib/host/web/index.ts"
+    },
+    "#/app/providers/*": "./src/app/providers/*.tsx",
+    "#/components/*": "./src/components/*.tsx",
     "#/*.css": "./src/*.css",
     "#/*": "./src/*.ts"
   },

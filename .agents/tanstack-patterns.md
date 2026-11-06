@@ -12,7 +12,7 @@ This guide is intentionally focused on TanStack Router and TanStack Start. For o
 
 The web app uses TanStack Start file-based routing. In this codebase, `routes/` acts as the FSD app layer.
 
-`apps/app` uses TanStack Router alone, without Start: file-based routes through `@tanstack/router-plugin`, client rendering only, browser history in the web host and hash history in the desktop host. The layers and segments below apply to it too, with these differences:
+`apps/app` uses TanStack Router alone, without Start: file-based routes through `@tanstack/router-plugin`, client rendering only, browser history in the web host and hash history in the desktop host. It does not use the FSD layers below: it follows the Bulletproof React layout described in [apps/app/AGENTS.md](../apps/app/AGENTS.md#structure), with routes in `src/app/routes/`. The routing rules here still apply, with these differences:
 
 - No `{-$locale}` segment; the locale is not part of the URL.
 - No server functions or SSR guards. `(auth)/route.tsx` wraps signed-in pages in a client-side `AuthGate`; see [Auth patterns](./auth.md#app-sign-in-round-trip).

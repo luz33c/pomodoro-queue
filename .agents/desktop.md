@@ -49,12 +49,12 @@ src/
 - External links:
   - `will-navigate` cannot be cancelled. Its `event.data.detail` is a JSON string `{ "url", "allowed" }`. When `allowed` is `false`, call `Utils.openExternal(url)`; it opens the system browser.
   - `window.open` and `target="_blank"` emit `new-window-open` (listen with `Electrobun.events.on("new-window-open")`; detail `{ url, isCmdClick, modifierFlags }`) on the native renderer only. CEF drops them without an event.
-  - The app's `shared/host/external-link.ts` should navigate in the same tab, so the rules catch the link on both renderers. Dedupe when one click produces both events.
+  - The app's desktop host (`hostAdapter.externalLinkProps` in `lib/host/desktop/index.ts`) navigates in the same tab, so the rules catch the link on both renderers. Dedupe when one click produces both events.
 
 ## Local Persistence
 
 - The main process opens `tsu-app.sqlite` in `Utils.paths.userData` (`~/Library/Application Support/<identifier>/<channel>/` on macOS) and serves TanStack DB's Electron persistence protocol through a `bun:sqlite` driver (`src/main/lib/sqlite/`). It closes the database on `before-quit`, which every quit path emits, including closing the last window.
-- The preload `src/preload/index.ts` installs `window.tsuDesktop.sqliteInvoke`, which `apps/app` reads in `shared/host/`. Calls travel as the `sqlitePersistence` RPC request with a 60 s limit (`src/shared/rpc/schema.ts`).
+- The preload `src/preload/index.ts` installs `window.tsuDesktop.sqliteInvoke`, which `apps/app` reads in `lib/host/`. Calls travel as the `sqlitePersistence` RPC request with a 60 s limit (`src/shared/rpc/schema.ts`).
 - `apps/app` and the preload each declare the `DesktopBridge` type, because apps share code only through `packages/*`. Change both together.
 - Electrobun RPC sends JSON, unlike Electron's structured clone. `src/shared/rpc/codec.ts` tags `Date` values on both ends; without it, rows reload from SQLite with string timestamps and fail schema validation on their next update. It does not encode BigInt, Map, or Set.
 
@@ -90,6 +90,6 @@ Verified on WKWebView and CEF:
 
 ## Open Items
 
-- Desktop authentication is a placeholder; it does not yet create or persist a signed-in session.
+- Desktop sign-in (see [Auth patterns](./auth.md#desktop-sign-in)) has not been run end to end yet: refresh token rotation, window activation after the callback, and the Keychain prompt for an unsigned packaged build are unverified.
 - Identifier and production domain (pending). The current app config still uses `dev.tsu-stack.desktop.spike` and version `0.0.0`.
 - Icons, signing and notarization, `release.baseUrl`, and a CI matrix on native runners.

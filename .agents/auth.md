@@ -5,7 +5,7 @@
 Clerk is the only authentication provider for Web, Native, Extension, and the API.
 
 - **Web**: `ClerkProvider` in `apps/web/src/routes/__root.tsx` and `clerkMiddleware()` in `apps/web/src/start.ts` connect browser and server authentication. Web owns sign-in and sign-up.
-- **App**: `apps/app` mounts `@clerk/react`'s `ClerkProvider` in its web host only (`shared/providers/auth-provider.tsx`). Everything else reads auth through `useAppAuth()` in `shared/host/auth.ts`. The desktop host has no sign-in yet and always reports a signed-out user.
+- **App**: `apps/app` mounts `@clerk/react`'s `ClerkProvider` in its web host only: `lib/host/web/auth.ts` is the one module that imports Clerk, and the desktop build never resolves it. Everything else reads auth through `useAppAuth()` from `lib/host/index.ts`. The desktop host (`lib/host/desktop/auth.ts`) mirrors the session the desktop shell keeps (see Desktop Sign-In).
 - **SSR**: `getClerkAuthState` in `apps/web/src/features/auth/api/clerk-auth-state.functions.ts` reads the current request with Clerk's server-side `auth()` helper.
 - **API**: Hono context creation verifies requests with `@clerk/backend`. Clients send a Clerk session token in `Authorization: Bearer <token>`.
 - **Native**: `@clerk/expo` uses its secure token cache and an app-local token getter for oRPC.
@@ -33,6 +33,17 @@ Web and App must share a root domain in production (for example `example.com` an
 
 Use Clerk's `SignIn`, `SignUp`, `useAuth`, and `useUser` integrations. Do not introduce a second session query or authentication provider.
 
+## Desktop Sign-In
+
+The desktop app signs in with Clerk as an OAuth 2.0 provider (authorization code with PKCE), not with Clerk's browser SDK, because `views://` cannot store cookies.
+
+1. The window calls `tsuDesktop.auth.signIn()`. The main process (`apps/desktop/src/main/lib/auth/`) starts a one-shot server on `127.0.0.1` (ports 47823–47825) and opens Clerk's `/oauth/authorize` in the system browser.
+2. Clerk sends a signed-out user to its sign-in page with `redirect_url=<FAPI>/oauth/authorize-with-immediate-redirect…`, then redirects to `http://127.0.0.1:<port>/callback?code&state`.
+3. The main process exchanges the code, keeps the access token in memory, and stores the refresh token in the OS credential store (`Bun.secrets`, one entry per identifier and channel). The window gets state changes as `authChanged` messages and a token per request through `authGetToken`; the refresh token never reaches the webview.
+4. The API accepts the OAuth access token with `acceptsToken: ["session_token", "oauth_token"]`; `auth.userId` is the Clerk user ID either way.
+
+Configuration: a public Clerk OAuth application per instance, with PKCE required, scopes `openid profile email offline_access`, and the three loopback redirect URIs. Its client ID is `VITE_CLERK_DESKTOP_CLIENT_ID`. Signing in does not change `dataMode`; desktop data stays local.
+
 ## API Authentication
 
 - `OrpcContext` exposes `auth: { userId: string } | null` and a request logger.
@@ -44,7 +55,7 @@ Use Clerk's `SignIn`, `SignUp`, `useAuth`, and `useUser` integrations. Do not in
 
 ## Client Tokens And Cache
 
-- Browser and Native token bridges store Clerk's `getToken` function, not a copied token. Resolve the token when making each API request. The App's bridge (`ApiAuthBridge` with `shared/api/auth-token.ts`) reads the getter through `useAppAuth()`, so a future desktop sign-in only replaces the desktop implementation.
+- Browser and Native token bridges store Clerk's `getToken` function, not a copied token. Resolve the token when making each API request. The App's bridge (`ApiAuthBridge` in `app/providers/auth-provider.tsx` with `lib/api-client/auth-token.ts`) reads the getter through `useAppAuth()`, so the desktop host only supplies its own getter.
 - Clear the token getter when its bridge unmounts.
 - Web and App clear their QueryClient when the Clerk user changes, so cached private data does not carry across accounts.
 - Keep the browser-extension background token flow and configured stable extension origin intact.

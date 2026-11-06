@@ -1,10 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { appConfig } from "#/config/app.config";
 import { generateAppSeo } from "#/shared/lib/seo";
 
 import { PrivacyPolicyPage } from "#/pages/privacy-policy/index";
-
-import { appConfig } from "#/config/app.config";
 
 export const Route = createFileRoute("/{-$locale}/(root-layout)/privacy-policy/")({
   head: ({ params }) =>

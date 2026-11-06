@@ -4,7 +4,7 @@ import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import viteReact, { reactCompilerPreset } from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
+import { defaultClientConditions, defineConfig } from "vite";
 
 import { ENV_APP } from "@uni-stack/env/app/env";
 
@@ -31,7 +31,12 @@ export default defineConfig(({ mode }) => {
     envDir: resolve(import.meta.dirname, "../../packages/env"),
     plugins: [
       // Must come before the React plugin
-      tanstackRouter({ autoCodeSplitting: true, target: "react" }),
+      tanstackRouter({
+        autoCodeSplitting: true,
+        generatedRouteTree: "./src/app/routeTree.gen.ts",
+        routesDirectory: "./src/app/routes",
+        target: "react"
+      }),
       viteReact(),
       /** @see {@link https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#react-compiler} */
       babel({
@@ -39,6 +44,11 @@ export default defineConfig(({ mode }) => {
       }),
       tailwindcss()
     ],
+    resolve: {
+      // The desktop condition points #/lib/host/runtime at lib/host/desktop (see package.json
+      // imports); every other build gets lib/host/web, and neither build imports the other
+      conditions: isDesktop ? [...defaultClientConditions, "desktop"] : [...defaultClientConditions]
+    },
     server: {
       port: isDesktop ? DESKTOP_DEV_PORT : webPort,
       strictPort: true

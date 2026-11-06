@@ -7,10 +7,9 @@ import { buttonVariants } from "@uni-stack/ui/components/button";
 import { Image } from "@uni-stack/ui/components/image";
 import { cn } from "@uni-stack/ui/lib/utils";
 
+import { appConfig } from "#/config/app.config";
 import { getAppUrl } from "#/shared/lib/app-url";
 import { LogoWordmark } from "#/shared/ui/logo";
-
-import { appConfig } from "#/config/app.config";
 
 type FooterLink =
   | {

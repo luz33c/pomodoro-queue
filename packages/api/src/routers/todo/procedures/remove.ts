@@ -4,11 +4,16 @@ import { TodoIdInputSchema } from "@uni-stack/core/todo";
 import { deleteTodo } from "@uni-stack/db/queries";
 
 import { protectedProcedure } from "#/orpc/procedures";
+import { publishTodoChange } from "#/routers/todo/change-feed";
 
 export const remove = protectedProcedure
   .route({ description: "Delete a todo; deleting a missing todo is a no-op", method: "POST" })
   .input(TodoIdInputSchema)
   .output(z.void())
   .handler(async ({ context, input }) => {
-    await deleteTodo({ id: input.id, ownerId: context.auth.userId });
+    const ownerId = context.auth.userId;
+    const deleted = await deleteTodo({ id: input.id, ownerId });
+    if (deleted) {
+      publishTodoChange(ownerId);
+    }
   });

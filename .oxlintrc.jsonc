@@ -147,6 +147,9 @@
       }
     },
     {
+      // Bulletproof React layout: app → features → components / hooks / lib / config / types / utils.
+      // Each top-level folder is a layer; features never import each other, and other code reaches a
+      // feature only through its index.ts. See apps/app/AGENTS.md.
       "files": ["apps/app/src/**/*.ts", "apps/app/src/**/*.tsx"],
       "jsPlugins": [{ "name": "fsd", "specifier": "eslint-plugin-fsd-lint" }],
       "rules": {
@@ -157,12 +160,46 @@
             "tsconfigPath": "./apps/app/tsconfig.json",
             "alias": { "value": "#", "withSlash": false },
             "layers": {
-              "app": { "pattern": "routes" },
-              "pages": { "pattern": "pages" },
-              "widgets": { "pattern": "widgets" },
-              "features": { "pattern": "features" },
-              "entities": { "pattern": "entities" },
-              "shared": { "pattern": "shared" }
+              "app": {
+                "pattern": "app",
+                "allowedToImport": [
+                  "app",
+                  "features",
+                  "components",
+                  "hooks",
+                  "lib",
+                  "config",
+                  "types",
+                  "utils"
+                ]
+              },
+              "features": {
+                "pattern": "features",
+                "priority": 2,
+                "allowedToImport": ["components", "hooks", "lib", "config", "types", "utils"]
+              },
+              "components": {
+                "pattern": "components",
+                "priority": 3,
+                "allowedToImport": ["components", "hooks", "lib", "config", "types", "utils"]
+              },
+              "hooks": {
+                "pattern": "hooks",
+                "priority": 4,
+                "allowedToImport": ["hooks", "lib", "config", "types", "utils"]
+              },
+              "lib": {
+                "pattern": "lib",
+                "priority": 5,
+                "allowedToImport": ["lib", "config", "types", "utils"]
+              },
+              "config": {
+                "pattern": "config",
+                "priority": 6,
+                "allowedToImport": ["config", "types", "utils"]
+              },
+              "types": { "pattern": "types", "priority": 7, "allowedToImport": ["types"] },
+              "utils": { "pattern": "utils", "priority": 8, "allowedToImport": ["types", "utils"] }
             },
             "ignoreImportPatterns": ["\\.css$"]
           }
@@ -174,12 +211,46 @@
             "tsconfigPath": "./apps/app/tsconfig.json",
             "alias": { "value": "#", "withSlash": true },
             "layers": {
-              "app": { "pattern": "routes" },
-              "pages": { "pattern": "pages" },
-              "widgets": { "pattern": "widgets" },
-              "features": { "pattern": "features" },
-              "entities": { "pattern": "entities" },
-              "shared": { "pattern": "shared" }
+              "app": {
+                "pattern": "app",
+                "allowedToImport": [
+                  "app",
+                  "features",
+                  "components",
+                  "hooks",
+                  "lib",
+                  "config",
+                  "types",
+                  "utils"
+                ]
+              },
+              "features": {
+                "pattern": "features",
+                "priority": 2,
+                "allowedToImport": ["components", "hooks", "lib", "config", "types", "utils"]
+              },
+              "components": {
+                "pattern": "components",
+                "priority": 3,
+                "allowedToImport": ["components", "hooks", "lib", "config", "types", "utils"]
+              },
+              "hooks": {
+                "pattern": "hooks",
+                "priority": 4,
+                "allowedToImport": ["hooks", "lib", "config", "types", "utils"]
+              },
+              "lib": {
+                "pattern": "lib",
+                "priority": 5,
+                "allowedToImport": ["lib", "config", "types", "utils"]
+              },
+              "config": {
+                "pattern": "config",
+                "priority": 6,
+                "allowedToImport": ["config", "types", "utils"]
+              },
+              "types": { "pattern": "types", "priority": 7, "allowedToImport": ["types"] },
+              "utils": { "pattern": "utils", "priority": 8, "allowedToImport": ["types", "utils"] }
             },
             "ignoreImportPatterns": ["\\.css$"],
             "allowSameSlice": true
@@ -191,14 +262,7 @@
             "rootPath": "/apps/app/src/",
             "tsconfigPath": "./apps/app/tsconfig.json",
             "alias": { "value": "#", "withSlash": true },
-            "layers": {
-              "app": { "pattern": "routes" },
-              "pages": { "pattern": "pages" },
-              "widgets": { "pattern": "widgets" },
-              "features": { "pattern": "features" },
-              "entities": { "pattern": "entities" },
-              "shared": { "pattern": "shared" }
-            },
+            "layers": ["features"],
             "ignoreImportPatterns": ["\\.css$"]
           }
         ],
@@ -209,17 +273,50 @@
             "tsconfigPath": "./apps/app/tsconfig.json",
             "alias": { "value": "#", "withSlash": true },
             "layers": {
-              "app": { "pattern": "routes" },
-              "pages": { "pattern": "pages" },
-              "widgets": { "pattern": "widgets" },
-              "features": { "pattern": "features" },
-              "entities": { "pattern": "entities" },
-              "shared": { "pattern": "shared" }
+              "app": {
+                "pattern": "app",
+                "allowedToImport": [
+                  "app",
+                  "features",
+                  "components",
+                  "hooks",
+                  "lib",
+                  "config",
+                  "types",
+                  "utils"
+                ]
+              },
+              "features": {
+                "pattern": "features",
+                "priority": 2,
+                "allowedToImport": ["components", "hooks", "lib", "config", "types", "utils"]
+              },
+              "components": {
+                "pattern": "components",
+                "priority": 3,
+                "allowedToImport": ["components", "hooks", "lib", "config", "types", "utils"]
+              },
+              "hooks": {
+                "pattern": "hooks",
+                "priority": 4,
+                "allowedToImport": ["hooks", "lib", "config", "types", "utils"]
+              },
+              "lib": {
+                "pattern": "lib",
+                "priority": 5,
+                "allowedToImport": ["lib", "config", "types", "utils"]
+              },
+              "config": {
+                "pattern": "config",
+                "priority": 6,
+                "allowedToImport": ["config", "types", "utils"]
+              },
+              "types": { "pattern": "types", "priority": 7, "allowedToImport": ["types"] },
+              "utils": { "pattern": "utils", "priority": 8, "allowedToImport": ["types", "utils"] }
             },
             "ignoreImportPatterns": ["\\.css$"],
             "allowTypeImports": false,
-            "excludeLayers": ["shared"],
-            "featuresOnly": false
+            "featuresOnly": true
           }
         ],
         "fsd/no-ui-in-business-logic": [
@@ -229,12 +326,46 @@
             "tsconfigPath": "./apps/app/tsconfig.json",
             "alias": { "value": "#", "withSlash": true },
             "layers": {
-              "app": { "pattern": "routes" },
-              "pages": { "pattern": "pages" },
-              "widgets": { "pattern": "widgets" },
-              "features": { "pattern": "features" },
-              "entities": { "pattern": "entities" },
-              "shared": { "pattern": "shared" }
+              "app": {
+                "pattern": "app",
+                "allowedToImport": [
+                  "app",
+                  "features",
+                  "components",
+                  "hooks",
+                  "lib",
+                  "config",
+                  "types",
+                  "utils"
+                ]
+              },
+              "features": {
+                "pattern": "features",
+                "priority": 2,
+                "allowedToImport": ["components", "hooks", "lib", "config", "types", "utils"]
+              },
+              "components": {
+                "pattern": "components",
+                "priority": 3,
+                "allowedToImport": ["components", "hooks", "lib", "config", "types", "utils"]
+              },
+              "hooks": {
+                "pattern": "hooks",
+                "priority": 4,
+                "allowedToImport": ["hooks", "lib", "config", "types", "utils"]
+              },
+              "lib": {
+                "pattern": "lib",
+                "priority": 5,
+                "allowedToImport": ["lib", "config", "types", "utils"]
+              },
+              "config": {
+                "pattern": "config",
+                "priority": 6,
+                "allowedToImport": ["config", "types", "utils"]
+              },
+              "types": { "pattern": "types", "priority": 7, "allowedToImport": ["types"] },
+              "utils": { "pattern": "utils", "priority": 8, "allowedToImport": ["types", "utils"] }
             },
             "ignoreImportPatterns": ["\\.css$"]
           }

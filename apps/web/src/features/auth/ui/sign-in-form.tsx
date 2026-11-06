@@ -6,6 +6,7 @@ import { useLocale } from "@uni-stack/i18n/tanstack-start/components/locale-prov
 import { FieldDescription } from "@uni-stack/ui/components/field";
 import { cn } from "@uni-stack/ui/lib/utils";
 
+import { appConfig } from "#/config/app.config";
 import { Container } from "#/shared/ui/container";
 import { LogoIcon } from "#/shared/ui/logo";
 
@@ -15,8 +16,6 @@ import {
   toClerkAuthPath,
   toClerkRedirectUrl
 } from "#/features/auth/lib/clerk-urls";
-
-import { appConfig } from "#/config/app.config";
 
 export function SignInForm({
   redirectTo = "/",

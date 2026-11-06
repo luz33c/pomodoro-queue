@@ -1,10 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { appConfig } from "#/config/app.config";
 import { generateAppSeo } from "#/shared/lib/seo";
 
 import { TermsOfServicePage } from "#/pages/terms-of-service/index";
-
-import { appConfig } from "#/config/app.config";
 
 export const Route = createFileRoute("/{-$locale}/(root-layout)/terms-of-service/")({
   head: ({ params }) =>

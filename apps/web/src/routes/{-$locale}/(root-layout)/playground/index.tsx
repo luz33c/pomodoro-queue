@@ -10,12 +10,11 @@ import { type To } from "@uni-stack/i18n/tanstack-start/types";
 import { Button, buttonVariants } from "@uni-stack/ui/components/button";
 import { useIsClient } from "@uni-stack/ui/hooks/use-is-client.hook";
 
+import { appConfig } from "#/config/app.config";
 import { generateAppSeo } from "#/shared/lib/seo";
 import { useLogger } from "#/shared/providers/logger-provider";
 import { Container } from "#/shared/ui/container";
 import { Image } from "#/shared/ui/image";
-
-import { appConfig } from "#/config/app.config";
 
 export const Route = createFileRoute("/{-$locale}/(root-layout)/playground/")({
   head: ({ params }) =>

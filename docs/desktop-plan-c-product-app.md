@@ -38,7 +38,7 @@ packages/ui、i18n、env   两个前端共享的组件、样式、文案和配�
 
 ## 两种宿主
 
-宿主由 App 的 Vite mode 在构建时确定，差异集中在 [`shared/host`](../apps/app/src/shared/host/index.ts)；`features/auth` 的 `AuthGate` 是例外，负责选择两种宿主的未登录界面。
+宿主由 App 的 Vite mode 在构建时确定：`vite --mode desktop` 加上 `desktop` 解析条件，`package.json` 的 `#/lib/host/runtime` 据此指向 [`lib/host/desktop`](../apps/app/src/lib/host/desktop/index.ts) 或 [`lib/host/web`](../apps/app/src/lib/host/web/index.ts)，两者实现同一个 `HostAdapter` 接口，另一个不会被打包。其他代码只读 `hostAdapter` 的能力；`AuthGate` 按 `hostAdapter.auth.signInRedirect` 决定是否要求登录。
 
 | 行为       | 浏览器宿主                                 | 桌面宿主                                           |
 | ---------- | ------------------------------------------ | -------------------------------------------------- |
@@ -46,7 +46,7 @@ packages/ui、i18n、env   两个前端共享的组件、样式、文案和配�
 | 资源路径   | 取自 `VITE_APP_URL` 的 pathname            | 相对路径 `./`                                      |
 | 路由       | browser history，basepath 来自构建基础路径 | hash history，basepath 为 `/`                      |
 | 地址示例   | `http://localhost:3002/app/dashboard`      | `views://mainview/index.html#/dashboard`           |
-| 认证       | 挂载 Clerk，通过 `useAppAuth()` 读取会话   | 不挂载 Clerk，`useAppAuth()` 返回未登录            |
+| 认证       | 挂载 Clerk，通过 `useAppAuth()` 读取会话   | 不挂载 Clerk，`useAppAuth()` 读取主进程的 OAuth 会话 |
 | 未登录页面 | 跳到 Web 登录，携带当前 App URL            | 显示登录占位和 API 健康状态                        |
 | 外链       | App 外链通常打开新标签页                   | 当前窗口导航被壳拦截，交给系统浏览器               |
 | API        | 每次请求从 token getter 获取 Bearer token  | 目前只请求无需登录的健康接口；私有数据等待认证接入 |
@@ -70,7 +70,7 @@ App 的受保护页面
 
 Web 的回跳校验要求目标 origin 与 `VITE_APP_URL` 一致，且 pathname 位于 App 基础路径内。站内目标继续使用已有的本地化路由校验；没有 redirect 时默认去 App 首页。代码见 [app-redirect.ts](../apps/web/src/features/auth/lib/app-redirect.ts)。
 
-API 的授权方和 CORS 列表自动包含 Web 与 App 的 origin；额外来源由 `CLERK_AUTHORIZED_PARTIES` 提供。桌面开发来源为 `http://localhost:3003`，打包后来源为 `views://mainview`。添加来源只允许请求通过来源校验，不会为桌面创建登录会话。
+API 的授权方和 CORS 列表自动包含 Web 与 App 的 origin；额外来源由 `CLERK_AUTHORIZED_PARTIES` 提供。桌面开发来源为 `http://localhost:3003`，打包后来源为 `views://mainview`。添加来源只允许请求通过来源校验；桌面登录走 Clerk OAuth（PKCE + 本机回调），见[认证指南](../.agents/auth.md#desktop-sign-in)。
 
 生产部署要求 Web 与 App 使用同一 Clerk 生产实例和同一根域，并按实际子域配置 Clerk。真实生产域名的会话共享仍需验收。App 退出登录后返回 `VITE_WEB_URL`。
 
@@ -143,7 +143,7 @@ App 的四个构建变量以 [ENV_APP](../packages/env/src/app/env.ts) 为准：
 当前仍需完成：
 
 - Docker 中的独立 App 服务与 Web 同源挂载验收，以及真实生产域名下的 Clerk 会话共享。
-- 桌面登录、token 持久化和会话交接；现在仅有登录占位。
+- 桌面登录已实现但未端到端实测：refresh token 轮换、回调后窗口激活、未签名打包版的钥匙串弹框。
 - 正式应用 identifier、版本与图标。当前配置仍是 `dev.tsu-stack.desktop.spike`、`0.0.0`。
 - macOS 签名、公证、更新发布地址和跨平台 CI；Windows、Linux 及较旧 macOS 尚无完整验收记录。
 - PWA、离线缓存与同步、preload 桥、原生菜单、托盘、通知和窗口状态保存均未实现，不应作为现有能力宣传。

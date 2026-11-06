@@ -1,2 +1,2 @@
-export { AuthGate } from "./ui/auth-gate";
-export { DesktopSignInPlaceholder } from "./ui/desktop-sign-in-placeholder";
+export { AuthGate } from "./components/auth-gate";
+export { DesktopSignIn } from "./components/desktop-sign-in";

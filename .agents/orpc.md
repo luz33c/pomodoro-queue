@@ -155,6 +155,7 @@ packages/api/src/routers/<slice>/
     <key>.ts      one procedure per file
   errors.ts       optional: errors that several procedures share
   queries.ts      optional: DB access that serves only this slice
+  change-feed.ts  optional: the slice's EventPublisher for a `changes` stream (see todo/)
 ```
 
 - `index.ts` imports the procedures and exports `<slice>Router`, for example `export const todoRouter = { create, update, remove }`. It holds no handler code.
@@ -162,6 +163,7 @@ packages/api/src/routers/<slice>/
 - `queries.ts` owns slice-local DB readers, aggregations, transport shaping helpers, and similar reusable helpers for that router.
 - `utils.ts`, `constants.ts`, or a file named for its job, such as `health/checks.ts`, are fine when the helper is still router-local.
 - Nest a sub-router as a nested slice folder with its own `index.ts` and `procedures/`.
+- A stream that pushes to clients is an ordinary procedure whose output is `eventIterator(schema)` and whose handler is an `async function*` that yields from the slice's `EventPublisher`, passing the handler's `signal` so the subscription ends with the request. Over `RPCLink` it is Server-Sent Events on the existing fetch, so the Bearer header, CORS, and proxies need nothing new, and oRPC writes a keep-alive comment every 5 seconds by default. Publish only after the write commits. See `todo/change-feed.ts` and `todo/procedures/changes.ts`, and [Sync](./sync.md) for the client side.
 
 ## Shared Contracts
 

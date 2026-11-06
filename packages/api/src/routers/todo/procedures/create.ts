@@ -3,6 +3,7 @@ import { db } from "@uni-stack/db";
 import { createTodo, getTodo } from "@uni-stack/db/queries";
 
 import { protectedProcedure } from "#/orpc/procedures";
+import { publishTodoChange } from "#/routers/todo/change-feed";
 import { TODO_ID_CONFLICT } from "#/routers/todo/errors";
 
 export const create = protectedProcedure
@@ -14,12 +15,12 @@ export const create = protectedProcedure
   })
   .input(TodoCreateInputSchema)
   .output(TodoRowSchema)
-  .handler(({ context, errors, input }) =>
-    db.transaction(async (tx) => {
-      const ownerId = context.auth.userId;
+  .handler(async ({ context, errors, input }) => {
+    const ownerId = context.auth.userId;
+    const { isNew, row } = await db.transaction(async (tx) => {
       const created = await createTodo({ id: input.id, ownerId, title: input.title }, tx);
       if (created) {
-        return created;
+        return { isNew: true, row: created };
       }
 
       // The id exists already: a replay of this owner's own write, or another owner's row
@@ -27,6 +28,12 @@ export const create = protectedProcedure
       if (!existing) {
         throw errors.TODO_ID_CONFLICT();
       }
-      return existing;
-    })
-  );
+      return { isNew: false, row: existing };
+    });
+
+    // After the commit, so a client that refetches on the signal reads the new row; a replay changed nothing
+    if (isNew) {
+      publishTodoChange(ownerId);
+    }
+    return row;
+  });

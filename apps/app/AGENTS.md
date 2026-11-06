@@ -13,28 +13,42 @@ Current architecture, deployment options, and remaining work: [docs/desktop-plan
 
 ## Boundaries
 
-- Host differences live in `src/shared/host/`. Pages, widgets, and queries never branch on the host. `AuthGate` branches on `dataMode` from `shared/host/persistence.ts` instead: `cloud` in the web host, `local` in the desktop host until desktop sign-in and sync exist. An entity picks its collection with the literal `import.meta.env.MODE === "desktop"`, because the bundler drops the desktop SQLite packages from the web build only when the dead branch sits in the same module.
-- Auth goes through `useAppAuth()` from `#/shared/host/auth`. Only `shared/host/auth.ts` and `shared/providers/auth-provider.tsx` import `@clerk/react`.
-- Data goes through oRPC with `#/shared/api/orpc`, typed by `@uni-stack/api/client/types` only. Requests carry a Bearer token and never rely on cookies, because `views://` cannot store them.
-- Synced data lives in TanStack DB collections in `entities/<name>/lib/`. In `cloud` mode it is a query collection that reads the `list` procedure and writes through oRPC, applying the row each write returns. In `local` mode it is a local-only collection persisted to the desktop shell's SQLite file. Pages read with `useLiveQuery` and write through the entity's functions. Rules for collections and writes: [Sync](../../.agents/sync.md).
+- Host differences live in `src/lib/host/`, in two implementations of one `HostAdapter` interface (`types.ts`): `web/` (Clerk, sign-in on the website, account rows in memory) and `desktop/` (the preload bridge, system-browser sign-in, SQLite). The build mode is the switch: `#/lib/host/runtime` is a conditional import in `package.json`, and `vite --mode desktop` adds the `desktop` resolve condition in `vite.config.ts`, so each build imports exactly one implementation and never bundles the other. `tsc` resolves the `default` (web) branch; the desktop implementation is checked through `satisfies HostAdapter`.
+- Everything outside `lib/host/` imports only `#/lib/host/index` (`hostAdapter`, `useAppAuth`, and the shared types) and reads capabilities such as `hostAdapter.auth.signInRedirect` or `hostAdapter.storage`, never which host it runs in and never `import.meta.env.MODE`. `AuthGate` requires sign-in only when the host has a `signInRedirect`, so desktop works signed out on device rows.
+- Auth goes through `useAppAuth()` from `#/lib/host/index`. Only `lib/host/web/auth.ts` imports `@clerk/react`.
+- Data goes through oRPC with `#/lib/api-client/orpc`, typed by `@uni-stack/api/client/types` only. Requests carry a Bearer token and never rely on cookies, because `views://` cannot store them.
+- Synced data lives in TanStack DB collections. A feature's `api/` hands its oRPC calls to `createSyncedSource` from `lib/sync/`, which works on both hosts: account rows once signed in (cached in SQLite on desktop and kept current by the server's change stream), this device's rows while signed out where the host keeps any. Components get the collection from the feature's `use<Name>Source()` hook, read with `useLiveQuery`, and write through the feature's functions. Rules for collections and writes: [Sync](../../.agents/sync.md).
 - Never import `electrobun/*`, `apps/web`, or `apps/desktop`. Share code only through `packages/*`.
 - `server.ts` runs directly on Node.js 24 and imports only `hono`, `@hono/node-server`, and Node built-ins. Node does not strip types from the `@uni-stack/*` sources in `node_modules`.
 - `dependencies` holds only what `server.ts` needs at runtime. Everything bundled into `dist` goes in `devDependencies`, so `pnpm deploy --prod` ships a minimal production directory.
 
 ## Structure
 
-The app follows the same FSD layers as `apps/web` (`routes → pages → widgets → features → entities → shared`), and Oxlint enforces them. See [TanStack patterns](../../.agents/tanstack-patterns.md) for segments.
+The app follows the [Bulletproof React](https://github.com/alan2207/bulletproof-react/blob/master/docs/project-structure.md) layout. `apps/web` still uses FSD; the two apps are organized differently on purpose.
 
-- `routes/` stays thin. `(auth)/route.tsx` wraps every page in `AuthGate` and `AppShell`. The gate requires sign-in only in `cloud` mode, so a page that calls a private API shows `DesktopSignInPlaceholder` itself when signed out, as the dashboard does.
-- `shared/config/app.ts` owns the app name, home path, and outbound URLs. Do not hard-code them.
-- `widgets/app-shell/config/nav-items.ts` lists product pages and outbound links. The header and the narrow-screen sheet render the same lists.
-- Queries live in the owning slice as `<slice>/api/<operation>.ts`, exporting `get*QueryOptions` and `useGet*Query`. File names carry no `.query` suffix. A mutation invalidates the affected query keys before it shows success.
+```text
+src/
+├── app/          main.tsx, router.ts, providers/, styles/, routes/ (TanStack file routes), routeTree.gen.ts
+├── features/     one folder per product capability: auth/, dashboard/, todos/
+│   └── <name>/   index.ts (the only entry other code may import), api/, components/, hooks/, stores/, types/, utils/
+├── components/   UI shared across features: container, spinner-screen, errors/, layouts/app-shell/
+├── hooks/        hooks shared across features (create it when the first one appears)
+├── lib/          preconfigured libraries: api-client/ (oRPC, Query), host/ (web or desktop), sync/, i18n, document-title
+└── config/       app.ts (name, home path, outbound URLs), nav-items.ts
+```
+
+- Imports flow one way: `lib`, `config`, `components`, and `hooks` never import `features` or `app`; `features` never import `app` or each other; `app` composes features. Oxlint enforces it with `eslint-plugin-fsd-lint` configured with these folders as layers (`.oxlintrc.jsonc`). The plugin checks `import` statements, not `export … from`.
+- Code outside a feature imports it only through its `index.ts`. Inside a feature, import `.ts` files with `#/features/<name>/…` and sibling `.tsx` files with `./`, because the `#/*` mapping resolves `.ts` only (`#/components/*` and `#/app/providers/*` map to `.tsx`).
+- Include only the folders a feature needs. Data a second feature must read moves out of its feature into `lib/` with a plain interface; until then it stays in the feature that owns it.
+- Route files stay thin and compose features. `(auth)/route.tsx` wraps every page in `AuthGate` and `AppShell`. The gate requires sign-in only when the host has a `signInRedirect`, so a route whose feature calls a private API shows `DesktopSignIn` itself when signed out, as `(auth)/dashboard/index.tsx` does.
+- `config/app.ts` owns the app name, home path, and outbound URLs. Do not hard-code them. `config/nav-items.ts` lists product pages and outbound links; the header and the narrow-screen sheet render the same lists.
+- Queries live in the owning feature as `features/<name>/api/<operation>.ts`, exporting `get*QueryOptions` and `useGet*Query`. File names carry no `.query` suffix. A mutation invalidates the affected query keys before it shows success.
 - Each route sets its title with `head()` and `documentTitle()`. `index.html` has no `<title>`.
 
 ## i18n
 
 - Messages come from `@uni-stack/i18n/messages`, shared with `apps/web`. Add English keys only, following [i18n guidelines](../../.agents/i18n.md).
-- Routes have no locale prefix. `shared/i18n/locale.ts` resolves the locale once at startup (`localStorage`, then `navigator.languages`, then `baseLocale`), and switching reloads the page.
+- Routes have no locale prefix. `lib/i18n.ts` resolves the locale once at startup (`localStorage`, then `navigator.languages`, then `baseLocale`), and switching reloads the page.
 - Do not call Paraglide's `setLocale` or register its Vite plugin here. The compiled runtime is shared with `apps/web`, which compiles it with its URL strategy.
 
 ## Environment
@@ -52,10 +66,10 @@ The app follows the same FSD layers as `apps/web` (`routes → pages → widgets
 | `pnpm --filter @uni-stack/app run start`         | Serve `dist/web` with `server.ts`                                                                  |
 | `pnpm --filter @uni-stack/app run typecheck`     | Type-check                                                                                         |
 
-`src/routeTree.gen.ts` is generated by `@tanstack/router-plugin` during dev and build, and it is committed like `apps/web`'s. After adding a route file, run the dev server or a build once before type-checking.
+`src/app/routeTree.gen.ts` is generated by `@tanstack/router-plugin` (`routesDirectory: ./src/app/routes` in `vite.config.ts`) during dev and build, and it is committed like `apps/web`'s. After adding a route file, run the dev server or a build once before type-checking.
 
 ## Adding A Page
 
-1. Create `pages/<name>/ui/<name>-page.tsx` and export it from `pages/<name>/index.ts`.
-2. Create `routes/(auth)/<name>/index.tsx` with `head()` and the page as `component`.
-3. Add an entry to `widgets/app-shell/config/nav-items.ts` when the page belongs in navigation.
+1. Create `features/<name>/components/<name>-page.tsx` and export it from `features/<name>/index.ts`.
+2. Create `app/routes/(auth)/<name>/index.tsx` with `head()` and the page as `component`.
+3. Add an entry to `config/nav-items.ts` when the page belongs in navigation.

@@ -25,7 +25,9 @@
     // Vendored agent skills and their lockfile are managed by the `skills` CLI
     ".agents/skills/",
     ".claude/skills/",
-    "skills-lock.json"
+    "skills-lock.json",
+    // Design docs and generated show-me pages are not held to code formatting
+    "docs/"
   ],
   "sortImports": {
     "customGroups": [
@@ -50,8 +52,19 @@
         "groupName": "entities"
       },
       {
-        "elementNamePattern": ["#/shared/**"],
+        // apps/web keeps FSD's shared/; apps/app's shared code sits in Bulletproof's top-level folders
+        "elementNamePattern": [
+          "#/shared/**",
+          "#/config/**",
+          "#/lib/**",
+          "#/hooks/**",
+          "#/components/**"
+        ],
         "groupName": "shared"
+      },
+      {
+        "elementNamePattern": ["#/app/**"],
+        "groupName": "app"
       }
     ],
     "groups": [
@@ -63,6 +76,7 @@
       "features",
       "widgets",
       "pages",
+      "app",
       ["internal", "subpath"],
       ["parent", "sibling", "index"],
       "style",

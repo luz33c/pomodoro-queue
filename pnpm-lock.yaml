@@ -106,11 +106,11 @@ catalogs:
       specifier: 4.3.3
       version: 4.3.3
     '@tanstack/db':
-      specifier: 0.15.2
-      version: 0.15.2
+      specifier: 1.0.0-rc.1.3
+      version: 1.0.0-rc.1.3
     '@tanstack/db-sqlite-persistence-core':
-      specifier: 0.4.12
-      version: 0.4.12
+      specifier: 1.0.0-rc.1.3
+      version: 1.0.0-rc.1.3
     '@tanstack/devtools-a11y':
       specifier: 0.2.0
       version: 0.2.0
@@ -118,8 +118,8 @@ catalogs:
       specifier: 0.8.3
       version: 0.8.3
     '@tanstack/electron-db-sqlite-persistence':
-      specifier: 0.2.13
-      version: 0.2.13
+      specifier: 1.0.0-rc.1.3
+      version: 1.0.0-rc.1.3
     '@tanstack/eslint-plugin-query':
       specifier: 5.104.0
       version: 5.104.0
@@ -127,11 +127,11 @@ catalogs:
       specifier: 1.162.0
       version: 1.162.0
     '@tanstack/query-db-collection':
-      specifier: 1.4.8
-      version: 1.4.8
+      specifier: 1.5.1
+      version: 1.5.1
     '@tanstack/react-db':
-      specifier: 0.5.12
-      version: 0.5.12
+      specifier: 1.0.0-rc.1.3
+      version: 1.0.0-rc.1.3
     '@tanstack/react-devtools':
       specifier: 0.10.10
       version: 0.10.10
@@ -432,16 +432,16 @@ importers:
         version: 4.3.3(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.50.0)(yaml@2.9.0))
       '@tanstack/db':
         specifier: 'catalog:'
-        version: 0.15.2(typescript@7.0.2)
+        version: 1.0.0-rc.1.3(typescript@7.0.2)
       '@tanstack/electron-db-sqlite-persistence':
         specifier: 'catalog:'
-        version: 0.2.13(typescript@7.0.2)
+        version: 1.0.0-rc.1.3(typescript@7.0.2)
       '@tanstack/query-db-collection':
         specifier: 'catalog:'
-        version: 1.4.8(@tanstack/query-core@5.104.0)(typescript@7.0.2)
+        version: 1.5.1(@tanstack/db@1.0.0-rc.1.3(typescript@7.0.2))(@tanstack/query-core@5.104.0)(typescript@7.0.2)
       '@tanstack/react-db':
         specifier: 'catalog:'
-        version: 0.5.12(react@19.2.8)(typescript@7.0.2)
+        version: 1.0.0-rc.1.3(react@19.2.8)(typescript@7.0.2)
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.104.0(react@19.2.8)
@@ -519,13 +519,13 @@ importers:
     devDependencies:
       '@tanstack/db':
         specifier: 'catalog:'
-        version: 0.15.2(typescript@7.0.2)
+        version: 1.0.0-rc.1.3(typescript@7.0.2)
       '@tanstack/db-sqlite-persistence-core':
         specifier: 'catalog:'
-        version: 0.4.12(typescript@7.0.2)
+        version: 1.0.0-rc.1.3(typescript@7.0.2)
       '@tanstack/electron-db-sqlite-persistence':
         specifier: 'catalog:'
-        version: 0.2.13(typescript@7.0.2)
+        version: 1.0.0-rc.1.3(typescript@7.0.2)
       '@types/bun':
         specifier: 'catalog:'
         version: 1.4.0
@@ -4695,18 +4695,18 @@ packages:
     peerDependencies:
       vite: 8.2.2
 
-  '@tanstack/db-ivm@0.2.0':
-    resolution: {integrity: sha512-AuMuGzVdWR5qzJPRYajmrUp95vMo0duvMZ0zBjMOvaI9rkh2GHZWCsJ/p7s81UN4Lep6HHJjahnYUF+XVL0+AQ==}
+  '@tanstack/db-ivm@1.0.0-rc.1.2':
+    resolution: {integrity: sha512-kF5XbkzNmDuJBr+p2//ijZO9CzAGp0fK8gRGRX6gzt9QZM9RNIizAPVLdXM9kcg+VlZC6xB28ZmScsX9j4LMuw==}
     peerDependencies:
       typescript: '>=4.7'
 
-  '@tanstack/db-sqlite-persistence-core@0.4.12':
-    resolution: {integrity: sha512-lGBkWTtnKB5ZE7rN87S3O1SSNNhGRDokHGil3UyR+YRcjk52JeZzVYufXJGs12I31L+6srTRM6/sWBUPg3e27Q==}
+  '@tanstack/db-sqlite-persistence-core@1.0.0-rc.1.3':
+    resolution: {integrity: sha512-9RJ/VHPXrK1aF6p+XBvauvs6wBFIPd7Ul4XRY2ELNVE02xwIT/GbO4S+GI8EX33mwPmtr9jj+hdvSsduVKjeWA==}
     peerDependencies:
       typescript: '>=4.7'
 
-  '@tanstack/db@0.15.2':
-    resolution: {integrity: sha512-s7CR8kOgkF1oPEGyKWItWHsg7U3hhQQu+k9CPjjAWwS6wzWVvjCbHbu/xnJvO1aPe7v3SBwo1tf6CMyKjNPNxg==}
+  '@tanstack/db@1.0.0-rc.1.3':
+    resolution: {integrity: sha512-O68zGYcb/24XrZQNkIBWlON2MiqgC+sSmnM+xxC7AZSEHQAYeUDy1IQE8g4vr3in8WMwD6/Jm/Y+7EoaR5H1eA==}
     peerDependencies:
       typescript: '>=4.7'
 
@@ -4830,8 +4830,8 @@ packages:
     peerDependencies:
       solid-js: '>=1.9.7'
 
-  '@tanstack/electron-db-sqlite-persistence@0.2.13':
-    resolution: {integrity: sha512-IcuGGCug4Vpqf0pGHVVc5pjQzCE3tToaqU/MVU+BZLM3iEQYXlqJ5/jeiBVaI8DMRwTwLyhxbv5KqIXdPrMLQA==}
+  '@tanstack/electron-db-sqlite-persistence@1.0.0-rc.1.3':
+    resolution: {integrity: sha512-YmQkMUcCN6ERSVOLH/z+RUviL1nDGv5HbZgoOxGY5q54cnUbfSLee+XuRgEA5rEpSNxyJJZ8EAwf0ey/ZY6mrQ==}
     peerDependencies:
       typescript: '>=4.7'
 
@@ -4876,17 +4876,18 @@ packages:
   '@tanstack/query-core@5.104.0':
     resolution: {integrity: sha512-JrC2r/JQlXt7khBSdUpsgxNvybzOg+aITa+ARRMlP2AFo93Y8vIqz077rp+e61mJetSZ0T6AJbwW1JHer1vrPQ==}
 
-  '@tanstack/query-db-collection@1.4.8':
-    resolution: {integrity: sha512-ysoX+BSYt6fbp0dPb/+vIe7wLlhPVXP0GKUP1sJ9FnbP2FkgxOzPzk2JDQsqlJweFl7P3z4kNViAyREJfbfc4w==}
+  '@tanstack/query-db-collection@1.5.1':
+    resolution: {integrity: sha512-KPEQHvbBm4BHpsKSoWAndCu/Xy21JyiYx/OISFj+TtPoN5o7ettoYaC8URDmqU5m1zGvji/nZv7SdVPipVcFRw==}
     peerDependencies:
+      '@tanstack/db': ^1.0.0-rc.0
       '@tanstack/query-core': 5.104.0
       typescript: '>=4.7'
 
   '@tanstack/query-devtools@5.104.0':
     resolution: {integrity: sha512-snKyFLVFC5LuNoyUTpyqCD2Z8cRlCWrAeO3xub0nGi81IMz8YAUWq2Z+XdpGSGT7bCxqVdOHUjyiA3CtDuBjfQ==}
 
-  '@tanstack/react-db@0.5.12':
-    resolution: {integrity: sha512-Sq5qtW/vJRzV3+vSFnr5dEk3GHOc/x7aG3lte6Y1wnC3GwsbnrBm1xy7XccPIvkeV8AU88Bo9QJwQXoElYqKLg==}
+  '@tanstack/react-db@1.0.0-rc.1.3':
+    resolution: {integrity: sha512-lFSAD+kSP7NLNLuFi/YNZmI2V4Vg1cJBqtwEbmGMhpfVRT8zEeoOcao7P2BoRcPvNbqdFz+nFfkZKTmpGrpDgw==}
     peerDependencies:
       react: '>=18.0.0'
 
@@ -14223,21 +14224,21 @@ snapshots:
       tailwindcss: 4.3.3
       vite: 8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.50.0)(yaml@2.9.0)
 
-  '@tanstack/db-ivm@0.2.0(typescript@7.0.2)':
+  '@tanstack/db-ivm@1.0.0-rc.1.2(typescript@7.0.2)':
     dependencies:
       fractional-indexing: 3.4.0
       typescript: 7.0.2
 
-  '@tanstack/db-sqlite-persistence-core@0.4.12(typescript@7.0.2)':
+  '@tanstack/db-sqlite-persistence-core@1.0.0-rc.1.3(typescript@7.0.2)':
     dependencies:
       '@standard-schema/spec': 1.1.0
-      '@tanstack/db': 0.15.2(typescript@7.0.2)
+      '@tanstack/db': 1.0.0-rc.1.3(typescript@7.0.2)
       typescript: 7.0.2
 
-  '@tanstack/db@0.15.2(typescript@7.0.2)':
+  '@tanstack/db@1.0.0-rc.1.3(typescript@7.0.2)':
     dependencies:
       '@standard-schema/spec': 1.1.0
-      '@tanstack/db-ivm': 0.2.0(typescript@7.0.2)
+      '@tanstack/db-ivm': 1.0.0-rc.1.2(typescript@7.0.2)
       '@tanstack/pacer-lite': 0.2.2
       typescript: 7.0.2
 
@@ -14349,9 +14350,9 @@ snapshots:
       - csstype
       - utf-8-validate
 
-  '@tanstack/electron-db-sqlite-persistence@0.2.13(typescript@7.0.2)':
+  '@tanstack/electron-db-sqlite-persistence@1.0.0-rc.1.3(typescript@7.0.2)':
     dependencies:
-      '@tanstack/db-sqlite-persistence-core': 0.4.12(typescript@7.0.2)
+      '@tanstack/db-sqlite-persistence-core': 1.0.0-rc.1.3(typescript@7.0.2)
       typescript: 7.0.2
 
   '@tanstack/eslint-plugin-query@5.104.0(eslint@10.9.1(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)':
@@ -14405,10 +14406,10 @@ snapshots:
 
   '@tanstack/query-core@5.104.0': {}
 
-  '@tanstack/query-db-collection@1.4.8(@tanstack/query-core@5.104.0)(typescript@7.0.2)':
+  '@tanstack/query-db-collection@1.5.1(@tanstack/db@1.0.0-rc.1.3(typescript@7.0.2))(@tanstack/query-core@5.104.0)(typescript@7.0.2)':
     dependencies:
       '@standard-schema/spec': 1.1.0
-      '@tanstack/db': 0.15.2(typescript@7.0.2)
+      '@tanstack/db': 1.0.0-rc.1.3(typescript@7.0.2)
       '@tanstack/query-core': 5.104.0
       typescript: 7.0.2
 
@@ -14428,9 +14429,9 @@ snapshots:
     transitivePeerDependencies:
       - csstype
 
-  '@tanstack/react-db@0.5.12(react@19.2.8)(typescript@7.0.2)':
+  '@tanstack/react-db@1.0.0-rc.1.3(react@19.2.8)(typescript@7.0.2)':
     dependencies:
-      '@tanstack/db': 0.15.2(typescript@7.0.2)
+      '@tanstack/db': 1.0.0-rc.1.3(typescript@7.0.2)
       react: 19.2.8
     transitivePeerDependencies:
       - typescript
