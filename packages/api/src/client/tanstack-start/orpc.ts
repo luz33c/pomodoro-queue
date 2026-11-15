@@ -36,7 +36,8 @@ const getORPCClient = createIsomorphicFn()
         const token = await getClerkAuthToken();
         return token ? { Authorization: `Bearer ${token}` } : {};
       },
-      url: `${ENV_WEB_ISOMORPHIC.VITE_SERVER_URL}/rpc`
+      origin: ENV_WEB_ISOMORPHIC.VITE_SERVER_URL,
+      url: "/rpc"
     });
 
     return createORPCClient(link);

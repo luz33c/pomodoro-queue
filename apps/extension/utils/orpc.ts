@@ -32,7 +32,8 @@ const link = new RPCLink({
     const token = await getClerkTokenFromBackground();
     return token ? { Authorization: `Bearer ${token}` } : {};
   },
-  url: `${ENV_EXTENSION.WXT_SERVER_URL}/rpc`
+  origin: ENV_EXTENSION.WXT_SERVER_URL,
+  url: "/rpc"
 });
 
 export const client: AppRouterClient = createORPCClient(link);

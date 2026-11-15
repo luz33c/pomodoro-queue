@@ -8,9 +8,12 @@ import { ENV_SERVER } from "@uni-stack/env/server/env";
 
 import { relations } from "#/schema/relations";
 
-const client = postgres(ENV_SERVER.DATABASE_URL);
+/** The postgres.js client behind `db`. PostgresPublisher uses it for LISTEN/NOTIFY. */
+export const pgClient = postgres(ENV_SERVER.DATABASE_URL);
 
-export const db = drizzle({ client, relations });
+export type PgClient = typeof pgClient;
+
+export const db = drizzle({ client: pgClient, relations });
 
 /** `db` itself or the `tx` handed out by `db.transaction()`. */
 export type DbExecutor = PgAsyncDatabase<PostgresJsQueryResultHKT, typeof relations>;

@@ -19,12 +19,12 @@ This guide is intentionally repo-specific. It documents the current preferred wa
 
 `packages/api/src` is split by role. Imports only point down the table:
 
-| Folder     | Holds                                                                                     | Imported by           |
-| ---------- | ----------------------------------------------------------------------------------------- | --------------------- |
-| `client/`  | `types.ts`, the type-only entry for app, native, and extension; `tanstack-start/` for web | apps                  |
-| `server/`  | `rpc.ts`, `openapi.ts`, `create-context.ts`, and `clerk.ts`                               | `apps/server`         |
-| `routers/` | One folder per slice; `routers/index.ts` assembles them into `appRouter`                  | `client/`, `server/`  |
-| `orpc/`    | `context.ts` and `procedures.ts`, the base every procedure builds on                      | `routers/`, `server/` |
+| Folder     | Holds                                                                                                               | Imported by           |
+| ---------- | ------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `client/`  | `types.ts`, the type-only entry for app, native, and extension; `tanstack-start/` for web                           | apps                  |
+| `server/`  | `rpc.ts`, `openapi.ts`, `create-context.ts`, and `clerk.ts`                                                         | `apps/server`         |
+| `routers/` | One folder per slice; `routers/index.ts` assembles them into `appRouter`                                            | `client/`, `server/`  |
+| `orpc/`    | `context.ts` and `procedures.ts`, the base every procedure builds on; `postgres-publisher.ts` for `changes` streams | `routers/`, `server/` |
 
 - `package.json` exports only `./client/*` and `./server/*`, so apps cannot import `routers/` or `orpc/` directly.
 - Code that several slices need lives in the slice that owns the concept. Infrastructure goes in `orpc/` (building procedures), `server/` (the HTTP edge), or a top-level folder named for the integration. There is no `lib/` folder.
@@ -35,7 +35,7 @@ Define routes with the shared procedure factories from `packages/api/src/orpc/pr
 
 - Use `publicProcedure` for public read operations.
 - Use `protectedProcedure` for authenticated operations.
-- Add route metadata with `.route({ description, method })`.
+- Add route metadata with `.meta(openapi({ description, method }))`, importing `openapi` from `@orpc/openapi`. Meta set on a base procedure merges with the procedure's own.
 - Define `input(...)` and `output(...)` schemas explicitly with Zod.
 - Prefer returning repo-native shapes directly instead of renaming fields unless there is a strong product reason.
 
@@ -53,10 +53,12 @@ const exampleOutputSchema = z.object({
 });
 
 export const byId = publicProcedure
-  .route({
-    description: "Get an example by ID",
-    method: "GET"
-  })
+  .meta(
+    openapi({
+      description: "Get an example by ID",
+      method: "GET"
+    })
+  )
   .input(exampleInputSchema)
   .output(exampleOutputSchema.nullable())
   .handler(async ({ input, context, errors }) => {
@@ -71,6 +73,7 @@ Prefer type-safe oRPC errors with `.errors(...)` on the procedure base.
 - Define expected errors up front.
 - Declare on each procedure only the errors it can throw. Define an error that several procedures share once, in the slice's `errors.ts`, and pass it by name: `.errors({ TODO_NOT_FOUND })`.
 - Use `errors.MY_ERROR()` in handlers.
+- An error definition holds only `message` and `data`; oRPC ignores a `status` there. Give each new code its HTTP status in the slice's `errors.ts` as `<SLICE>_ERROR_STATUS`, for example `{ TODO_NOT_FOUND: 404 }`, and spread that into `server/error-status.ts`, which the RPC handler, the OpenAPI handler, and the generated spec share. A code missing from that map is sent as 400.
 - Use `data` schemas only for fields the client truly needs, and never include sensitive information.
 - Reserve thrown unknown errors for truly unexpected cases.
 - Do not leak sensitive information through error data or messages.
@@ -79,25 +82,28 @@ Prefer type-safe oRPC errors with `.errors(...)` on the procedure base.
 Example:
 
 ```ts
+// packages/api/src/routers/example/errors.ts
+export const EXAMPLE_NOT_FOUND = {
+  message: "Example not found"
+};
+
+export const EXAMPLE_ERROR_STATUS = {
+  EXAMPLE_NOT_FOUND: 404
+};
+
+// a procedure
 const protectedExampleProcedure = protectedProcedure.errors({
-  RATE_LIMITED: {
+  EXAMPLE_NOT_FOUND,
+  // Common codes such as TOO_MANY_REQUESTS already have a status in COMMON_ERROR_STATUS_MAP
+  TOO_MANY_REQUESTS: {
     data: z.object({
       retryAfter: z.number().int().min(1)
-    }),
-    status: 429
-  },
-  DATABASE_ERROR: {
-    description: "Failed to update example",
-    status: 500
-  },
-  EXAMPLE_NOT_FOUND: {
-    message: "Example not found",
-    status: 404
+    })
   }
 });
 ```
 
-Equivalent `ORPCError` throws are fine when the code, status, and data match a defined error, but the repo default should still be the typed `errors.*(...)` form.
+Equivalent `ORPCError` throws are fine when the code and data match a defined error, but the repo default should still be the typed `errors.*(...)` form.
 
 ## Logging
 
@@ -153,9 +159,9 @@ packages/api/src/routers/<slice>/
   index.ts        assembles the slice router from procedures/
   procedures/
     <key>.ts      one procedure per file
-  errors.ts       optional: errors that several procedures share
+  errors.ts       optional: errors that several procedures share, and their HTTP statuses
   queries.ts      optional: DB access that serves only this slice
-  change-feed.ts  optional: the slice's EventPublisher for a `changes` stream (see todo/)
+  change-feed.ts  optional: the slice's publisher for a `changes` stream (see todo/)
 ```
 
 - `index.ts` imports the procedures and exports `<slice>Router`, for example `export const todoRouter = { create, update, remove }`. It holds no handler code.
@@ -163,7 +169,7 @@ packages/api/src/routers/<slice>/
 - `queries.ts` owns slice-local DB readers, aggregations, transport shaping helpers, and similar reusable helpers for that router.
 - `utils.ts`, `constants.ts`, or a file named for its job, such as `health/checks.ts`, are fine when the helper is still router-local.
 - Nest a sub-router as a nested slice folder with its own `index.ts` and `procedures/`.
-- A stream that pushes to clients is an ordinary procedure whose output is `eventIterator(schema)` and whose handler is an `async function*` that yields from the slice's `EventPublisher`, passing the handler's `signal` so the subscription ends with the request. Over `RPCLink` it is Server-Sent Events on the existing fetch, so the Bearer header, CORS, and proxies need nothing new, and oRPC writes a keep-alive comment every 5 seconds by default. Publish only after the write commits. See `todo/change-feed.ts` and `todo/procedures/changes.ts`, and [Sync](./sync.md) for the client side.
+- A stream that pushes to clients is an ordinary procedure whose output is `asyncIteratorObject(schema)` and whose handler is an `async function*` that yields from the slice's publisher, passing the handler's `signal` so the subscription ends with the request. The publisher is a `PostgresPublisher` from `orpc/postgres-publisher.ts` on a channel named for the slice, such as `todo_changes`; that file ports the adapter proposed to oRPC upstream and is replaced by `@orpc/publisher/postgres` once it ships, so keep its logic and message format identical to upstream. Over `RPCLink` it is Server-Sent Events on the existing fetch, so the Bearer header, CORS, and proxies need nothing new, and oRPC writes a keep-alive comment every 15 seconds by default. Publish only after the write commits, and await it: `publish<Domain>Change(ownerId, context.logger)` logs a warning instead of failing the write when the signal cannot be sent. See `todo/change-feed.ts` and `todo/procedures/changes.ts`, and [Sync](./sync.md) for the client side.
 
 ## Shared Contracts
 

@@ -35,12 +35,13 @@ catalog:
   "@inlang/paraglide-js": 2.24.1
   "@lonik/oh-image": 3.3.0
   "@mdx-js/rollup": 3.1.1
-  "@orpc/client": 1.15.0
-  "@orpc/json-schema": 1.15.0
-  "@orpc/openapi": 1.15.0
-  "@orpc/server": 1.15.0
-  "@orpc/tanstack-query": 1.15.0
-  "@orpc/zod": 1.15.0
+  "@orpc/client": 2.0.0-beta.50
+  "@orpc/json-schema": 2.0.0-beta.50
+  "@orpc/openapi": 2.0.0-beta.50
+  "@orpc/publisher": 2.0.0-beta.50
+  "@orpc/server": 2.0.0-beta.50
+  "@orpc/tanstack-query": 2.0.0-beta.50
+  "@orpc/zod": 2.0.0-beta.50
   "@paper-design/shaders-react": 0.0.80
   "@react-native/metro-config": 0.86.3
   "@rolldown/plugin-babel": 0.2.3
@@ -53,14 +54,14 @@ catalog:
   "@tanstack/electron-db-sqlite-persistence": 1.0.0-rc.1.3
   "@tanstack/eslint-plugin-query": 5.104.0
   "@tanstack/eslint-plugin-router": 1.162.0
-  "@tanstack/query-core": 5.104.0
+  "@tanstack/query-core": 5.107.1
   "@tanstack/query-db-collection": 1.5.1
   "@tanstack/react-db": 1.0.0-rc.1.3
   "@tanstack/react-devtools": 0.10.10
   "@tanstack/react-form": 1.33.5
   "@tanstack/react-form-devtools": 0.2.34
-  "@tanstack/react-query": 5.104.0
-  "@tanstack/react-query-devtools": 5.104.0
+  "@tanstack/react-query": 5.107.1
+  "@tanstack/react-query-devtools": 5.107.1
   "@tanstack/react-router": 1.170.46
   "@tanstack/react-router-devtools": 1.167.2
   "@tanstack/react-router-ssr-query": 1.167.3
@@ -124,7 +125,7 @@ catalog:
   vite: 8.2.2
   vitest: 4.1.11
   wxt: 0.21.4
-  zod: 4.4.3
+  zod: 4.6.7
 
 catalogs:
   native:

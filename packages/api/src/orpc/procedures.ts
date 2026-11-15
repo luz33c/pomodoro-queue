@@ -1,3 +1,4 @@
+import { openapi } from "@orpc/openapi";
 import { ORPCError, os } from "@orpc/server";
 
 import { type OrpcContext } from "#/orpc/context";
@@ -18,11 +19,13 @@ const requireAuth = o.middleware(async ({ context, next }) => {
   });
 });
 
-export const protectedProcedure = publicProcedure.use(requireAuth).route({
-  spec: (spec) => {
-    return {
-      ...spec,
-      security: [{ clerkBearer: [] }]
-    };
-  }
-});
+export const protectedProcedure = publicProcedure.use(requireAuth).meta(
+  openapi({
+    spec: (spec) => {
+      return {
+        ...spec,
+        security: [{ clerkBearer: [] }]
+      };
+    }
+  })
+);

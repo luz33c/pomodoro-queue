@@ -22,7 +22,8 @@ const link = new RPCLink({
     const token = await getClerkAuthToken();
     return token ? { Authorization: `Bearer ${token}` } : {};
   },
-  url: `${ENV_NATIVE.EXPO_PUBLIC_SERVER_URL}/rpc`
+  origin: ENV_NATIVE.EXPO_PUBLIC_SERVER_URL,
+  url: "/rpc"
 });
 
 export const client: AppRouterClient = createORPCClient(link);

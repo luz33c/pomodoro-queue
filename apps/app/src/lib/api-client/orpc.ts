@@ -13,7 +13,9 @@ const link = new RPCLink({
     const token = await getAuthToken();
     return token ? { Authorization: `Bearer ${token}` } : {};
   },
-  url: `${ENV_APP.VITE_SERVER_URL}/rpc`
+  // 2.0 takes a path as `url`; the server URL, /server path included, is the origin
+  origin: ENV_APP.VITE_SERVER_URL,
+  url: "/rpc"
 });
 
 export const client: AppRouterClient = createORPCClient(link);

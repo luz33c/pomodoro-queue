@@ -1,3 +1,5 @@
+import { openapi } from "@orpc/openapi";
+
 import { TodoCreateInputSchema, TodoRowSchema } from "@uni-stack/core/todo";
 import { db } from "@uni-stack/db";
 import { createTodo, getTodo } from "@uni-stack/db/queries";
@@ -8,11 +10,13 @@ import { TODO_ID_CONFLICT } from "#/routers/todo/errors";
 
 export const create = protectedProcedure
   .errors({ TODO_ID_CONFLICT })
-  .route({
-    description:
-      "Create a todo with a client-generated id; replaying the same id returns the stored row",
-    method: "POST"
-  })
+  .meta(
+    openapi({
+      description:
+        "Create a todo with a client-generated id; replaying the same id returns the stored row",
+      method: "POST"
+    })
+  )
   .input(TodoCreateInputSchema)
   .output(TodoRowSchema)
   .handler(async ({ context, errors, input }) => {
@@ -33,7 +37,7 @@ export const create = protectedProcedure
 
     // After the commit, so a client that refetches on the signal reads the new row; a replay changed nothing
     if (isNew) {
-      publishTodoChange(ownerId);
+      await publishTodoChange(ownerId, context.logger);
     }
     return row;
   });

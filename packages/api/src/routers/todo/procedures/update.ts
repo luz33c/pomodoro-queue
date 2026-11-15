@@ -1,3 +1,5 @@
+import { openapi } from "@orpc/openapi";
+
 import { TodoRowSchema, TodoUpdateInputSchema } from "@uni-stack/core/todo";
 import { updateTodo } from "@uni-stack/db/queries";
 
@@ -7,7 +9,7 @@ import { TODO_NOT_FOUND } from "#/routers/todo/errors";
 
 export const update = protectedProcedure
   .errors({ TODO_NOT_FOUND })
-  .route({ description: "Update a todo's title or completion", method: "POST" })
+  .meta(openapi({ description: "Update a todo's title or completion", method: "POST" }))
   .input(TodoUpdateInputSchema)
   .output(TodoRowSchema)
   .handler(async ({ context, errors, input }) => {
@@ -19,6 +21,6 @@ export const update = protectedProcedure
     if (!updated) {
       throw errors.TODO_NOT_FOUND();
     }
-    publishTodoChange(ownerId);
+    await publishTodoChange(ownerId, context.logger);
     return updated;
   });

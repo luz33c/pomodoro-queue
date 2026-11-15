@@ -10,8 +10,9 @@ Postgres, through `packages/db`, is the source of truth. Clients hold rows in Ta
 - Make creates idempotent with `onConflictDoNothing` on the client-generated id. A replay returns the stored row; an id owned by another user is a typed 409 (`TODO_ID_CONFLICT`).
 - Declare the row schema from `packages/core` (`TodoRowSchema`) as the `list` output. The procedure returns Drizzle rows, so it stops compiling when a column is renamed, removed, or retyped.
 - Pin the table row to the core row in `packages/api/src/routers/<domain>/contract.ts` (see `todo/contract.ts`). The `list` output alone misses a column added to the table but not to the core row, because Zod strips it; the contract fails typecheck and names the column.
-- Each synced table has a `changes` procedure: an `eventIterator` output that stays open and yields one event per change of the signed-in user's rows. The slice's `change-feed.ts` holds an `EventPublisher` keyed by `ownerId`; every write procedure calls `publish<Domain>Change(ownerId)` after its write commits and only when something changed (a create replay or a delete of a missing row publishes nothing). Events carry no rows.
-- The publisher is in-process. With more than one server instance, relay it through Postgres `LISTEN/NOTIFY` inside `change-feed.ts`; procedures and clients stay as they are.
+- Each synced table has a `changes` procedure: an `asyncIteratorObject` output that stays open and yields one event per change of the signed-in user's rows. The slice's `change-feed.ts` holds a `PostgresPublisher` on its own channel (`todo_changes`), keyed by `ownerId`; every write procedure awaits `publish<Domain>Change(ownerId, context.logger)` after its write commits and only when something changed (a create replay or a delete of a missing row publishes nothing). Events carry no rows.
+- The publisher relays through Postgres `LISTEN/NOTIFY`, so a write on any server instance reaches streams on every instance. Each instance opens one dedicated listen connection on its first subscription. Delivery is at most once: when that connection reconnects, every stream on the instance ends with an error, and clients reconnect and refetch.
+- `LISTEN` needs a session, so `DATABASE_URL` must connect directly or through a session-mode pooler. A transaction-mode pooler silently drops notifications.
 
 ## Client Collections
 

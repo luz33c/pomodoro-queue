@@ -15,10 +15,11 @@ function createQueryClient() {
         refetchOnReconnect: false,
         refetchOnWindowFocus: false,
         retry: (failureCount, error: unknown) => {
+          // oRPC 2.0 client errors carry `code`, not `status`
           if (
             error instanceof Error &&
-            "status" in error &&
-            [401, 403].includes((error as { status: number }).status)
+            "code" in error &&
+            (error.code === "UNAUTHORIZED" || error.code === "FORBIDDEN")
           ) {
             return false;
           }

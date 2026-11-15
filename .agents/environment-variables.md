@@ -18,6 +18,8 @@ Database CLI commands import `@uni-stack/env/database/env` directly. This entry 
 
 The application DB singleton and Server still use `ENV_SERVER`; this separation applies to database tooling, not application startup. All scopes continue to use the same `packages/env/.env` file.
 
+The server's `DATABASE_URL` must connect directly or through a session-mode pooler, because pushed changes use Postgres `LISTEN` (see [Sync](./sync.md)).
+
 ## Client Exposure Rule
 
 Only vars prefixed with `VITE_` are available on the client (`import.meta.env`). Server-only vars (`DATABASE_URL`, `CLERK_SECRET_KEY`) must never be exposed to the client.

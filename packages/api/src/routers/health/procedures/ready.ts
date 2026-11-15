@@ -1,3 +1,4 @@
+import { openapi } from "@orpc/openapi";
 import { z } from "zod";
 
 import { HealthChecksSchema, HealthReadyOutputSchema } from "@uni-stack/core/health";
@@ -6,20 +7,22 @@ import { publicProcedure } from "#/orpc/procedures";
 import { buildBaseHealth, runServiceChecks } from "#/routers/health/checks";
 
 export const ready = publicProcedure
-  .route({
-    description: "Check if the server is ready to handle requests and connect to external services",
-    method: "GET",
-    spec: (spec) => {
-      return { ...spec, security: [] };
-    }
-  })
+  .meta(
+    openapi({
+      description:
+        "Check if the server is ready to handle requests and connect to external services",
+      method: "GET",
+      spec: (spec) => {
+        return { ...spec, security: [] };
+      }
+    })
+  )
   .errors({
     SERVICE_UNAVAILABLE: {
       data: z.object({
         checks: HealthChecksSchema
       }),
-      description: "One or more services are unhealthy",
-      status: 503
+      message: "One or more services are unhealthy"
     }
   })
   .output(HealthReadyOutputSchema)
