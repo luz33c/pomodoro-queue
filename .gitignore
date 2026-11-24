@@ -33,3 +33,6 @@ tmp
 
 # Agent tooling: personal Claude Code settings (shared settings live in .claude/settings.json)
 .claude/settings.local.json
+
+# Scratch design demos for small requirements (use and discard)
+docs/scratch/

@@ -1,0 +1,2046 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PomodoQ 交互方案 ×5</title>
+<style>
+:root{
+  --bg:#f6f4f1;--paper:#fffdfa;--ink:#1c1917;--muted:#6b645c;--line:#e7e2db;--soft:#f1ede7;--chip:#ebe6df;
+  --focus:#ff6e47;--focus-soft:#ffe6dd;--break:#5cd1eb;--break-soft:#dcf5fb;--long:#8ea2ff;--long-soft:#e3e8ff;
+  --amber:#a86a12;--amber-bg:#fdf5e4;--amber-line:#f0d9a8;
+  --wall:radial-gradient(120% 90% at 20% 10%,#f4d9c6 0%,#d9c7e6 45%,#9fb6d9 100%);--mb-fg:#1c1917;--mb-bg:rgba(255,255,255,.38);
+  --font:"Geist",-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --serif:"Instrument Serif","Songti SC","STSong",Georgia,serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#131110;--paper:#1b1917;--ink:#ece8e3;--muted:#a39b91;--line:#2e2a26;--soft:#211e1b;--chip:#2a2622;
+  --focus-soft:#3a221b;--break-soft:#143037;--long-soft:#1e2442;--amber:#e3b25a;--amber-bg:#2a2216;--amber-line:#4a3b1e;
+  --wall:radial-gradient(120% 90% at 20% 10%,#3b2c3f 0%,#1f2a44 50%,#0f1626 100%);--mb-fg:#f3f0ec;--mb-bg:rgba(20,20,24,.42);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#131110;--paper:#1b1917;--ink:#ece8e3;--muted:#a39b91;--line:#2e2a26;--soft:#211e1b;--chip:#2a2622;
+  --focus-soft:#3a221b;--break-soft:#143037;--long-soft:#1e2442;--amber:#e3b25a;--amber-bg:#2a2216;--amber-line:#4a3b1e;
+  --wall:radial-gradient(120% 90% at 20% 10%,#3b2c3f 0%,#1f2a44 50%,#0f1626 100%);--mb-fg:#f3f0ec;--mb-bg:rgba(20,20,24,.42);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.65 var(--font);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1160px;margin:0 auto;padding:0 16px}
+header.top{padding:48px 0 20px}
+.kicker{font-size:12px;letter-spacing:.06em;color:var(--muted)}
+h1{font:400 40px/1.2 var(--serif);margin:10px 0 14px;letter-spacing:-.01em}
+.lede{max-width:860px;color:var(--muted);margin:0}
+.lede b{color:var(--ink);font-weight:600}
+section{padding:34px 0 8px;border-top:1px solid var(--line);margin-top:26px}
+h2{font-size:20px;margin:0 0 6px;font-weight:600;display:flex;gap:10px;align-items:baseline}
+h2 .n{font:400 15px var(--mono);color:var(--muted)}
+.sub{color:var(--muted);margin:0 0 18px;max-width:880px}
+button{font-family:inherit}
+/* overview cards + tabs */
+.ovw{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.oc{text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;color:inherit;font:inherit;display:flex;flex-direction:column;gap:6px}
+.oc:hover{border-color:var(--muted)}
+.oc.on{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+.oc .no{font:12px var(--mono);color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+.oc .sw{display:inline-flex;gap:3px}
+.oc .sw i{width:10px;height:10px;border-radius:50%;display:block;border:1px solid rgba(0,0,0,.08)}
+.oc h3{margin:0;font-size:17px}
+.oc p{margin:0;font-size:13px;color:var(--muted);line-height:1.55}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+.tab{border:1px solid var(--line);background:var(--paper);color:var(--muted);font-size:13.5px;padding:7px 14px;border-radius:99px;cursor:pointer}
+.tab b{font-weight:600;color:var(--ink);margin-right:6px}
+.tab.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tab.on b{color:var(--bg)}
+.ctrls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin:0 0 10px;font-size:13px}
+.ctrl{display:flex;align-items:center;gap:8px}
+.ctrl>span{color:var(--muted)}
+.seg{display:inline-flex;background:var(--chip);border-radius:8px;padding:2px}
+.seg button{border:0;background:none;color:var(--muted);font-size:13px;padding:4px 10px;border-radius:6px;cursor:pointer}
+.seg button.on{background:var(--paper);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink);font-size:13px;padding:4px 10px;border-radius:8px;cursor:pointer}
+.btn:hover{background:var(--soft)}
+.jumps{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;margin:0 0 14px}
+.jumps>span{color:var(--muted);margin-right:4px}
+.log{font:12.5px/1.5 var(--mono);color:var(--muted);background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin-top:12px;min-height:38px}
+.log b{color:var(--ink);font-weight:600}
+.notes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.note{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.note h4{margin:0 0 4px;font-size:12px;color:var(--muted);font-weight:500;letter-spacing:.04em}
+.note p{margin:0;font-size:13.5px}
+.trade{font-size:13.5px;color:var(--muted);margin:10px 0 0}
+.trade b{color:var(--ink);font-weight:600}
+/* doc parts */
+.tw{overflow-x:auto}
+table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.tbl th,.tbl td{text-align:left;padding:10px 12px;border-top:1px solid var(--line);vertical-align:top}
+.tbl th{background:var(--soft);font-weight:600;font-size:13px;color:var(--muted);border-top:0;white-space:nowrap}
+.tbl td:first-child{white-space:nowrap;font-weight:500}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card h4{margin:0 0 6px;font-size:15px}
+.card p{margin:0;font-size:13.5px;color:var(--muted)}
+.card .def{margin-top:8px;font-size:12.5px}
+.card .def b{color:var(--ink)}
+.co{background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:12px;padding:12px 16px;font-size:14px;margin:14px 0}
+.co b{font-weight:600}
+.rules{margin:0;padding-left:20px;max-width:880px}
+.rules li{margin:4px 0}
+footer{color:var(--muted);font-size:13px;padding:30px 0 50px;border-top:1px solid var(--line);margin-top:34px}
+/* gallery */
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.gc{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer}
+.gc.on{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+.gc h4{margin:0 0 10px;font-size:15px;display:flex;justify-content:space-between;align-items:center}
+.gc h4 small{font-weight:400;font-size:12px;color:var(--muted)}
+.gi{background:#000;border-radius:0 0 16px 16px;height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;color:var(--focus);font:600 13px var(--mono);margin:0 auto 12px;max-width:280px}
+.gi i{display:block;width:86px;height:100%;background:#000}
+.gp{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.gp div{background:#1f2a36;border-radius:10px;height:96px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:6px;gap:4px;color:rgba(255,255,255,.7);font-size:11.5px}
+.gp div:first-child{background:#2a211c}
+/* mac frame */
+.mac{background:#0c0c0e;border-radius:20px;padding:12px 12px 16px;box-shadow:0 30px 60px -20px rgba(0,0,0,.35)}
+.vp{position:relative;width:100%;height:calc(700px * var(--s,1));overflow:hidden;border-radius:9px}
+.scr{position:absolute;left:0;top:0;width:1120px;height:700px;transform:scale(var(--s,1));transform-origin:0 0;background:var(--wall);overflow:hidden;font-family:var(--font);font-size:14px;line-height:1.5;user-select:none;color:#1c1917}
+.mac-base{height:10px;margin:0 auto;width:30%;background:#1d1d20;border-radius:0 0 10px 10px}
+.mb{position:absolute;top:0;left:0;right:0;height:30px;background:var(--mb-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:13px;color:var(--mb-fg);z-index:30}
+.mb .l,.mb .r{display:flex;gap:16px;align-items:center}
+.mb .app{font-weight:600}
+.mb .tm{font-variant-numeric:tabular-nums;display:inline-flex;gap:5px;align-items:center}
+.notch{position:absolute;top:0;left:50%;width:190px;height:32px;margin-left:-95px;background:#000;border-radius:0 0 13px 13px;z-index:62;pointer-events:none}
+.dock{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:10px;padding:7px 10px 9px;background:rgba(255,255,255,.28);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:18px;border:.5px solid rgba(255,255,255,.35);z-index:20}
+.dock .di{width:46px;height:46px;border-radius:11px;position:relative;cursor:pointer;display:grid;place-items:center}
+.dock .di::after{content:"";position:absolute;bottom:-6px;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:transparent}
+.dock .di.run::after{background:var(--mb-fg)}
+.dock .d1{background:linear-gradient(160deg,#8fd3ff,#2a7bd6)}
+.dock .d2{background:linear-gradient(160deg,#f5f5f5,#cfcfcf)}
+.dock .d3{background:linear-gradient(160deg,#a6e3a1,#3c9a5f)}
+.dock .d4{background:linear-gradient(160deg,#fff,#ffe9df)}
+.toast{position:absolute;top:58px;left:50%;transform:translateX(-50%);background:rgba(20,20,22,.9);color:#fff;font-size:13px;padding:7px 16px;border-radius:99px;z-index:80;animation:pop .2s;white-space:nowrap}
+@keyframes pop{from{transform:translate(-50%,-6px);opacity:0}}
+@keyframes rise{from{transform:translateY(8px);opacity:0}}
+.ti{width:1em;height:1em;vertical-align:-.12em;display:inline-block;flex:none}
+/* ---------- pets ---------- */
+.m{display:block;overflow:visible;flex:none}
+.m .lg{transform-box:fill-box;transform-origin:50% 0}
+.m .pw,.m .aru{display:none}
+.m.run .lg.a{animation:m-sw var(--mt,.36s) ease-in-out infinite alternate}
+.m.run .lg.b{animation:m-sw var(--mt,.36s) ease-in-out infinite alternate-reverse}
+@keyframes m-sw{from{transform:rotate(36deg)}to{transform:rotate(-36deg)}}
+.m.run .pt{animation:m-bob calc(var(--mt,.36s) / 2) ease-in-out infinite alternate}
+@keyframes m-bob{to{transform:translateY(-1.8px)}}
+.m.walk{--mt:.62s}
+.m .tl{transform-origin:16px 26px;animation:m-wag .5s ease-in-out infinite alternate}
+@keyframes m-wag{from{transform:rotate(-10deg)}to{transform:rotate(13deg)}}
+.m.idle .tl,.m.sip .tl{animation-duration:1.4s}
+.m .ey{transform-box:fill-box;transform-origin:50% 50%;animation:m-blink 4.2s infinite}
+@keyframes m-blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+.m.sip .lg{display:none}
+.m.sip .pw{display:block}
+.m-dog.sip .pt,.m-cat.sip .pt{transform:translateY(8px)}
+.m-dog.sip .hd,.m-cat.sip .hd{transform-origin:44px 25px;animation:m-dip 3.6s ease-in-out infinite}
+@keyframes m-dip{0%,32%,100%{transform:rotate(0)}48%,80%{transform:rotate(15deg)}}
+.m .stm{animation:m-steam 2.2s ease-in-out infinite}
+.m .stm.s2{animation-delay:-1.1s}
+@keyframes m-steam{0%{opacity:0;transform:translateY(3px)}40%{opacity:.9}100%{opacity:0;transform:translateY(-4px)}}
+.m-dog.stretch .lf,.m-cat.stretch .lf{display:none}
+.m-dog.stretch .pw,.m-cat.stretch .pw{display:block}
+.m-dog.stretch .bdg,.m-cat.stretch .bdg{transform-origin:20px 33px;animation:m-bow 3s ease-in-out infinite}
+@keyframes m-bow{0%,100%{transform:rotate(14deg) scaleX(1)}45%,72%{transform:rotate(20deg) scaleX(1.08)}}
+.m-dog.stretch .hd,.m-cat.stretch .hd{transform-origin:44px 25px;transform:rotate(-22deg)}
+.m-tomato.run .bdg{transform-origin:32px 40px;animation:m-tilt .36s ease-in-out infinite alternate}
+@keyframes m-tilt{from{transform:rotate(3deg)}to{transform:rotate(8deg)}}
+.m-tomato.sip .pt{transform:translateY(4px)}
+.m-tomato.sip .bdg{transform-origin:32px 40px;animation:m-tsip 3.6s ease-in-out infinite}
+@keyframes m-tsip{0%,32%,100%{transform:rotate(0)}48%,80%{transform:rotate(12deg)}}
+.m-tomato.stretch .ard{display:none}
+.m-tomato.stretch .aru{display:block}
+.m-tomato.stretch .bdg{transform-origin:32px 40px;animation:m-squash 2.8s ease-in-out infinite}
+@keyframes m-squash{0%,100%{transform:scale(1,1)}40%,68%{transform:scale(.9,1.13)}}
+.m.paused *{animation-play-state:paused!important}
+@media (prefers-reduced-motion:reduce){.m *{animation:none!important}}
+/* ---------- island ---------- */
+.isl{position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:60;--ear:6px;--acc:var(--focus);transition:width .32s cubic-bezier(.3,1.3,.5,1),height .32s cubic-bezier(.3,1.3,.5,1);cursor:pointer}
+.isl::before,.isl::after{content:"";position:absolute;top:0;width:var(--ear);height:var(--ear);transition:all .3s}
+.isl::before{left:calc(-1 * var(--ear));background:radial-gradient(circle at 0 100%,transparent var(--ear),#000 calc(var(--ear) + .6px))}
+.isl::after{right:calc(-1 * var(--ear));background:radial-gradient(circle at 100% 100%,transparent var(--ear),#000 calc(var(--ear) + .6px))}
+.isl-in{position:absolute;inset:0;background:#000;color:#fff;border-radius:0 0 18px 18px;overflow:hidden;transition:border-radius .3s}
+.isl.open{--ear:20px}
+.isl.open .isl-in{border-radius:0 0 34px 34px}
+.wing{position:absolute;top:0;height:32px;display:flex;align-items:center;gap:6px;font:600 13px var(--mono);font-variant-numeric:tabular-nums;transition:opacity .15s}
+.wing.l{left:13px}.wing.r{right:13px;color:var(--acc)}
+.wing small{font:500 11.5px var(--font);color:rgba(255,255,255,.8)}
+.wing .dot{width:7px;height:7px;border-radius:50%;background:var(--acc)}
+.isl.pz .wing.r{color:rgba(255,255,255,.55)}
+.ix{position:absolute;left:24px;right:24px;top:42px;opacity:0;pointer-events:none;transition:opacity .2s .08s}
+.isl.open .ix{opacity:1;pointer-events:auto}
+.ix-h{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:rgba(255,255,255,.6)}
+.ix-h b{color:var(--acc);font-weight:600}
+.ix-t{display:flex;justify-content:space-between;align-items:center;margin-top:3px;gap:12px}
+.ix-name{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:8px;min-width:0}
+.ix-time{font:600 30px/1 var(--mono);color:var(--acc);font-variant-numeric:tabular-nums}
+.ix-bar{height:4px;border-radius:2px;background:rgba(255,255,255,.14);margin:11px 0;overflow:hidden}
+.ix-bar i{display:block;height:100%;background:var(--acc);border-radius:2px}
+.ix-b{display:flex;gap:6px}
+.ib{flex:1;border:0;border-radius:9px;background:rgba(255,255,255,.12);color:#fff;font-size:12.5px;padding:6px 0;cursor:pointer}
+.ib:hover{background:rgba(255,255,255,.2)}
+.ib.pri{background:var(--acc);color:#111;font-weight:600}
+/* s2 island: ground + track */
+.gnd{position:absolute;left:8px;bottom:5px;width:44px;height:2px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.55) 0 5px,transparent 5px 10px);animation:gnd .4s linear infinite;border-radius:1px}
+@keyframes gnd{to{background-position:-10px 0}}
+.isl.pz .gnd,.isl.brk .gnd{animation:none;opacity:.4}
+.trk{position:relative;height:40px;margin:6px 0 8px}
+.trk::before{content:"";position:absolute;left:0;right:0;bottom:6px;height:3px;border-radius:2px;background:rgba(255,255,255,.16)}
+.trk i{position:absolute;left:0;bottom:6px;height:3px;border-radius:2px;background:var(--acc)}
+.trk .tp{position:absolute;bottom:8px;transform:translateX(-60%)}
+.trk em{position:absolute;right:-4px;bottom:9px;font-style:normal;font-size:11px;color:rgba(255,255,255,.6)}
+/* s3 island bubble */
+.bub{position:absolute;left:-6px;top:40px;background:#fff;color:#16171b;font-size:12.5px;font-weight:500;padding:6px 12px;border-radius:14px 14px 14px 4px;white-space:nowrap;box-shadow:0 8px 22px rgba(0,0,0,.28);animation:rise .22s ease;pointer-events:none}
+.bub::before{content:"";position:absolute;left:14px;top:-6px;border:7px solid transparent;border-top:0;border-bottom-color:#fff}
+.ix-say{background:rgba(255,255,255,.1);border-radius:6px 16px 16px 16px;padding:9px 12px;font-size:13px;line-height:1.5;display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.ix-say b{color:var(--acc);font:600 15px var(--mono)}
+/* s4 island: pet hangs below the notch */
+.hang{position:absolute;left:50%;top:31px;width:70px;height:38px;margin-left:-35px;background:#000;border-radius:0 0 20px 20px;display:flex;align-items:center;justify-content:center;transition:height .25s,opacity .2s;overflow:hidden}
+.hang::before,.hang::after{content:"";position:absolute;top:1px;width:8px;height:8px}
+.isl.open .hang{height:0;opacity:0}
+/* s5 island: progress line on the bottom edge */
+.edge{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.14)}
+.edge i{display:block;height:100%;background:var(--acc)}
+.isl.open .edge{opacity:0}
+.ix-dots{display:flex;gap:6px;margin:10px 0;flex-wrap:wrap}
+.ix-dots i{width:12px;height:12px;border-radius:50%;border:1.5px solid rgba(255,255,255,.3);display:block}
+.ix-dots i.d{background:var(--focus);border-color:var(--focus)}
+.ix-dots i.c{border-color:var(--acc);box-shadow:0 0 0 3px rgba(255,110,71,.25)}
+/* ---------- app window (shared) ---------- */
+.win{position:absolute;left:150px;top:56px;width:820px;height:576px;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;background:var(--w-bg);color:var(--w-fg);box-shadow:0 0 0 .5px rgba(0,0,0,.3),0 28px 70px rgba(0,0,0,.36);transition:transform .35s ease,opacity .3s;transform-origin:50% 120%;z-index:10;--w-r:10px}
+.win.min{transform:translateY(300px) scale(.12);opacity:0;pointer-events:none}
+.tb{height:46px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 14px;position:relative}
+.lights{display:flex;gap:8px}
+.lights i{width:12px;height:12px;border-radius:50%;display:block;background:#ff5f57}
+.lights i:nth-child(2){background:#febc2e;cursor:pointer}
+.lights i:nth-child(3){background:#28c840}
+.tb .ttl{position:absolute;left:50%;transform:translateX(-50%);font-size:12.5px;font-weight:600;color:var(--w-mut)}
+.tool{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 11px 0 7px;border-radius:99px;border:1px solid var(--w-line);background:var(--w-card);color:var(--w-fg);font-size:12px;cursor:pointer}
+.wb{flex:1;min-height:0;position:relative}
+.wbtn{border:1px solid var(--w-line);background:var(--w-sec);color:var(--w-fg);font-size:13px;font-weight:500;padding:8px 16px;border-radius:var(--w-r);cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:7px;justify-content:center}
+.wbtn:hover{filter:brightness(.97)}
+.wbtn.pri{background:var(--w-pri);color:var(--w-pri-fg);border-color:transparent;font-weight:600}
+.wbtn.sm{padding:5px 11px;font-size:12.5px}
+.wbtn.dng{color:var(--w-dng)}
+.wbtn:disabled{opacity:.4;cursor:not-allowed}
+.cap{font-size:12px;letter-spacing:.06em;color:var(--w-mut);margin:0 0 8px}
+.opt{display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:center;text-align:left;width:100%;border:1px solid var(--w-line);background:var(--w-card);color:var(--w-fg);border-radius:14px;padding:14px 16px;cursor:pointer;transition:transform .12s}
+.opt:hover{transform:translateY(-1px)}
+.opt .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--w-sec);color:var(--w-fg)}
+.opt b{display:block;font-size:15.5px;font-weight:600}
+.opt small{display:block;font-size:12.5px;color:var(--w-mut);line-height:1.45;margin-top:2px}
+.opt.pri{background:var(--w-pri);color:var(--w-pri-fg);border-color:transparent}
+.opt.pri small{color:inherit;opacity:.7}
+.opt.pri .ic{background:rgba(127,127,127,.16);color:inherit}
+.stpr{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--w-mut)}
+.stpr span{display:inline-flex;align-items:center;gap:6px}
+.stpr i{font-style:normal;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--w-line);font:600 11px var(--mono)}
+.stpr .on{color:var(--w-fg);font-weight:600}
+.stpr .on i{background:var(--w-pri);color:var(--w-pri-fg);border-color:transparent}
+.stpr .dn i{background:var(--w-sec);color:var(--w-fg)}
+.stpr u{width:22px;height:1px;background:var(--w-line);display:block}
+.tr{display:grid;grid-template-columns:20px 1fr auto;gap:12px;align-items:center;padding:9px 12px;border-radius:10px;font-size:14px;cursor:pointer}
+.tr:hover{background:var(--w-card)}
+.tr.off .tt{color:var(--w-mut)}
+.tr .tt small{display:block;font-size:12px;color:var(--w-mut);margin-top:1px}
+.ck{width:18px;height:18px;border-radius:6px;border:1.5px solid var(--w-mut);display:grid;place-items:center;flex:none}
+.ck.on{background:var(--w-pri);border-color:var(--w-pri);color:var(--w-pri-fg)}
+.ck svg{width:11px;height:11px;display:none}
+.ck.on svg{display:block}
+.nb{display:inline-flex;align-items:center;gap:6px;font:600 13px var(--mono)}
+.nb b{min-width:44px;text-align:center;display:inline-flex;gap:4px;align-items:center;justify-content:center}
+.mini{width:22px;height:22px;border:1px solid var(--w-line);background:var(--w-sec);color:var(--w-fg);border-radius:7px;cursor:pointer;font:14px/1 var(--font);padding:0}
+.shim{display:inline-block;font-size:12px;color:var(--w-mut);padding:3px 12px;border-radius:99px;background:linear-gradient(90deg,var(--w-card) 25%,var(--w-line) 50%,var(--w-card) 75%);background-size:200% 100%;animation:shim 1.1s linear infinite}
+@keyframes shim{to{background-position:-200% 0}}
+.aitag{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:1px 7px;border-radius:99px;background:var(--w-sec);color:var(--w-ai,var(--w-mut));border:1px solid var(--w-line)}
+.rhy{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.rhy>div{border:1px solid var(--w-line);background:var(--w-card);border-radius:12px;padding:8px 10px;font-size:12px;color:var(--w-mut)}
+.rhy .nb{margin-top:4px;color:var(--w-fg)}
+.rhy .nb b{min-width:30px}
+.pbar{display:flex;gap:2px;height:16px;border-radius:5px;overflow:hidden}
+.pbar i{display:block;border-radius:3px;min-width:2px}
+.pbar .f{background:var(--focus)}
+.pbar .short{background:var(--break)}
+.pbar .long{background:var(--long)}
+.pbar .gh{background:repeating-linear-gradient(135deg,var(--w-line) 0 4px,transparent 4px 8px);outline:1px dashed var(--w-mut);outline-offset:-1px}
+.pleg{display:flex;justify-content:space-between;font:12px var(--mono);color:var(--w-mut);margin-top:5px}
+.qr{display:grid;grid-template-columns:18px 1fr auto;gap:10px;align-items:center;padding:6px 10px;font-size:13px;border-radius:8px}
+.qr .st{font-size:11px;text-align:center;color:var(--w-mut)}
+.qr .mt{font:12px var(--mono);color:var(--w-mut)}
+.qr.short,.qr.long{font-size:12px;color:var(--w-mut);padding-top:3px;padding-bottom:3px}
+.qr.cur{background:var(--w-sec);font-weight:600}
+.qr.done .tt,.qr.skip .tt{opacity:.55}
+.qr.more{display:block;color:var(--w-mut);font-size:12px}
+.ctl{display:flex;gap:8px}
+.banner{display:flex;align-items:center;gap:10px;background:var(--w-card);border:1px solid var(--w-line);border-radius:12px;padding:9px 14px;font-size:13px;animation:rise .25s ease}
+.banner b{font-weight:600}
+/* pet picker */
+.pp{position:absolute;right:14px;top:4px;width:392px;background:#fff;color:#1c1917;border-radius:16px;box-shadow:0 0 0 .5px rgba(0,0,0,.18),0 20px 50px rgba(0,0,0,.3);padding:14px;z-index:20;animation:rise .18s ease}
+.pp h5{margin:0;font-size:14px;display:flex;justify-content:space-between;align-items:center}
+.pp h5 button{border:0;background:none;font-size:16px;cursor:pointer;color:#8a837a;padding:0 4px}
+.pp p{margin:2px 0 10px;font-size:12px;color:#7a7268}
+.ppg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ppc{border:1.5px solid #ece7df;border-radius:12px;padding:8px;cursor:pointer;background:#fff;text-align:center;font-size:12.5px;color:#1c1917}
+.ppc.on{border-color:#1c1917}
+.ppc .pv{height:62px;border-radius:8px;background:#111;display:flex;align-items:center;justify-content:center;margin-bottom:6px}
+.ppc small{display:block;color:#8a837a;font-size:11px}
+</style>
+<style>
+/* ---------- shared bits (part 2) ---------- */
+.m .pwb{display:none}
+.m.sip .pwb{display:block}
+.wb.fresh .anim{animation:rise .28s ease both}
+.wb.fresh .d1{animation-delay:.05s}
+.wb.fresh .d2{animation-delay:.1s}
+.isl.open .wing{opacity:0}
+.isl.open .ix{animation:ixIn .26s .08s both}
+@keyframes ixIn{from{opacity:0;transform:translateY(-4px)}}
+.big{font:600 44px/1.05 var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.ph{font-size:13px;color:var(--w-mut)}
+.dial{position:relative;flex:none}
+.dial .rg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);overflow:visible}
+.dial .trk{fill:none;stroke:var(--d-trk,rgba(255,255,255,.2));stroke-width:var(--d-w,5)}
+.dial .prg{fill:none;stroke:var(--d-prg,#fff);stroke-width:var(--d-w,5);stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100}
+.dial .in{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.lh{display:flex;justify-content:space-between;font-size:12px;color:var(--w-mut);padding:4px 12px 6px}
+.lh a{cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.aitag svg{width:10px;height:10px}
+.endc{font-size:12.5px;color:var(--w-mut);display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;padding:1px 9px;border-radius:99px;background:var(--focus);color:#fff;margin-right:6px}
+.tag.short{background:var(--break);color:#06323c}
+.tag.long{background:var(--long);color:#101a4a}
+.chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.chip{border:1px solid var(--w-line);background:var(--w-card);color:var(--w-fg);font-size:12.5px;padding:5px 12px;border-radius:99px;cursor:pointer}
+.chip.on{background:var(--w-pri);color:var(--w-pri-fg);border-color:transparent}
+.sumbox{background:var(--w-card);border:1px solid var(--w-line);border-radius:14px;padding:14px 16px}
+.sumn{font-size:14px;color:var(--w-mut)}
+.sumn b{font:600 34px/1 var(--mono);color:var(--w-fg);margin-right:6px}
+.suml{font-size:13px;color:var(--w-mut);margin-top:5px}
+.suml b{color:var(--w-fg);font-weight:600}
+.row{display:flex;gap:8px}
+.row .wbtn{flex:1}
+/* ---------- break overlay (shared) ---------- */
+.ov{position:absolute;inset:0;z-index:50;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;animation:ovIn .45s ease;overflow:hidden;text-align:center}
+@keyframes ovIn{from{opacity:0;transform:scale(1.03)}}
+.ov h3{margin:0;font:400 36px/1.2 var(--serif);letter-spacing:.01em}
+.ov .osub{margin:6px 0 0;font-size:14px;color:rgba(255,255,255,.66)}
+.ov .otime{font:600 60px/1 var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.ov .otip{margin:0;font-size:14.5px;color:rgba(255,255,255,.78)}
+.ov-f{position:absolute;left:0;right:0;bottom:24px;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12.5px;color:rgba(255,255,255,.6)}
+.hold{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.08);color:#fff;font-size:12.5px;padding:7px 18px;border-radius:99px;cursor:pointer}
+.hold i{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(255,255,255,.28)}
+.hold.on i{width:100%;transition:width 3s linear}
+.hold span{position:relative}
+/* overlay 1: ring */
+.ov.o1{background:radial-gradient(90% 85% at 50% 42%,#136273 0%,#0A3540 55%,#061F27 100%)}
+.ov.o1.long{background:radial-gradient(90% 85% at 50% 42%,#2F4396 0%,#172052 55%,#0C1130 100%)}
+.o1 .dial{margin:20px 0 14px}
+/* overlay 2: stroll */
+.ov.o2{background:linear-gradient(180deg,#2A231C,#15110D);align-items:stretch;justify-content:flex-start;text-align:left;padding:104px 150px 0}
+.o2 .otime{font:400 124px/1 var(--serif);margin-top:8px;letter-spacing:-.02em}
+.o2trk{position:relative;height:150px;margin-top:34px;border-bottom:2px solid rgba(255,255,255,.24)}
+.o2trk .desk{position:absolute;left:0;bottom:0}
+.o2trk .walker{position:absolute;bottom:-9px;left:96px}
+.o2trk .walker.flip .m{transform:scaleX(-1)}
+.o2trk .scup{position:absolute;bottom:-9px}
+.o2ph{display:flex;gap:26px;margin-top:16px;font-size:13.5px;color:rgba(255,255,255,.42)}
+.o2ph .on{color:#fff}
+/* overlay 3: speech */
+.ov.o3{background:radial-gradient(80% 75% at 50% 45%,#2B2F5A 0%,#151733 55%,#0A0B18 100%)}
+.o3say{position:relative;background:#fff;color:#16171B;font-size:19px;font-weight:500;padding:14px 26px;border-radius:24px;margin-bottom:28px;min-width:300px;transition:opacity .2s}
+.o3say::after{content:"";position:absolute;left:50%;bottom:-10px;margin-left:-10px;border:10px solid transparent;border-bottom:0;border-top-color:#fff}
+.o3say.sw{opacity:0}
+.o3 .otime{font-size:44px;margin-top:22px}
+/* overlay 4: scene */
+.ov.o4{background:linear-gradient(180deg,#86CDF0 0%,#CDEEF8 48%,#FFF3DA 74%);color:#1F3B2D}
+.o4 .sun{position:absolute;right:150px;top:84px;width:92px;height:92px;border-radius:50%;background:#FFD45E;box-shadow:0 0 0 18px rgba(255,212,94,.3),0 0 0 42px rgba(255,212,94,.15)}
+.o4 .cloud{position:absolute;height:28px;border-radius:99px;background:rgba(255,255,255,.88);animation:drift 46s linear infinite}
+.o4 .cloud::before{content:"";position:absolute;left:22%;bottom:40%;width:46%;height:120%;border-radius:99px;background:inherit}
+@keyframes drift{from{transform:translateX(-80px)}to{transform:translateX(160px)}}
+.o4 .hill{position:absolute;left:0;bottom:0;width:100%;height:250px}
+.o4 .txt{position:absolute;left:110px;top:86px;text-align:left}
+.o4 h3{font:800 46px/1.15 var(--font);letter-spacing:-.02em}
+.o4 .osub{color:rgba(31,59,45,.7)}
+.o4 .otime{margin-top:16px}
+.o4 .breath{position:absolute;left:50%;bottom:92px;width:280px;height:280px;margin-left:-140px;border-radius:50%;border:3px solid rgba(31,59,45,.2);background:rgba(255,255,255,.22);animation:breathe 8s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(.7);opacity:.5}50%{transform:scale(1.06);opacity:1}}
+.o4 .petw{position:absolute;left:50%;bottom:132px;transform:translateX(-50%)}
+.o4 .bl{position:absolute;left:50%;bottom:98px;transform:translateX(-50%);font-size:15px;font-weight:600;height:22px;width:120px}
+.o4 .bl span{position:absolute;left:0;right:0;animation:blA 8s infinite}
+.o4 .bl span+span{animation-name:blB}
+@keyframes blA{0%,44%{opacity:1}50%,94%{opacity:0}100%{opacity:1}}
+@keyframes blB{0%,44%{opacity:0}50%,94%{opacity:1}100%{opacity:0}}
+.o4 .ov-f{color:rgba(20,45,30,.75)}
+.o4 .hold{border-color:rgba(20,45,30,.4);background:rgba(255,255,255,.55);color:#1F3B2D}
+.o4 .hold i{background:rgba(31,59,45,.22)}
+/* overlay 5: harvest */
+.ov.o5{background:linear-gradient(180deg,#18202E,#0B0F16)}
+.o5row{display:flex;gap:10px;margin:18px 0 30px;flex-wrap:wrap;justify-content:center;max-width:620px}
+.o5row i{width:36px;height:36px;border-radius:50%;border:2px dashed rgba(255,255,255,.24);display:grid;place-items:center}
+.o5row i.d{border:0;animation:pop5 .4s cubic-bezier(.3,1.5,.5,1) both}
+.o5row i.d .ti{width:36px;height:36px}
+@keyframes pop5{from{transform:scale(.3);opacity:0}}
+.o5 .otime{margin-top:20px}
+/* ===== 方案 1 经典表盘 ===== */
+.win.s1{--w-bg:linear-gradient(165deg,#10724E,#0A5038);--w-fg:#fff;--w-mut:rgba(255,255,255,.7);--w-line:rgba(255,255,255,.18);--w-card:rgba(255,255,255,.1);--w-sec:rgba(255,255,255,.14);--w-pri:#fff;--w-pri-fg:#0B5A3D;--w-dng:#FFD9D2;--w-r:12px}
+.win.s1.brk{--w-bg:linear-gradient(165deg,#FF6259,#D93E3D);--w-pri-fg:#C22F2E}
+.s1h{height:100%;display:flex;flex-direction:column;align-items:center;padding:0 22px 14px;gap:12px}
+.s1card{width:100%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.s1card .cap{margin:2px 4px 2px}
+.s1hist{width:100%;font-size:12.5px;color:var(--w-mut)}
+.s1hist .cap{margin:0 2px 4px}
+.s1hist div{display:flex;justify-content:space-between;align-items:center;padding:5px 2px;border-top:1px solid rgba(255,255,255,.12)}
+.s1now{text-align:center}
+.s1now b{display:block;font-size:17px;font-weight:600}
+.s1now span{font-size:12.5px;color:var(--w-mut)}
+.s1 .banner{width:100%}
+.s1 .rhy{grid-template-columns:1fr 1fr}
+.sheet{position:absolute;inset:0;background:#fff;color:#14231C;border-radius:18px 18px 0 0;display:flex;flex-direction:column;--w-fg:#14231C;--w-mut:#6B7A72;--w-line:#E1E8E3;--w-card:#F5F8F6;--w-sec:#ECF2EE;--w-pri:#0E6B49;--w-pri-fg:#fff;box-shadow:0 -10px 30px rgba(0,0,0,.18)}
+.sheet.in{animation:sheetUp .3s cubic-bezier(.2,.9,.3,1)}
+.fresh .sheet .sb{animation:rise .22s ease both}
+.s1plan{display:flex;flex-direction:column;margin-top:10px;border-top:1px solid var(--w-line)}
+.s1plan div{display:grid;grid-template-columns:10px 1fr auto;gap:10px;align-items:center;padding:7px 2px;border-bottom:1px solid var(--w-line);font-size:13px}
+.s1plan i{width:10px;height:10px;border-radius:3px;display:block}
+.s1plan span:last-child{color:var(--w-mut);font:12px var(--mono);display:inline-flex;gap:4px;align-items:center}
+@keyframes sheetUp{from{transform:translateY(36px);opacity:0}}
+.sheet .sh{padding:16px 20px 8px}
+.sheet h3{margin:0 0 10px;font-size:17px}
+.sheet .sd{font-size:12.5px;color:var(--w-mut);margin:10px 0 0}
+.sheet .sb{flex:1;min-height:0;overflow:auto;padding:0 10px 8px}
+.sheet .sf{padding:12px 20px 16px;display:flex;gap:8px;border-top:1px solid var(--w-line)}
+.sheet .sf .wbtn{flex:1}
+.sheet .tr:hover{background:var(--w-card)}
+.sheet .pad{padding:4px 10px}
+/* ===== 方案 2 时间线 ===== */
+.win.s2{--w-bg:#FBF9F5;--w-fg:#1F1B16;--w-mut:#8A8177;--w-line:#E7E0D5;--w-card:#fff;--w-sec:#F1ECE4;--w-pri:#1F1B16;--w-pri-fg:#fff;--w-dng:#C4432B}
+.s2g{height:100%;display:grid;grid-template-rows:1fr auto}
+.s2top{display:grid;grid-template-columns:1fr 360px;gap:30px;padding:0 30px 14px;min-height:0}
+.s2top.wz{grid-template-columns:1fr 300px}
+.s2hero{display:flex;flex-direction:column;justify-content:center;min-width:0}
+.s2time{font:400 108px/1 var(--serif);letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin:4px 0 6px}
+.s2task{font-size:19px;font-weight:600;margin-bottom:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s2p{margin:0;color:var(--w-mut);font-size:13.5px;max-width:330px}
+.s2side{display:flex;flex-direction:column;justify-content:center;gap:8px;min-height:0;min-width:0}
+.s2list{display:flex;flex-direction:column;justify-content:center;min-width:0}
+.s2list h3{margin:0 0 2px 12px;font:400 26px/1.2 var(--serif)}
+.s2list .sd{margin:0 0 4px 12px;font-size:13px;color:var(--w-mut)}
+.s2list .tr{padding:5px 12px}
+.s2list .tr .tt small{margin-top:0}
+.rl{border-top:1px solid var(--w-line);padding:12px 30px 14px;background:var(--w-card)}
+.rl-h{display:flex;justify-content:space-between;font-size:12px;color:var(--w-mut);margin-bottom:36px}
+.rail{position:relative;height:22px;background:var(--w-sec);border-radius:6px}
+.rail i{position:absolute;top:0;bottom:0;border-radius:4px;background:var(--focus);box-shadow:inset -1px 0 0 var(--w-card)}
+.rail i.short,.rail i.long{top:7px;bottom:7px;background:var(--break);border-radius:3px;box-shadow:none}
+.rail i.long{background:var(--long)}
+.rail i.done{opacity:.32}
+.rail i.gh{background:repeating-linear-gradient(135deg,#D9D1C4 0 4px,transparent 4px 8px);outline:1px dashed #B5AC9F;outline-offset:-1px;box-shadow:none}
+.rail i.pop{animation:blk .34s cubic-bezier(.3,1.5,.5,1)}
+@keyframes blk{from{transform:scaleY(.2);opacity:0}}
+.rail u{position:absolute;top:30px;font:11px var(--mono);color:var(--w-mut);text-decoration:none;transform:translateX(-50%)}
+.rail u::before{content:"";position:absolute;left:50%;top:-7px;height:5px;width:1px;background:#CFC7BA}
+.rail .now{position:absolute;top:-5px;bottom:-5px;width:2px;background:var(--w-fg);margin-left:-1px;z-index:2;border-radius:1px}
+.rail .now span{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);white-space:nowrap}
+.rl-l{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:28px;font-size:12px;color:var(--w-mut);min-height:18px}
+.rl-l span{display:inline-flex;align-items:center;gap:5px}
+.rl-l i{width:8px;height:8px;border-radius:2px;display:block}
+/* ===== 方案 3 对话式 ===== */
+.win.s3{--w-bg:#15161B;--w-fg:#F2F3F7;--w-mut:#9195A6;--w-line:#2B2D38;--w-card:#1F2129;--w-sec:#282B36;--w-pri:#FF6E47;--w-pri-fg:#1A0E0A;--w-dng:#FF9C8E;--w-ai:#B9A6FF}
+.s3g{height:100%;display:flex;flex-direction:column}
+.s3hd{display:flex;align-items:center;gap:14px;padding:0 22px 14px;border-bottom:1px solid var(--w-line)}
+.s3hd .big{font-size:32px}
+.s3hd .st{font-size:12.5px;color:var(--w-mut);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:300px}
+.s3hd .rt{margin-left:auto}
+.chat{flex:1;min-height:0;overflow:auto;padding:16px 20px;display:flex;flex-direction:column;gap:12px}
+.chat>:first-child{margin-top:auto}
+.win *{scrollbar-width:none}
+.win ::-webkit-scrollbar{width:0;height:0}
+.cb{display:flex;gap:10px;align-items:flex-start;max-width:94%}
+.cb .av{width:34px;height:34px;border-radius:50%;background:var(--w-sec);display:grid;place-items:center;flex:none}
+.cb .bx{background:var(--w-card);border:1px solid var(--w-line);border-radius:6px 16px 16px 16px;padding:10px 14px;font-size:14px;line-height:1.55;min-width:0;flex:1}
+.cb .bx b{font-weight:600;color:#fff}
+.cb.me{align-self:flex-end}
+.cb.me .bx{background:var(--w-pri);color:var(--w-pri-fg);border-color:transparent;border-radius:16px 16px 6px 16px;font-weight:500}
+.cb.old{opacity:.55}
+.cb .cardx{margin-top:10px;background:var(--w-bg);border:1px solid var(--w-line);border-radius:12px;padding:6px}
+.cb .cardx .pd{padding:8px}
+.comp{padding:12px 20px 16px;border-top:1px solid var(--w-line);display:flex;flex-direction:column;gap:8px}
+.comp .cap{margin:0}
+.s3 .tr:hover{background:var(--w-card)}
+/* ===== 方案 4 卡片 ===== */
+.win.s4{--w-bg:#FFF4E3;--w-fg:#2B2118;--w-mut:#8F7F6C;--w-line:#2B2118;--w-card:#fff;--w-sec:#FFE4BF;--w-pri:#FF6E47;--w-pri-fg:#fff;--w-dng:#C4432B;--w-r:14px}
+.s4 .wbtn,.s4 .opt,.s4 .tool,.s4 .mini,.s4 .chip{border:2px solid #2B2118}
+.s4 .wbtn,.s4 .opt{box-shadow:0 3px 0 #2B2118}
+.s4 .wbtn:active,.s4 .opt:active{transform:translateY(2px);box-shadow:0 1px 0 #2B2118}
+.s4 .opt .ic{background:#FFE4BF;color:#2B2118;border:2px solid #2B2118}
+.s4 .opt.pri .ic{background:#fff;color:#FF6E47}
+.s4 .opt.pri small{opacity:.9}
+.s4 .stpr i{border:2px solid #2B2118}
+.s4 .banner{border:2px solid #2B2118}
+.s4g{height:100%;display:flex;flex-direction:column;padding:0 26px 20px;gap:14px}
+.scene{position:relative;flex:1;min-height:0;border:2px solid #2B2118;border-radius:24px;background:linear-gradient(180deg,#FFE4BF 0 74%,#F7C98B 74%);overflow:hidden}
+.scene .gl{position:absolute;left:0;right:0;top:74%;height:2px;background:#2B2118}
+.scene .dash{position:absolute;left:0;right:0;top:calc(74% + 16px);height:3px;background:repeating-linear-gradient(90deg,#2B2118 0 18px,transparent 18px 46px);opacity:.35}
+.scene.go .dash{animation:dash .5s linear infinite}
+@keyframes dash{to{background-position:-46px 0}}
+.scene .sp{position:absolute;left:58%;top:74%;transform:translate(-50%,-93%)}
+.scene .tm{position:absolute;left:26px;top:18px;max-width:46%}
+.scene .toms{position:absolute;right:20px;top:20px;display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;max-width:210px}
+.scene .toms i{width:20px;height:20px;border-radius:50%;border:2px solid #2B2118;display:grid;place-items:center;background:#fff}
+.scene .toms i.d{background:#FF6E47}
+.scene .toms i.c{background:#FFD39B;box-shadow:0 0 0 3px rgba(255,110,71,.35)}
+.s4time{font:800 72px/1 var(--font);letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.s4task{font-size:17px;font-weight:700;margin-top:4px}
+.s4row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.s4run{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:start}
+.s4run .lft{display:flex;flex-direction:column;gap:12px}
+.s4wh{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--w-mut)}
+.s4mid{flex:1;min-height:0;display:grid;grid-template-columns:1fr 230px;gap:26px;align-items:center}
+.deck{position:relative;width:400px;height:316px;margin:0 auto}
+.dk{position:absolute;inset:0;background:#fff;border:2px solid #2B2118;border-radius:22px;box-shadow:0 4px 0 #2B2118;padding:20px 22px;display:flex;flex-direction:column}
+.dk.b1{transform:rotate(3deg) translate(8px,6px);background:#FFE4BF}
+.dk.b2{transform:rotate(-2.5deg) translate(-8px,10px);background:#FFD39B}
+.dk.in{animation:dkIn .25s cubic-bezier(.3,1.3,.5,1)}
+@keyframes dkIn{from{transform:scale(.94) translateY(8px);opacity:.4}}
+.dk.fly-l{animation:flyL .24s ease-in forwards}
+.dk.fly-r{animation:flyR .24s ease-in forwards}
+@keyframes flyL{to{transform:translate(-150%,24px) rotate(-18deg);opacity:0}}
+@keyframes flyR{to{transform:translate(150%,24px) rotate(18deg);opacity:0}}
+.dkh{display:flex;justify-content:space-between;font-size:12px;color:var(--w-mut)}
+.dk h3{margin:12px 0 0;font-size:25px;line-height:1.25;font-weight:800;letter-spacing:-.01em}
+.dke{flex:1;display:flex;flex-direction:column;justify-content:center;gap:8px}
+.dke .tomr{display:flex;gap:5px;align-items:center}
+.dke .tomr .ti{width:30px;height:30px}
+.dke .tomr .nb{margin-left:auto}
+.dke p{margin:0;font-size:13px;color:var(--w-mut)}
+.dkb{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.joined{align-self:stretch;display:flex;flex-direction:column;gap:6px;justify-content:center}
+.joined .jc{background:#fff;border:2px solid #2B2118;border-radius:12px;padding:6px 10px;font-size:12.5px;display:flex;justify-content:space-between;gap:8px}
+.joined .jc.new{animation:rise .25s ease}
+.joined .jc span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.joined .emp{font-size:12.5px;color:var(--w-mut);border:2px dashed #C9B79F;border-radius:12px;padding:14px 10px;text-align:center}
+.joined .tot{font-size:13px;font-weight:700;margin-top:4px}
+.s4wf{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px;color:var(--w-mut)}
+.s4cols{flex:1;min-height:0;display:grid;grid-template-columns:1fr 290px;gap:22px;align-items:center}
+.ord{display:flex;flex-direction:column;gap:8px}
+.ordr{display:grid;grid-template-columns:24px 1fr auto auto;gap:10px;align-items:center;background:#fff;border:2px solid #2B2118;border-radius:14px;padding:8px 12px;font-size:14px;font-weight:600}
+.ordr .no{font:700 12px var(--mono);color:var(--w-mut)}
+.ordr .mv{display:inline-flex;gap:4px}
+.s4sum{background:#fff;border:2px solid #2B2118;border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:10px}
+/* ===== 方案 5 时间预算 ===== */
+.win.s5{--w-bg:#F3F5F8;--w-fg:#111827;--w-mut:#6B7280;--w-line:#DDE2EA;--w-card:#fff;--w-sec:#E8ECF2;--w-pri:#111827;--w-pri-fg:#fff;--w-dng:#D43D2A;--w-r:9px}
+.s5g{height:100%;display:grid;grid-template-columns:1fr 372px;gap:26px;padding:0 26px 22px}
+.s5l{display:flex;flex-direction:column;justify-content:center;gap:10px;min-width:0}
+.s5time{font:600 88px/1 var(--mono);letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+.s5task{font-size:18px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shelf{align-self:center;background:var(--w-card);border:1px solid var(--w-line);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:14px;box-shadow:0 1px 2px rgba(16,24,40,.05)}
+.shh{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:var(--w-mut)}
+.shh b{font-size:15px;color:var(--w-fg)}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.slot{aspect-ratio:1;border-radius:50%;border:2px dashed #CBD2DC;display:grid;place-items:center;font:600 12px var(--mono);color:var(--w-mut)}
+.slot.d{border:0;background:#FFE6DD}
+.slot.d .ti{width:62%;height:62%}
+.slot.c{border:2px solid var(--focus);box-shadow:0 0 0 4px rgba(255,110,71,.18);color:var(--focus)}
+.slot.u{border-style:solid;border-color:#111827;background:#111827;color:#fff}
+.slot.x{border-style:solid;border-color:var(--w-dng);color:var(--w-dng);background:#FDECE9}
+.shp{display:flex;align-items:flex-end;gap:12px;font-size:12.5px;color:var(--w-mut);border-top:1px solid var(--w-line);padding-top:12px}
+.shp p{margin:0}
+.s5w{height:100%;display:flex;flex-direction:column;padding:0 26px 20px;gap:14px}
+.s5wh{display:flex;justify-content:space-between;align-items:center}
+.s5wh h3{margin:0;font-size:18px}
+.s5wb{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:14px}
+.s5wb h4{margin:0;font-size:22px;font-weight:600}
+.s5wb .sd{margin:0;color:var(--w-mut);font-size:13.5px}
+.s5wf{display:flex;justify-content:flex-end;gap:8px}
+.bts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.bt{border:1px solid var(--w-line);background:var(--w-card);border-radius:14px;padding:16px;text-align:left;cursor:pointer;color:var(--w-fg);font:inherit}
+.bt b{display:block;font-size:22px;font-weight:600}
+.bt small{display:block;color:var(--w-mut);font-size:12.5px;margin-top:2px}
+.bt .cp{margin-top:14px;display:flex;gap:3px;flex-wrap:wrap;min-height:18px}
+.bt .cp .ti{width:17px;height:17px}
+.bt.on{border-color:#111827;box-shadow:0 0 0 1px #111827}
+.s5two{display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start}
+.capp{background:var(--w-card);border:1px solid var(--w-line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.capp .slots{gap:8px}
+.ainote{font-size:13px;background:var(--w-sec);border-radius:10px;padding:10px 12px;line-height:1.55}
+.warn{font-size:12.5px;color:var(--w-dng);font-weight:500}
+.s5 .tr{background:var(--w-card);border:1px solid var(--w-line);margin-bottom:6px}
+.s5 .tr.off{background:transparent;border-style:dashed}
+.cfm{background:var(--w-card);border:1px solid var(--w-line);border-radius:14px;overflow:hidden}
+.cfm div{display:grid;grid-template-columns:120px 1fr auto;gap:12px;padding:10px 14px;font-size:14px;border-top:1px solid var(--w-line);align-items:center}
+.cfm div:first-child{border-top:0}
+.cfm .tmn{font:12.5px var(--mono);color:var(--w-mut)}
+/* ---------- responsive ---------- */
+@media (max-width:980px){.ovw{grid-template-columns:repeat(3,1fr)}.notes{grid-template-columns:repeat(2,1fr)}.gal{grid-template-columns:1fr}}
+@media (max-width:820px){
+  h1{font-size:30px}
+  header.top{padding-top:32px}
+  .ovw{grid-template-columns:1fr 1fr}
+  .notes,.cards{grid-template-columns:1fr}
+  .mac{padding:6px 6px 8px;border-radius:12px}
+  .tbl td:first-child{white-space:normal}
+}
+@media (max-width:480px){.ovw{grid-template-columns:1fr}}
+
+/* 方案 1 卡片综合 */
+.s4wh a,.k1ai a{cursor:pointer;text-decoration:underline;text-underline-offset:2px;color:var(--w-fg)}
+.k1pick{position:relative;flex:1;min-height:0;display:grid;grid-template-columns:1fr 236px;gap:24px;align-items:stretch}
+.k1desk{position:relative;display:flex;flex-direction:column;justify-content:center;gap:12px;min-width:0;user-select:none;-webkit-user-select:none;touch-action:none}
+.k1q h3{margin:0;font-size:22px;font-weight:800;letter-spacing:-.01em}
+.k1q p{margin:4px 0 0;font-size:12.5px;color:var(--w-mut);line-height:1.5}
+.k1sc{position:relative;height:300px;overflow-y:auto;overflow-x:hidden;margin:-10px -8px 0;padding:12px 8px 8px;scrollbar-width:thin;scrollbar-color:#C9B79F transparent;overscroll-behavior:contain}
+.k1sc::-webkit-scrollbar{width:6px}
+.k1sc::-webkit-scrollbar-thumb{background:#C9B79F;border-radius:3px}
+.k1grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 14px;align-content:start}
+.k1c.gone{visibility:hidden}
+.k1c.on.k1fly{position:absolute;margin:0;z-index:12;pointer-events:none;transition:none;transform:rotate(var(--r))}
+.k1c{position:relative;height:78px;min-width:0;text-align:left;font:inherit;color:var(--w-fg);background:#fff;border:2px solid #2B2118;border-radius:18px;box-shadow:0 4px 0 #2B2118;padding:10px 14px;display:flex;flex-direction:column;cursor:pointer;transform:rotate(var(--r));transition:transform .14s,box-shadow .14s,background .14s}
+.k1c:hover{transform:rotate(var(--r)) translateY(-3px)}
+.k1c.on{background:#FFEDE3;border-color:#FF6E47;box-shadow:0 4px 0 #FF6E47,0 0 0 4px rgba(255,110,71,.22);transform:rotate(var(--r)) translateY(-5px)}
+.k1c.on{cursor:grab}
+.k1c.in{animation:dkIn .28s cubic-bezier(.3,1.3,.5,1)}
+.k1c.drag{transition:none;cursor:grabbing;box-shadow:0 14px 26px rgba(43,33,24,.28);pointer-events:none}
+.k1c .k1h{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--w-mut)}
+.k1k{width:20px;height:20px;border-radius:50%;border:2px solid #C9B79F;background:#fff;display:grid;place-items:center;color:transparent}
+.k1k svg{width:11px;height:11px}
+.k1c.on .k1k{background:#FF6E47;border-color:#FF6E47;color:#fff}
+.k1c b{font-size:16px;font-weight:800;line-height:1.25;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.k1mq{position:absolute;border:1.5px dashed #FF6E47;background:rgba(255,110,71,.12);border-radius:6px;pointer-events:none;z-index:8}
+.k1acts{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px;color:var(--w-mut);margin-top:4px}
+.k1acts a{cursor:pointer;text-decoration:underline;text-underline-offset:2px;color:var(--w-fg)}
+.k1done{height:290px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;font-size:13px;color:var(--w-mut);line-height:1.6;border:2px dashed #C9B79F;border-radius:20px}
+.k1done p{margin:0}
+.k1box{position:relative;align-self:center;height:330px;display:flex;flex-direction:column;background:#FFDDAE;border:2px solid #2B2118;border-radius:8px 8px 24px 24px;box-shadow:0 5px 0 #2B2118,inset 0 14px 0 rgba(43,33,24,.1);padding:24px 12px 12px;transition:transform .14s,background .14s}
+.k1box::before{content:"";position:absolute;left:-10px;right:-10px;top:-8px;height:14px;background:#F2C48A;border:2px solid #2B2118;border-radius:6px}
+.k1box.emp{background:#FFEBCB}
+.k1box.over{background:#FFC98F;transform:scale(1.04)}
+.k1box.bump{animation:k1bump .22s ease}
+@keyframes k1bump{40%{transform:translateY(5px) scale(1.03,.97)}}
+.k1bh{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:#7A6550;margin-bottom:8px}
+.k1bh b{font-size:14px;color:var(--w-fg);font-weight:800}
+.k1bl{flex:1;display:flex;flex-direction:column;gap:7px;min-height:0;overflow-y:auto;overflow-x:hidden;padding:2px 5px 6px 3px;margin:0 -5px 0 -3px;scrollbar-width:thin;scrollbar-color:#C9A46E transparent}
+.k1bl::-webkit-scrollbar{width:6px}
+.k1bl::-webkit-scrollbar-thumb{background:#C9A46E;border-radius:3px}
+.k1j{flex:none}
+.k1acts>span:first-child{white-space:nowrap}
+.k1cols{grid-template-rows:minmax(0,1fr)}
+.k1cols .ord{position:relative;max-height:100%;overflow-y:auto;padding:0 6px 4px 0;scrollbar-width:thin;scrollbar-color:#C9B79F transparent}
+.k1cols .ord::-webkit-scrollbar{width:6px}
+.k1cols .ord::-webkit-scrollbar-thumb{background:#C9B79F;border-radius:3px}
+.k1cols .ordr{flex:none}
+.k1ai{position:sticky;top:0;z-index:2;flex:none}
+.k1j{display:flex;align-items:center;gap:6px;background:#fff;border:2px solid #2B2118;border-radius:11px;box-shadow:0 2px 0 #2B2118;padding:6px 6px 6px 10px;font-size:12.5px;font-weight:600;transform:rotate(calc(var(--r)*.6))}
+.k1j.new{animation:k1land .34s cubic-bezier(.3,1.5,.5,1) both;animation-delay:var(--d)}
+@keyframes k1land{from{transform:translateY(-26px) rotate(-10deg) scale(.7);opacity:0}}
+.k1j span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.k1x{flex:none;width:20px;height:20px;border-radius:50%;border:0;background:#F3E6D2;color:#7A6550;font:inherit;font-size:14px;line-height:1;cursor:pointer;display:grid;place-items:center;padding:0}
+.k1x:hover{background:#2B2118;color:#fff}
+.k1be{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;color:#7A6550}
+.k1be b{font-size:14px;color:var(--w-fg)}
+.k1be small{font-size:11.5px;line-height:1.5}
+.k1cols{align-items:center}
+.k1ai{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:7px 12px;border-radius:12px;border:2px dashed #C9B79F;color:var(--w-mut);background:linear-gradient(90deg,#FFF4E3 25%,#FFE4BF 50%,#FFF4E3 75%);background-size:200% 100%;animation:shim 1.2s linear infinite}
+.k1ai svg{width:13px;height:13px;flex:none;color:#FF6E47}
+.k1ai span{flex:1}
+.k1ai.ok{animation:none;background:#FFE4BF;border:2px solid #2B2118;color:var(--w-fg)}
+.k1cols .ordr{padding:6px 12px}
+.k1cols .ordr .tt{min-width:0}
+.k1cols .ordr .tt small{display:block;font-size:11.5px;font-weight:400;color:var(--w-mut);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.k1cols .ordr.wait{border-style:dashed;border-color:#C9B79F;background:#FFFAF1}
+.k1cols .ordr.wait .mv{visibility:hidden}
+.k1cols .ordr.pop{animation:blk .34s cubic-bezier(.3,1.5,.5,1)}
+.k1cols .shim{background:linear-gradient(90deg,#FFE4BF 25%,#FFF4E3 50%,#FFE4BF 75%);background-size:200% 100%;border:1.5px dashed #C9B79F}
+.k1say{position:absolute;bottom:128px;transform:translateX(-50%);background:#fff;color:#16171B;font-size:16px;font-weight:500;padding:10px 20px;border-radius:20px;white-space:nowrap;box-shadow:0 10px 26px rgba(0,0,0,.3)}
+.k1say::after{content:"";position:absolute;left:50%;bottom:-9px;margin-left:-9px;border:9px solid transparent;border-bottom:0;border-top-color:#fff}
+.k1say:empty{display:none}
+.k1row{margin:30px 0 0;justify-content:flex-start;max-width:none}
+.k1gh{background:repeating-linear-gradient(135deg,#EBDCC4 0 5px,transparent 5px 10px)!important;outline:1px dashed #C9B79F;outline-offset:-1px}
+.k1run{height:100%;display:flex;flex-direction:column;padding:0 26px 20px;gap:14px}
+.k1top{flex:1;min-height:0;display:grid;grid-template-columns:1fr 330px;gap:24px;align-items:center}
+.k1hero{min-width:0}
+.k1hero .s4task{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:14px}
+.k1ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.k1next{background:#fff;border:2px solid #2B2118;border-radius:18px;box-shadow:0 3px 0 #2B2118;padding:12px 14px}
+.k1next .cap{margin:0 0 4px}
+.k1run .rl{border:2px solid #2B2118;border-radius:18px;background:#fff;padding:12px 20px 10px}
+.k1run .rl-h{margin-bottom:34px}
+.k1run .rl-l{margin-top:26px}
+.k1run .rail{background:#FFF0D9}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF6B47"/><stop offset="1" stop-color="#FFB547"/></linearGradient></defs></svg>
+<div class="wrap">
+<header class="top">
+  <div class="kicker">PomodoQ · 番茄队列 × macOS Island · 交互方案 ×5（未实现）</div>
+  <h1>五套交互方案：以番茄钟为主的首页、分步创建、会动的 island</h1>
+  <p class="lede"><b>结论：</b>五套方案遵守同一组规则。首页只有番茄钟和「创建 PomodoQ」两个入口：直接开始，或者按任务智能排番茄。按任务创建是分步的，每项任务要几个番茄先由 AI 估，你可以改。专注时宠物在刘海 island 里跑，休息时它在整块屏幕上喝咖啡、拉伸；宠物是可以换的动效模板，默认小番茄，还有小狗和小猫。五套的差别在首页气质、创建步骤怎么走、island 和休息页怎么动。上一版页面没有改动；队列进行中的管理（加任务、调顺序、提前完成）沿用上一版。本页只讲产品和交互。</p>
+</header>
+
+<section style="border-top:0;margin-top:0;padding-top:10px">
+  <h2><span class="n">01</span>五套方案一览</h2>
+  <p class="sub">点任意一张卡片，下面的屏幕就切到那套方案。每套都能从首页一路操作到休息全屏。</p>
+  <div class="ovw" id="ovw"></div>
+  <div class="co"><b>五套共用的规则</b>
+    <ul class="rules">
+      <li>首页不显示今日任务，主角是倒计时；「创建 PomodoQ」区域有两个按钮。</li>
+      <li><b>直接开始</b>（自由队列）：一键开始，专注 25 分、短休 5 分、每 4 个番茄长休 20 分，一直循环到手动终止。</li>
+      <li><b>按任务智能排番茄</b>：选哪些任务进队列 → AI 估每项要几个番茄（1–6 个，可手动改，可一键恢复 AI 的估计）→ 预览 → 开始。AI 一时估不出来，就先按 1 个番茄处理。</li>
+      <li>专注和休息自动接续；队列最后一个番茄后面不排休息。</li>
+      <li>动效模板在窗口右上角「动效」里换，island、主窗口、休息全屏一起换。</li>
+    </ul>
+  </div>
+</section>
+
+<section id="demo">
+  <h2><span class="n">02</span>交互演示：在一块 MacBook 屏幕上操作每套方案</h2>
+  <p class="sub">先选方案，再在屏幕里点「直接开始」或「按任务智能排番茄」。专注开始后把鼠标移到刘海上可以展开 island；点窗口黄色按钮收起主窗口，从 Dock 的番茄图标恢复。想直接看某个时刻，用「直接跳到」。换方案时，进行中的队列会保留，方便对比同一时刻的 island 和休息页。</p>
+
+  <div class="tabs" id="tabs"></div>
+  <div class="ctrls">
+    <div class="ctrl"><span>动效模板</span><div class="seg" data-group="pet"><button data-set="pet:tomato">小番茄</button><button data-set="pet:dog">小狗</button><button data-set="pet:cat">小猫</button></div></div>
+    <div class="ctrl"><span>演示速度</span><div class="seg" data-group="speed"><button data-set="speed:1">1×</button><button data-set="speed:60">60×</button><button data-set="speed:300">300×</button></div></div>
+    <div class="ctrl"><span>外观</span><div class="seg" data-group="theme"><button data-set="theme:system">跟随系统</button><button data-set="theme:light">浅色</button><button data-set="theme:dark">深色</button></div></div>
+  </div>
+  <div class="jumps">
+    <span>直接跳到</span>
+    <button class="btn" data-act="jump:home">首页</button>
+    <button class="btn" data-act="jump:wiz">创建步骤</button>
+    <button class="btn" data-act="jump:focus">专注进行中</button>
+    <button class="btn" data-act="jump:warn">休息前 1 分钟</button>
+    <button class="btn" data-act="jump:break">休息中</button>
+    <span style="margin-left:10px">操作</span>
+    <button class="btn" data-act="ff">快进到本段结束</button>
+    <button class="btn" data-act="reset">重置</button>
+  </div>
+
+  <div class="mac">
+    <div class="vp" id="vp">
+      <div class="scr" id="scr">
+        <div class="mb">
+          <div class="l"><span class="app">PomodoQ</span><span>文件</span><span>编辑</span><span>显示</span><span>窗口</span></div>
+          <div class="r"><span>Wi‑Fi</span><span id="clock">周日 14:05</span></div>
+        </div>
+        <div class="notch"></div>
+        <div class="win" id="win"></div>
+        <div class="dock">
+          <div class="di d1" title="访达"></div>
+          <div class="di d2" title="浏览器"></div>
+          <div class="di d3" title="备忘录"></div>
+          <div class="di d4 run" title="PomodoQ" data-act="dock"><svg viewBox="0 0 16 16" width="30" height="30" aria-hidden="true"><circle cx="8" cy="9.2" r="6" fill="url(#tg)"/><path d="M8 4.6 4.6 3.2l2.5-.5L8 .6l.9 2.1 2.5.5z" fill="#3DDC68"/></svg></div>
+        </div>
+        <div id="ov"></div>
+        <div class="isl" id="isl" style="display:none"><div class="isl-in" id="islIn"></div><div id="islX"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="mac-base"></div>
+  <div class="log" id="log">事件：打开 PomodoQ，还没有队列。</div>
+  <div class="notes" id="notes"></div>
+  <p class="trade" id="trade"></p>
+</section>
+
+<section>
+  <h2><span class="n">03</span>动效模板：小番茄、小狗、小猫</h2>
+  <p class="sub">模板决定专注和休息时出现的角色。点一张卡片就切换，上面的屏幕会同步。这里的角色是用简单图形画的占位，正式版换成画师的动图，位置和时机不变。</p>
+  <div class="gal" id="gal"></div>
+  <div class="tw" style="margin-top:14px">
+    <table class="tbl">
+      <thead><tr><th>每套模板要的动画</th><th>出现在哪</th><th>什么时候</th></tr></thead>
+      <tbody>
+        <tr><td>跑动（循环）</td><td>刘海 island、主窗口</td><td>专注进行中。island 里很小，角色轮廓要简单、一眼认得出</td></tr>
+        <tr><td>喝咖啡（循环）</td><td>休息全屏、休息时的 island</td><td>短休息</td></tr>
+        <tr><td>拉伸（循环）</td><td>休息全屏</td><td>长休息，或和喝咖啡轮换</td></tr>
+        <tr><td>待机</td><td>首页、暂停时</td><td>还没开始，或者按了暂停</td></tr>
+        <tr><td>庆祝（可选）</td><td>主窗口</td><td>整个队列完成</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">04</span>五套方案对比</h2>
+  <p class="sub">五套的规则相同，差别在呈现方式。可以整套选，也可以从不同方案里各取一块。</p>
+  <div class="tw">
+    <table class="tbl">
+      <thead><tr><th>方案</th><th>首页</th><th>创建步骤</th><th>AI 估算怎么出现</th><th>Island 专注动效</th><th>休息全屏</th><th>更适合</th></tr></thead>
+      <tbody>
+        <tr><td>1 卡片综合</td><td>暖色大场景，角色站在中间（同方案 4）</td><td>2 步：按住拖过卡片圈中多张，一起丢进盒子 → AI 排番茄、调顺序</td><td>第二步逐项亮起番茄数和理由，时间条跟着长</td><td>角色和「第几个」在 island 左侧，底边进度线；休息前 1 分钟说一句提醒</td><td>角色走去喝咖啡再走回来，头顶气泡说休息提示；一排打卡格（番茄 / 骨头 / 小鱼）</td><td>喜欢方案 4 的气质，但想批量选、想看时间线</td></tr>
+        <tr><td>2 时间线</td><td>浅色宽窗，底部常驻今天的时间线</td><td>2 步：边选边估 → 定节奏</td><td>勾选的同时估，时间线上实时长出色块</td><td>角色脚下有流动的地面；展开后在进度轨道上跑</td><td>角色走去喝咖啡再走回来，位置就是休息进度</td><td>在意「几点能做完」</td></tr>
+        <tr><td>3 对话式</td><td>深色窗口，角色开口问你怎么开始</td><td>3 轮对话：选任务 → 估番茄 → 排计划</td><td>作为角色的一句回答，带一张可改的卡片</td><td>关键时刻从刘海落下一句气泡</td><td>角色轮流说休息提示</td><td>喜欢有陪伴感、不想填表</td></tr>
+        <tr><td>4 卡片</td><td>暖色大场景，角色站在中间</td><td>2 步：逐张决定加不加 → 排顺序</td><td>每张任务卡上各估各的</td><td>角色挂在刘海下方的小标签里</td><td>整屏插画场景，角色拉伸，跟着呼吸</td><td>任务多、想快速过一遍</td></tr>
+        <tr><td>5 时间预算</td><td>左边倒计时，右边今日番茄架</td><td>3 步：给时间 → AI 挑任务 → 确认</td><td>AI 既估番茄数，也决定哪些装得下</td><td>island 底边一条进度线，左侧显示第几个</td><td>展示已经收获的番茄</td><td>时间有限、想让 AI 替你取舍</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">05</span>我的建议和要你定的事</h2>
+  <div class="co"><b>建议：用方案 1「卡片综合」，和方案 4 对比着看。</b> 方案 1 是按你的想法拼的：方案 4 的暖色和卡片，任务改成圈中多张、一起丢进「今日队列」盒子，番茄数由 AI 逐项估出来，专注时的主窗口和休息页用方案 2 的时间线，island 像方案 5 一样不多占一行，休息前提醒和休息页带方案 3 的对话气泡。和方案 4 的差别只在三处：选任务是一次丢多张还是逐张、专注时看场景还是看时间线、休息时走去喝咖啡还是原地拉伸。这只是我的判断，看完演示后以你的感受为准。</div>
+  <div class="cards">
+    <div class="card"><h4>选哪一套，或者怎么混搭</h4><p>首页、创建步骤、island 动效、休息全屏这四块可以分别选。</p><p class="def"><b>默认：</b>按上面的建议。</p></div>
+    <div class="card"><h4>首发做几套动效模板</h4><p>每套模板需要第 03 节列的 4 段循环动画，庆祝是可选的。</p><p class="def"><b>默认：</b>首发只做小番茄，小狗和小猫随后补。</p></div>
+    <div class="card"><h4>AI 估的番茄数被改了以后要不要记住</h4><p>例如你总把「写文档」从 3 个改成 4 个，下次估同类任务是否参考。</p><p class="def"><b>默认：</b>记住，并在理由里说明「按你上次的调整」。</p></div>
+    <div class="card"><h4>方案 5 里 AI 没排进来的任务怎么办</h4><p>时间装不下的任务留在今日任务里，不会消失。</p><p class="def"><b>默认：</b>确认页列出「这次没排」，不自动挪到明天。</p></div>
+    <div class="card"><h4>短休息和长休息的动效要不要区分</h4><p>演示里短休息喝咖啡，方案 4 用拉伸。</p><p class="def"><b>默认：</b>短休息喝咖啡，长休息拉伸。</p></div>
+    <div class="card"><h4>休息全屏的严格程度</h4><p>演示按严格模式：休息页没有跳过，只能按住 3 秒结束整个队列。</p><p class="def"><b>默认：</b>沿用上一版的「严格 / 普通」开关。</p></div>
+  </div>
+</section>
+
+<footer>设计整理，非实现完成声明。角色动画为占位图形，正式素材由画师提供。上一版方案见同目录下的 show-me-pomodoro-queue-island-2026-11-15.html。</footer>
+</div>
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const fmt = s => { s = Math.max(0, Math.ceil(s)); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
+const clk = sec => { const m = Math.floor(sec / 60) % 1440; return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+const dur = min => { min = Math.round(min); const h = Math.floor(min / 60), m = min % 60; return h ? (m ? `${h} 小时 ${m} 分` : `${h} 小时`) : `${m} 分钟`; };
+
+/* ---------- data ---------- */
+const TODOS = [
+  { id: 1, title: '写 Q4 复盘文档', ai: 3, why: '背景、数据、结论 3 节' },
+  { id: 2, title: '回复设计评审意见', ai: 1, why: '12 条评论' },
+  { id: 3, title: '重构登录页表单校验', ai: 2, why: '5 个字段 + 自测' },
+  { id: 4, title: '读《深度工作》第 3 章', ai: 1, why: '约 30 页' },
+  { id: 5, title: '整理下周计划', ai: 1, why: '例行整理' },
+];
+const MORE = [
+  { id: 6, title: '准备周会要讲的 3 页', ai: 1, why: '3 页幻灯片' },
+  { id: 7, title: '修复导出 CSV 乱码', ai: 2, why: '复现、修复、回归' },
+  { id: 8, title: '给新同事写上手指南', ai: 2, why: '环境、流程、常见问题' },
+  { id: 9, title: '回复客户邮件', ai: 1, why: '4 封待回' },
+  { id: 10, title: '整理报销单', ai: 1, why: '6 张发票' },
+  { id: 11, title: '复习英语单词', ai: 1, why: '50 个词' },
+  { id: 12, title: '看竞品更新日志', ai: 1, why: '3 家产品' },
+  { id: 13, title: '写订单模块的单元测试', ai: 2, why: '8 个用例' },
+  { id: 14, title: '订下周出差的车票酒店', ai: 1, why: '往返 + 2 晚' },
+];
+const ALL = TODOS.concat(MORE);
+const COL = { 1: '#FF6E47', 2: '#F2A93B', 3: '#3FB58A', 4: '#5C8DF6', 5: '#A77BF3', 6: '#E86A9A', 7: '#2FA8C6', 8: '#8FB339', 9: '#D9822B', 10: '#7A6FF0', 11: '#C75BD3', 12: '#4FA36B', 13: '#E0564F', 14: '#5E7A99' };
+const PH = { f: '专注时段', short: '短休息', long: '长休息' };
+const TIPS = ['离开屏幕，让眼睛休息', '做些伸展运动或深呼吸', '喝杯水，保持水分充足'];
+const RH0 = { f: 25, s: 5, l: 20, every: 4 };
+const RH = {
+  f: { min: 5, max: 90, step: 5, label: '专注（分）' },
+  s: { min: 1, max: 30, step: 1, label: '短休（分）' },
+  l: { min: 5, max: 60, step: 5, label: '长休（分）' },
+  every: { min: 2, max: 8, step: 1, label: '几个后长休' },
+};
+const PRE = {
+  std: { f: 25, s: 5, l: 20, every: 4, label: '标准 25 / 5' },
+  deep: { f: 50, s: 10, l: 30, every: 2, label: '长专注 50 / 10' },
+  sprint: { f: 15, s: 3, l: 15, every: 4, label: '短冲刺 15 / 3' },
+};
+const PETS = { tomato: '小番茄', dog: '小狗', cat: '小猫' };
+const T0 = 14 * 3600 + 5 * 60;
+
+/* ---------- icons ---------- */
+const TI = '<svg class="ti" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="9.2" r="6" fill="url(#tg)"/><path d="M8 4.6 4.6 3.2l2.5-.5L8 .6l.9 2.1 2.5.5z" fill="#3DDC68"/></svg>';
+const IC = {
+  play: '<svg viewBox="0 0 16 16" width="15" height="15"><path d="M4.5 2.8v10.4L13 8z" fill="currentColor"/></svg>',
+  spark: '<svg viewBox="0 0 16 16" width="15" height="15"><path d="M7 1.5l1.6 4.2L13 7.3 8.6 8.9 7 13.1 5.4 8.9 1 7.3l4.400-1.600zM12.800 10.500l.700 1.800 1.800.700-1.800.700-.700 1.800-.700-1.800-1.800-.700 1.800-.700z" fill="currentColor"/></svg>',
+  check: '<svg viewBox="0 0 12 12"><path d="M2.5 6.2l2.400 2.400 4.600-5" fill="none" stroke="currentColor" stroke-width="1.800" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  pause: '<svg viewBox="0 0 16 16" width="14" height="14"><path d="M4 3h3v10H4zM9 3h3v10H9z" fill="currentColor"/></svg>',
+  skip: '<svg viewBox="0 0 16 16" width="14" height="14"><path d="M3 3l7 5-7 5zM11 3h2v10h-2z" fill="currentColor"/></svg>',
+};
+
+/* ---------- pets（占位图形，正式版换成画师的动图） ---------- */
+const BODY = {
+  tomato: `<g class="pt"><g class="bdg">
+<line class="lg a" x1="27" y1="35" x2="27" y2="43" stroke="#E0512F" stroke-width="3.200" stroke-linecap="round"/>
+<line class="lg b" x1="37" y1="35" x2="37" y2="43" stroke="#E0512F" stroke-width="3.200" stroke-linecap="round"/>
+<ellipse class="pw" cx="25" cy="39.600" rx="4.200" ry="2" fill="#E0512F"/><ellipse class="pw" cx="39" cy="39.600" rx="4.200" ry="2" fill="#E0512F"/>
+<path class="ard" d="M17.500 26q-4.500 2.500-3.500 7.500M46.500 26q4.500 2.500 3.500 7.500" stroke="#E0512F" stroke-width="2.600" fill="none" stroke-linecap="round"/>
+<path class="aru" d="M18.500 20q-6-5-4.500-11.500M45.500 20q6-5 4.500-11.500" stroke="#E0512F" stroke-width="2.600" fill="none" stroke-linecap="round"/>
+<ellipse cx="32" cy="24" rx="16" ry="14.500" fill="url(#tg)"/>
+<ellipse cx="24.500" cy="16.500" rx="4.200" ry="2.300" fill="#fff" opacity=".38" transform="rotate(-28 24.500 16.500)"/>
+<path d="M32 11.500 24.500 8l5.300-1.200L32 1.500l2.200 5.300L39.500 8z" fill="#3DDC68"/>
+<ellipse class="ey" cx="27.500" cy="24" rx="1.700" ry="2.300" fill="#3A1A10"/><ellipse class="ey" cx="37.500" cy="24" rx="1.700" ry="2.300" fill="#3A1A10"/>
+<path d="M30 29.200q2.500 2.300 5 0" stroke="#3A1A10" stroke-width="1.400" fill="none" stroke-linecap="round"/>
+<circle cx="23.500" cy="28.500" r="2.100" fill="#FF3B2F" opacity=".32"/><circle cx="41.500" cy="28.500" r="2.100" fill="#FF3B2F" opacity=".32"/>
+</g></g>`,
+  dog: `<g class="pt">
+<line class="lg b" x1="21.500" y1="32" x2="21.500" y2="43" stroke="#C4853A" stroke-width="4.200" stroke-linecap="round"/>
+<ellipse class="pwb" cx="19" cy="34.600" rx="5.500" ry="2.300" fill="#C4853A"/>
+<g class="bdg">
+<path class="tl" d="M16.500 26.500q-6.500-3-5-11" stroke="#E9A85A" stroke-width="4" fill="none" stroke-linecap="round"/>
+<line class="lg a lf" x1="39" y1="32" x2="39" y2="43" stroke="#C4853A" stroke-width="4.200" stroke-linecap="round"/>
+<rect x="13.500" y="20" width="33" height="15" rx="7.500" fill="#E9A85A"/>
+<path d="M22 34.300q9 1.400 17 0" stroke="#FFF2DC" stroke-width="2.200" fill="none" stroke-linecap="round" opacity=".85"/>
+<line class="lg b lf" x1="42" y1="32" x2="42" y2="43" stroke="#E9A85A" stroke-width="4.600" stroke-linecap="round"/>
+<ellipse class="pw" cx="50" cy="34.200" rx="6" ry="2.500" fill="#FFF2DC"/>
+<g class="hd">
+<path d="M42.500 23l6.500 4" stroke="#FF6E47" stroke-width="3" stroke-linecap="round"/>
+<circle cx="48" cy="17" r="9.500" fill="#E9A85A"/>
+<ellipse cx="55" cy="20.500" rx="6" ry="4.600" fill="#FFF2DC"/>
+<ellipse cx="59.400" cy="18.400" rx="2.100" ry="1.700" fill="#3A2415"/>
+<path d="M43.500 8.500q-6.500 2-4.500 12.500 5.500-.500 7.500-8.500z" fill="#C4853A"/>
+<ellipse class="ey" cx="50.500" cy="14.600" rx="1.500" ry="2.100" fill="#3A2415"/>
+<path d="M53 23q2.600 1.800 5 0" stroke="#3A2415" stroke-width="1.100" fill="none" stroke-linecap="round"/>
+</g></g>
+<line class="lg a" x1="18.500" y1="32" x2="18.500" y2="43" stroke="#E9A85A" stroke-width="4.600" stroke-linecap="round"/>
+</g>`,
+  cat: `<g class="pt">
+<line class="lg b" x1="21" y1="32" x2="21" y2="43" stroke="#737C9C" stroke-width="3.400" stroke-linecap="round"/>
+<ellipse class="pwb" cx="19" cy="34.800" rx="5" ry="2.100" fill="#737C9C"/>
+<g class="bdg">
+<path class="tl" d="M16.500 27q-8-3-5.500-13 .800-3 3-2.200" stroke="#9AA3BF" stroke-width="3.400" fill="none" stroke-linecap="round"/>
+<line class="lg a lf" x1="38.500" y1="32" x2="38.500" y2="43" stroke="#737C9C" stroke-width="3.400" stroke-linecap="round"/>
+<rect x="14" y="21" width="31" height="13.500" rx="6.750" fill="#9AA3BF"/>
+<path d="M24 21.800v3.800M29 21.300v4.400M34 21.800v3.800" stroke="#737C9C" stroke-width="1.700" stroke-linecap="round"/>
+<line class="lg b lf" x1="41" y1="32" x2="41" y2="43" stroke="#9AA3BF" stroke-width="3.800" stroke-linecap="round"/>
+<ellipse class="pw" cx="49" cy="34.400" rx="5.500" ry="2.200" fill="#EEF0F7"/>
+<g class="hd">
+<path d="M40 14.500l.600-10.500 7 6z" fill="#9AA3BF"/><path d="M48.500 9.500l6-6.500 1.800 9.500z" fill="#9AA3BF"/>
+<path d="M41.800 12l.400-5 3.400 3z" fill="#F3A6B0"/><path d="M50.800 9.300l3-3.300.900 4.800z" fill="#F3A6B0"/>
+<circle cx="47.500" cy="18" r="9" fill="#9AA3BF"/>
+<ellipse cx="52.800" cy="21.600" rx="4.800" ry="3.500" fill="#EEF0F7"/>
+<path d="M55 19.600h2.600l-1.300 1.700z" fill="#F3A6B0"/>
+<ellipse class="ey" cx="49.800" cy="16.400" rx="1.400" ry="2.100" fill="#262A3B"/>
+<path d="M54.800 23q1.500 1.300 3 0" stroke="#262A3B" stroke-width="1" fill="none" stroke-linecap="round"/>
+<path d="M56.500 21.500l5.500-1M56.500 22.800l5.500 1.200" stroke="#737C9C" stroke-width=".700" stroke-linecap="round"/>
+</g></g>
+<line class="lg a" x1="18.500" y1="32" x2="18.500" y2="43" stroke="#9AA3BF" stroke-width="3.800" stroke-linecap="round"/>
+</g>`,
+};
+const CUPDX = { tomato: -9, dog: 0, cat: -3 };
+const cupG = dx => `<g transform="translate(${dx} 0)" color="rgba(255,255,255,.75)">
+<path class="stm" d="M65 28q-2.200-2.600 0-5t0-5" stroke="currentColor" stroke-width="1.500" fill="none" stroke-linecap="round"/>
+<path class="stm s2" d="M70.500 28q-2.200-2.600 0-5t0-5" stroke="currentColor" stroke-width="1.500" fill="none" stroke-linecap="round"/>
+<path d="M73.500 34.500q5.500-.500 4.500 4-1 3.500-5.500 3" stroke="#fff" stroke-width="2" fill="none"/>
+<path d="M61 31.500h13l-1.600 12h-9.800z" fill="#fff" stroke="rgba(0,0,0,.2)" stroke-width=".600"/>
+<ellipse cx="67.500" cy="32" rx="6" ry="1.300" fill="#7A4A2A"/>
+<path d="M63.300 37.500h8.400" stroke="#FF6E47" stroke-width="2.400" stroke-linecap="round"/></g>`;
+
+function pet(pose, h, kind, cls) {
+  kind = kind || S.pet;
+  const vw = pose === 'sip' ? 84 : 64;
+  const w = Math.round(h * vw / 48);
+  const anim = pose === 'walk' ? 'run walk' : pose;
+  return `<svg class="m m-${kind} ${anim}${cls ? ' ' + cls : ''}" viewBox="0 0 ${vw} 48" width="${w}" height="${h}" aria-hidden="true">${BODY[kind]}${pose === 'sip' ? cupG(CUPDX[kind]) : ''}</svg>`;
+}
+
+/* ---------- state ---------- */
+const S = {
+  scheme: 1, pet: 'tomato', speed: 60, theme: 'system',
+  stage: 'home', W: null, q: null, win: 'open',
+  hover: false, pinned: false, peek: 0, bubble: null,
+  picker: false, confirmEnd: false, anim: true,
+  clock: T0, last: null, rail: null, ovPh: null,
+};
+let TOK = 0;
+const V = {};
+const todo = id => ALL.find(t => t.id === id);
+const cur = () => S.q.segs[S.q.idx];
+const nF = q => q.segs.filter(s => s.type === 'f').length;
+const nextF = () => S.q.segs.slice(S.q.idx + 1).find(s => s.type === 'f');
+const pz = () => (S.q && S.q.paused ? 'paused' : '');
+const log = h => { $('log').innerHTML = '事件：' + h; };
+const say = t => { S.bubble = { text: t, until: Date.now() + 3800 }; };
+const feed = t => { const q = S.q; if (!q) return; q.feed.push(t); if (q.feed.length > 6) q.feed.shift(); };
+
+/* ---------- queue engine ---------- */
+const totalMin = segs => segs.reduce((a, s) => a + s.min, 0);
+function buildSegs(items, r) {
+  const segs = [], tot = items.reduce((a, i) => a + i.n, 0);
+  let no = 0;
+  items.forEach(it => {
+    for (let k = 1; k <= it.n; k++) {
+      no++;
+      segs.push({ type: 'f', min: r.f, title: it.title, todoId: it.id, k, of: it.n, no, st: 'pending' });
+      if (no < tot) { const long = no % r.every === 0; segs.push({ type: long ? 'long' : 'short', min: long ? r.l : r.s, st: 'pending' }); }
+    }
+  });
+  return segs;
+}
+function freeAhead(q, n) {
+  while (q.segs.length - 1 - q.idx < n) {
+    const last = q.segs[q.segs.length - 1];
+    if (last.type === 'f') { const long = last.no % q.r.every === 0; q.segs.push({ type: long ? 'long' : 'short', min: long ? q.r.l : q.r.s, st: 'pending' }); }
+    else { q.fc++; q.segs.push({ type: 'f', min: q.r.f, title: '自由专注', no: q.fc, k: 1, of: 1, st: 'pending' }); }
+  }
+}
+function capFor(min, r) {
+  let n = 0, t = 0;
+  for (;;) {
+    const add = r.f + (n > 0 ? (n % r.every === 0 ? r.l : r.s) : 0);
+    if (t + add > min) return n;
+    t += add; n++;
+    if (n >= 12) return n;
+  }
+}
+const startLine = c => (S.q.mode === 'free' ? `开始第 ${c.no} 个番茄` : `开始：${c.title}${c.of > 1 ? ` ${c.k}/${c.of}` : ''}`);
+
+function startQueue(mode, items, r) {
+  const q = { mode, r: { ...r }, idx: 0, paused: false, fc: 1, t0: S.clock, doneF: 0, focusSec: 0, feed: [] };
+  q.segs = mode === 'free' ? [{ type: 'f', min: r.f, title: '自由专注', no: 1, k: 1, of: 1, st: 'pending' }] : buildSegs(items, r);
+  if (mode === 'free') freeAhead(q, 14);
+  q.segs[0].st = 'cur';
+  q.remain = q.segs[0].min * 60;
+  S.q = q; S.stage = 'run'; S.W = null; S.confirmEnd = false; S.last = null; S.picker = false; S.anim = true;
+  S.hover = false; S.pinned = false; S.peek = Date.now() + 2600;
+  say(startLine(q.segs[0]));
+  feed(mode === 'free' ? '自由队列开始了。专注 25 分钟，我在刘海里陪你跑。' : `队列开始了，一共 ${nF(q)} 个番茄。先做「${esc(q.segs[0].title)}」。`);
+}
+function finish(ended) {
+  const q = S.q;
+  S.last = { n: q.doneF, min: q.focusSec / 60, ended };
+  S.q = null; S.stage = 'home'; S.win = 'open'; S.confirmEnd = false; S.hover = false; S.pinned = false; S.bubble = null; S.anim = true;
+  log(ended ? `终止队列 → 回到首页 · 已完成 ${S.last.n} 个番茄会保留在记录里` : `最后一个番茄完成 → 队列结束，回到首页 · 共 ${S.last.n} 个番茄`);
+  render();
+}
+function advance(skipped) {
+  const q = S.q, c = q.segs[q.idx];
+  c.st = skipped ? 'skip' : 'done';
+  c.used = c.min * 60 - Math.max(0, q.remain);
+  if (c.type === 'f') { q.focusSec += c.used; if (!skipped) q.doneF++; }
+  if (q.mode === 'free') freeAhead(q, 14);
+  if (q.idx >= q.segs.length - 1) return finish(false);
+  q.idx++;
+  const n = q.segs[q.idx];
+  n.st = 'cur'; q.remain = n.min * 60; S.peek = 0; S.confirmEnd = false;
+  if (n.type === 'f') {
+    S.peek = Date.now() + 2600;
+    say(startLine(n)); feed(`休息结束。${startLine(n)}。`);
+    log(`${skipped ? '跳过' : PH[c.type] + '结束'} → 休息页收回，自动开始下一个番茄「${esc(n.title)}」· island 回到橙色`);
+  } else {
+    S.hover = false; S.pinned = false;
+    feed(`第 ${c.no} 个番茄${skipped ? '跳过了' : '完成'}，休息 ${n.min} 分钟。`);
+    log(`${skipped ? '跳过当前番茄' : '专注结束'} → 休息页盖住整块屏幕（${PH[n.type]} ${n.min} 分钟）· island 变色，${PETS[S.pet]}开始${S.scheme === 4 ? '拉伸' : '喝咖啡'}`);
+  }
+  render();
+}
+function warn() {
+  S.peek = Date.now() + 3600;
+  say('还有 1 分钟，准备休息');
+  feed('还有 1 分钟，手头的事可以收个尾了。');
+  log(V[S.scheme].bubWarn ? '专注还剩 1 分钟 → 角色从 island 里说一句「还有 1 分钟，准备休息」，island 不展开' : '专注还剩 1 分钟 → island 自动展开 3 秒提醒，不打断操作');
+  renderIsl();
+  if (S.scheme === 3) renderWin();
+}
+function togglePause() {
+  const q = S.q; if (!q) return;
+  q.paused = !q.paused;
+  feed(q.paused ? '已暂停。我在这等你。' : '继续。');
+  log(q.paused ? `暂停 → 倒计时停住，${PETS[S.pet]}停下来等你` : '继续 → 倒计时接着走');
+  render();
+}
+function ff() {
+  const q = S.q; if (!q) { log('还没有队列。先在屏幕里创建一个，或者用「直接跳到」'); return; }
+  q.paused = false; q.remain = 0.2;
+}
+function defaultQueue() {
+  S.clock = T0;
+  startQueue('smart', TODOS.map(t => ({ id: t.id, title: t.title, n: t.ai })), RH0);
+  S.peek = 0; S.bubble = null;
+}
+function jump(k) {
+  S.picker = false;
+  if (k === 'home') { S.q = null; S.W = null; S.stage = 'home'; S.last = null; S.win = 'open'; S.clock = T0; S.anim = true; log('回到首页：只有倒计时和「创建 PomodoQ」两个入口'); return render(); }
+  if (k === 'wiz') { S.q = null; S.win = 'open'; S.clock = T0; return openWiz(); }
+  defaultQueue();
+  const q = S.q;
+  if (k === 'focus') { q.remain = 18 * 60 + 40; S.clock += 380; log('专注进行中：把鼠标移到刘海上展开 island；点黄色按钮收起主窗口'); }
+  if (k === 'warn') { q.remain = 64; S.clock += 25 * 60 - 64; log('还剩 1 分多钟：马上会看到 island 自动展开提醒'); }
+  if (k === 'break') { q.remain = 0; S.clock += 25 * 60; advance(false); return; }
+  render();
+}
+function resetAll() {
+  S.q = null; S.W = null; S.stage = 'home'; S.last = null; S.win = 'open'; S.clock = T0; S.hover = false; S.pinned = false; S.peek = 0; S.bubble = null; S.picker = false; S.confirmEnd = false; S.anim = true;
+  log('重置演示：回到今天 14:05，还没有队列');
+  render();
+}
+
+let lastT = performance.now();
+function tick() {
+  const now = performance.now(), real = Math.min(.5, (now - lastT) / 1000);
+  lastT = now;
+  const q = S.q;
+  let dirty = false;
+  if (S.peek && Date.now() > S.peek) { S.peek = 0; dirty = true; }
+  if (S.bubble && Date.now() > S.bubble.until) { S.bubble = null; dirty = true; }
+  if (q && !q.paused) {
+    const c = q.segs[q.idx];
+    let sp = S.speed;
+    if (sp > 1) { if (c.type !== 'f') sp = Math.min(sp, Math.max(1, c.min * 5)); else if (q.remain <= 61) sp = Math.min(sp, 8); }
+    let dt = real * sp;
+    const before = q.remain;
+    if (c.type === 'f' && before > 60 && before - dt < 60) dt = before - 60;
+    q.remain -= dt; S.clock += dt;
+    if (c.type === 'f' && before > 60 && q.remain <= 60 && c.min > 2) { warn(); dirty = false; }
+    if (q.remain <= 0) { advance(false); return; }
+  }
+  if (dirty) renderIsl();
+  paint();
+}
+
+/* ---------- wizard ---------- */
+const WIZLOG = {
+  1: '点「按任务智能排番茄」→ 14 张任务卡铺在桌面上，往下滚能看到全部：按住鼠标拖过卡片一次圈中多张（拖到边缘会自动滚），再一起丢进「今日队列」盒子',
+  2: '点「按任务智能排番茄」→ 默认全选，AI 边选边估，时间线上的色块一块块长出来',
+  3: '点「按任务智能排番茄」→ 用对话一步步来，先选任务',
+  4: '点「按任务智能排番茄」→ 任务一张张翻：加入队列，或者今天不做（也可以按 ← / →）',
+  5: '点「按任务智能排番茄」→ 先告诉它你有多少时间',
+};
+function openWiz() {
+  const W = { tok: ++TOK, step: 0, pick: {}, est: {}, pend: {}, order: TODOS.map(t => t.id), r: { ...RH0 }, i: 0, fly: null, budget: null, cap: 0, edit: false, just: null, note: '' };
+  TODOS.forEach(t => { W.pick[t.id] = true; });
+  S.W = W; S.stage = 'wiz'; S.anim = true; S.picker = false; S.last = null;
+  if (S.scheme === 2) estimate(W.order, 450, 380);
+  if (S.scheme === 4) { W.pick = {}; estimate([W.order[0]], 650, 0); }
+  if (S.scheme === 1) { W.order = ALL.map(t => t.id); W.pick = {}; W.sel = {}; }
+  log(WIZLOG[S.scheme]);
+  render();
+}
+function estimate(ids, base, gap) {
+  const W = S.W, tok = W.tok;
+  let k = 0;
+  ids.forEach(id => {
+    if (W.est[id] != null || W.pend[id]) return;
+    W.pend[id] = true;
+    setTimeout(() => {
+      if (!S.W || S.W.tok !== tok) return;
+      W.est[id] = todo(id).ai; W.pend[id] = false; W.just = id;
+      if (S.scheme === 5 && W.step === 1 && W.order.every(i => W.est[i] != null)) aiPick();
+      renderWin();
+      W.just = null;
+    }, base + gap * k++);
+  });
+}
+const pickedIds = W => W.order.filter(id => W.pick[id]);
+const itemsOf = W => pickedIds(W).map(id => ({ id, title: todo(id).title, n: W.est[id] || 1 }));
+const allReady = W => pickedIds(W).every(id => W.est[id] != null);
+function plan(W, readyOnly) {
+  const it = itemsOf(W).filter(i => !readyOnly || W.est[i.id] != null), segs = buildSegs(it, W.r), tot = totalMin(segs), nf = segs.filter(s => s.type === 'f').length;
+  return { it, segs, tot, nf, end: S.clock + tot * 60, focus: nf * W.r.f, rest: tot - nf * W.r.f };
+}
+function aiPick() {
+  const W = S.W;
+  let left = W.cap;
+  const out = [];
+  W.pick = {};
+  W.order.forEach(id => { const n = W.est[id]; if (n <= left) { W.pick[id] = true; left -= n; } else out.push(id); });
+  const big = out.find(id => W.est[id] > W.cap);
+  W.note = !out.length ? '这段时间够把 5 项都做完。' :
+    big ? `「${todo(big).title}」要 ${W.est[big]} 个番茄，这段时间装不下，这次先不排；其余按顺序挑了能装下的。` :
+    `按任务顺序往里装，装到第 ${W.cap - left} 个番茄就满了，后面 ${out.length} 项这次先不排。`;
+  W.aiSig = pickedIds(W).join(',');
+  log(`AI 估完 5 项，并按 ${W.cap} 个番茄的容量挑了 ${pickedIds(W).length} 项 · 你可以自己增减`);
+}
+function wizStart() {
+  const W = S.W, it = itemsOf(W);
+  if (!it.length) return;
+  startQueue('smart', it, W.r);
+  log(`开始专注 → ${nF(S.q)} 个番茄排好了，倒计时同时出现在刘海 island 里 · 预计 ${clk(S.q.t0 + totalMin(S.q.segs) * 60)} 结束`);
+  render();
+}
+
+/* ---------- shared view pieces ---------- */
+const ring = () => '<svg class="rg" viewBox="0 0 100 100"><circle class="trk" cx="50" cy="50" r="46"/><circle class="prg" cx="50" cy="50" r="46" pathLength="100" data-ring/></svg>';
+const optFree = () => `<button class="opt pri" data-act="free"><span class="ic">${IC.play}</span><span><b>直接开始</b><small>自由队列 · 专注 25 分、休息 5 分，一直循环到你停</small></span></button>`;
+const optSmart = () => `<button class="opt" data-act="smart"><span class="ic">${IC.spark}</span><span><b>按任务智能排番茄</b><small>从今日 ${(S.scheme === 1 ? ALL : TODOS).length} 项任务里选，AI 估每项要几个番茄</small></span></button>`;
+const banner = () => `<div class="banner anim">${TI}<span><b>队列${S.last.ended ? '已终止' : '完成'}</b> · 完成 ${S.last.n} 个番茄 · 专注 ${dur(S.last.min)}</span></div>`;
+const stepper = (names, at) => `<div class="stpr">${names.map((n, i) => `${i ? '<u></u>' : ''}<span class="${i === at ? 'on' : i < at ? 'dn' : ''}"><i>${i < at ? '✓' : i + 1}</i>${n}</span>`).join('')}</div>`;
+const ck = on => `<span class="ck${on ? ' on' : ''}">${IC.check}</span>`;
+const estUI = (W, id) => (W.est[id] == null ? '<span class="shim">AI 估算中…</span>' : `<span class="nb"><button class="mini" data-act="wn:${id}:-1">−</button><b>${W.est[id]} ${TI}</b><button class="mini" data-act="wn:${id}:1">+</button></span>`);
+const whyUI = (W, id) => (W.est[id] == null ? '' : W.est[id] === todo(id).ai ? `<small><span class="aitag">${IC.spark}AI 估</span> ${todo(id).why}</small>` : `<small>你改成了 ${W.est[id]} 个 · AI 原估 ${todo(id).ai} 个</small>`);
+const rhyUI = r => `<div class="rhy">${Object.keys(RH).map(k => `<div>${RH[k].label}<div class="nb"><button class="mini" data-act="wr:${k}:-1">−</button><b>${r[k]}</b><button class="mini" data-act="wr:${k}:1">+</button></div></div>`).join('')}</div>`;
+const preUI = r => `<div class="chips">${Object.keys(PRE).map(k => { const p = PRE[k]; return `<button class="chip${p.f === r.f && p.s === r.s && p.l === r.l && p.every === r.every ? ' on' : ''}" data-act="wpre:${k}">${p.label}</button>`; }).join('')}</div>`;
+const rhyText = r => `${r.f} / ${r.s} / ${r.l} · 每 ${r.every} 个长休`;
+const pbar = segs => `<div class="pbar">${segs.map(s => `<i class="${s.type === 'f' ? 'f' : s.type}" style="flex:${s.min}${s.type === 'f' && s.todoId ? ';background:' + COL[s.todoId] : ''}"></i>`).join('')}</div>`;
+const pleg = P => `<div class="pleg"><span>${clk(S.clock)} 开始</span><span>${P.nf} 个番茄 · ${dur(P.tot)}</span><span>${clk(P.end)} 结束</span></div>`;
+const ctl = () => `<div class="ctl"><button class="wbtn pri" data-act="pause">${S.q.paused ? IC.play + '继续' : IC.pause + '暂停'}</button><button class="wbtn" data-act="skip">${IC.skip}跳过</button></div>`;
+const endBtn = () => (S.confirmEnd ? `<span class="endc">确定终止？已完成的番茄会保留<button class="wbtn sm dng" data-act="endYes">终止</button><button class="wbtn sm" data-act="endNo">再想想</button></span>` : `<button class="wbtn sm dng" data-act="end">终止队列</button>`);
+const cTitle = c => (c.type === 'f' ? esc(c.title) : PH[c.type]);
+const cSub = c => { const q = S.q; if (c.type !== 'f') { const n = nextF(); return n ? `结束后自动开始：${esc(n.title)}` : '队列的最后一段'; } return q.mode === 'free' ? `第 ${c.no} 个番茄 · 自由队列` : `${c.of > 1 ? `这项的第 ${c.k} / ${c.of} 个 · ` : ''}队列第 ${c.no} / ${nF(q)} 个`; };
+const tagOf = c => `<span class="tag ${c.type === 'f' ? '' : c.type}">${S.q.paused ? '已暂停' : PH[c.type]}</span>`;
+function nextList(max) {
+  const q = S.q, rows = [];
+  let i = q.idx + 1;
+  for (; i < q.segs.length && rows.length < max; i++) {
+    const s = q.segs[i];
+    rows.push(s.type === 'f'
+      ? `<div class="qr"><span class="st">${TI}</span><span class="tt">${esc(s.title)}${s.of > 1 ? ` <span class="mt">${s.k}/${s.of}</span>` : ''}</span><span class="mt">${s.min} 分</span></div>`
+      : `<div class="qr ${s.type}"><span class="st">·</span><span class="tt">${PH[s.type]}</span><span class="mt">${s.min} 分</span></div>`);
+  }
+  if (q.mode === 'free') rows.push('<div class="qr more">自由队列一直循环，直到你终止</div>');
+  else if (!rows.length) rows.push('<div class="qr more">这是最后一个番茄</div>');
+  else { const left = q.segs.slice(i).filter(s => s.type === 'f').length; if (left) rows.push(`<div class="qr more">后面还有 ${left} 个番茄</div>`); }
+  return rows.join('');
+}
+function tbar() {
+  return `<div class="tb"><div class="lights"><i></i><i title="收起" data-act="min"></i><i></i></div><div class="ttl">PomodoQ</div><button class="tool" data-act="picker" title="动效模板">${pet('idle', 18)}<span>动效 · ${PETS[S.pet]}</span></button></div>`;
+}
+function picker() {
+  const sub = { tomato: '默认', dog: '跑 · 喝咖啡 · 拉伸', cat: '跑 · 喝咖啡 · 伸懒腰' };
+  return `<div class="pp"><h5>动效模板<button data-act="picker">×</button></h5><p>专注时它在刘海里跑，休息时它在整块屏幕上喝咖啡、拉伸。</p><div class="ppg">${Object.keys(PETS).map(k => `<button class="ppc${S.pet === k ? ' on' : ''}" data-set="pet:${k}"><div class="pv">${pet('run', 40, k)}</div>${PETS[k]}<small>${sub[k]}</small></button>`).join('')}</div></div>`;
+}
+/* island pieces */
+const ixHead = c => { const q = S.q; const r = c.type === 'f' ? (S.bubble && Date.now() < S.peek ? esc(S.bubble.text) : q.mode === 'smart' ? `第 ${c.no} / ${nF(q)} 个番茄` : `第 ${c.no} 个番茄 · 自由队列`) : `下一个：${nextF() ? esc(nextF().title) : '—'}`; return `<div class="ix-h"><span><b>${q.paused ? '已暂停' : PH[c.type]}</b> · ${r}</span></div>`; };
+const ixBtns = () => `<div class="ix-b"><button class="ib pri" data-act="pause">${S.q.paused ? '继续' : '暂停'}</button><button class="ib" data-act="skip">跳过</button><button class="ib" data-act="openWin">打开窗口</button></div>`;
+const ixBreak = c => `<div class="ix">${ixHead(c)}<div class="ix-t"><div class="ix-name">${pet('sip', 30)}<span>休息中，起来走走</span></div><div class="ix-time" data-t="rem">${fmt(S.q.remain)}</div></div><div class="ix-bar"><i data-bar></i></div></div>`;
+const wings = (l, r) => `<div class="wing l">${l}</div><div class="wing r">${r == null ? `<span data-t="rem">${fmt(S.q.remain)}</span>` : r}</div>`;
+const ovFoot = () => { const n = nextF(); return `<div class="ov-f"><span>${n ? `休息结束后自动开始：${esc(n.title)}` : ''}</span><button class="hold" data-hold><i></i><span>按住 3 秒结束整个队列</span></button></div>`; };
+/* ================= 方案 1 卡片综合 ================= */
+const k1clk = sec => (sec >= 86400 ? '次日 ' : '') + clk(sec);
+V[1] = {
+  skin: 's4', rail: true,
+  box: { w: 820, h: 572, l: 150, t: 52 },
+  home() { return V[4].home(); },
+  wiz() {
+    const W = S.W, steps = ['圈中任务丢进盒子', 'AI 排番茄并开始'], pk = pickedIds(W);
+    W.sel = W.sel || {};
+    if (W.step === 0) {
+      const tilt = [-1.6, 1.2, -.9, 1.5, -1.2, .8];
+      const pile = W.order.filter(id => !W.pick[id]), nSel = pile.filter(id => W.sel[id]).length;
+      const landed = W.landed || [];
+      return `<div class="s4g"><div class="s4wh">${stepper(steps, 0)}<span>已丢进 <b style="color:var(--w-fg)">${pk.length}</b> / ${W.order.length} 张</span></div>
+<div class="k1pick"><div class="k1desk"><div class="k1q"><h3>今天做哪几项？</h3><p>按住鼠标拖过卡片，一次圈中多张（也可以一张张点）。圈好后点按钮，或把圈中的卡片拖进右边的盒子。</p></div>
+${pile.length ? `<div class="k1sc" data-sc="k1pile"><div class="k1grid">${pile.map((id, n) => `<button class="k1c${W.sel[id] ? ' on' : ''}${id === W.back ? ' in' : ''}" data-k="${id}" data-act="ksel:${id}" style="--r:${tilt[n % 6]}deg"><span class="k1h"><span>今日任务</span><i class="k1k">${IC.check}</i></span><b>${esc(todo(id).title)}</b></button>`).join('')}</div></div>` : `<div class="k1done">${pet('idle', 64)}<p>都丢进去了。<br>想拿出来，点盒子里卡片上的 ×。</p></div>`}
+<div class="k1acts"><span>${pile.length ? `<a data-act="kall:1">全部圈中</a> · <a data-act="kall:0">取消圈中</a>` : ''}</span><button class="wbtn${nSel ? ' pri' : ''}" data-act="kthrow"${nSel ? '' : ' disabled'}${pile.length ? '' : ' style="visibility:hidden"'}>${nSel ? `把圈中的 ${nSel} 张丢进盒子 →` : '先圈中几张卡片'}</button></div></div>
+<div class="k1box${pk.length ? '' : ' emp'}"><div class="k1bh"><b>今日队列</b><span>${pk.length} 项${pk.length > 7 ? ' · 可滚动' : ''}</span></div>${pk.length ? `<div class="k1bl" data-sc="k1box">${pk.map((id, n) => `<div class="k1j${landed.includes(id) ? ' new' : ''}" style="--r:${tilt[(n + 2) % 6]}deg;--d:${Math.min(landed.indexOf(id), 6) * 70}ms"><span>${esc(todo(id).title)}</span><button class="k1x" data-act="kout:${id}" title="拿出来，今天不做">×</button></div>`).join('')}</div>` : `<div class="k1be">${pet('idle', 44)}<b>把任务卡丢进来</b><small>把圈中的卡片拖过来，<br>或点「丢进盒子」按钮。<br>留在桌面上的今天不做。</small></div>`}</div></div>
+<div class="s4wf"><button class="wbtn sm" data-act="wcancel">取消</button><span>${pk.length ? '盒子里的任务，下一步交给 AI 估每项要几个番茄' : pile.length > 6 ? `桌面上还有 ${pile.length} 张，往下滚能看到全部` : `桌面上还有 ${pile.length} 张`}</span><button class="wbtn${pk.length && !nSel ? ' pri' : ''}" data-act="wnext"${pk.length ? '' : ' disabled'}>${IC.spark}让 AI 排番茄</button></div></div>`;
+    }
+    const ready = allReady(W), P = plan(W, true), got = pk.filter(id => W.est[id] != null).length;
+    return `<div class="s4g"><div class="s4wh">${stepper(steps, 1)}<span>${ready ? `${pk.length} 项 · ${P.nf} 个番茄` : `AI 估算中 ${got} / ${pk.length}`}</span></div>
+<div class="s4cols k1cols"><div class="ord" data-sc="k1ord"><div class="k1ai${ready ? ' ok' : ''}">${IC.spark}<span>${ready ? `AI 排好了，共 ${P.nf} 个番茄。不合适可以加减，或调顺序。` : 'AI 正在逐项估算每个任务要几个番茄…'}</span>${ready ? '<a data-act="wreset">恢复 AI 的估计</a>' : ''}</div>
+${pk.map((id, i) => `<div class="ordr${W.est[id] == null ? ' wait' : ''}${id === W.just ? ' pop' : ''}"><span class="no">${i + 1}</span><span class="tt">${esc(todo(id).title)}${W.est[id] == null ? '<small>等 AI 估…</small>' : whyUI(W, id)}</span>${estUI(W, id)}<span class="mv"><button class="mini" data-act="wmv:${id}:-1"${i ? '' : ' disabled'}>↑</button><button class="mini" data-act="wmv:${id}:1"${i < pk.length - 1 ? '' : ' disabled'}>↓</button></span></div>`).join('')}</div>
+<div class="s4sum"><p class="cap" style="margin:0">这一轮的安排</p>${P.nf ? pbar(P.segs) : '<div class="pbar"><i class="k1gh" style="flex:1"></i></div>'}<div class="pleg" style="margin:0"><span>${clk(S.clock)} 开始</span><span>${ready ? k1clk(P.end) + ' 结束' : '… 结束'}</span></div>${preUI(W.r)}<div class="suml" style="margin:0">${ready ? `专注 <b>${dur(P.focus)}</b> · 休息 ${dur(P.rest)}` : 'AI 估完后，这里显示总时长和结束时间'}</div></div></div>
+<div class="s4wf"><button class="wbtn" data-act="wback">重新选任务</button><button class="wbtn pri" data-act="wstart"${ready ? '' : ' disabled'}>开始专注</button></div></div>`;
+  },
+  run(c) {
+    const q = S.q;
+    S.rail = railWin(q);
+    const end = S.clock + q.remain + q.segs.slice(q.idx + 1).reduce((a, s) => a + s.min * 60, 0);
+    const seen = {}, lg = q.mode === 'free' ? [] : q.segs.filter(s => s.type === 'f' && !seen[s.todoId] && (seen[s.todoId] = 1)).map(s => `<span><i style="background:${COL[s.todoId]}"></i>${esc(s.title)} · ${s.of}</span>`), legend = q.mode === 'free' ? LEG_FREE : lg.slice(0, 4).join('') + (lg.length > 4 ? `<span>等 ${lg.length} 项</span>` : '');
+    return `<div class="k1run"><div class="k1top">
+<div class="k1hero"><div class="ph">${tagOf(c)}${cSub(c)}</div><div class="s4time" data-t="rem">${fmt(q.remain)}</div><div class="s4task">${cTitle(c)}</div><div class="k1ctl">${ctl()}${endBtn()}</div></div>
+<div class="k1next"><p class="cap">接下来</p>${nextList(4)}</div>
+</div>${railPanel(runBlocks(q), q.mode === 'free' ? `自由队列 · 已完成 ${q.doneF} 个番茄` : `预计 ${k1clk(end)} 结束 · 已完成 ${q.doneF} / ${nF(q)}`, c.type === 'f' ? 'run' : 'sip', legend)}</div>`;
+  },
+  isl(open, c) {
+    const brk = c.type !== 'f', q = S.q;
+    const w = wings(pet(brk ? 'sip' : 'run', 20, null, pz()) + (brk ? '' : `<small>${c.no}${q.mode === 'smart' ? ' / ' + nF(q) : ''}</small>`)) + '<div class="edge"><i data-bar></i></div>';
+    if (!open) return { w: 372, h: 36, html: w, x: S.bubble && !brk ? `<div class="bub">${esc(S.bubble.text)}</div>` : '' };
+    if (brk) return { w: 430, h: 132, html: w + ixBreak(c) };
+    return { w: 470, h: 216, html: w + `<div class="ix">${ixHead(c)}<div class="ix-t"><div class="ix-name"><span>${cTitle(c)}</span></div><div class="ix-time" data-t="rem">${fmt(q.remain)}</div></div><div class="trk"><i data-bar></i><span class="tp" data-px>${pet('run', 30, null, pz())}</span><em><svg width="10" height="13" viewBox="0 0 10 13"><path d="M1 0v13" stroke="currentColor" stroke-width="1.400"/><path d="M1 1h8L7 3.500 9 6H1z" fill="currentColor"/></svg></em></div>${ixBtns()}</div>` };
+  },
+  bubWarn: true,
+  ov(c) { return V[2].ov(c).replace('<div class="walker"', '<div class="k1say" id="wsay"></div><div class="walker"').replace('</div>' + ovFoot(), '</div>' + k1Row() + ovFoot()).replace(` · 已完成 ${S.q.doneF} 个番茄`, ''); },
+  paint(p, c) {
+    V[2].paint(p, c);
+    if (c.type === 'f') return;
+    const e = $('wsay'), w = $('walker');
+    if (!e || !w) return;
+    e.style.left = (parseFloat(w.style.left) + 55).toFixed(1) + 'px';
+    const t = S.ovPh === 0 ? '起来走走，我去倒杯咖啡。' : S.ovPh === 2 ? '差不多了，走回座位吧。' : K1SAY[Math.floor(Date.now() / 3400) % K1SAY.length];
+    if (e.textContent !== t) e.textContent = t;
+  },
+};
+
+/* ================= 方案 2 时间线 ================= */
+function railPanel(blocks, right, pose, legend) {
+  const R = S.rail, pos = s => (s - R.t0) / (R.span * 60) * 100;
+  let h = '';
+  blocks.forEach(b => { h += `<i class="${b.cls}" style="left:${pos(b.start).toFixed(2)}%;width:${(b.min / R.span * 100).toFixed(2)}%${b.col ? ';background:' + b.col : ''}"></i>`; });
+  for (let t = Math.ceil(R.t0 / 3600) * 3600; t <= R.t0 + R.span * 60; t += 3600) h += `<u style="left:${pos(t).toFixed(2)}%">${clk(t)}</u>`;
+  h += `<b class="now" data-clk style="left:${clamp(pos(S.clock), 0, 100).toFixed(2)}%"><span>${pet(pose, 28, null, pz())}</span></b>`;
+  return `<div class="rl"><div class="rl-h"><span>今天的时间线</span><span>${right}</span></div><div class="rail">${h}</div><div class="rl-l">${legend}</div></div>`;
+}
+function railWin(q) {
+  let t0 = Math.floor(q.t0 / 3600) * 3600, span = 300;
+  if (q.mode === 'smart') { const end = S.clock + q.remain + q.segs.slice(q.idx + 1).reduce((a, s) => a + s.min * 60, 0); span = Math.max(300, Math.ceil((end - t0) / 3600) * 60); }
+  else while (S.clock > t0 + span * 60 * .8) t0 += 7200;
+  return { t0, span };
+}
+function runBlocks(q) {
+  const R = S.rail, lo = R.t0, hi = R.t0 + R.span * 60, out = [], c = q.segs[q.idx];
+  const col = s => (s.type === 'f' && s.todoId ? COL[s.todoId] : '');
+  const tc = S.clock - (c.min * 60 - q.remain);
+  let tb = tc;
+  for (let i = q.idx - 1; i >= 0; i--) {
+    const s = q.segs[i], u = s.used != null ? s.used : s.min * 60;
+    tb -= u;
+    const a = Math.max(tb, lo), b = Math.min(tb + u, hi);
+    if (b - a > 30) out.unshift({ cls: (s.type === 'f' ? 'f' : s.type) + ' done', start: a, min: (b - a) / 60, col: col(s) });
+  }
+  let tf = tc;
+  for (let i = q.idx; i < q.segs.length && tf < hi; i++) {
+    const s = q.segs[i], a = Math.max(tf, lo), b = Math.min(tf + s.min * 60, hi);
+    if (b > a) out.push({ cls: s.type === 'f' ? 'f' : s.type, start: a, min: (b - a) / 60, col: col(s) });
+    tf += s.min * 60;
+  }
+  return out;
+}
+const LEG_FREE = '<span><i style="background:var(--focus)"></i>专注</span><span><i style="background:var(--break)"></i>短休息</span><span><i style="background:var(--long)"></i>长休息</span>';
+V[2] = {
+  rail: true,
+  box: { w: 880, h: 560, l: 120, t: 60 },
+  home() {
+    S.rail = { t0: Math.floor(S.clock / 3600) * 3600, span: 300 };
+    return `<div class="s2g"><div class="s2top">
+<div class="s2hero anim"><div class="ph">未开始 · 专注 25 分钟</div><div class="s2time">25:00</div>${S.last ? banner() : '<p class="s2p">排好队列后，今天的番茄会画在下面这条时间线上，一眼看到几点能做完。</p>'}</div>
+<div class="s2side anim d1"><p class="cap">创建 PomodoQ</p>${optFree()}${optSmart()}</div>
+</div>${railPanel([], '今天还没有队列', 'idle', '')}</div>`;
+  },
+  wiz() {
+    const W = S.W, pk = pickedIds(W), P = plan(W, true), ready = allReady(W);
+    const ghosts = pk.filter(id => W.est[id] == null).length;
+    const t0 = Math.floor(S.clock / 3600) * 3600;
+    S.rail = { t0, span: Math.max(300, Math.ceil((S.clock + (P.tot + ghosts * 30) * 60 - t0) / 3600) * 60) };
+    const blocks = [];
+    let t = S.clock;
+    P.segs.forEach(s => { blocks.push({ cls: (s.type === 'f' ? 'f' : s.type) + (s.todoId === W.just ? ' pop' : ''), start: t, min: s.min, col: s.type === 'f' ? COL[s.todoId] : '' }); t += s.min * 60; });
+    for (let g = 0; g < ghosts; g++) { if (P.segs.length || g) t += W.r.s * 60; blocks.push({ cls: 'gh', start: t, min: W.r.f }); t += W.r.f * 60; }
+    const legend = P.it.map(i => `<span><i style="background:${COL[i.id]}"></i>${esc(i.title)} · ${i.n}</span>`).join('') + (ghosts ? `<span><i style="outline:1px dashed #B5AC9F"></i>AI 还在估 ${ghosts} 项</span>` : '');
+    let left, btns;
+    if (W.step === 0) {
+      left = `<div class="s2list"><h3>今天做哪些？</h3><p class="sd">勾选的同时 AI 就在估番茄数，下面的时间线会跟着变。</p>
+<div class="lh"><span>已选 ${pk.length} / ${TODOS.length} 项</span><span><a data-act="wall:1">全选</a> · <a data-act="wall:0">全不选</a></span></div>
+${W.order.map(id => `<div class="tr${W.pick[id] ? '' : ' off'}" data-act="wpick:${id}">${ck(W.pick[id])}<span class="tt">${esc(todo(id).title)}${W.pick[id] ? whyUI(W, id) : ''}</span>${W.pick[id] ? estUI(W, id) : '<span class="ph">不排</span>'}</div>`).join('')}</div>`;
+      btns = `<button class="wbtn" data-act="wcancel">取消</button><button class="wbtn pri" data-act="wnext"${pk.length && ready ? '' : ' disabled'}>下一步：定节奏</button>`;
+    } else {
+      left = `<div class="s2list"><h3>用什么节奏？</h3><p class="sd">选一个预设，或者自己调。时间线和结束时间会跟着变。</p><div style="padding:0 12px;display:flex;flex-direction:column;gap:12px">${preUI(W.r)}${rhyUI(W.r)}<div class="suml" style="margin:0">第 ${W.r.every} 个番茄后长休 ${W.r.l} 分钟；最后一个番茄后面不排休息。</div></div></div>`;
+      btns = `<button class="wbtn" data-act="wback">上一步</button><button class="wbtn pri" data-act="wstart">开始专注</button>`;
+    }
+    return `<div class="s2g"><div class="s2top wz">${left}
+<div class="s2side">${stepper(['选任务 · AI 估', '定节奏'], W.step)}<div class="sumbox"><div class="sumn"><b>${P.nf}</b>个番茄</div><div class="suml">${clk(S.clock)} 开始 → <b>${P.nf && !ghosts ? clk(P.end) : '…'}</b> 结束</div><div class="suml">专注 ${dur(P.focus)} · 休息 ${dur(P.rest)}</div><div class="suml">节奏 ${rhyText(W.r)}</div></div><div class="row">${btns}</div></div>
+</div>${railPanel(blocks, P.nf && !ghosts ? `预计 ${clk(P.end)} 结束` : ghosts ? 'AI 估算中…' : '还没选任务', 'idle', legend)}</div>`;
+  },
+  run(c) {
+    const q = S.q;
+    S.rail = railWin(q);
+    const end = S.clock + q.remain + q.segs.slice(q.idx + 1).reduce((a, s) => a + s.min * 60, 0);
+    const seen = {}, legend = q.mode === 'free' ? LEG_FREE : q.segs.filter(s => s.type === 'f' && !seen[s.todoId] && (seen[s.todoId] = 1)).map(s => `<span><i style="background:${COL[s.todoId]}"></i>${esc(s.title)} · ${s.of}</span>`).join('');
+    return `<div class="s2g"><div class="s2top">
+<div class="s2hero"><div class="ph">${tagOf(c)}${cSub(c)}</div><div class="s2time" data-t="rem">${fmt(q.remain)}</div><div class="s2task">${cTitle(c)}</div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">${ctl()}${endBtn()}</div></div>
+<div class="s2side"><p class="cap">接下来</p>${nextList(5)}</div>
+</div>${railPanel(runBlocks(q), q.mode === 'free' ? `自由队列 · 已完成 ${q.doneF} 个番茄` : `预计 ${clk(end)} 结束 · 已完成 ${q.doneF} / ${nF(q)}`, c.type === 'f' ? 'run' : 'sip', legend)}</div>`;
+  },
+  isl(open, c) {
+    const brk = c.type !== 'f';
+    const w = wings(`<span style="position:relative;top:-2px">${pet(brk ? 'sip' : 'run', 22, null, pz())}</span><i class="gnd" style="left:-5px;width:42px;bottom:4px"></i>`);
+    if (!open) return { w: 372, h: 32, html: w };
+    if (brk) return { w: 430, h: 132, html: w + ixBreak(c) };
+    return { w: 470, h: 216, html: w + `<div class="ix">${ixHead(c)}<div class="ix-t"><div class="ix-name"><span>${cTitle(c)}</span></div><div class="ix-time" data-t="rem">${fmt(S.q.remain)}</div></div><div class="trk"><i data-bar></i><span class="tp" data-px>${pet('run', 30, null, pz())}</span><em><svg width="10" height="13" viewBox="0 0 10 13"><path d="M1 0v13" stroke="currentColor" stroke-width="1.400"/><path d="M1 1h8L7 3.500 9 6H1z" fill="currentColor"/></svg></em></div>${ixBtns()}</div>` };
+  },
+  ov(c) {
+    const sc = 110 / 48, dx = CUPDX[S.pet];
+    return `<div class="ov o2"><div class="osub" style="margin:0">${PH[c.type]} ${c.min} 分钟 · 已完成 ${S.q.doneF} 个番茄</div><div class="otime" data-t="rem">${fmt(S.q.remain)}</div>
+<div class="o2trk"><svg class="desk" width="84" height="74" viewBox="0 0 84 74" aria-hidden="true"><rect x="27" y="16" width="32" height="21" rx="3" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2.500"/><path d="M20 41h46" stroke="rgba(255,255,255,.55)" stroke-width="3" stroke-linecap="round"/><path d="M6 46h72M13 46v28M71 46v28" stroke="rgba(255,255,255,.34)" stroke-width="3" stroke-linecap="round"/></svg>
+<div class="walker" id="walker"></div><svg class="scup" id="scup" style="left:${Math.round(600 + (58 + dx) * sc)}px" viewBox="58 12 24 36" width="${Math.round(24 * sc)}" height="${Math.round(36 * sc)}" aria-hidden="true">${cupG(0)}</svg></div>
+<div class="o2ph"><span>① 起身，走去倒杯咖啡</span><span>② 喝一口，看看远处</span><span>③ 走回座位</span></div>${ovFoot()}</div>`;
+  },
+  paint(p, c) {
+    if (c.type === 'f') return;
+    const w = $('walker');
+    if (!w) return;
+    const X0 = 96, X1 = 600, ph = p < .4 ? 0 : p < .6 ? 1 : 2;
+    const x = ph === 0 ? X0 + (X1 - X0) * (p / .4) : ph === 1 ? X1 : X1 - (X1 - X0) * ((p - .6) / .4);
+    if (S.ovPh !== ph) {
+      S.ovPh = ph;
+      w.innerHTML = pet(ph === 1 ? 'sip' : 'walk', 110);
+      w.classList.toggle('flip', ph === 2);
+      $('scup').style.visibility = ph === 1 ? 'hidden' : '';
+      document.querySelectorAll('.o2ph span').forEach((e, i) => e.classList.toggle('on', i === ph));
+    }
+    w.style.left = x.toFixed(1) + 'px';
+  },
+};
+
+/* ================= 方案 3 对话式 ================= */
+const aiB = (html, card, old) => `<div class="cb${old ? ' old' : ' anim'}"><span class="av">${pet('idle', 22)}</span><div class="bx">${html}${card ? `<div class="cardx">${card}</div>` : ''}</div></div>`;
+const meB = (t, old) => `<div class="cb me${old ? ' old' : ''}"><div class="bx">${t}</div></div>`;
+const K1TOK = {
+  tomato: TI,
+  dog: '<svg class="ti" viewBox="0 0 16 16" aria-hidden="true"><g transform="rotate(-38 8 8)" fill="#F4E9D6"><rect x="3.600" y="6.400" width="8.800" height="3.200" rx="1.200"/><circle cx="3.300" cy="6.200" r="2"/><circle cx="3.300" cy="9.800" r="2"/><circle cx="12.700" cy="6.200" r="2"/><circle cx="12.700" cy="9.800" r="2"/></g></svg>',
+  cat: '<svg class="ti" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.200 8C3 4.600 7.600 4.200 10.600 8 7.600 11.800 3 11.400 1.200 8z" fill="#7FC8E8"/><path d="M10 8l4.600-3.400v6.800z" fill="#5AAED3"/><circle cx="4.200" cy="7.400" r=".9" fill="#16171B"/></svg>',
+};
+const k1Row = () => {
+  const q = S.q, fs = q.segs.filter(s => s.type === 'f');
+  const show = q.mode === 'free' ? fs.filter(s => s.no <= q.doneF + 3).slice(-12) : fs;
+  return `<div class="o5row k1row">${show.map(s => `<i class="${s.st === 'done' ? 'd' : ''}">${s.st === 'done' ? K1TOK[S.pet] : ''}</i>`).join('')}</div>`;
+};
+const K1SAY = ['先别看屏幕了，看看远处。', '肩膀放松，深呼吸三次。', '你也倒杯水吧。'];
+const O3 = ['先别看屏幕了，看看远处。', '我去喝口咖啡，你也倒杯水吧。', '站起来，伸个懒腰。', '肩膀放松，深呼吸三次。'];
+V[3] = {
+  box: { w: 560, h: 572, l: 280, t: 52 },
+  hd(big, st, live) {
+    const brk = live && cur().type !== 'f';
+    return `<div class="s3hd"><div class="dial" style="width:54px;height:54px;--d-w:8;--d-prg:var(--w-pri);--d-trk:var(--w-sec)">${ring()}</div><div style="min-width:0"><div class="big"${live ? ' data-t="rem"' : ''}>${big}</div><div class="st">${st}</div></div><div class="rt">${pet(live ? (brk ? 'sip' : 'run') : 'idle', 44, null, pz())}</div></div>`;
+  },
+  home() {
+    return `<div class="s3g">${this.hd('25:00', '未开始')}<div class="chat">${S.last ? aiB(`刚才那轮${S.last.ended ? '提前结束了' : '做完了'}：完成 <b>${S.last.n} 个番茄</b>，专注 ${dur(S.last.min)}。`, '', true) : aiB('今天上午那轮做完了：6 个番茄，专注 2 小时 30 分。', '', true)}${aiB(`下午好。现在 ${clk(S.clock)}，今天还有 ${TODOS.length} 项任务没做完。<br>想怎么开始？`)}</div><div class="comp"><p class="cap">创建 PomodoQ</p>${optFree()}${optSmart()}</div></div>`;
+  },
+  wiz() {
+    const W = S.W, pk = pickedIds(W), ready = allReady(W);
+    const q0 = `今天有 ${TODOS.length} 项没做完。哪些要排进这一轮？`;
+    let m = meB('按今日任务排番茄', W.step > 0), comp;
+    if (W.step === 0) {
+      m += aiB(q0, W.order.map(id => `<div class="tr${W.pick[id] ? '' : ' off'}" data-act="wpick:${id}">${ck(W.pick[id])}<span class="tt">${esc(todo(id).title)}</span><span></span></div>`).join(''));
+      comp = `<button class="wbtn" data-act="wcancel">取消</button><button class="wbtn pri" data-act="wnext"${pk.length ? '' : ' disabled'}>就这 ${pk.length} 项，帮我估一下</button>`;
+    } else {
+      m += aiB(q0, '', true) + meB(`就这 ${pk.length} 项，帮我估一下`, W.step > 1);
+      if (W.step === 1) {
+        m += aiB(ready ? '估好了。每项大概要这么多番茄，觉得不对直接改：' : '我看看每项大概要多久…', pk.map(id => `<div class="tr" style="grid-template-columns:1fr auto;cursor:default"><span class="tt">${esc(todo(id).title)}${whyUI(W, id)}</span>${estUI(W, id)}</div>`).join(''));
+        comp = `<button class="wbtn" data-act="wback">上一步</button><button class="wbtn pri" data-act="wnext"${ready ? '' : ' disabled'}>可以，排一下</button>`;
+      } else {
+        const P = plan(W);
+        m += aiB(`估好了，一共 ${P.nf} 个番茄。`, '', true) + meB('可以，排一下') +
+          aiB(`排好了：<b>${P.nf} 个番茄</b>，${clk(S.clock)} 开始，<b>${clk(P.end)}</b> 结束${P.nf > W.r.every ? `，第 ${W.r.every} 个番茄后长休 ${W.r.l} 分钟` : ''}。`,
+            `<div class="pd">${pbar(P.segs)}${pleg(P)}<div style="margin-top:10px">${W.edit ? preUI(W.r) + '<div style="height:8px"></div>' + rhyUI(W.r) : `<div class="chips"><span class="ph">节奏 ${rhyText(W.r)}</span><button class="chip" data-act="wedit">改节奏</button></div>`}</div></div>`);
+        comp = `<button class="wbtn" data-act="wback">上一步</button><button class="wbtn pri" data-act="wstart">开始专注</button>`;
+      }
+    }
+    return `<div class="s3g">${this.hd('25:00', '正在创建队列')}<div class="chat">${m}</div><div class="comp"><div class="row">${comp}</div></div></div>`;
+  },
+  run(c) {
+    const q = S.q;
+    return `<div class="s3g">${this.hd(fmt(q.remain), `${q.paused ? '已暂停' : PH[c.type]} · ${cTitle(c)}`, true)}<div class="chat">${q.feed.map((t, i) => aiB(t, i === q.feed.length - 1 ? `<div class="pd"><p class="cap">接下来</p>${nextList(3)}</div>` : '', i < q.feed.length - 1)).join('')}</div><div class="comp"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">${ctl()}${endBtn()}</div></div></div>`;
+  },
+  bubWarn: true,
+  isl(open, c) {
+    const brk = c.type !== 'f', q = S.q;
+    const w = wings(pet(brk ? 'sip' : 'run', 24, null, pz()));
+    if (!open) return { w: 348, h: 32, html: w, x: S.bubble && !brk ? `<div class="bub">${esc(S.bubble.text)}</div>` : '' };
+    if (brk) return { w: 430, h: 132, html: w + ixBreak(c) };
+    return { w: 440, h: 178, html: w + `<div class="ix"><div class="ix-say">${pet('run', 30, null, pz())}<span>${q.paused ? '先停一下。还剩' : `正在专注「${cTitle(c)}」，还剩`} <b data-t="rem">${fmt(q.remain)}</b></span></div><div class="ix-bar" style="margin:0 0 11px"><i data-bar></i></div>${ixBtns()}</div>` };
+  },
+  ov(c) {
+    return `<div class="ov o3"><div class="o3say" id="o3say">${O3[0]}</div>${pet('sip', 150)}<div class="otime" data-t="rem">${fmt(S.q.remain)}</div><p class="osub">${PH[c.type]} ${c.min} 分钟 · 已完成 ${S.q.doneF} 个番茄</p>${ovFoot()}</div>`;
+  },
+  paint(p, c) {
+    if (c.type === 'f') return;
+    const e = $('o3say');
+    if (!e) return;
+    const i = Math.floor(Date.now() / 3400) % O3.length;
+    if (S.ovPh === i) return;
+    const first = S.ovPh == null;
+    S.ovPh = i;
+    if (first) { e.textContent = O3[i]; return; }
+    e.classList.add('sw');
+    setTimeout(() => { e.textContent = O3[i]; e.classList.remove('sw'); }, 220);
+  },
+};
+
+/* ================= 方案 4 卡片 ================= */
+V[4] = {
+  box: { w: 760, h: 566, l: 180, t: 56 },
+  home() {
+    return `<div class="s4g"><div class="scene anim"><div class="tm"><div class="s4time">25:00</div><div class="ph">未开始 · 选一种方式开始</div></div><i class="gl"></i><i class="dash"></i><div class="sp">${pet('idle', 124)}</div></div>${S.last ? banner() : ''}<div class="anim d1"><p class="cap">创建 PomodoQ</p><div class="s4row">${optFree()}${optSmart()}</div></div></div>`;
+  },
+  wiz() {
+    const W = S.W, steps = ['逐张过任务', '排顺序并开始'];
+    if (W.step === 0) {
+      const id = W.order[W.i], t = todo(id), left = W.order.length - W.i, joined = pickedIds(W), e = W.est[id];
+      const tot = joined.reduce((a, j) => a + (W.est[j] || 1), 0);
+      const inCls = W.fly ? 'fly-' + W.fly : W.fresh ? 'in' : '';
+      W.fresh = false;
+      const est = e == null ? '<span class="shim" style="align-self:flex-start">AI 正在估这项要几个番茄…</span>' :
+        `<div class="tomr">${TI.repeat(e)}<span class="nb"><button class="mini" data-act="wn:${id}:-1">−</button><b>${e}</b><button class="mini" data-act="wn:${id}:1">+</button></span></div><p>${e === t.ai ? `<span class="aitag">${IC.spark}AI 估</span> ${e} 个番茄，约 ${dur(e * W.r.f)} · ${t.why}` : `你改成了 ${e} 个 · AI 原估 ${t.ai} 个`}</p>`;
+      return `<div class="s4g"><div class="s4wh">${stepper(steps, 0)}<span>第 ${W.i + 1} / ${W.order.length} 张</span></div>
+<div class="s4mid"><div class="deck">${left > 2 ? '<div class="dk b2"></div>' : ''}${left > 1 ? '<div class="dk b1"></div>' : ''}<div class="dk ${inCls}"><div class="dkh"><span>今日任务</span><span>${W.i + 1} / ${W.order.length}</span></div><h3>${esc(t.title)}</h3><div class="dke">${est}</div><div class="dkb"><button class="wbtn" data-act="dk:no">← 今天不做</button><button class="wbtn pri" data-act="dk:yes"${e == null ? ' disabled' : ''}>加入队列 →</button></div></div></div>
+<div class="joined"><p class="cap">已加入队列</p>${joined.length ? joined.map(j => `<div class="jc${j === W.lastJoin ? ' new' : ''}"><span>${esc(todo(j).title)}</span><span>${W.est[j]} ${TI}</span></div>`).join('') : '<div class="emp">还没有。加入的任务会落到这里</div>'}<div class="tot">${joined.length ? `共 ${tot} 个番茄 · 专注 ${dur(tot * W.r.f)}` : ''}</div></div></div>
+<div class="s4wf"><button class="wbtn sm" data-act="wcancel">取消</button><span>键盘 ← 今天不做 · → 加入队列</span></div></div>`;
+    }
+    const pk = pickedIds(W), P = plan(W);
+    if (!pk.length) return `<div class="s4g"><div class="s4wh">${stepper(steps, 1)}</div><div class="s4mid" style="grid-template-columns:1fr"><div style="text-align:center"><div style="display:inline-block">${pet('idle', 90)}</div><h3 style="margin:14px 0 4px">一项都没加入</h3><p class="ph">可以重新过一遍，或者直接开始自由队列。</p></div></div><div class="s4wf"><button class="wbtn" data-act="wredo">重新过一遍</button><button class="wbtn pri" data-act="free">直接开始</button></div></div>`;
+    return `<div class="s4g"><div class="s4wh">${stepper(steps, 1)}<span>${pk.length} 项 · ${P.nf} 个番茄</span></div>
+<div class="s4cols"><div class="ord">${pk.map((id, i) => `<div class="ordr"><span class="no">${i + 1}</span><span>${esc(todo(id).title)}</span>${estUI(W, id)}<span class="mv"><button class="mini" data-act="wmv:${id}:-1"${i ? '' : ' disabled'}>↑</button><button class="mini" data-act="wmv:${id}:1"${i < pk.length - 1 ? '' : ' disabled'}>↓</button></span></div>`).join('')}</div>
+<div class="s4sum"><p class="cap" style="margin:0">这一轮的安排</p>${pbar(P.segs)}<div class="pleg" style="margin:0"><span>${clk(S.clock)} 开始</span><span>${clk(P.end)} 结束</span></div>${preUI(W.r)}<div class="suml" style="margin:0">专注 <b>${dur(P.focus)}</b> · 休息 ${dur(P.rest)}</div></div></div>
+<div class="s4wf"><button class="wbtn" data-act="wredo">重新过一遍</button><button class="wbtn pri" data-act="wstart">开始专注</button></div></div>`;
+  },
+  toms(c) {
+    const q = S.q, fs = q.segs.filter(s => s.type === 'f');
+    const no = c.type === 'f' ? c.no : q.segs[q.idx - 1].no;
+    const show = q.mode === 'free' ? fs.filter(s => s.no <= no + 2).slice(-9) : fs;
+    return show.map(s => `<i class="${s.st === 'done' ? 'd' : s.st === 'cur' ? 'c' : ''}"></i>`).join('');
+  },
+  run(c) {
+    const q = S.q, brk = c.type !== 'f';
+    return `<div class="s4g"><div class="scene${brk || q.paused ? '' : ' go'}"><div class="tm"><div class="ph">${tagOf(c)}${cSub(c)}</div><div class="s4time" data-t="rem">${fmt(q.remain)}</div><div class="s4task">${cTitle(c)}</div></div><div class="toms">${this.toms(c)}</div><i class="gl"></i><i class="dash"></i><div class="sp">${pet(brk ? 'stretch' : 'run', 124, null, pz())}</div></div>
+<div class="s4run"><div class="lft">${ctl()}${endBtn()}</div><div><p class="cap">接下来</p>${nextList(2)}</div></div></div>`;
+  },
+  isl(open, c) {
+    const brk = c.type !== 'f', q = S.q;
+    const w = wings(`<i class="dot"></i><small>${q.paused ? '暂停' : brk ? '休息' : '专注'}</small>`);
+    const hang = `<div class="hang">${pet(brk ? 'sip' : 'run', 26, null, pz())}</div>`;
+    if (!open) return { w: 316, h: 32, html: w, x: hang };
+    if (brk) return { w: 430, h: 132, html: w + ixBreak(c), x: hang };
+    return { w: 430, h: 190, html: w + `<div class="ix"><div class="ix-t" style="margin-top:0"><div class="ix-name">${pet('run', 44, null, pz())}<span><span style="display:block;font-size:12px;font-weight:400;color:rgba(255,255,255,.6)">${q.paused ? '已暂停' : PH[c.type]} · ${q.mode === 'smart' ? `第 ${c.no} / ${nF(q)} 个` : `第 ${c.no} 个`}</span>${cTitle(c)}</span></div><div class="ix-time" data-t="rem">${fmt(q.remain)}</div></div><div class="ix-bar"><i data-bar></i></div>${ixBtns()}</div>`, x: hang };
+  },
+  ov(c) {
+    return `<div class="ov o4"><i class="sun"></i><i class="cloud" style="left:150px;top:268px;width:120px"></i><i class="cloud" style="left:640px;top:118px;width:92px;animation-duration:64s"></i>
+<svg class="hill" viewBox="0 0 1120 250" preserveAspectRatio="none" aria-hidden="true"><path d="M0 110Q190 20 400 100T800 80T1120 100V250H0z" fill="#A5DDB0"/><path d="M0 160Q240 90 500 150T960 140T1120 160V250H0z" fill="#79C994"/><path d="M0 205Q280 172 560 200T1120 196V250H0z" fill="#55B37A"/></svg>
+<div class="txt"><h3>${c.type === 'long' ? '长休息，起来走走' : '伸个懒腰'}</h3><p class="osub">${PH[c.type]} ${c.min} 分钟 · 已完成 ${S.q.doneF} 个番茄</p><div class="otime" data-t="rem">${fmt(S.q.remain)}</div></div>
+<i class="breath"></i><div class="petw">${pet('stretch', 170)}</div><div class="bl"><span>吸气…</span><span>呼气…</span></div>${ovFoot()}</div>`;
+  },
+};
+
+/* ================= 方案 5 时间预算 ================= */
+const BL = { 60: '1 小时', 120: '2 小时', 180: '3 小时', until: '这段时间' };
+V[5] = {
+  box: { w: 860, h: 556, l: 130, t: 62 },
+  home() {
+    const n = S.last ? S.last.n : 0;
+    return `<div class="s5g"><div class="s5l"><div class="ph">未开始 · 专注 25 分钟</div><div class="s5time">25:00</div>${S.last ? banner() : ''}<p class="cap" style="margin:10px 0 0">创建 PomodoQ</p>${optFree()}${optSmart()}</div>
+<div class="shelf anim d1"><div class="shh"><b>今日番茄架</b><span>${n} 个已完成</span></div><div class="slots">${Array.from({ length: Math.max(8, Math.ceil(n / 4) * 4) }, (_, i) => `<span class="slot${i < n ? ' d' : ''}">${i < n ? TI : ''}</span>`).join('')}</div><div class="shp">${pet('idle', 56)}<p>排好队列后，每完成一个番茄，这里亮一格。</p></div></div></div>`;
+  },
+  wiz() {
+    const W = S.W;
+    let body = '', foot = '';
+    if (W.step === 0) {
+      const H = Math.max(18, Math.ceil(S.clock / 3600) + 1);
+      const opts = [['60', '1 小时', 60], ['120', '2 小时', 120], ['180', '3 小时', 180], ['until', `到 ${H}:00`, Math.floor((H * 3600 - S.clock) / 60)]];
+      body = `<h4>你现在有多少时间？</h4><p class="sd">AI 会按这段时间能装下几个番茄来挑任务，休息时间已经算在里面。</p><div class="bts">${opts.map(([k, label, min]) => { const cap = capFor(min, W.r); return `<button class="bt${W.budget === k ? ' on' : ''}" data-act="wb:${k}:${min}"><b>${label}</b><small>到 ${clk(S.clock + min * 60)}</small><div class="cp">${TI.repeat(cap)}</div><small>能装 ${cap} 个番茄</small></button>`; }).join('')}</div>`;
+      foot = `<button class="wbtn" data-act="wcancel">取消</button><button class="wbtn pri" data-act="wnext"${W.budget ? '' : ' disabled'}>${IC.spark}让 AI 挑任务</button>`;
+    } else if (W.step === 1) {
+      const ready = W.order.every(id => W.est[id] != null), pk = pickedIds(W), P = plan(W);
+      const used = pk.reduce((a, id) => a + (W.est[id] || 0), 0), over = Math.max(0, used - W.cap);
+      const slots = Array.from({ length: Math.max(W.cap, used) }, (_, i) => `<span class="slot ${i < Math.min(used, W.cap) ? 'u' : i < W.cap ? '' : 'x'}">${i + 1}</span>`).join('');
+      body = `<div class="s5two"><div>${W.order.map(id => { const on = ready && W.pick[id]; return `<div class="tr${on ? '' : ' off'}"${ready ? ` data-act="wpick:${id}"` : ' style="cursor:default"'}>${ck(on)}<span class="tt">${esc(todo(id).title)}${ready ? (on ? whyUI(W, id) : `<small>这次不排 · 要 ${W.est[id]} 个番茄</small>`) : ''}</span>${W.est[id] == null || on ? estUI(W, id) : `<span class="ph">${W.est[id]} ${TI}</span>`}</div>`; }).join('')}</div>
+<div class="capp"><div class="shh"><b>${BL[W.budget]}能装 ${W.cap} 个番茄</b><span>${ready ? `已排 ${used}` : '…'}</span></div><div class="slots">${slots}</div>${ready ? `<div class="ainote"><span class="aitag">${IC.spark}${pk.join(',') === W.aiSig ? 'AI 的安排' : 'AI 原本的安排 · 你已调整'}</span><br>${esc(W.note)}</div>` : '<div class="ainote">AI 正在估每项任务，并挑出这段时间装得下的…</div>'}${!ready ? '' : over ? `<div class="warn">超出 ${over} 个番茄，要做到 ${clk(P.end)}，比你给的时间晚 ${dur(P.tot - W.budgetMin)}</div>` : pk.length ? `<div class="suml" style="margin:0">预计 <b>${clk(P.end)}</b> 做完</div>` : '<div class="warn">至少排 1 项</div>'}</div></div>`;
+      foot = `<button class="wbtn" data-act="wback">上一步</button><button class="wbtn pri" data-act="wnext"${ready && pk.length ? '' : ' disabled'}>下一步：确认</button>`;
+    } else {
+      const P = plan(W), rng = {}, out = W.order.filter(id => !W.pick[id]);
+      let t = S.clock;
+      P.segs.forEach(s => { if (s.type === 'f') (rng[s.todoId] = rng[s.todoId] || { a: t }).b = t + s.min * 60; t += s.min * 60; });
+      body = `<h4>${P.nf} 个番茄，${clk(P.end)} 做完</h4><p class="sd">节奏 ${rhyText(W.r)}。开始后可以随时暂停、跳过或终止。</p><div class="cfm">${P.it.map(it => `<div><span class="tmn">${clk(rng[it.id].a)} – ${clk(rng[it.id].b)}</span><span>${esc(it.title)}</span><span>${it.n} ${TI}</span></div>`).join('')}</div>${out.length ? `<p class="sd">这次没排：${out.map(id => esc(todo(id).title)).join('、')}。它们留在今日任务里。</p>` : ''}`;
+      foot = `<button class="wbtn" data-act="wback">上一步</button><button class="wbtn pri" data-act="wstart">开始专注</button>`;
+    }
+    return `<div class="s5w"><div class="s5wh"><h3>按任务智能排番茄</h3>${stepper(['给时间', 'AI 挑任务', '确认'], W.step)}</div><div class="s5wb">${body}</div><div class="s5wf">${foot}</div></div>`;
+  },
+  show(c) {
+    const q = S.q, fs = q.segs.filter(s => s.type === 'f');
+    const no = c.type === 'f' ? c.no : q.segs[q.idx - 1].no;
+    return q.mode === 'free' ? fs.filter(s => s.no <= Math.max(8, Math.ceil((no + 1) / 4) * 4)) : fs;
+  },
+  run(c) {
+    const q = S.q;
+    return `<div class="s5g"><div class="s5l"><div class="ph">${tagOf(c)}${cSub(c)}</div><div class="s5time" data-t="rem">${fmt(q.remain)}</div><div class="s5task">${cTitle(c)}</div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:4px">${ctl()}${endBtn()}</div><div style="margin-top:8px"><p class="cap">接下来</p>${nextList(2)}</div></div>
+<div class="shelf"><div class="shh"><b>今日番茄架</b><span>${q.doneF}${q.mode === 'smart' ? ' / ' + nF(q) : ''} 个已完成</span></div><div class="slots">${this.show(c).map(s => `<span class="slot${s.st === 'done' ? ' d' : s.st === 'cur' ? ' c' : ''}">${s.st === 'done' ? TI : s.st === 'skip' ? '跳过' : s.no}</span>`).join('')}</div><div class="shp">${pet(c.type === 'f' ? 'run' : 'sip', 56, null, pz())}<p>${c.type === 'f' ? '做完这个番茄，这里再亮一格。' : '休息一下，回来接着收。'}</p></div></div></div>`;
+  },
+  isl(open, c) {
+    const brk = c.type !== 'f', q = S.q;
+    const w = wings(pet(brk ? 'sip' : 'run', 20, null, pz()) + (brk ? '' : `<small>${c.no}${q.mode === 'smart' ? ' / ' + nF(q) : ''}</small>`)) + '<div class="edge"><i data-bar></i></div>';
+    if (!open) return { w: 372, h: 36, html: w };
+    if (brk) return { w: 430, h: 132, html: w + ixBreak(c) };
+    return { w: 450, h: 206, html: w + `<div class="ix">${ixHead(c)}<div class="ix-t"><div class="ix-name">${pet('run', 30, null, pz())}<span>${cTitle(c)}</span></div><div class="ix-time" data-t="rem">${fmt(q.remain)}</div></div><div class="ix-dots">${this.show(c).map(s => `<i class="${s.st === 'done' ? 'd' : s.st === 'cur' ? 'c' : ''}"></i>`).join('')}</div>${ixBtns()}</div>` };
+  },
+  ov(c) {
+    const q = S.q, fs = q.segs.filter(s => s.type === 'f');
+    const show = q.mode === 'free' ? fs.filter(s => s.no <= q.doneF + 3).slice(-12) : fs;
+    const left = fs.filter(s => s.st === 'pending').length;
+    return `<div class="ov o5"><h3>已收获 ${q.doneF} 个番茄</h3><p class="osub">${PH[c.type]} ${c.min} 分钟${q.mode === 'smart' ? ` · 还有 ${left} 个` : ''}</p><div class="o5row">${show.map(s => `<i class="${s.st === 'done' ? 'd' : ''}">${s.st === 'done' ? TI : ''}</i>`).join('')}</div>${pet('sip', 120)}<div class="otime" data-t="rem">${fmt(q.remain)}</div>${ovFoot()}</div>`;
+  },
+};
+
+/* ================= 方案说明 ================= */
+const SCHEMES = [
+  { id: 1, name: '卡片综合', sw: ['#FFF4E3', '#FF6E47', '#2B2118'],
+    one: '方案 4 的暖色和卡片，但可以圈中多张一起丢进盒子；AI 逐项估番茄；专注和休息用方案 2 的时间线。',
+    notes: ['和方案 4 一样的暖色场景首页：倒计时在左、角色在右，下面并排两个创建按钮。',
+      '两步：任务卡片铺在桌面上，多了就往下滚；按住鼠标拖过卡片一次圈中多张，拖到列表边缘会自动滚动，然后一起丢进「今日队列」盒子（圈中的也可以直接拖进去）→ AI 逐项估番茄，可加减、调顺序，然后开始。演示里方案 1 放了 14 项任务，方便看列表和盒子装多了的样子。',
+      '专注时主窗口底部是今天的时间线，角色站在「现在」的位置往前走。island 不多占一行：角色和「第几个」在左侧，底边一条进度线；还剩 1 分钟时角色说一句提醒。',
+      '角色从座位走去喝咖啡，再走回来，位置就是休息进度；一路上用气泡跟你说话。下面一排打卡格，做完一个亮一个：小番茄亮番茄，小狗亮骨头，小猫亮小鱼。'],
+    trade: '把方案 4 的气质和方案 2 的时间线合在一起，一次能丢好几张，比逐张翻快，也保留了丢卡片的手感；但番茄数要到下一步才看到。' },
+  { id: 2, name: '时间线', sw: ['#FBF9F5', '#1F1B16', '#FF6E47'],
+    one: '浅色宽窗，底部常驻今天的时间线。勾任务的同时 AI 就在估，色块实时长出来。',
+    notes: ['左边大号倒计时，右边两个创建按钮，底部一条今天的时间线，角色站在「现在」的位置。',
+      '两步：勾任务时 AI 同步估番茄，时间线上对应的色块一块块出现，右侧实时显示几点结束；第二步选节奏。',
+      '角色脚下有一段流动的地面。展开后角色在进度轨道上从左跑到右，终点是一面小旗。',
+      '角色从座位走到咖啡杯，喝一口，再走回来。它走到哪，休息就过了多少。'],
+    trade: '「几点能做完」最直观，步骤最少；但窗口最宽，占的屏幕面积大。' },
+  { id: 3, name: '对话式', sw: ['#15161B', '#FF6E47', '#B9A6FF'],
+    one: '深色窗口，角色用对话带你走：问你做哪些、告诉你估了多少、给你排好计划。',
+    notes: ['顶部一条状态栏显示倒计时。主体是和角色的对话，底部是「创建 PomodoQ」两个按钮。',
+      '三轮对话：你勾任务 → 角色回一张估算卡片（可改）→ 角色给出排好的计划，点「开始专注」。',
+      '角色在刘海左侧跑。开始、还剩 1 分钟这些时刻，刘海下方落下一句气泡，不用展开也能看到。',
+      '角色端着咖啡，头顶的气泡每几秒换一句休息提示。'],
+    trade: '陪伴感最强，不像在填表；但信息密度低，用熟了可能嫌慢。' },
+  { id: 4, name: '卡片', sw: ['#FFF4E3', '#FF6E47', '#2B2118'],
+    one: '暖色大场景，角色站在中间。任务一张张翻：加入队列，或者今天不做。',
+    notes: ['上半屏是一块暖色场景，倒计时在左、角色在右。下面并排两个创建按钮。',
+      '两步：任务卡片一张张过，每张卡上 AI 单独估番茄，点「加入队列」或「今天不做」（也可以按 ← →）；然后调顺序、开始。',
+      '刘海下方挂一个小标签，角色在标签里跑；刘海两侧只留状态点和时间。展开后标签收起，角色放大。',
+      '整屏的蓝天草地，角色做拉伸，旁边的圆圈带你吸气、呼气。'],
+    trade: '最有性格，逐项做决定最快；但风格强烈，和系统界面的反差最大。' },
+  { id: 5, name: '时间预算', sw: ['#F3F5F8', '#111827', '#FF6E47'],
+    one: '先说你有多少时间，AI 估完番茄数，再替你挑出装得下的任务。',
+    notes: ['左边倒计时和两个创建按钮，右边是「今日番茄架」，每完成一个番茄亮一格。',
+      '三步：选可用时间 → AI 估番茄并挑出装得下的任务，超出会提示晚多久 → 确认每项的起止时间。',
+      '刘海底边一条细进度线，左侧是角色和「第几个 / 共几个」。展开后有一排番茄圆点。',
+      '一排已经收获的番茄，角色在下面喝咖啡。'],
+    trade: 'AI 的作用最大，适合时间紧的时候；但多了一步「给时间」，而且让 AI 替你取舍需要信任它。' },
+];
+const NOTE_H = ['主界面', '创建步骤', 'Island 专注', '休息全屏'];
+
+/* ================= 渲染 ================= */
+let galKey = '', ovKey = '';
+function renderChrome() {
+  const sc = SCHEMES[S.scheme - 1];
+  $('ovw').innerHTML = SCHEMES.map(s => `<button class="oc${s.id === S.scheme ? ' on' : ''}" data-set="scheme:${s.id}" data-go="1"><span class="no"><span>方案 ${s.id}</span><span class="sw">${s.sw.map(c => `<i style="background:${c}"></i>`).join('')}</span></span><h3>${s.name}</h3><p>${s.one}</p></button>`).join('');
+  $('tabs').innerHTML = SCHEMES.map(s => `<button class="tab${s.id === S.scheme ? ' on' : ''}" data-set="scheme:${s.id}"><b>方案 ${s.id}</b>${s.name}</button>`).join('');
+  document.querySelectorAll('.seg[data-group]').forEach(g => {
+    const k = g.dataset.group;
+    g.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.set === k + ':' + S[k]));
+  });
+  $('notes').innerHTML = sc.notes.map((n, i) => `<div class="note"><h4>${NOTE_H[i]}</h4><p>${n}</p></div>`).join('');
+  $('trade').innerHTML = `<b>方案 ${sc.id} 的取舍：</b>${sc.trade}`;
+  if (galKey !== S.pet) {
+    galKey = S.pet;
+    const tag = { tomato: '默认', dog: '可选', cat: '可选' };
+    $('gal').innerHTML = Object.keys(PETS).map(k => `<div class="gc${k === S.pet ? ' on' : ''}" data-set="pet:${k}"><h4>${PETS[k]}<small>${k === S.pet ? '当前使用' : tag[k]}</small></h4><div class="gi"><span>${pet('run', 22, k)}</span><i></i><span>18:40</span></div><div class="gp"><div>${pet('run', 54, k)}<span>专注 · 跑动</span></div><div>${pet('sip', 54, k)}<span>休息 · 喝咖啡</span></div><div>${pet('stretch', 54, k)}<span>休息 · 拉伸</span></div></div></div>`).join('');
+  }
+  const root = document.documentElement;
+  if (S.theme === 'system') root.removeAttribute('data-theme'); else root.setAttribute('data-theme', S.theme);
+}
+function renderWin() {
+  const el = $('win'), v = V[S.scheme], c = S.q ? cur() : null, b = v.box;
+  el.className = 'win ' + (v.skin || 's' + S.scheme) + (S.win === 'min' ? ' min' : '') + (c && c.type !== 'f' ? ' brk' : '');
+  el.style.left = b.l + 'px'; el.style.top = b.t + 'px'; el.style.width = b.w + 'px'; el.style.height = b.h + 'px';
+  const keep = {};
+  el.querySelectorAll('[data-sc]').forEach(n => { keep[n.dataset.sc] = n.scrollTop; });
+  const body = S.stage === 'wiz' && S.W ? v.wiz() : S.stage === 'run' && c ? v.run(c) : v.home();
+  el.innerHTML = tbar() + `<div class="wb${S.anim ? ' fresh' : ''}">${body}${S.picker ? picker() : ''}</div>`;
+  S.anim = false;
+  el.querySelectorAll('[data-sc]').forEach(n => { if (keep[n.dataset.sc]) n.scrollTop = keep[n.dataset.sc]; });
+  const pp = el.querySelector('.k1cols .ordr.pop');
+  if (pp) { const o = pp.parentNode, bot = pp.offsetTop + pp.offsetHeight + 8; if (bot > o.scrollTop + o.clientHeight) o.scrollTop = bot - o.clientHeight; }
+  const ch = el.querySelector('.chat');
+  if (ch) ch.scrollTop = ch.scrollHeight;
+  paint();
+}
+function renderIsl() {
+  const el = $('isl'), q = S.q;
+  if (!q) { el.style.display = 'none'; $('islIn').innerHTML = ''; $('islX').innerHTML = ''; return; }
+  const c = cur(), brk = c.type !== 'f';
+  const open = S.hover || S.pinned || (!V[S.scheme].bubWarn && Date.now() < S.peek);
+  const r = V[S.scheme].isl(open, c);
+  el.style.display = '';
+  el.className = 'isl' + (open ? ' open' : '') + (brk ? ' brk' : '') + (q.paused ? ' pz' : '');
+  el.style.width = r.w + 'px'; el.style.height = r.h + 'px';
+  el.style.setProperty('--acc', brk ? (c.type === 'long' ? 'var(--long)' : 'var(--break)') : 'var(--focus)');
+  $('islIn').innerHTML = r.html;
+  $('islX').innerHTML = r.x || '';
+  paint();
+}
+function renderOv() {
+  const q = S.q, c = q ? cur() : null, on = !!c && c.type !== 'f';
+  if (q && !q.uid) q.uid = ++TOK;
+  const key = on ? [S.scheme, S.pet, q.uid, q.idx].join(':') : '';
+  if (key === ovKey) return;
+  ovKey = key; S.ovPh = null;
+  $('ov').innerHTML = on ? V[S.scheme].ov(c) : '';
+  paint();
+}
+function paint() {
+  const q = S.q, root = $('scr');
+  $('clock').textContent = '周日 ' + clk(S.clock);
+  if (S.rail) {
+    const x = clamp((S.clock - S.rail.t0) / (S.rail.span * 60) * 100, 0, 100).toFixed(2) + '%';
+    root.querySelectorAll('[data-clk]').forEach(e => { e.style.left = x; });
+  }
+  if (!q) return;
+  const c = cur(), p = clamp(1 - q.remain / (c.min * 60), 0, 1), t = fmt(q.remain), pc = (p * 100).toFixed(2) + '%';
+  root.querySelectorAll('[data-t="rem"]').forEach(e => { if (e.textContent !== t) e.textContent = t; });
+  root.querySelectorAll('[data-ring]').forEach(e => { e.style.strokeDashoffset = (100 * (1 - p)).toFixed(2); });
+  root.querySelectorAll('[data-bar]').forEach(e => { e.style.width = pc; });
+  root.querySelectorAll('[data-px]').forEach(e => { e.style.left = pc; });
+  const v = V[S.scheme];
+  if (v.paint) v.paint(p, c);
+  if (v.rail && q.mode === 'free' && S.stage === 'run' && S.rail && S.clock > S.rail.t0 + S.rail.span * 60 * .8) renderWin();
+}
+function render() { renderChrome(); renderWin(); renderIsl(); renderOv(); }
+
+/* ================= 操作 ================= */
+function setOpt(k, v, go) {
+  if (k === 'scheme') {
+    v = +v;
+    if (v !== S.scheme) {
+      S.scheme = v; S.picker = false; S.anim = true; S.confirmEnd = false;
+      if (S.stage === 'wiz') { S.W = null; S.stage = 'home'; }
+      const sc = SCHEMES[v - 1];
+      log(`切到<b>方案 ${v} · ${sc.name}</b>${S.q ? '：队列保留在同一时刻，对比 island 和休息页' : '：从首页开始，点「直接开始」或「按任务智能排番茄」'}`);
+      render();
+    }
+    if (go) $('demo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+  if (k === 'pet') {
+    if (v === S.pet) return;
+    S.pet = v;
+    log(`动效模板换成<b>${PETS[v]}</b> → island、主窗口、休息全屏一起换`);
+    return render();
+  }
+  if (k === 'speed') { S.speed = +v; log(`演示速度 ${v}×${+v > 1 ? '（休息和最后 1 分钟会自动放慢，方便看清）' : '（真实速度）'}`); return renderChrome(); }
+  if (k === 'theme') { S.theme = v; return renderChrome(); }
+}
+function act(name, a, b) {
+  const W = S.W;
+  switch (name) {
+    case 'free':
+      startQueue('free', null, RH0);
+      log('点「直接开始」→ 自由队列立刻开始：专注 25 分 / 短休 5 分，循环到你终止 · 倒计时同时出现在刘海 island 里');
+      return render();
+    case 'smart': return openWiz();
+    case 'pause': return togglePause();
+    case 'skip': if (S.q) advance(true); return;
+    case 'end': S.confirmEnd = true; return renderWin();
+    case 'endNo': S.confirmEnd = false; return renderWin();
+    case 'endYes': if (S.q) finish(true); return;
+    case 'openWin': S.win = 'open'; S.pinned = false; S.hover = false; log('从 island 点「打开窗口」→ 主窗口回到前面'); renderWin(); return renderIsl();
+    case 'min': S.win = 'min'; S.picker = false; log(S.q ? '收起主窗口 → 倒计时继续留在刘海 island 里；点 Dock 的番茄图标恢复' : '收起主窗口；点 Dock 的番茄图标恢复'); return renderWin();
+    case 'dock': if (S.win !== 'open') { S.win = 'open'; log('点 Dock 的番茄图标 → 主窗口恢复'); renderWin(); } return;
+    case 'picker': S.picker = !S.picker; if (S.picker) log('打开「动效」→ 选一个模板，island、主窗口、休息全屏一起换'); return renderWin();
+    case 'jump': S.win = 'open'; S.hover = false; S.pinned = false; return jump(a);
+    case 'ff': return ff();
+    case 'reset': return resetAll();
+  }
+  if (!W) return;
+  const id = +a, pk = pickedIds(W);
+  switch (name) {
+    case 'wpick':
+      W.pick[id] = !W.pick[id];
+      if (S.scheme === 2 && W.pick[id]) estimate([id], 500, 0);
+      log(W.pick[id] ? `勾选「${esc(todo(id).title)}」→ 加入这一轮${S.scheme === 2 ? '，时间线上多出它的色块' : ''}` : `取消「${esc(todo(id).title)}」→ 这一轮不排，它留在今日任务里`);
+      return renderWin();
+    case 'wall':
+      W.order.forEach(i => { W.pick[i] = a === '1'; });
+      if (S.scheme === 2 && a === '1') estimate(W.order, 300, 260);
+      return renderWin();
+    case 'ksel':
+      if (W.fly || W.pick[id]) return;
+      W.sel[id] = !W.sel[id]; W.back = null;
+      log(W.sel[id] ? `圈中「${esc(todo(id).title)}」→ 还可以继续圈，然后一起丢进盒子` : `取消圈中「${esc(todo(id).title)}」`);
+      return renderWin();
+    case 'kall':
+      if (W.fly) return;
+      W.back = null; W.sel = {};
+      if (a === '1') W.order.forEach(i => { if (!W.pick[i]) W.sel[i] = true; });
+      log(a === '1' ? '全部圈中 → 桌面上的卡片都圈上了，包括还没滚到的' : '取消圈中 → 一张都不圈');
+      return renderWin();
+    case 'kthrow': {
+      const ids = W.order.filter(i => W.sel[i] && !W.pick[i]);
+      if (W.fly || W.step !== 0 || !ids.length) return;
+      return kThrow(ids);
+    }
+    case 'kout':
+      if (W.fly) return;
+      W.pick[id] = false; W.back = id; W.landed = null;
+      log(`把「${esc(todo(id).title)}」从盒子里拿出来 → 回到桌面，今天不做也可以`);
+      renderWin();
+      { const el = document.querySelector(`.k1sc [data-k="${id}"]`), sc = el && el.closest('.k1sc');
+        if (sc) { const top = el.offsetTop - 10, bot = el.offsetTop + el.offsetHeight + 10; if (top < sc.scrollTop) sc.scrollTop = top; else if (bot > sc.scrollTop + sc.clientHeight) sc.scrollTop = bot - sc.clientHeight; } }
+      return;
+    case 'wn':
+      if (W.est[id] == null) return;
+      W.est[id] = clamp(W.est[id] + (+b), 1, 6);
+      log(`手动把「${esc(todo(id).title)}」改成 ${W.est[id]} 个番茄（AI 原估 ${todo(id).ai} 个，范围 1–6）`);
+      return renderWin();
+    case 'wreset':
+      W.order.forEach(i => { if (W.est[i] != null) W.est[i] = todo(i).ai; });
+      log('恢复 AI 的估计 → 手动改过的番茄数全部还原');
+      return renderWin();
+    case 'wr':
+      W.r[a] = clamp(W.r[a] + (+b) * RH[a].step, RH[a].min, RH[a].max);
+      log(`调节奏 → ${rhyText(W.r)} · 预览和结束时间跟着变`);
+      return renderWin();
+    case 'wpre': {
+      const p = PRE[a];
+      Object.assign(W.r, { f: p.f, s: p.s, l: p.l, every: p.every });
+      log(`选预设「${p.label}」→ ${rhyText(W.r)}`);
+      return renderWin();
+    }
+    case 'wedit': W.edit = true; return renderWin();
+    case 'wback': W.step = Math.max(0, W.step - 1); S.anim = true; return renderWin();
+    case 'wcancel': S.W = null; S.stage = 'home'; S.anim = true; log('取消创建 → 回到首页，什么都没有改'); return render();
+    case 'wstart': return wizStart();
+    case 'wnext':
+      if (S.scheme === 1) {
+        if (W.step !== 0 || !pk.length) return;
+        W.step = 1; estimate(pk, 500, Math.min(520, Math.round(3600 / pk.length))); W.sel = {}; W.back = null; W.landed = null; log(`盒子里有 ${pk.length} 项 → AI 逐项估番茄数，估好一项亮一项，时间条跟着长出来`);
+      } else if (S.scheme === 3) {
+        if (W.step === 0) { if (!pk.length) return; W.step = 1; estimate(pk, 520, 420); log(`选了 ${pk.length} 项 → AI 开始逐项估番茄数，估好一项显示一项`); }
+        else if (W.step === 1) { if (!allReady(W)) return; W.step = 2; log('AI 估完了 → 预览整条队列：几个番茄、几点结束'); }
+      } else if (S.scheme === 2) {
+        if (W.step !== 0 || !pk.length || !allReady(W)) return;
+        W.step = 1; log('任务和番茄数定了 → 选节奏，时间线和结束时间跟着变');
+      } else if (S.scheme === 5) {
+        if (W.step === 0) {
+          if (!W.budget) return;
+          W.step = 1;
+          if (W.order.every(i => W.est[i] != null)) aiPick(); else { estimate(W.order, 520, 360); log(`给了 ${dur(W.budgetMin)} → AI 先估每项要几个番茄，再挑出装得下的`); }
+        } else if (W.step === 1) { if (!pk.length) return; W.step = 2; log('确认页：每项任务的起止时间都列出来了'); }
+      }
+      S.anim = true;
+      return renderWin();
+    case 'wb':
+      W.budget = a; W.budgetMin = +b; W.cap = capFor(+b, W.r);
+      log(`选「${a === 'until' ? '到 ' + clk(S.clock + (+b) * 60) : BL[a]}」→ 这段时间能装 ${W.cap} 个番茄（休息已算在内）`);
+      return renderWin();
+    case 'dk': {
+      if (W.fly || W.step !== 0) return;
+      const cid = W.order[W.i], yes = a === 'yes', tok = W.tok;
+      if (yes && W.est[cid] == null) return;
+      W.pick[cid] = yes; W.lastJoin = yes ? cid : null; W.fly = yes ? 'r' : 'l';
+      log(yes ? `「${esc(todo(cid).title)}」→ 加入队列，${W.est[cid]} 个番茄` : `「${esc(todo(cid).title)}」→ 今天不做，它留在今日任务里`);
+      renderWin();
+      setTimeout(() => {
+        if (!S.W || S.W.tok !== tok) return;
+        W.fly = null; W.lastJoin = null; W.i++;
+        if (W.i >= W.order.length) { W.step = 1; W.i = 0; S.anim = true; log(`${W.order.length} 张都过完了 → 排顺序、看预览，然后开始`); }
+        else { W.fresh = true; estimate([W.order[W.i]], 600, 0); }
+        renderWin();
+      }, 240);
+      return;
+    }
+    case 'wmv': {
+      const i = pk.indexOf(id), j = i + (+b);
+      if (i < 0 || j < 0 || j >= pk.length) return;
+      const x = W.order.indexOf(pk[i]), y = W.order.indexOf(pk[j]);
+      W.order[x] = pk[j]; W.order[y] = pk[i];
+      log(`把「${esc(todo(id).title)}」${+b < 0 ? '上移' : '下移'}一位 → 预览跟着变`);
+      return renderWin();
+    }
+    case 'wredo':
+      W.step = 0; W.i = 0; W.pick = {}; W.fly = null; W.fresh = true; S.anim = true;
+      estimate([W.order[0]], 400, 0);
+      log('重新过一遍 → 从第一张任务卡开始');
+      return renderWin();
+  }
+}
+
+/* ================= 方案 1：把卡片丢进盒子 ================= */
+// 把卡片从滚动列表里「拿起来」：在列表外放一张一样的卡片，原位置留空
+function kLift(ids) {
+  const pick = document.querySelector('.k1pick'), sc = document.querySelector('.k1sc');
+  if (!pick || !sc) return [];
+  const p = pick.getBoundingClientRect(), v = sc.getBoundingClientRect(), k = p.width / pick.offsetWidth || 1;
+  const out = [];
+  ids.forEach(id => {
+    const el = sc.querySelector(`[data-k="${id}"]`);
+    if (!el) return;
+    const r = el.getBoundingClientRect(), w = el.offsetWidth, h = el.offsetHeight;
+    const off = r.bottom < v.top + 6 || r.top > v.bottom - 6;
+    const cx = r.left + r.width / 2, cy = clamp(r.top + r.height / 2, v.top + 24 * k, v.bottom - 24 * k);
+    const c = el.cloneNode(true);
+    c.removeAttribute('data-act'); c.removeAttribute('data-k');
+    c.className = 'k1c on k1fly';
+    Object.assign(c.style, { left: (cx - p.left) / k - w / 2 + 'px', top: (cy - p.top) / k - h / 2 + 'px', width: w + 'px', height: h + 'px' });
+    c._off = off; c._tx = 0; c._ty = 0; c._id = id;
+    pick.appendChild(c);
+    el.classList.add('gone');
+    out.push(c);
+  });
+  return out;
+}
+function kThrow(ids, lifted) {
+  const W = S.W, tok = W.tok, box = document.querySelector('.k1box'), pick = document.querySelector('.k1pick');
+  const done = () => {
+    if (!S.W || S.W.tok !== tok) return;
+    ids.forEach(i => { W.pick[i] = true; delete W.sel[i]; });
+    W.fly = false; W.back = null; W.landed = ids.slice();
+    log(ids.length > 1 ? `${ids.length} 张卡片一起丢进「今日队列」盒子 → 盒子里现在有 ${pickedIds(W).length} 项` : `「${esc(todo(ids[0]).title)}」丢进「今日队列」盒子 → 盒子里现在有 ${pickedIds(W).length} 项`);
+    renderWin();
+    const bl = document.querySelector('.k1bl');
+    if (bl) bl.scrollTop = bl.scrollHeight;
+  };
+  if (!box || !pick) return done();
+  W.fly = true;
+  const els = lifted || kLift(ids), n = els.length;
+  const gap = n > 6 ? Math.max(34, Math.round(480 / n)) : 80, dur1 = 400;
+  const k = pick.getBoundingClientRect().width / pick.offsetWidth || 1, b = box.getBoundingClientRect();
+  const bx = b.left + b.width / 2, by = b.top + b.height / 2;
+  els.forEach((el, i) => {
+    const r = el.getBoundingClientRect(), tx = el._tx || 0, ty = el._ty || 0;
+    const dx = tx + (bx - (r.left + r.width / 2)) / k, dy = ty + (by - (r.top + r.height / 2)) / k;
+    const rot = i % 2 ? -1 : 1;
+    el.style.zIndex = 12 + i;
+    el.animate([
+      { transform: `translate(${tx}px,${ty}px) rotate(${rot * 3}deg)`, opacity: el._off ? 0 : 1 },
+      { transform: `translate(${tx + (dx - tx) * .55}px,${ty + (dy - ty) * .55 - 54}px) rotate(${rot * 14}deg) scale(.82)`, opacity: 1, offset: .55 },
+      { transform: `translate(${dx}px,${dy}px) rotate(${rot * 26}deg) scale(.2)`, opacity: .1 },
+    ], { duration: dur1, delay: i * gap, easing: 'cubic-bezier(.45,0,.75,1)', fill: 'both' });
+    setTimeout(() => { box.classList.remove('bump'); void box.offsetWidth; box.classList.add('bump'); }, i * gap + dur1 - 40);
+  });
+  setTimeout(done, Math.max(0, n - 1) * gap + dur1 + 60);
+}
+let KD = null, eatUntil = 0;
+document.addEventListener('click', e => { if (performance.now() < eatUntil) { eatUntil = 0; e.stopPropagation(); e.preventDefault(); } }, true);
+document.addEventListener('pointerdown', e => {
+  const W = S.W;
+  if (S.scheme !== 1 || S.stage !== 'wiz' || !W || W.step !== 0 || W.fly || e.button) return;
+  const desk = e.target.closest('.k1desk');
+  if (!desk || e.target.closest('.k1acts')) return;
+  const k = desk.getBoundingClientRect().width / desk.offsetWidth || 1, sc = desk.querySelector('.k1sc'), v = sc && sc.getBoundingClientRect();
+  if (sc && e.target === sc && sc.offsetWidth > sc.clientWidth && e.clientX >= v.right - (sc.offsetWidth - sc.clientWidth) * k - 1) return;   // 按在滚动条上
+  const hit = e.target.closest('.k1c'), card = hit && W.sel[+hit.dataset.k] ? hit : null;
+  KD = { desk, sc, card, id: card ? +card.dataset.k : 0, x: e.clientX, y: e.clientY, px: e.clientX, py: e.clientY, k, on: false, base: { ...W.sel }, cur: { ...W.sel }, over: false,
+    s0: sc ? sc.scrollTop : 0, inSc: !!(sc && e.clientY >= v.top && e.clientY <= v.bottom), sp: 0, raf: 0 };
+});
+// 框选：起点跟着列表内容走，所以拖到边缘自动滚动时，滚出去的卡片也算圈中
+function kMarq(d) {
+  const o = d.desk.getBoundingClientRect(), v = d.sc ? d.sc.getBoundingClientRect() : o;
+  const ay = d.inSc ? d.y - (d.sc.scrollTop - d.s0) * d.k : d.y;
+  const ex = clamp(d.px, o.left, o.right), ey = clamp(d.py, o.top, o.bottom);
+  const x0 = Math.min(d.x, ex), x1 = Math.max(d.x, ex), y0 = Math.min(ay, ey), y1 = Math.max(ay, ey);
+  const sy = d.inSc ? clamp(ay, v.top, v.bottom) : ay, vy0 = Math.min(sy, ey), vy1 = Math.max(sy, ey);
+  Object.assign(d.mq.style, { left: (x0 - o.left) / d.k + 'px', top: (vy0 - o.top) / d.k + 'px', width: (x1 - x0) / d.k + 'px', height: (vy1 - vy0) / d.k + 'px' });
+  d.cur = { ...d.base };
+  d.desk.querySelectorAll('.k1c').forEach(el => {
+    const r = el.getBoundingClientRect(), id = +el.dataset.k;
+    const hit = d.base[id] || (r.left < x1 && r.right > x0 && r.top < y1 && r.bottom > y0);
+    if (hit) d.cur[id] = true;
+    el.classList.toggle('on', !!hit);
+  });
+}
+function kAuto(d) {
+  d.raf = 0;
+  if (KD !== d || !d.mq || !d.sp || !d.sc) return;
+  const before = d.sc.scrollTop;
+  d.sc.scrollTop = before + d.sp;
+  if (d.sc.scrollTop !== before) kMarq(d);
+  d.raf = requestAnimationFrame(() => kAuto(d));
+}
+document.addEventListener('scroll', e => { if (KD && KD.mq && e.target === KD.sc) kMarq(KD); }, true);
+document.addEventListener('pointermove', e => {
+  if (!KD) return;
+  const W = S.W, d = KD;
+  if (!W) { KD = null; return; }
+  d.px = e.clientX; d.py = e.clientY;
+  const dx = (e.clientX - d.x) / d.k, dy = (e.clientY - d.y) / d.k;
+  if (!d.on) {
+    if (Math.hypot(dx, dy) < 6) return;
+    d.on = true;
+    if (d.card) {
+      const ids = W.order.filter(i => W.sel[i] && !W.pick[i]);
+      d.els = kLift(ids);
+      d.grab = d.els.find(c => c._id === d.id) || d.els[0];
+      const c = d.grab.getBoundingClientRect();
+      d.els.forEach(el => {
+        const r = el.getBoundingClientRect();
+        el._ox = (c.left + c.width / 2 - r.left - r.width / 2) / d.k * .86;
+        el._oy = (c.top + c.height / 2 - r.top - r.height / 2) / d.k * .86;
+        el.classList.add('drag');
+      });
+      d.grab.style.zIndex = 20;
+    } else {
+      d.mq = document.createElement('div');
+      d.mq.className = 'k1mq';
+      d.desk.appendChild(d.mq);
+    }
+  }
+  e.preventDefault();
+  if (d.card) {
+    d.els.forEach((el, i) => {
+      el._tx = dx + el._ox; el._ty = dy + el._oy;
+      el.style.transform = `translate(${el._tx}px,${el._ty}px) rotate(${el === d.grab ? -3 : i % 2 ? 5 : -6}deg)`;
+    });
+    const box = document.querySelector('.k1box'), b = box.getBoundingClientRect();
+    d.over = e.clientX >= b.left && e.clientX <= b.right && e.clientY >= b.top && e.clientY <= b.bottom;
+    box.classList.toggle('over', d.over);
+  } else {
+    kMarq(d);
+    d.sp = 0;
+    if (d.sc && d.sc.scrollHeight > d.sc.clientHeight) {
+      const v = d.sc.getBoundingClientRect(), edge = 30 * d.k;
+      if (e.clientY > v.bottom - edge) d.sp = Math.min(16, 2 + (e.clientY - (v.bottom - edge)) / d.k * .3);
+      else if (e.clientY < v.top + edge) d.sp = -Math.min(16, 2 + (v.top + edge - e.clientY) / d.k * .3);
+    }
+    if (d.sp && !d.raf) d.raf = requestAnimationFrame(() => kAuto(d));
+  }
+});
+const kUp = e => {
+  if (!KD) return;
+  const d = KD, W = S.W;
+  KD = null;
+  if (d.raf) cancelAnimationFrame(d.raf);
+  if (!d.on || !W) return;
+  eatUntil = performance.now() + 80;
+  W.back = null;
+  if (d.card) {
+    const ids = d.els.map(c => c._id);
+    document.querySelector('.k1box').classList.remove('over');
+    if (d.over && e.type === 'pointerup' && ids.length) { d.els.forEach(c => c.classList.remove('drag')); return kThrow(ids, d.els); }
+    log(`拖着 ${ids.length} 张卡片没放进盒子 → 卡片回到桌面，还是圈中的`);
+    return renderWin();
+  }
+  W.sel = d.cur;
+  const n = Object.keys(W.sel).length;
+  log(n ? `按住鼠标拖过卡片 → 现在圈中 ${n} 张，可以点「丢进盒子」，或按住圈中的卡片拖进盒子` : '拖了一下，但没有圈到卡片');
+  renderWin();
+};
+document.addEventListener('pointerup', kUp);
+document.addEventListener('pointercancel', kUp);
+
+/* ================= 事件 ================= */
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-act],[data-set]');
+  if (t) {
+    if (t.disabled) return;
+    if (t.dataset.act) { const p = t.dataset.act.split(':'); act(p[0], p[1], p[2]); }
+    else { const p = t.dataset.set.split(':'); setOpt(p[0], p[1], t.dataset.go); }
+    return;
+  }
+  if (e.target.closest('#isl') && S.q) {
+    S.pinned = !S.pinned;
+    if (!S.pinned) S.hover = false;
+    log(S.pinned ? '点刘海 → island 固定展开，再点一次收起' : 'island 收起，回到刘海两侧的小尺寸');
+    renderIsl();
+  }
+});
+const islEl = $('isl');
+islEl.addEventListener('mouseenter', () => { if (!S.hover) { S.hover = true; renderIsl(); } });
+islEl.addEventListener('mouseleave', () => { if (S.hover) { S.hover = false; renderIsl(); } });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (S.picker) { S.picker = false; renderWin(); }
+    else if (S.pinned) { S.pinned = false; renderIsl(); }
+    return;
+  }
+  if (S.scheme === 4 && S.stage === 'wiz' && S.W && S.W.step === 0 && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+    e.preventDefault();
+    act('dk', e.key === 'ArrowLeft' ? 'no' : 'yes');
+  }
+});
+let holdT = 0;
+const holdEnd = () => { clearTimeout(holdT); document.querySelectorAll('[data-hold].on').forEach(h => h.classList.remove('on')); };
+document.addEventListener('pointerdown', e => {
+  const h = e.target.closest('[data-hold]');
+  if (!h) return;
+  h.classList.add('on');
+  clearTimeout(holdT);
+  holdT = setTimeout(() => { holdEnd(); if (S.q) finish(true); }, 3000);
+});
+document.addEventListener('pointerup', holdEnd);
+document.addEventListener('pointercancel', holdEnd);
+document.addEventListener('pointerout', e => {
+  const h = e.target.closest && e.target.closest('[data-hold]');
+  if (h && !(e.relatedTarget && h.contains(e.relatedTarget))) holdEnd();
+});
+
+const vp = $('vp');
+const fit = () => vp.style.setProperty('--s', (vp.clientWidth / 1120).toFixed(4));
+if (window.ResizeObserver) new ResizeObserver(fit).observe(vp);
+window.addEventListener('resize', fit);
+fit();
+render();
+setInterval(tick, 100);
+window.__demo = { S, V, jump, act, setOpt, ff, render };
+})();
+</script>
+</body>
+</html>

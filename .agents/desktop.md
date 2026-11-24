@@ -1,6 +1,6 @@
 # Desktop (Electrobun)
 
-> The runtime observations below come from the Phase 0 spike (2026-10-24), not a new validation run. Current architecture and remaining work: [docs/desktop-plan-c-product-app.md](../docs/desktop-plan-c-product-app.md). UI conventions: [apps/app/AGENTS.md](../apps/app/AGENTS.md).
+> The runtime observations below come from the Phase 0 spike (2026-10-24), not a new validation run. Remaining work is under [Open Items](#open-items). UI conventions: [apps/app/AGENTS.md](../apps/app/AGENTS.md).
 
 `apps/desktop` is a thin Electrobun 2.x shell around `apps/app`. It owns the main process, the window, the navigation policy, and packaging. All UI comes from the app's desktop build (`vite build --mode desktop`).
 

@@ -9,7 +9,7 @@ The product app: a Vite + React + TanStack Router SPA. It has no TanStack Start,
 
 The web build can also be served by `apps/web` on the website's origin: point `VITE_APP_URL` under `VITE_WEB_URL` (for example `https://example.com/app`) and rebuild. `apps/web/server.ts` then serves `dist/web` there, and in development Web's Vite proxies that path to this app's dev server on `:3002`. One build serves one address.
 
-Current architecture, deployment options, and remaining work: [docs/desktop-plan-c-product-app.md](../../docs/desktop-plan-c-product-app.md). Desktop shell: [Desktop](../../.agents/desktop.md).
+This app was split out of `apps/web` on 2026-10-24 so the product UI gets a browser and a desktop build from one source while `apps/web` keeps SSR, SEO, and the sign-in entry; building the desktop bundle from `apps/web` and sharing a page package between the two were rejected. Desktop shell: [Desktop](../../.agents/desktop.md). Production runtime and deployment: [Node.js and pnpm toolchain](../../.agents/toolchain.md#app-production-runtime).
 
 ## Boundaries
 
@@ -53,7 +53,7 @@ src/
 
 ## Environment
 
-`ENV_APP` (`@uni-stack/env/app/env`) validates `VITE_APP_URL`, `VITE_SERVER_URL`, `VITE_WEB_URL`, and `VITE_CLERK_PUBLISHABLE_KEY`. Vite compiles them into the bundle, so a desktop release build must run with production values.
+`ENV_APP` (`@uni-stack/env/app/env`) validates `VITE_APP_URL`, `VITE_SERVER_URL`, `VITE_WEB_URL`, `VITE_CLERK_PUBLISHABLE_KEY`, and `VITE_CLERK_DESKTOP_CLIENT_ID` (desktop sign-in). Vite compiles them into the bundle, so a desktop release build must run with production values.
 
 ## Commands
 

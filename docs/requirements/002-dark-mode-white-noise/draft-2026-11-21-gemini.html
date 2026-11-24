@@ -1,0 +1,2729 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<script>
+try {
+  var _t = localStorage.getItem('pomodoq-s1-doc-theme');
+  var _m = document.querySelector('meta[name="color-scheme"]');
+  if (_t === 'light' || _t === 'dark') {
+    if (_m) _m.content = _t;
+    document.documentElement.setAttribute('data-theme', _t);
+  } else {
+    if (_m) _m.content = 'light dark';
+  }
+} catch (e) {}
+</script>
+<title>PomodoQ 002 白噪音（二期）· 方案 1 × 暗色 × 白噪音 ×5 · Gemini 对比稿</title>
+<style>
+/* ===== 页面文档 Token（与原文档保持一致，遵循 light-dark 与 meta color-scheme 同步） ===== */
+:root{
+  --bg-l:#f6f4f1;--bg-d:#131110;
+  --paper-l:#fffdfa;--paper-d:#1b1917;
+  --ink-l:#1c1917;--ink-d:#ece8e3;
+  --muted-l:#6b645c;--muted-d:#a39b91;
+  --line-l:#e7e2db;--line-d:#2e2a26;
+  --soft-l:#f1ede7;--soft-d:#211e1b;
+  --chip-l:#ebe6df;--chip-d:#2a2622;
+  --amber-l:#a86a12;--amber-d:#e3b25a;
+  --amber-bg-l:#fdf5e4;--amber-bg-d:#2a2216;
+  --amber-line-l:#f0d9a8;--amber-line-d:#4a3b1e;
+  --green-l:#256b49;--green-d:#79c99e;
+  --green-bg-l:#eaf5ef;--green-bg-d:#172a20;
+  --green-line-l:#c2e2cf;--green-line-d:#284c38;
+
+  --bg:var(--bg-l);--paper:var(--paper-l);--ink:var(--ink-l);--muted:var(--muted-l);
+  --line:var(--line-l);--soft:var(--soft-l);--chip:var(--chip-l);
+  --focus:#ff6e47;--focus-soft:#ffe6dd;--break:#5cd1eb;--break-soft:#dcf5fb;--long:#8ea2ff;--long-soft:#e3e8ff;
+  --amber:var(--amber-l);--amber-bg:var(--amber-bg-l);--amber-line:var(--amber-line-l);
+  --green:var(--green-l);--green-bg:var(--green-bg-l);--green-line:var(--green-line-l);
+  --wall:radial-gradient(120% 90% at 20% 10%,#f4d9c6 0%,#d9c7e6 45%,#9fb6d9 100%);
+  --mb-fg:#1c1917;--mb-bg:rgba(255,255,255,.38);
+  --font:"Geist",-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --serif:"Instrument Serif","Songti SC","STSong",Georgia,serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  color-scheme:light dark;
+}
+:root:has(> head > meta[name="color-scheme"][content="dark"]){color-scheme:dark}
+:root:has(> head > meta[name="color-scheme"][content="light"]){color-scheme:light}
+@supports (color:light-dark(white,black)){
+  :root{
+    --bg:light-dark(var(--bg-l),var(--bg-d));
+    --paper:light-dark(var(--paper-l),var(--paper-d));
+    --ink:light-dark(var(--ink-l),var(--ink-d));
+    --muted:light-dark(var(--muted-l),var(--muted-d));
+    --line:light-dark(var(--line-l),var(--line-d));
+    --soft:light-dark(var(--soft-l),var(--soft-d));
+    --chip:light-dark(var(--chip-l),var(--chip-d));
+    --amber:light-dark(var(--amber-l),var(--amber-d));
+    --amber-bg:light-dark(var(--amber-bg-l),var(--amber-bg-d));
+    --amber-line:light-dark(var(--amber-line-l),var(--amber-line-d));
+    --green:light-dark(var(--green-l),var(--green-d));
+    --green-bg:light-dark(var(--green-bg-l),var(--green-bg-d));
+    --green-line:light-dark(var(--green-line-l),var(--green-line-d));
+  }
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:var(--bg-d);--paper:var(--paper-d);--ink:var(--ink-d);--muted:var(--muted-d);
+    --line:var(--line-d);--soft:var(--soft-d);--chip:var(--chip-d);
+    --focus-soft:#3a221b;--break-soft:#143037;--long-soft:#1e2442;
+    --amber:var(--amber-d);--amber-bg:var(--amber-bg-d);--amber-line:var(--amber-line-d);
+    --green:var(--green-d);--green-bg:var(--green-bg-d);--green-line:var(--green-line-d);
+    --wall:radial-gradient(120% 90% at 20% 10%,#3b2c3f 0%,#1f2a44 50%,#0f1626 100%);
+    --mb-fg:#f3f0ec;--mb-bg:rgba(20,20,24,.46);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:var(--bg-d);--paper:var(--paper-d);--ink:var(--ink-d);--muted:var(--muted-d);
+  --line:var(--line-d);--soft:var(--soft-d);--chip:var(--chip-d);
+  --focus-soft:#3a221b;--break-soft:#143037;--long-soft:#1e2442;
+  --amber:var(--amber-d);--amber-bg:var(--amber-bg-d);--amber-line:var(--amber-line-d);
+  --green:var(--green-d);--green-bg:var(--green-bg-d);--green-line:var(--green-line-d);
+  --wall:radial-gradient(120% 90% at 20% 10%,#3b2c3f 0%,#1f2a44 50%,#0f1626 100%);
+  --mb-fg:#f3f0ec;--mb-bg:rgba(20,20,24,.46);
+  color-scheme:dark;
+}
+:root[data-theme="light"]{
+  --wall:radial-gradient(120% 90% at 20% 10%,#f4d9c6 0%,#d9c7e6 45%,#9fb6d9 100%);
+  --mb-fg:#1c1917;--mb-bg:rgba(255,255,255,.38);
+  color-scheme:light;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.65 var(--font);-webkit-font-smoothing:antialiased}
+button,input{font-family:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.wrap{max-width:1160px;margin:0 auto;padding:0 16px}
+header.top{padding:48px 0 20px}
+.kicker{font-size:12px;letter-spacing:.06em;color:var(--muted)}
+h1{font:400 40px/1.2 var(--serif);margin:10px 0 14px;letter-spacing:-.01em}
+.lede{max-width:900px;color:var(--muted);margin:0}
+.lede b{color:var(--ink);font-weight:600}
+section{padding:34px 0 8px;border-top:1px solid var(--line);margin-top:26px}
+h2{font-size:20px;margin:0 0 6px;font-weight:600;display:flex;gap:10px;align-items:baseline}
+h2 .n{font:400 15px var(--mono);color:var(--muted)}
+.sub{color:var(--muted);margin:0 0 18px;max-width:900px}
+
+/* overview cards + tabs + controls */
+.ovw{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.oc{text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;color:inherit;font:inherit;display:flex;flex-direction:column;gap:6px;transition:border-color .15s,transform .15s}
+.oc:hover{border-color:var(--muted);transform:translateY(-1px)}
+.oc.on{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+.oc .no{font:12px var(--mono);color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:6px}
+.oc .badge{font:500 11px var(--font);padding:1px 7px;border-radius:99px;background:var(--focus-soft);color:var(--focus)}
+.oc h3{margin:0;font-size:16px;line-height:1.35}
+.oc p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.55}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+.tab{border:1px solid var(--line);background:var(--paper);color:var(--muted);font-size:13.5px;padding:7px 14px;border-radius:99px;cursor:pointer}
+.tab b{font-weight:600;color:var(--ink);margin-right:6px}
+.tab.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tab.on b{color:var(--bg)}
+.ctrls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin:0 0 10px;font-size:13px}
+.ctrl{display:flex;align-items:center;gap:8px}
+.ctrl>span{color:var(--muted)}
+.seg{display:inline-flex;background:var(--chip);border-radius:8px;padding:2px}
+.seg button{border:0;background:none;color:var(--muted);font-size:13px;padding:4px 10px;border-radius:6px;cursor:pointer}
+.seg button.on{background:var(--paper);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.14)}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink);font-size:13px;padding:4px 10px;border-radius:8px;cursor:pointer}
+.btn:hover{background:var(--soft)}
+.btn.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.jumps{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;margin:0 0 14px}
+.jumps>span{color:var(--muted);margin-right:4px}
+.log{font:12.5px/1.55 var(--mono);color:var(--muted);background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin-top:12px;min-height:38px}
+.log b{color:var(--ink);font-weight:600}
+.notes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.note{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.note h4{margin:0 0 4px;font-size:12px;color:var(--muted);font-weight:500;letter-spacing:.04em}
+.note p{margin:0;font-size:13.5px}
+.trade{font-size:13.5px;color:var(--muted);margin:10px 0 0}
+.trade b{color:var(--ink);font-weight:600}
+
+/* doc blocks */
+.tw{overflow-x:auto}
+table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.tbl th,.tbl td{text-align:left;padding:10px 12px;border-top:1px solid var(--line);vertical-align:top}
+.tbl th{background:var(--soft);font-weight:600;font-size:13px;color:var(--muted);border-top:0;white-space:nowrap}
+.tbl td:first-child{white-space:nowrap;font-weight:600}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card h4{margin:0 0 6px;font-size:15px}
+.card p{margin:0;font-size:13.5px;color:var(--muted)}
+.card .def{margin-top:8px;font-size:12.5px}
+.card .def b{color:var(--ink)}
+.co{background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:12px;padding:12px 16px;font-size:14px;margin:14px 0}
+.co b{font-weight:600}
+.co.ok{background:var(--green-bg);border-color:var(--green-line)}
+.rules{margin:6px 0 0;padding-left:20px;max-width:900px}
+.rules li{margin:4px 0}
+code.c{font:12.5px var(--mono);background:var(--soft);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+pre.arch{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font:12.5px/1.65 var(--mono);overflow-x:auto;margin:0;color:var(--ink)}
+.arch-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:12px}
+.diff-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.diff-item{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;grid-template-columns:280px 1fr;gap:14px;align-items:baseline}
+.diff-item .path{font:600 12.5px var(--mono);color:var(--ink);word-break:break-all}
+.diff-item p{margin:0;font-size:13.5px;color:var(--muted)}
+details.src{margin-top:14px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+details.src summary{cursor:pointer;font-weight:600;font-size:13.5px}
+details.src ul{margin:8px 0 2px;padding-left:20px;font-size:13px;color:var(--muted)}
+details.src li{margin:4px 0}
+footer{color:var(--muted);font-size:13px;padding:30px 0 50px;border-top:1px solid var(--line);margin-top:34px}
+footer a{color:var(--ink);text-underline-offset:3px}
+
+/* dark mode token showcase */
+.tcmp{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.tbox{border-radius:16px;padding:16px;border:2px solid}
+.tbox.lt{background:#FFF4E3;color:#2B2118;border-color:#2B2118;box-shadow:0 4px 0 #2B2118;color-scheme:only light}
+.tbox.dk{background:#1D1713;color:#F6ECE0;border-color:#564538;box-shadow:0 4px 0 #0B0806;color-scheme:only dark}
+.tbox h4{margin:0 0 4px;font-size:15px;display:flex;justify-content:space-between;align-items:center}
+.tbox h4 small{font:500 11.5px var(--mono);opacity:.75}
+.tbox p{margin:0 0 12px;font-size:12.5px;opacity:.78}
+.swg{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.swi{display:flex;flex-direction:column;gap:4px;font-size:11px}
+.swi i{display:block;height:28px;border-radius:8px;border:1.5px solid rgba(127,127,127,.35)}
+.swi span{font-weight:600;line-height:1.2}
+.swi code{font:10.5px var(--mono);opacity:.72}
+
+/* pet gallery */
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.gc{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer}
+.gc.on{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+.gc h4{margin:0 0 10px;font-size:15px;display:flex;justify-content:space-between;align-items:center}
+.gc h4 small{font-weight:400;font-size:12px;color:var(--muted)}
+.gi{background:#000;border-radius:0 0 16px 16px;height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;color:var(--focus);font:600 13px var(--mono);margin:0 auto 12px;max-width:280px}
+.gi i{display:block;width:86px;height:100%;background:#000}
+.gp{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.gp div{background:#1f2a36;border-radius:10px;height:96px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:6px;gap:4px;color:rgba(255,255,255,.78);font-size:11.5px}
+.gp div:first-child{background:#2a211c}
+
+/* ===== MacBook 屏幕模拟 ===== */
+.mac{background:#0c0c0e;border-radius:20px;padding:12px 12px 16px;box-shadow:0 30px 60px -20px rgba(0,0,0,.35)}
+.vp{position:relative;width:100%;height:calc(700px * var(--s,1));overflow:hidden;border-radius:9px}
+.scr{position:absolute;left:0;top:0;width:1120px;height:700px;transform:scale(var(--s,1));transform-origin:0 0;background:var(--wall);overflow:hidden;font-family:var(--font);font-size:14px;line-height:1.5;user-select:none;color:#1c1917}
+.mac-base{height:10px;margin:0 auto;width:30%;background:#1d1d20;border-radius:0 0 10px 10px}
+.mb{position:absolute;top:0;left:0;right:0;height:30px;background:var(--mb-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:13px;color:var(--mb-fg);z-index:30}
+.mb .l,.mb .r{display:flex;gap:14px;align-items:center}
+.mb .app{font-weight:600}
+.mb .mb-snd{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;padding:1px 8px;border-radius:99px;background:rgba(0,0,0,.12);cursor:pointer;border:0;color:inherit}
+:root[data-theme="dark"] .mb .mb-snd{background:rgba(255,255,255,.14)}
+.notch{position:absolute;top:0;left:50%;width:190px;height:32px;margin-left:-95px;background:#000;border-radius:0 0 13px 13px;z-index:62;pointer-events:none;transition:opacity .2s}
+.notch.off{opacity:0}
+.dock{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:10px;padding:7px 10px 9px;background:rgba(255,255,255,.28);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:18px;border:.5px solid rgba(255,255,255,.35);z-index:20}
+.dock .di{width:46px;height:46px;border-radius:11px;position:relative;cursor:pointer;display:grid;place-items:center}
+.dock .di::after{content:"";position:absolute;bottom:-6px;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:transparent}
+.dock .di.run::after{background:var(--mb-fg)}
+.dock .d1{background:linear-gradient(160deg,#8fd3ff,#2a7bd6)}
+.dock .d2{background:linear-gradient(160deg,#f5f5f5,#cfcfcf)}
+.dock .d3{background:linear-gradient(160deg,#a6e3a1,#3c9a5f)}
+.dock .d4{background:linear-gradient(160deg,#fff,#ffe9df)}
+.min-hint{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(20,18,16,.78);color:#fff;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:14px 22px;border-radius:16px;text-align:center;font-size:13.5px;z-index:8;border:1px solid rgba(255,255,255,.16);display:flex;flex-direction:column;gap:8px;align-items:center}
+.min-hint button{border:0;background:#ff6e47;color:#1a0e0a;font-weight:700;font-size:13px;padding:6px 14px;border-radius:99px;cursor:pointer}
+.ti{width:1em;height:1em;vertical-align:-.12em;display:inline-block;flex:none}
+@keyframes rise{from{transform:translateY(8px);opacity:0}}
+@keyframes blk{from{transform:scaleY(.2);opacity:0}}
+@keyframes dkIn{from{transform:scale(.94) translateY(8px);opacity:.4}}
+@keyframes shim{to{background-position:-200% 0}}
+@keyframes ixIn{from{opacity:0;transform:translateY(-4px)}}
+@keyframes ovIn{from{opacity:0;transform:scale(1.03)}}
+
+/* ===== 宠物动效（完整保留原文档） ===== */
+.m{display:block;overflow:visible;flex:none}
+.m .lg{transform-box:fill-box;transform-origin:50% 0}
+.m .pw,.m .aru,.m .pwb{display:none}
+.m.run .lg.a{animation:m-sw var(--mt,.36s) ease-in-out infinite alternate}
+.m.run .lg.b{animation:m-sw var(--mt,.36s) ease-in-out infinite alternate-reverse}
+@keyframes m-sw{from{transform:rotate(36deg)}to{transform:rotate(-36deg)}}
+.m.run .pt{animation:m-bob calc(var(--mt,.36s) / 2) ease-in-out infinite alternate}
+@keyframes m-bob{to{transform:translateY(-1.8px)}}
+.m.walk{--mt:.62s}
+.m .tl{transform-origin:16px 26px;animation:m-wag .5s ease-in-out infinite alternate}
+@keyframes m-wag{from{transform:rotate(-10deg)}to{transform:rotate(13deg)}}
+.m.idle .tl,.m.sip .tl{animation-duration:1.4s}
+.m .ey{transform-box:fill-box;transform-origin:50% 50%;animation:m-blink 4.2s infinite}
+@keyframes m-blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+.m.sip .lg{display:none}
+.m.sip .pw,.m.sip .pwb{display:block}
+.m-dog.sip .pt,.m-cat.sip .pt{transform:translateY(8px)}
+.m-dog.sip .hd,.m-cat.sip .hd{transform-origin:44px 25px;animation:m-dip 3.6s ease-in-out infinite}
+@keyframes m-dip{0%,32%,100%{transform:rotate(0)}48%,80%{transform:rotate(15deg)}}
+.m .stm{animation:m-steam 2.2s ease-in-out infinite}
+.m .stm.s2{animation-delay:-1.1s}
+@keyframes m-steam{0%{opacity:0;transform:translateY(3px)}40%{opacity:.9}100%{opacity:0;transform:translateY(-4px)}}
+.m-dog.stretch .lf,.m-cat.stretch .lf{display:none}
+.m-dog.stretch .pw,.m-cat.stretch .pw{display:block}
+.m-dog.stretch .bdg,.m-cat.stretch .bdg{transform-origin:20px 33px;animation:m-bow 3s ease-in-out infinite}
+@keyframes m-bow{0%,100%{transform:rotate(14deg) scaleX(1)}45%,72%{transform:rotate(20deg) scaleX(1.08)}}
+.m-dog.stretch .hd,.m-cat.stretch .hd{transform-origin:44px 25px;transform:rotate(-22deg)}
+.m-tomato.run .bdg{transform-origin:32px 40px;animation:m-tilt .36s ease-in-out infinite alternate}
+@keyframes m-tilt{from{transform:rotate(3deg)}to{transform:rotate(8deg)}}
+.m-tomato.sip .pt{transform:translateY(4px)}
+.m-tomato.sip .bdg{transform-origin:32px 40px;animation:m-tsip 3.6s ease-in-out infinite}
+@keyframes m-tsip{0%,32%,100%{transform:rotate(0)}48%,80%{transform:rotate(12deg)}}
+.m-tomato.stretch .ard{display:none}
+.m-tomato.stretch .aru{display:block}
+.m-tomato.stretch .bdg{transform-origin:32px 40px;animation:m-squash 2.8s ease-in-out infinite}
+@keyframes m-squash{0%,100%{transform:scale(1,1)}40%,68%{transform:scale(.9,1.13)}}
+.m.paused *{animation-play-state:paused!important}
+
+/* ===== 微型实时声波动画 ===== */
+.eq{display:inline-flex;align-items:flex-end;gap:2px;height:12px;vertical-align:middle}
+.eq i{display:block;width:2px;height:4px;border-radius:2px;background:currentColor;transition:height .2s}
+.eq.live i:nth-child(1){animation:eq1 .7s ease-in-out infinite alternate}
+.eq.live i:nth-child(2){animation:eq2 .52s ease-in-out infinite alternate}
+.eq.live i:nth-child(3){animation:eq3 .64s ease-in-out infinite alternate}
+.eq.live i:nth-child(4){animation:eq1 .58s ease-in-out infinite alternate-reverse}
+@keyframes eq1{from{height:3px}to{height:11px}}
+@keyframes eq2{from{height:10px}to{height:3px}}
+@keyframes eq3{from{height:4px}to{height:12px}}
+.eq.dim i{opacity:.45;height:3px}
+.eq.err i{background:#ff7852;height:5px}
+@media (prefers-reduced-motion:reduce){.m *,.eq *,.amb *{animation:none!important}}
+
+/* ===== Dynamic Island（硬件级黑底，显式 color-scheme: only dark） ===== */
+.isl{position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:60;--ear:6px;--acc:var(--focus);transition:width .32s cubic-bezier(.3,1.3,.5,1),height .32s cubic-bezier(.3,1.3,.5,1);cursor:pointer;color-scheme:only dark}
+.isl::before,.isl::after{content:"";position:absolute;top:0;width:var(--ear);height:var(--ear);transition:all .3s}
+.isl::before{left:calc(-1 * var(--ear));background:radial-gradient(circle at 0 100%,transparent var(--ear),#000 calc(var(--ear) + .6px))}
+.isl::after{right:calc(-1 * var(--ear));background:radial-gradient(circle at 100% 100%,transparent var(--ear),#000 calc(var(--ear) + .6px))}
+.isl-in{position:absolute;inset:0;background:#000;color:#fff;border-radius:0 0 18px 18px;overflow:hidden;transition:border-radius .3s}
+.isl.open{--ear:20px}
+.isl.open .isl-in{border-radius:0 0 34px 34px}
+.wing{position:absolute;top:0;height:32px;display:flex;align-items:center;gap:6px;font:600 13px var(--mono);font-variant-numeric:tabular-nums;transition:opacity .15s}
+.wing.l{left:13px}.wing.r{right:13px;color:var(--acc)}
+.wing small{font:500 11.5px var(--font);color:rgba(255,255,255,.8)}
+.isl.pz .wing.r{color:rgba(255,255,255,.55)}
+.isl.open .wing{opacity:0}
+.edge{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.14)}
+.edge i{display:block;height:100%;background:var(--acc)}
+.isl.open .edge{opacity:0}
+.ix{position:absolute;left:22px;right:22px;top:40px;opacity:0;pointer-events:none;transition:opacity .2s .08s}
+.isl.open .ix{opacity:1;pointer-events:auto;animation:ixIn .24s .06s both}
+.ix-h{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:rgba(255,255,255,.65);gap:8px}
+.ix-h b{color:var(--acc);font-weight:600}
+.ix-t{display:flex;justify-content:space-between;align-items:center;margin-top:3px;gap:12px}
+.ix-name{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:8px;min-width:0}
+.ix-time{font:600 28px/1 var(--mono);color:var(--acc);font-variant-numeric:tabular-nums}
+.ix-bar{height:4px;border-radius:2px;background:rgba(255,255,255,.14);margin:10px 0;overflow:hidden}
+.ix-bar i{display:block;height:100%;background:var(--acc);border-radius:2px}
+.trk{position:relative;height:36px;margin:4px 0 8px}
+.trk::before{content:"";position:absolute;left:0;right:0;bottom:6px;height:3px;border-radius:2px;background:rgba(255,255,255,.16)}
+.trk i{position:absolute;left:0;bottom:6px;height:3px;border-radius:2px;background:var(--acc)}
+.trk .tp{position:absolute;bottom:8px;transform:translateX(-60%)}
+.trk em{position:absolute;right:-4px;bottom:9px;font-style:normal;font-size:11px;color:rgba(255,255,255,.6)}
+.ix-b{display:flex;gap:6px}
+.ib{flex:1;border:0;border-radius:9px;background:rgba(255,255,255,.13);color:#fff;font-size:12px;padding:6px 8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap}
+.ib:hover{background:rgba(255,255,255,.22)}
+.ib.pri{background:var(--acc);color:#140c09;font-weight:600}
+.ib.snd-on{background:rgba(255,120,82,.26);color:#ffb69b;border:1px solid rgba(255,120,82,.45)}
+.ib.snd-err{background:rgba(255,95,87,.24);color:#ffb2ac;border:1px solid rgba(255,95,87,.5)}
+/* W5 Island 完整声控带 */
+.ix-w5{margin-top:9px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);display:flex;flex-direction:column;gap:7px}
+.ix-w5-row{display:flex;align-items:center;gap:8px;font-size:11.5px;color:rgba(255,255,255,.85)}
+.ix-w5-chips{display:flex;gap:4px;flex-wrap:wrap}
+.ix-w5-chips button{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:rgba(255,255,255,.82);font-size:11px;padding:2px 8px;border-radius:99px;cursor:pointer}
+.ix-w5-chips button.on{background:#ff7852;border-color:#ff7852;color:#1a0e0a;font-weight:700}
+.ix-w5-vol{display:flex;align-items:center;gap:8px;font-size:11.5px;color:rgba(255,255,255,.72)}
+.ix-w5-vol>span{white-space:nowrap;flex:none}
+.ix-w5-vol input.sl{flex:1;min-width:0;inline-size:auto}
+.ix-w5-vol output{min-width:32px;flex:none;text-align:right;font:600 11.5px var(--mono);color:#fff}
+.bub{position:absolute;left:-6px;top:40px;background:#fff;color:#16171b;font-size:12.5px;font-weight:500;padding:6px 12px;border-radius:14px 14px 14px 4px;white-space:nowrap;box-shadow:0 8px 22px rgba(0,0,0,.28);animation:rise .22s ease;pointer-events:none}
+.bub::before{content:"";position:absolute;left:14px;top:-6px;border:7px solid transparent;border-top:0;border-bottom-color:#fff}
+:root[data-theme="dark"] .bub{background:#251E19;color:#F6ECE0;border:1px solid #564538}
+:root[data-theme="dark"] .bub::before{border-bottom-color:#251E19}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .bub{background:#251E19;color:#F6ECE0;border:1px solid #564538}
+  :root:not([data-theme="light"]) .bub::before{border-bottom-color:#251E19}
+  :root:not([data-theme="light"]) .mb .mb-snd{background:rgba(255,255,255,.14)}
+}
+
+/* ===== 方案 1 应用主窗口：双主题语义 Token 体系（暖纸浅色 vs 暖墨深色） ===== */
+.win{
+  position:absolute;left:150px;top:52px;width:820px;height:572px;border-radius:14px;overflow:hidden;
+  display:flex;flex-direction:column;
+  background:var(--w-bg);color:var(--w-fg);accent-color:var(--w-pri);
+  box-shadow:0 0 0 .5px rgba(0,0,0,.32),0 28px 70px rgba(0,0,0,.38);
+  transition:transform .35s ease,opacity .3s,background .2s ease,color .2s ease;
+  transform-origin:50% 120%;z-index:10;
+  /* 默认：暖纸浅色（完全还原原文档方案 1） */
+  color-scheme:only light;
+  --w-bg:#FFF4E3;--w-fg:#2B2118;--w-mut:#8F7F6C;--w-bd:#2B2118;--w-sh:#2B2118;
+  --w-card:#FFFFFF;--w-sec:#FFE4BF;--w-pri:#FF6E47;--w-pri-fg:#FFFFFF;--w-dng:#C4432B;
+  --w-r:14px;--w-soft-bd:#C9B79F;
+  --w-sky:#FFE4BF;--w-gnd:#F7C98B;--w-dash:rgba(43,33,24,.35);
+  --w-box:#FFDDAE;--w-box-lid:#F2C48A;--w-box-emp:#FFEBCB;--w-box-over:#FFC98F;--w-box-mut:#7A6550;
+  --w-sel-bg:#FFEDE3;--w-sel-bd:#FF6E47;--w-sel-glow:rgba(255,110,71,.22);
+  --w-rail:#FFF0D9;--w-tick:#CFC7BA;
+  --w-ai-a:#FFF4E3;--w-ai-b:#FFE4BF;--w-ai-ok:#FFE4BF;--w-wait:#FFFAF1;
+  --w-xbg:#F3E6D2;--w-xfg:#7A6550;
+  --w-scr:#C9B79F;--w-scr-b:#C9A46E;
+  --w-pop-bg:#FFFFFF;--w-pop-bd:#2B2118;--w-pop-sub:#7A7268;
+  --sl-trk:#E3D2BC;--sl-fill:#FF6E47;--sl-th:#2B2118;--sl-th-bd:#FFF4E3;
+}
+/* 暖墨暗色（保留全部 2px 卡片描边、硬偏移阴影与暖色纸箱质感） */
+.win.dark{
+  color-scheme:only dark;
+  --w-bg:#1D1713;--w-fg:#F6ECE0;--w-mut:#B9A896;--w-bd:#564538;--w-sh:#0B0806;
+  --w-card:#28201A;--w-sec:#362B22;--w-pri:#FF7852;--w-pri-fg:#1C0F0A;--w-dng:#FF9482;
+  --w-soft-bd:#645142;
+  --w-sky:#2B2019;--w-gnd:#3E2E22;--w-dash:rgba(246,236,224,.28);
+  --w-box:#3A2C1F;--w-box-lid:#4E3B2A;--w-box-emp:#30241A;--w-box-over:#593E26;--w-box-mut:#C6B19A;
+  --w-sel-bg:#40241B;--w-sel-bd:#FF7852;--w-sel-glow:rgba(255,120,82,.26);
+  --w-rail:#17120E;--w-tick:#5E4D3F;
+  --w-ai-a:#28201A;--w-ai-b:#3B2E22;--w-ai-ok:#3B2D20;--w-wait:#241C17;
+  --w-xbg:#47372A;--w-xfg:#E2D1BE;
+  --w-scr:#645142;--w-scr-b:#7A6048;
+  --w-pop-bg:#251E19;--w-pop-bd:#564538;--w-pop-sub:#B9A896;
+  --sl-trk:#4A3C31;--sl-fill:#FF7852;--sl-th:#F6ECE0;--sl-th-bd:#1D1713;
+  background:var(--w-bg);color:var(--w-fg);accent-color:var(--w-pri);
+}
+.win.min{transform:translateY(300px) scale(.12);opacity:0;pointer-events:none}
+
+/* ===== 窗口顶栏与工具按钮 ===== */
+.tb{height:46px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 14px;position:relative;gap:8px}
+.lights{display:flex;gap:8px;z-index:2}
+.lights i{width:12px;height:12px;border-radius:50%;display:block;background:#ff5f57}
+.lights i:nth-child(2){background:#febc2e;cursor:pointer}
+.lights i:nth-child(3){background:#28c840}
+.tb .ttl{position:absolute;left:50%;transform:translateX(-50%);font-size:12.5px;font-weight:700;color:var(--w-mut);pointer-events:none}
+.tb-r{display:flex;align-items:center;gap:6px;z-index:2}
+.tool{display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 10px 0 8px;border-radius:99px;border:2px solid var(--w-bd);background:var(--w-card);color:var(--w-fg);font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .14s,transform .12s}
+.tool:hover{background:var(--w-sec)}
+.tool.on{background:var(--w-pri);color:var(--w-pri-fg);border-color:var(--w-bd)}
+.tool.snd-live{background:var(--w-sel-bg);border-color:var(--w-pri);color:var(--w-fg)}
+.tool.snd-err{border-color:var(--w-dng);color:var(--w-dng)}
+.wb{flex:1;min-height:0;position:relative}
+.wb.fresh .anim{animation:rise .28s ease both}
+.wb.fresh .d1{animation-delay:.05s}
+
+/* ===== 按钮、表单与原生 Range Slider（遵循 modern-web-guidance slider 指南） ===== */
+.wbtn{border:2px solid var(--w-bd);background:var(--w-sec);color:var(--w-fg);font-size:13px;font-weight:600;padding:8px 16px;border-radius:var(--w-r);cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:7px;justify-content:center;box-shadow:0 3px 0 var(--w-sh);transition:transform .1s,box-shadow .1s,filter .12s}
+.wbtn:hover:not(:disabled){filter:brightness(.98)}
+.wbtn:active:not(:disabled){transform:translateY(2px);box-shadow:0 1px 0 var(--w-sh)}
+.wbtn.pri{background:var(--w-pri);color:var(--w-pri-fg);font-weight:700}
+.wbtn.sm{padding:5px 11px;font-size:12.5px}
+.wbtn.xs{padding:3px 9px;font-size:11.5px;border-radius:10px;box-shadow:0 2px 0 var(--w-sh)}
+.wbtn.dng{color:var(--w-dng)}
+.wbtn:disabled{opacity:.42;cursor:not-allowed}
+.cap{font-size:12px;letter-spacing:.06em;color:var(--w-mut);margin:0 0 8px;font-weight:600}
+.opt{display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:center;text-align:left;width:100%;border:2px solid var(--w-bd);background:var(--w-card);color:var(--w-fg);border-radius:14px;padding:14px 16px;cursor:pointer;box-shadow:0 3px 0 var(--w-sh);transition:transform .12s,box-shadow .12s}
+.opt:hover{transform:translateY(-1px)}
+.opt:active{transform:translateY(2px);box-shadow:0 1px 0 var(--w-sh)}
+.opt .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--w-sec);color:var(--w-fg);border:2px solid var(--w-bd)}
+.opt b{display:block;font-size:15.5px;font-weight:700}
+.opt small{display:block;font-size:12.5px;color:var(--w-mut);line-height:1.45;margin-top:2px}
+.opt.pri{background:var(--w-pri);color:var(--w-pri-fg)}
+.opt.pri small{color:inherit;opacity:.85}
+.opt.pri .ic{background:var(--w-card);color:var(--w-pri)}
+.stpr{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--w-mut)}
+.stpr span{display:inline-flex;align-items:center;gap:6px}
+.stpr i{font-style:normal;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--w-bd);font:700 11px var(--mono)}
+.stpr .on{color:var(--w-fg);font-weight:700}
+.stpr .on i{background:var(--w-pri);color:var(--w-pri-fg)}
+.stpr .dn i{background:var(--w-sec);color:var(--w-fg)}
+.stpr u{width:22px;height:2px;background:var(--w-bd);opacity:.35;display:block}
+.nb{display:inline-flex;align-items:center;gap:6px;font:600 13px var(--mono)}
+.nb b{min-width:44px;text-align:center;display:inline-flex;gap:4px;align-items:center;justify-content:center}
+.mini{width:22px;height:22px;border:2px solid var(--w-bd);background:var(--w-sec);color:var(--w-fg);border-radius:7px;cursor:pointer;font:700 13px/1 var(--font);padding:0}
+.mini:disabled{opacity:.35;cursor:not-allowed}
+.shim{display:inline-block;font-size:12px;color:var(--w-mut);padding:3px 12px;border-radius:99px;background:linear-gradient(90deg,var(--w-ai-b) 25%,var(--w-ai-a) 50%,var(--w-ai-b) 75%);background-size:200% 100%;border:1.5px dashed var(--w-soft-bd);animation:shim 1.1s linear infinite}
+.aitag{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:1px 7px;border-radius:99px;background:var(--w-sec);color:var(--w-mut);border:1px solid var(--w-soft-bd)}
+.aitag svg{width:10px;height:10px}
+.pbar{display:flex;gap:2px;height:16px;border-radius:5px;overflow:hidden}
+.pbar i{display:block;border-radius:3px;min-width:2px}
+.pbar .f{background:var(--focus)}
+.pbar .short{background:var(--break)}
+.pbar .long{background:var(--long)}
+.pleg{display:flex;justify-content:space-between;font:12px var(--mono);color:var(--w-mut);margin-top:5px}
+.qr{display:grid;grid-template-columns:18px 1fr auto;gap:10px;align-items:center;padding:5px 8px;font-size:12.5px;border-radius:8px}
+.qr .st{font-size:11px;text-align:center;color:var(--w-mut)}
+.qr .mt{font:11.5px var(--mono);color:var(--w-mut)}
+.qr.short,.qr.long{font-size:11.5px;color:var(--w-mut);padding-top:2px;padding-bottom:2px}
+.qr.more{display:block;color:var(--w-mut);font-size:11.5px}
+.ctl{display:flex;gap:8px}
+.banner{display:flex;align-items:center;gap:10px;background:var(--w-card);border:2px solid var(--w-bd);border-radius:12px;padding:9px 14px;font-size:13px;animation:rise .25s ease}
+.banner b{font-weight:700}
+.ph{font-size:13px;color:var(--w-mut)}
+.endc{font-size:12.5px;color:var(--w-mut);display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tag{display:inline-block;font-size:11.5px;font-weight:700;padding:1px 9px;border-radius:99px;background:var(--focus);color:#fff;margin-right:6px}
+.tag.short{background:var(--break);color:#06323c}
+.tag.long{background:var(--long);color:#101a4a}
+.chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.chip{border:2px solid var(--w-bd);background:var(--w-card);color:var(--w-fg);font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;cursor:pointer}
+.chip.on{background:var(--w-pri);color:var(--w-pri-fg)}
+.suml{font-size:13px;color:var(--w-mut);margin-top:5px}
+.suml b{color:var(--w-fg);font-weight:700}
+
+/* Custom Styled Native Range Slider (separate WebKit & Firefox rules, progress() fallback) */
+input.sl[type="range"]{
+  --slider-track-size:6px;
+  --slider-thumb-size:16px;
+  --slider-track-radius:999px;
+  --slider-thumb-radius:50%;
+  --slider-track-color:var(--sl-trk,#d9d9d9);
+  --slider-fill-color:var(--sl-fill,#ff6e47);
+  --slider-thumb-color:var(--sl-th,#2b2118);
+  --slider-thumb-border:var(--sl-th-bd,#fff);
+  --attr-min:0;--attr-max:100;--control-value:45;
+  --slider-progress:calc(progress(var(--control-value), var(--attr-min), var(--attr-max)) * 100%);
+  appearance:none;-webkit-appearance:none;
+  inline-size:100%;block-size:24px;margin:0;padding:0;border:0;background:transparent;cursor:pointer;
+}
+@supports not (opacity:progress(1,0,100)){
+  input.sl[type="range"]{
+    --slider-progress:calc((var(--control-value) - var(--attr-min)) / (var(--attr-max) - var(--attr-min)) * 100%);
+  }
+}
+input.sl[type="range"]::-webkit-slider-runnable-track{
+  block-size:var(--slider-track-size);border:0;border-radius:var(--slider-track-radius);
+  background:linear-gradient(to right,var(--slider-fill-color) var(--slider-progress),var(--slider-track-color) var(--slider-progress));
+}
+input.sl[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  inline-size:var(--slider-thumb-size);block-size:var(--slider-thumb-size);
+  margin-block-start:calc((var(--slider-track-size) - var(--slider-thumb-size)) / 2);
+  border:2px solid var(--slider-thumb-border);border-radius:var(--slider-thumb-radius);
+  background:var(--slider-thumb-color);box-shadow:0 1px 3px rgba(0,0,0,.28);
+}
+input.sl[type="range"]::-moz-range-track{
+  block-size:var(--slider-track-size);border:0;border-radius:var(--slider-track-radius);background:var(--slider-track-color);
+}
+input.sl[type="range"]::-moz-range-progress{
+  block-size:var(--slider-track-size);border-radius:var(--slider-track-radius);background:var(--slider-fill-color);
+}
+input.sl[type="range"]::-moz-range-thumb{
+  inline-size:var(--slider-thumb-size);block-size:var(--slider-thumb-size);
+  border:2px solid var(--slider-thumb-border);border-radius:var(--slider-thumb-radius);background:var(--slider-thumb-color);
+}
+input.sl[type="range"]:focus-visible{outline:2px solid var(--slider-fill-color);outline-offset:3px;border-radius:6px}
+.isl input.sl[type="range"]{--sl-trk:rgba(255,255,255,.22);--sl-fill:#ff7852;--sl-th:#fff;--sl-th-bd:#000}
+
+/* ===== 方案 1 核心视图（首页 + 圈卡丢盒 + AI 排番茄 + 时间线运行页） ===== */
+.s4g{height:100%;display:flex;flex-direction:column;padding:0 26px 20px;gap:14px}
+.scene{position:relative;flex:1;min-height:0;border:2px solid var(--w-bd);border-radius:24px;background:linear-gradient(180deg,var(--w-sky) 0 74%,var(--w-gnd) 74%);overflow:hidden;box-shadow:0 4px 0 var(--w-sh)}
+.scene .gl{position:absolute;left:0;right:0;top:74%;height:2px;background:var(--w-bd)}
+.scene .dash{position:absolute;left:0;right:0;top:calc(74% + 16px);height:3px;background:repeating-linear-gradient(90deg,var(--w-dash) 0 18px,transparent 18px 46px)}
+.scene .sp{position:absolute;left:58%;top:74%;transform:translate(-50%,-93%);z-index:3}
+.scene .tm{position:absolute;left:26px;top:18px;max-width:50%;z-index:3}
+.s4time{font:800 72px/1 var(--font);letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.s4task{font-size:17px;font-weight:700;margin-top:4px}
+.s4row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.s4wh{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--w-mut)}
+.s4wh a,.k1ai a{cursor:pointer;text-decoration:underline;text-underline-offset:2px;color:var(--w-fg)}
+.s4wf{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px;color:var(--w-mut)}
+.s4cols{flex:1;min-height:0;display:grid;grid-template-columns:1fr 296px;gap:20px;align-items:center;grid-template-rows:minmax(0,1fr)}
+.ord{display:flex;flex-direction:column;gap:7px;position:relative;max-height:100%;overflow-y:auto;padding:0 6px 4px 0;scrollbar-width:thin;scrollbar-color:var(--w-scr) transparent}
+.ordr{display:grid;grid-template-columns:22px 1fr auto auto;gap:8px;align-items:center;background:var(--w-card);border:2px solid var(--w-bd);border-radius:14px;padding:6px 11px;font-size:13.5px;font-weight:600;flex:none}
+.ordr .no{font:700 12px var(--mono);color:var(--w-mut)}
+.ordr .mv{display:inline-flex;gap:4px}
+.ordr .tt{min-width:0}
+.ordr .tt small{display:block;font-size:11.5px;font-weight:400;color:var(--w-mut);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ordr.wait{border-style:dashed;border-color:var(--w-soft-bd);background:var(--w-wait)}
+.ordr.wait .mv{visibility:hidden}
+.ordr.pop{animation:blk .34s cubic-bezier(.3,1.5,.5,1)}
+.s4sum{background:var(--w-card);border:2px solid var(--w-bd);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:9px;box-shadow:0 3px 0 var(--w-sh)}
+
+/* 暗色星空点缀 & W1 场景声景氛围视觉层 */
+.night-sky{position:absolute;inset:0 0 26% 0;pointer-events:none;opacity:0;transition:opacity .3s}
+.win.dark .night-sky{opacity:1}
+.night-sky .moon{position:absolute;right:34px;top:22px;width:30px;height:30px;border-radius:50%;box-shadow:inset -8px -4px 0 0 #FFD89B;opacity:.75}
+.night-sky i{position:absolute;width:3px;height:3px;border-radius:50%;background:#FFE8C7;opacity:.55}
+.amb{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.amb-rain i{position:absolute;top:-20px;width:1.5px;height:26px;background:linear-gradient(180deg,transparent,rgba(92,165,205,.55));border-radius:2px;animation:rainFall 1.05s linear infinite}
+.win.dark .amb-rain i{background:linear-gradient(180deg,transparent,rgba(142,208,242,.52))}
+@keyframes rainFall{to{transform:translate(-18px,260px)}}
+.amb-fire{background:radial-gradient(60% 55% at 62% 76%,rgba(255,120,62,.32),transparent 72%);animation:firePulse 2.4s ease-in-out infinite alternate}
+@keyframes firePulse{from{opacity:.55;transform:scale(.97)}to{opacity:1;transform:scale(1.04)}}
+.amb-forest i{position:absolute;height:2px;border-radius:2px;background:rgba(63,165,122,.35);animation:windDrift 3.8s ease-in-out infinite}
+@keyframes windDrift{0%{transform:translateX(-40px);opacity:0}35%{opacity:.8}100%{transform:translateX(220px);opacity:0}}
+.amb-cafe i{position:absolute;bottom:28%;width:24px;height:44px;border-radius:50%;border:2px solid rgba(190,130,80,.28);border-color:rgba(190,130,80,.35) transparent transparent transparent;animation:steamUp 3.2s ease-out infinite}
+@keyframes steamUp{0%{transform:translateY(10px) scale(.8);opacity:0}40%{opacity:.7}100%{transform:translateY(-64px) scale(1.2);opacity:0}}
+.amb-wave{position:absolute;left:58%;top:54%;width:140px;height:140px;margin:-70px 0 0 -70px;border-radius:50%;border:2px solid rgba(255,110,71,.22);animation:ripple 3.2s ease-out infinite}
+@keyframes ripple{0%{transform:scale(.5);opacity:.65}100%{transform:scale(1.9);opacity:0}}
+.scene-badge{position:absolute;right:16px;bottom:14px;z-index:4;display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:99px;border:2px solid var(--w-bd);background:var(--w-card);color:var(--w-fg);font-size:11.5px;font-weight:700;cursor:pointer;box-shadow:0 2px 0 var(--w-sh)}
+.scene-badge.live{background:var(--w-sel-bg);border-color:var(--w-pri)}
+
+/* Step 0: 14张卡片圈选丢进盒子 */
+.k1pick{position:relative;flex:1;min-height:0;display:grid;grid-template-columns:1fr 236px;gap:24px;align-items:stretch}
+.k1desk{position:relative;display:flex;flex-direction:column;justify-content:center;gap:12px;min-width:0;user-select:none;-webkit-user-select:none;touch-action:none}
+.k1q h3{margin:0;font-size:22px;font-weight:800;letter-spacing:-.01em}
+.k1q p{margin:4px 0 0;font-size:12.5px;color:var(--w-mut);line-height:1.5}
+.k1sc{position:relative;height:300px;overflow-y:auto;overflow-x:hidden;margin:-10px -8px 0;padding:12px 8px 8px;scrollbar-width:thin;scrollbar-color:var(--w-scr) transparent;overscroll-behavior:contain}
+.k1grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 14px;align-content:start}
+.k1c.gone{visibility:hidden}
+.k1c.on.k1fly{position:absolute;margin:0;z-index:12;pointer-events:none;transition:none;transform:rotate(var(--r))}
+.k1c{position:relative;height:78px;min-width:0;text-align:left;font:inherit;color:var(--w-fg);background:var(--w-card);border:2px solid var(--w-bd);border-radius:18px;box-shadow:0 4px 0 var(--w-sh);padding:10px 14px;display:flex;flex-direction:column;cursor:pointer;transform:rotate(var(--r));transition:transform .14s,box-shadow .14s,background .14s}
+.k1c:hover{transform:rotate(var(--r)) translateY(-3px)}
+.k1c.on{background:var(--w-sel-bg);border-color:var(--w-sel-bd);box-shadow:0 4px 0 var(--w-sel-bd),0 0 0 4px var(--w-sel-glow);transform:rotate(var(--r)) translateY(-5px);cursor:grab}
+.k1c.in{animation:dkIn .28s cubic-bezier(.3,1.3,.5,1)}
+.k1c.drag{transition:none;cursor:grabbing;box-shadow:0 14px 26px rgba(0,0,0,.35);pointer-events:none}
+.k1c .k1h{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--w-mut)}
+.k1k{width:20px;height:20px;border-radius:50%;border:2px solid var(--w-soft-bd);background:var(--w-card);display:grid;place-items:center;color:transparent}
+.k1k svg{width:11px;height:11px}
+.k1c.on .k1k{background:var(--w-pri);border-color:var(--w-pri);color:var(--w-pri-fg)}
+.k1c b{font-size:15.5px;font-weight:800;line-height:1.25;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.k1mq{position:absolute;border:1.5px dashed var(--w-pri);background:rgba(255,110,71,.14);border-radius:6px;pointer-events:none;z-index:8}
+.k1acts{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px;color:var(--w-mut);margin-top:4px}
+.k1acts a{cursor:pointer;text-decoration:underline;text-underline-offset:2px;color:var(--w-fg)}
+.k1acts>span:first-child{white-space:nowrap}
+.k1done{height:290px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;font-size:13px;color:var(--w-mut);line-height:1.6;border:2px dashed var(--w-soft-bd);border-radius:20px}
+.k1done p{margin:0}
+.k1box{position:relative;align-self:center;height:330px;display:flex;flex-direction:column;background:var(--w-box);border:2px solid var(--w-bd);border-radius:8px 8px 24px 24px;box-shadow:0 5px 0 var(--w-sh),inset 0 14px 0 rgba(0,0,0,.1);padding:24px 12px 12px;transition:transform .14s,background .14s}
+.k1box::before{content:"";position:absolute;left:-10px;right:-10px;top:-8px;height:14px;background:var(--w-box-lid);border:2px solid var(--w-bd);border-radius:6px}
+.k1box.emp{background:var(--w-box-emp)}
+.k1box.over{background:var(--w-box-over);transform:scale(1.04)}
+.k1box.bump{animation:k1bump .22s ease}
+@keyframes k1bump{40%{transform:translateY(5px) scale(1.03,.97)}}
+.k1bh{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--w-box-mut);margin-bottom:8px}
+.k1bh b{font-size:14px;color:var(--w-fg);font-weight:800}
+.k1bl{flex:1;display:flex;flex-direction:column;gap:7px;min-height:0;overflow-y:auto;overflow-x:hidden;padding:2px 5px 6px 3px;margin:0 -5px 0 -3px;scrollbar-width:thin;scrollbar-color:var(--w-scr-b) transparent}
+.k1j{flex:none;display:flex;align-items:center;gap:6px;background:var(--w-card);border:2px solid var(--w-bd);border-radius:11px;box-shadow:0 2px 0 var(--w-sh);padding:6px 6px 6px 10px;font-size:12.5px;font-weight:600;transform:rotate(calc(var(--r)*.6))}
+.k1j.new{animation:k1land .34s cubic-bezier(.3,1.5,.5,1) both;animation-delay:var(--d)}
+@keyframes k1land{from{transform:translateY(-26px) rotate(-10deg) scale(.7);opacity:0}}
+.k1j span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.k1x{flex:none;width:20px;height:20px;border-radius:50%;border:0;background:var(--w-xbg);color:var(--w-xfg);font:inherit;font-size:14px;line-height:1;cursor:pointer;display:grid;place-items:center;padding:0}
+.k1x:hover{background:var(--w-fg);color:var(--w-bg)}
+.k1be{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;color:var(--w-box-mut)}
+.k1be b{font-size:14px;color:var(--w-fg)}
+.k1be small{font-size:11.5px;line-height:1.5}
+.k1ai{position:sticky;top:0;z-index:2;flex:none;display:flex;align-items:center;gap:8px;font-size:12.5px;padding:7px 12px;border-radius:12px;border:2px dashed var(--w-soft-bd);color:var(--w-mut);background:linear-gradient(90deg,var(--w-ai-a) 25%,var(--w-ai-b) 50%,var(--w-ai-a) 75%);background-size:200% 100%;animation:shim 1.2s linear infinite}
+.k1ai svg{width:13px;height:13px;flex:none;color:var(--w-pri)}
+.k1ai span{flex:1}
+.k1ai.ok{animation:none;background:var(--w-ai-ok);border:2px solid var(--w-bd);color:var(--w-fg)}
+.k1gh{background:repeating-linear-gradient(135deg,var(--w-soft-bd) 0 5px,transparent 5px 10px)!important;outline:1px dashed var(--w-soft-bd);outline-offset:-1px}
+
+/* Legacy WebKit scrollbar fallback scoped via @supports not (scrollbar-color: auto) */
+@supports not (scrollbar-color:auto){
+  .k1sc,.k1bl,.ord{scrollbar-width:auto}
+  .k1sc::-webkit-scrollbar,.k1bl::-webkit-scrollbar,.ord::-webkit-scrollbar{width:6px}
+  .k1sc::-webkit-scrollbar-thumb,.ord::-webkit-scrollbar-thumb{background:var(--w-scr);border-radius:3px}
+  .k1bl::-webkit-scrollbar-thumb{background:var(--w-scr-b);border-radius:3px}
+}
+
+/* Focus Running View + Timeline Rail */
+.k1run{height:100%;display:flex;flex-direction:column;padding:0 26px 20px;gap:14px}
+.k1top{flex:1;min-height:0;display:grid;grid-template-columns:1fr 330px;gap:22px;align-items:center}
+.k1hero{min-width:0}
+.k1hero .s4task{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:12px}
+.k1ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.k1rcol{display:flex;flex-direction:column;gap:10px;min-width:0}
+.k1next{background:var(--w-card);border:2px solid var(--w-bd);border-radius:18px;box-shadow:0 3px 0 var(--w-sh);padding:11px 13px}
+.k1next .cap{margin:0 0 4px}
+.rl{border:2px solid var(--w-bd);border-radius:18px;background:var(--w-card);padding:11px 18px 10px;box-shadow:0 3px 0 var(--w-sh)}
+.rl-h{display:flex;justify-content:space-between;font-size:12px;color:var(--w-mut);margin-bottom:32px}
+.rail{position:relative;height:22px;background:var(--w-rail);border-radius:6px}
+.rail i{position:absolute;top:0;bottom:0;border-radius:4px;background:var(--focus);box-shadow:inset -1px 0 0 var(--w-card)}
+.rail i.short,.rail i.long{top:7px;bottom:7px;background:var(--break);border-radius:3px;box-shadow:none}
+.rail i.long{background:var(--long)}
+.rail i.done{opacity:.32}
+.rail u{position:absolute;top:28px;font:11px var(--mono);color:var(--w-mut);text-decoration:none;transform:translateX(-50%)}
+.rail u::before{content:"";position:absolute;left:50%;top:-7px;height:5px;width:1px;background:var(--w-tick)}
+.rail .now{position:absolute;top:-5px;bottom:-5px;width:2px;background:var(--w-fg);margin-left:-1px;z-index:2;border-radius:1px}
+.rail .now span{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);white-space:nowrap}
+.rl-l{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:24px;font-size:11.5px;color:var(--w-mut);min-height:17px}
+.rl-l span{display:inline-flex;align-items:center;gap:5px}
+.rl-l i{width:8px;height:8px;border-radius:2px;display:block}
+
+/* ===== 弹层：动效选择器 / 主题选择器 / W1 声景弹层 / W3 多轨混音抽屉 / W2 常驻声控卡 / W4 任务声景芯片 ===== */
+.pop{position:absolute;right:14px;top:4px;background:var(--w-pop-bg);color:var(--w-fg);border:2px solid var(--w-pop-bd);border-radius:18px;box-shadow:0 5px 0 var(--w-sh),0 20px 50px rgba(0,0,0,.32);padding:14px;z-index:25;animation:rise .18s ease}
+.pop h5{margin:0;font-size:14px;display:flex;justify-content:space-between;align-items:center}
+.pop h5 button{border:0;background:none;font-size:17px;cursor:pointer;color:var(--w-mut);padding:0 4px}
+.pop .psub{margin:3px 0 10px;font-size:12px;color:var(--w-pop-sub);line-height:1.45}
+.pp{width:392px}
+.ppg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ppc{border:2px solid var(--w-soft-bd);border-radius:12px;padding:8px;cursor:pointer;background:var(--w-bg);text-align:center;font-size:12.5px;color:var(--w-fg);font-weight:600}
+.ppc.on{border-color:var(--w-pri);box-shadow:0 0 0 2px var(--w-sel-glow)}
+.ppc .pv{height:62px;border-radius:8px;background:#141210;display:flex;align-items:center;justify-content:center;margin-bottom:6px}
+.ppc small{display:block;color:var(--w-mut);font-size:11px;font-weight:400}
+
+/* 主题切换弹层 */
+.pop-theme{width:270px;right:108px}
+.tp-list{display:flex;flex-direction:column;gap:6px}
+.tp-opt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 11px;border-radius:12px;border:2px solid var(--w-soft-bd);background:var(--w-bg);color:var(--w-fg);cursor:pointer;font-size:13px;font-weight:600;text-align:left}
+.tp-opt small{display:block;font-size:11px;color:var(--w-mut);font-weight:400}
+.tp-opt.on{border-color:var(--w-pri);background:var(--w-sel-bg)}
+.tp-sw{width:20px;height:20px;border-radius:50%;border:2px solid var(--w-bd);flex:none}
+
+/* W1 & W5 fallback 声景弹层 */
+.spop{width:356px;right:14px}
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px}
+.scard{border:2px solid var(--w-soft-bd);background:var(--w-bg);color:var(--w-fg);border-radius:12px;padding:8px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px;font-weight:700;transition:transform .1s,border-color .12s}
+.scard:hover{transform:translateY(-1px)}
+.scard small{font-size:10.5px;font-weight:400;color:var(--w-mut)}
+.scard.on{border-color:var(--w-pri);background:var(--w-sel-bg);box-shadow:0 2px 0 var(--w-pri)}
+.sbar{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;background:var(--w-bg);border:1.5px solid var(--w-soft-bd);margin-bottom:8px}
+.sbar label{font-size:12px;color:var(--w-mut);white-space:nowrap;flex:none;font-weight:600}
+.sbar input.sl{flex:1;min-width:0;inline-size:auto}
+.sbar output{font:700 12px var(--mono);min-width:34px;flex:none;text-align:right}
+.sfoot{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11.5px;color:var(--w-mut)}
+.serr{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;border-radius:10px;background:rgba(255,110,71,.14);border:1.5px solid var(--w-dng);color:var(--w-dng);font-size:12px;margin-bottom:8px;font-weight:600}
+
+/* W2 专注页常驻声控卡 */
+.wn2{background:var(--w-card);border:2px solid var(--w-bd);border-radius:18px;box-shadow:0 3px 0 var(--w-sh);padding:10px 12px;display:flex;flex-direction:column;gap:7px}
+.wn2-hd{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.wn2-hd b{font-size:13px;display:inline-flex;align-items:center;gap:6px}
+.wn2-chips{display:flex;gap:4px;flex-wrap:wrap}
+.wn2-chips button{border:1.5px solid var(--w-soft-bd);background:var(--w-bg);color:var(--w-fg);font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;cursor:pointer}
+.wn2-chips button.on{border-color:var(--w-pri);background:var(--w-sel-bg);color:var(--w-fg)}
+.wn2-vol{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--w-mut)}
+.wn2-vol>span{white-space:nowrap;flex:none}
+.wn2-vol input.sl{flex:1;min-width:0;inline-size:auto}
+.wn2-vol output{font:700 11.5px var(--mono);min-width:32px;flex:none;text-align:right;color:var(--w-fg)}
+
+/* W3 多轨混音抽屉 */
+.mdraw{position:absolute;top:0;right:0;bottom:0;width:368px;background:var(--w-pop-bg);color:var(--w-fg);border-left:2px solid var(--w-bd);box-shadow:-14px 0 36px rgba(0,0,0,.28);padding:12px 15px;z-index:26;display:flex;flex-direction:column;gap:7px;animation:drawerIn .22s ease}
+@keyframes drawerIn{from{transform:translateX(28px);opacity:0}}
+.mdraw h5{margin:0;font-size:15px;display:flex;justify-content:space-between;align-items:center}
+.mdraw h5 button{border:0;background:none;font-size:18px;color:var(--w-mut);cursor:pointer;padding:0 4px}
+.mpres{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.mpre{border:2px solid var(--w-soft-bd);background:var(--w-bg);color:var(--w-fg);border-radius:11px;padding:6px 9px;text-align:left;cursor:pointer;font-size:12px;font-weight:700}
+.mpre small{display:block;font-size:10.5px;font-weight:400;color:var(--w-mut)}
+.mpre.on{border-color:var(--w-pri);background:var(--w-sel-bg)}
+.mtracks{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:5px;padding-right:2px}
+.mtrk{display:grid;grid-template-columns:76px 1fr 34px;gap:8px;align-items:center;padding:4px 9px;border-radius:10px;background:var(--w-bg);border:1.5px solid var(--w-soft-bd);font-size:12px}
+.mtrk.act{border-color:var(--w-pri);background:var(--w-sel-bg)}
+.mtrk .tn{font-weight:700;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.mtrk output{font:700 11.5px var(--mono);text-align:right;color:var(--w-mut)}
+.mtrk.act output{color:var(--w-fg)}
+
+/* W4 队列绑定声景芯片 */
+.tchip{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:99px;border:1.5px solid var(--w-soft-bd);background:var(--w-bg);color:var(--w-fg);cursor:pointer;margin-left:6px;vertical-align:middle}
+.tchip:hover{border-color:var(--w-pri)}
+.w4-box{padding:8px 10px;border-radius:12px;background:var(--w-bg);border:1.5px dashed var(--w-soft-bd);display:flex;flex-direction:column;gap:6px}
+.w4-hd{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--w-mut);font-weight:600}
+.w4-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;border:2px solid var(--w-bd);background:var(--w-sel-bg);color:var(--w-fg);font-size:12px;font-weight:700;cursor:pointer;margin-top:8px}
+
+/* ===== 休息全屏（保留方案 1 走去喝咖啡 + 对话气泡 + 宠物打卡格，新增暗色模式适配与声态胶囊） ===== */
+.ov{position:absolute;inset:0;z-index:50;color:#fff;display:flex;flex-direction:column;animation:ovIn .45s ease;overflow:hidden;color-scheme:only dark}
+.ov.o2{background:linear-gradient(180deg,#2A231C,#15110D);align-items:stretch;justify-content:flex-start;text-align:left;padding:96px 150px 0}
+.ov.o2.dk{background:linear-gradient(180deg,#15110E,#090706)}
+.ov .osub{margin:0;font-size:14px;color:rgba(255,255,255,.68);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ov .otime{font:400 118px/1 var(--serif);margin-top:8px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.o2trk{position:relative;height:146px;margin-top:26px;border-bottom:2px solid rgba(255,255,255,.24)}
+.o2trk .desk{position:absolute;left:0;bottom:0}
+.o2trk .walker{position:absolute;bottom:-9px;left:96px}
+.o2trk .walker.flip .m{transform:scaleX(-1)}
+.o2trk .scup{position:absolute;bottom:-9px}
+.k1say{position:absolute;bottom:124px;transform:translateX(-50%);background:#FFFDF9;color:#1C1612;font-size:15.5px;font-weight:500;padding:9px 18px;border-radius:20px;white-space:nowrap;box-shadow:0 10px 26px rgba(0,0,0,.35)}
+.k1say::after{content:"";position:absolute;left:50%;bottom:-9px;margin-left:-9px;border:9px solid transparent;border-bottom:0;border-top-color:#FFFDF9}
+.ov.dk .k1say{background:#2A221C;color:#F6ECE0;border:1.5px solid #564538}
+.ov.dk .k1say::after{border-top-color:#2A221C}
+.k1say:empty{display:none}
+.o2ph{display:flex;gap:26px;margin-top:14px;font-size:13.5px;color:rgba(255,255,255,.42)}
+.o2ph .on{color:#fff}
+.o5row{display:flex;gap:10px;margin:24px 0 0;flex-wrap:wrap;justify-content:flex-start}
+.o5row i{width:36px;height:36px;border-radius:50%;border:2px dashed rgba(255,255,255,.24);display:grid;place-items:center}
+.o5row i.d{border:0}
+.o5row i.d .ti{width:36px;height:36px}
+.ov-snd{display:inline-flex;align-items:center;gap:6px;padding:3px 11px;border-radius:99px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);font-size:12px;color:rgba(255,255,255,.86);cursor:pointer}
+.ov-snd:hover{background:rgba(255,255,255,.18)}
+.ov-f{position:absolute;left:0;right:0;bottom:22px;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12.5px;color:rgba(255,255,255,.64)}
+.hold{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.08);color:#fff;font-size:12.5px;padding:7px 18px;border-radius:99px;cursor:pointer}
+.hold i{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(255,255,255,.28)}
+.hold.on i{width:100%;transition:width 3s linear}
+.hold span{position:relative}
+
+/* responsive */
+@media (max-width:980px){
+  .ovw{grid-template-columns:repeat(3,1fr)}
+  .notes{grid-template-columns:repeat(2,1fr)}
+  .gal,.arch-grid,.tcmp{grid-template-columns:1fr}
+}
+@media (max-width:820px){
+  h1{font-size:30px}
+  header.top{padding-top:32px}
+  .ovw{grid-template-columns:1fr 1fr}
+  .notes,.cards{grid-template-columns:1fr}
+  .diff-item{grid-template-columns:1fr;gap:4px}
+  .mac{padding:6px 6px 8px;border-radius:12px}
+  .tbl td:first-child{white-space:normal}
+  .swg{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:480px){.ovw{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="tg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FF6B47"/>
+      <stop offset="1" stop-color="#FFB547"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<div class="wrap">
+<header class="top">
+  <div class="kicker">PomodoQ · 002 白噪音（二期，含 001 全部功能）· 方案 1 卡片综合 × 暗色模式 × 白噪音 · 交互方案 ×5 · Gemini 对比稿（未实现）</div>
+  <h1>以方案 1 为根基：暖墨暗色模式，与五套白噪音交互方案</h1>
+  <p class="lede"><b>定位：</b>二期在 <a href="../001-pomodoro-queue/prd.html">001</a>（方案 1「卡片综合」+ 外观三选一）的基础上加白噪音，001 的功能一项不少。<b>注意：</b>001 已采用 Claude 对比稿的深色取值；本稿的「暖墨暗色」取值只作对比，冲突时以 001 为准。</p>
+  <p class="lede"><b>结论：</b>完整保留原文档方案 1「卡片综合」的全部气质与交互（暖色大场景首页、14 张任务卡框选/拖进纸箱盒子、AI 逐项估番茄与调序、运行中底部时间线、底边进度线 Island + 1 分钟气泡提醒、走去喝咖啡休息全屏 + 宠物打卡格、三套动效模板）。在此根基上，<b>① 为应用本体补齐「暖墨暗色」双色 Token 体系</b>（标题栏内建三态切换，也可跟随系统）；<b>② 提供 5 套可实际出声试听的白噪音交互方案（W1–W5）</b>，覆盖单音弹层、专注常驻卡、多轨混音、AI 按任务绑声、刘海声控中枢五种产品方向。本页不改业务代码，供交互评审与技术落点确认。</p>
+</header>
+
+<section style="border-top:0;margin-top:0;padding-top:10px">
+  <h2><span class="n">01</span>围绕方案 1 的五套白噪音方案一览</h2>
+  <p class="sub">五套方案共用完全相同的方案 1 主流程与暗色模式，差别在于白噪音的能力形态与控制落点。点击任意卡片跳转到对应演示，浏览器内可直接用 Web Audio API 合成试听。</p>
+  <div class="ovw" id="ovw"></div>
+  <div class="co"><b>五套白噪音方案共用的底线规则（继承自方案 1）</b>
+    <ul class="rules">
+      <li><b>方案 1 核心体验零削弱：</b>首页仍是倒计时 + 宠物场景 + 双入口；按任务创建仍是 2 步「圈卡丢盒 → AI 排番茄」；专注底部常驻时间线；休息全屏走去喝咖啡并亮起打卡格（番茄 / 骨头 / 小鱼）。</li>
+      <li><b>暗色模式双层独立可控：</b>页面/系统外观与应用内主题均支持「跟随系统 / 暖纸浅色 / 暖墨深色」，2px 卡片描边、硬偏移阴影、纸箱质感、弹窗与休息页气泡全部语义化适配，深色下无刺眼闪白。</li>
+      <li><b>白噪音生命周期规则：</b>默认静音、仅由用户手势解锁开启；<b>专注中平滑淡入</b>，暂停/终止立即淡出，<b>休息段默认静音</b>（可选切换「休息极轻伴奏 20%」）；待开始时开启或试听会播放 4 秒预览后进入待命。</li>
+      <li><b>本机隔离与容错：</b>音量与开关只保存在本机，不跨设备突然出声；音频被系统/浏览器拦截时在声控区与 Island 提示重试，<b>番茄计时绝不中断或回滚</b>。</li>
+    </ul>
+  </div>
+</section>
+
+<section id="demo">
+  <h2><span class="n">02</span>交互演示：在 MacBook 屏幕上体验暗色模式与五套白噪音</h2>
+  <p class="sub">直接在屏幕内操作完整方案 1 流程，并点击窗口右上角按钮切换<b>白噪音 / 主题 / 动效</b>。切换 W1–W5 时会保留当前队列进度、暗色设置与声音状态；所有白噪音由浏览器实时合成，调低设备音量后即可试听。</p>
+
+  <div class="tabs" id="tabs" role="tablist" aria-label="切换白噪音方案"></div>
+  <div class="ctrls">
+    <div class="ctrl"><span>动效模板</span><div class="seg" data-group="pet"><button data-set="pet:tomato">小番茄</button><button data-set="pet:dog">小狗</button><button data-set="pet:cat">小猫</button></div></div>
+    <div class="ctrl"><span>演示速度</span><div class="seg" data-group="speed"><button data-set="speed:1">1×</button><button data-set="speed:60">60×</button><button data-set="speed:300">300×</button></div></div>
+    <div class="ctrl"><span>页面 / 系统外观</span><div class="seg" data-group="docTheme"><button data-set="docTheme:system">跟随系统</button><button data-set="docTheme:light">浅色</button><button data-set="docTheme:dark">深色</button></div></div>
+    <div class="ctrl"><span>应用内主题</span><div class="seg" data-group="appTheme"><button data-set="appTheme:system">随系统</button><button data-set="appTheme:light">暖纸浅</button><button data-set="appTheme:dark">暖墨深</button></div></div>
+  </div>
+  <div class="jumps">
+    <span>直接跳到</span>
+    <button class="btn" data-act="jump:home">首页</button>
+    <button class="btn" data-act="jump:wiz">创建步骤（14 卡）</button>
+    <button class="btn" data-act="jump:focus">专注进行中</button>
+    <button class="btn" data-act="jump:warn">休息前 1 分钟</button>
+    <button class="btn" data-act="jump:break">休息中</button>
+    <span style="margin-left:8px">声控与边界</span>
+    <button class="btn" id="btnMin" data-act="toggleMin">模拟收起主窗</button>
+    <button class="btn" id="btnNoIsl" data-act="toggleNoIsl">模拟无刘海</button>
+    <button class="btn" id="btnErr" data-act="simErr">模拟声音被拦截</button>
+    <button class="btn" data-act="ff">快进到本段结束</button>
+    <button class="btn" data-act="reset">重置</button>
+  </div>
+
+  <div class="mac">
+    <div class="vp" id="vp">
+      <div class="scr" id="scr">
+        <div class="mb">
+          <div class="l"><span class="app">PomodoQ</span><span>文件</span><span>编辑</span><span>显示</span><span>窗口</span></div>
+          <div class="r">
+            <button class="mb-snd" id="mbSnd" data-act="toggleSound" title="点击开关白噪音" style="display:none"></button>
+            <span>Wi‑Fi</span>
+            <span id="clock">周日 14:05</span>
+          </div>
+        </div>
+        <div class="notch" id="notch"></div>
+        <div class="min-hint" id="minHint" style="display:none">
+          <span>PomodoQ 主窗口已收起到 Dock · 番茄与白噪音在后台继续</span>
+          <button data-act="dock">从 Dock 恢复主窗口</button>
+        </div>
+        <div class="win" id="win"></div>
+        <div class="dock">
+          <div class="di d1" title="访达"></div>
+          <div class="di d2" title="浏览器"></div>
+          <div class="di d3" title="备忘录"></div>
+          <div class="di d4 run" title="PomodoQ（点击恢复窗口）" data-act="dock"><svg viewBox="0 0 16 16" width="30" height="30" aria-hidden="true"><circle cx="8" cy="9.2" r="6" fill="url(#tg)"/><path d="M8 4.6 4.6 3.2l2.5-.5L8 .6l.9 2.1 2.5.5z" fill="#3DDC68"/></svg></div>
+        </div>
+        <div id="ov"></div>
+        <div class="isl" id="isl" style="display:none"><div class="isl-in" id="islIn"></div><div id="islX"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="mac-base"></div>
+  <div class="log" id="log" aria-live="polite">事件：打开 PomodoQ 方案 1（支持暗色模式与 Web Audio 实时白噪音）。点「直接开始」或右上角声景按钮体验。</div>
+  <div class="notes" id="notes"></div>
+  <p class="trade" id="trade"></p>
+</section>
+
+<section>
+  <h2><span class="n">03</span>暗色模式规范与动效模板（全量语义 Token）</h2>
+  <p class="sub">原文档方案 1 的 <code class="c">.win.s4</code>、<code class="c">.k1c</code>、<code class="c">.k1box</code>、<code class="c">.k1next</code>、<code class="c">.pp</code> 中有二十余处浅色硬编码（如 <code class="c">#FFF4E3</code>、<code class="c">#fff</code>、<code class="c">#2B2118</code>），切系统暗色时主窗口依然刺眼。新版将其全部抽离为 <code class="c">--w-*</code> 语义变量，用「暖墨底 + 可可描边 + 深墨硬阴影」在夜间延续手绘卡片的立体触感。</p>
+
+  <div class="tcmp">
+    <div class="tbox lt">
+      <h4>暖纸浅色 · Light <small>color-scheme: only light</small></h4>
+      <p>完全保留原方案 1 暖奶油纸面与深棕硬描边，高明度下层次清晰。</p>
+      <div class="swg">
+        <div class="swi"><i style="background:#FFF4E3"></i><span>窗体底</span><code>#FFF4E3</code></div>
+        <div class="swi"><i style="background:#FFFFFF"></i><span>卡片面</span><code>#FFFFFF</code></div>
+        <div class="swi"><i style="background:#2B2118"></i><span>描边/字</span><code>#2B2118</code></div>
+        <div class="swi"><i style="background:#FFDDAE"></i><span>队列纸箱</span><code>#FFDDAE</code></div>
+        <div class="swi"><i style="background:#FF6E47"></i><span>番茄主色</span><code>#FF6E47</code></div>
+      </div>
+    </div>
+    <div class="tbox dk">
+      <h4>暖墨深色 · Dark <small>color-scheme: only dark</small></h4>
+      <p>避免纯黑死灰：烘烤深咖底配柔和奶白字（对比度 14.2:1），夜间场景自带星月微光，休息页气泡同步暗化。</p>
+      <div class="swg">
+        <div class="swi"><i style="background:#1D1713"></i><span>窗体底</span><code>#1D1713</code></div>
+        <div class="swi"><i style="background:#28201A"></i><span>卡片面</span><code>#28201A</code></div>
+        <div class="swi"><i style="background:#564538"></i><span>卡片描边</span><code>#564538</code></div>
+        <div class="swi"><i style="background:#3A2C1F"></i><span>暗色纸箱</span><code>#3A2C1F</code></div>
+        <div class="swi"><i style="background:#FF7852"></i><span>提亮主色</span><code>#FF7852</code></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="sub" style="margin-bottom:12px"><b>动效模板（沿用原方案 1）：</b>小番茄、小狗、小猫三套角色同步应用到刘海 Island、首页场景、底部时间线与休息全屏打卡格（番茄 / 骨头 / 小鱼）。点击卡片立即同步上方演示。</p>
+  <div class="gal" id="gal"></div>
+</section>
+
+<section>
+  <h2><span class="n">04</span>五套白噪音方案横向对比</h2>
+  <p class="sub">五套方案都以方案 1「卡片综合」为唯一母体，区别在于声音交互深度与空间归属。可以单选一套，也可以组合（例如首版 W1 + W5 快捷静音，后续补 W3 混音或 W4 按任务绑声）。</p>
+  <div class="tw">
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>方案</th>
+          <th>声音入口位置</th>
+          <th>音频能力模型</th>
+          <th>对方案 1 布局的影响</th>
+          <th>收起主窗 / Island 体验</th>
+          <th>开发成本</th>
+          <th>最适合的用户</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>W1 · 标题栏声景弹层<br><span style="font-weight:400;color:var(--focus);font-size:12px">首版推荐</span></td>
+          <td>标题栏胶囊（与主题、动效并列），点开弹出 6 音色卡片面板</td>
+          <td>单选 6 种精选音景 + 音量 + 休息策略；首页场景附带轻氛围视效</td>
+          <td>零侵入：首页、14 卡桌面、盒子、时间线尺寸与密度 100% 不变</td>
+          <td>Island 左侧显示微声波，展开后一键静音/恢复</td>
+          <td>低（独立弹层 + 单路播放器）</td>
+          <td>希望保持方案 1 原汁原味简洁感，同时全流程随时调音</td>
+        </tr>
+        <tr>
+          <td>W2 · 专注页常驻声控卡</td>
+          <td>专注运行页右侧「接下来」上方常驻卡片；首页右下角轻试听胶囊</td>
+          <td>单选 6 音景 + 常驻波形 + 直触滑块，抬眼即控</td>
+          <td>专注页右侧栏共享高度，「接下来」列表从 4 行压缩到 2 行</td>
+          <td>Island 展开态一键静音/恢复，精调回主窗口</td>
+          <td>低（纯主窗布局内嵌组件）</td>
+          <td>专注时频繁看剩余时间并顺手微调音量，偏好零折叠直觉</td>
+        </tr>
+        <tr>
+          <td>W3 · 多轨分层混音台</td>
+          <td>标题栏「混音 · N 轨」按钮滑出右侧卡片抽屉；专注页显示配方标签</td>
+          <td>多轨并行叠加（6 轨独立增益）+ 4 套预设配方（如雨夜咖啡馆）</td>
+          <td>抽屉覆盖滑出不挤占主画布，专注页仅增一枚配方徽章</td>
+          <td>Island 展开显示当前配方名 + 一键总静音</td>
+          <td>中（多路 AudioGraph 混音与配方持久化）</td>
+          <td>白噪音重度玩家，喜欢「雨声 + 壁炉 + 轻粉噪」自定义叠音</td>
+        </tr>
+        <tr>
+          <td>W4 · 队列卡片语义绑声</td>
+          <td>第 2 步「AI 排番茄」任务行声景芯片 + 汇总卡队列策略 + 专注页当前声景条</td>
+          <td>AI 按任务内容自动配声（支持改单任务或全队列统一），跨任务平滑 Crossfade</td>
+          <td>向导第 2 步信息更丰富，时间线轨道图例同步标出各任务声景</td>
+          <td>跨任务切段时 Island 气泡同步提示「切到下一任务与对应声景」</td>
+          <td>中高（AI 估算契约扩展 <code class="c">suggestedSound</code> + 段切换 Crossfade）</td>
+          <td>不同任务需要不同氛围（写代码用粉噪、读书用壁炉、回消息用咖啡馆）</td>
+        </tr>
+        <tr>
+          <td>W5 · 刘海 Island 声控中枢</td>
+          <td>以 macOS Dynamic Island 展开面板为主控；主窗标题栏提供无刘海降级弹层</td>
+          <td>单选音景 + 音量滑块 + 静音全放进 Island 展开态，收起态带微声波</td>
+          <td>主窗口最干净，不增加专注页额外区块</td>
+          <td>收起主窗留在编辑器/文档中即可切音色、拖音量；无刘海自动降级主窗弹层</td>
+          <td>高（需 Electrobun 主进程桥接原生 Swift Island 控件与焦点管理）</td>
+          <td>90% 时间把番茄钟收在后台，希望完全在刘海里完成声音控制</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">05</span>技术架构与本仓库真实改动落点</h2>
+  <p class="sub">基于当前仓库代码（<code class="c">apps/app</code>、<code class="c">apps/desktop</code>、<code class="c">packages/core</code>）梳理最小调用链路。白噪音播放器与主题偏好全部归属本机宿主层，不污染服务端队列写路径。</p>
+
+  <div class="arch-grid">
+    <pre class="arch">【状态投影与音频驱动链路】
+队列快照 (packages/core 绝对时间段投影)
+  ├── 阶段 ∈ {focus} && !paused && localSound.enabled
+  │     └── 有效音轨 (单音 / W3 多轨 / W4 当前段绑定音色)
+  │           → 宿主 AudioAdapter.play(tracks, masterVol, rampMs=140)
+  ├── 阶段 ∈ {short, long}
+  │     ├── breakMode === 'mute' → fadeOut(160ms) + stop
+  │     └── breakMode === 'duck' → setMasterGain(masterVol * 0.2)
+  └── 暂停 / 结束 / 登出 → fadeOut(120ms) + release
+
+【主题同步链路（无闪烁 FOUC 防护）】
+localStorage('pomodoq-theme') ──▶ 首帧内联脚本写 &lt;meta name="color-scheme"&gt;
+  └── CSS :root:has(meta) + light-dark() + [data-theme] 回退
+        ├── 文档/桌面外壳随系统或手动覆写
+        └── 主窗应用独立支持 color-scheme: only light | only dark</pre>
+
+    <pre class="arch">【宿主分层职责】
+apps/app (React SPA · 认证后公共布局)
+  ├── ThemeStore (Zustand · 持久化本机 theme)
+  ├── AmbientAudioStore (Zustand · 本机音量/音色/混音)
+  └── HostAdapter.audio
+        ├── Web 实现: AudioContext + 6 路循环 Buffer
+        │            + BiquadFilter + GainNode (零外链)
+        └── Desktop 实现: window.tsuDesktop RPC
+              └── apps/desktop 主进程 (Bun)
+                    └── Swift Helper (AVAudioEngine + Island)
+                          ↳ 唯一发声源，WebView 不重复播</pre>
+  </div>
+
+  <div class="co ok"><b>为什么不把白噪音状态同步到服务端？</b> 用户常在公司电脑静音开会、回家戴耳机听雨声；将开关与音量留在各设备本地存储（仅可选同步自定义配方名），既避免另一台设备突然外放社死，也省去额外的实时写冲突与服务端带宽。</div>
+
+  <div class="diff-list">
+    <div class="diff-item">
+      <div class="path">apps/app/src/lib/host/types.ts</div>
+      <p>在 <code class="c">HostAdapter</code> 新增可选 <code class="c">audio: HostAudioController</code>（<code class="c">setMix / setMasterVolume / stop / subscribeStatus</code>）与 <code class="c">island</code> 桥接契约，Web 与 Desktop 通过 <code class="c">#/lib/host/runtime</code> 各自实现。</p>
+    </div>
+    <div class="diff-item">
+      <div class="path">apps/app/src/app/routes/(auth)/route.tsx</div>
+      <p>在 <code class="c">AuthLayout</code> 的 <code class="c">&lt;AppShell&gt;</code> 之上挂载队列投影订阅器与本机音频调度器，保证切换页面或折叠窗口时声音生命周期不断裂。</p>
+    </div>
+    <div class="diff-item">
+      <div class="path">apps/app/src/app/styles/app.css<br>packages/ui/src/styles/theme.css</div>
+      <p>落地「暖纸浅色 / 暖墨深色」两套语义 CSS 变量（<code class="c">--w-bg / --w-card / --w-bd / --w-sh / --w-box</code>），配合 <code class="c">&lt;meta name="color-scheme"&gt;</code> 与防闪烁脚本。</p>
+    </div>
+    <div class="diff-item">
+      <div class="path">apps/desktop/src/shared/rpc/schema.ts<br>apps/desktop/src/main/index.ts</div>
+      <p>扩展 <code class="c">DesktopRPC</code> 新增 <code class="c">audioUpdate / islandSync</code> 请求与 <code class="c">audioStatusChanged</code> 回推消息；在 <code class="c">before-quit</code> 中释放原生播放器。</p>
+    </div>
+    <div class="diff-item">
+      <div class="path">apps/desktop/electrobun.config.ts</div>
+      <p>当前配置为 <code class="c">exitOnLastWindowClosed: true</code>。若支持 W5「关闭/收起主窗后由刘海持续控音」，需改为隐藏窗口驻留托盘/Island，并在显式 Quit 时停声。</p>
+    </div>
+  </div>
+
+  <details class="src">
+    <summary>查看本仓库源码调研依据（只读核对，未改动业务代码）</summary>
+    <ul>
+      <li><b>已有直接复用：</b><code class="c">apps/app/src/lib/host/types.ts</code> 已具备 <code class="c">HostAdapter</code> 宿主隔离抽象；<code class="c">apps/app/src/app/routes/(auth)/route.tsx</code> 已有统一认证外壳；<code class="c">apps/desktop/src/shared/rpc/schema.ts</code> 与 <code class="c">apps/desktop/src/main/index.ts</code> 已打通 Electrobun 双向 RPC 与 <code class="c">before-quit</code> 清理钩子。</li>
+      <li><b>原设计基线：</b><code class="c">docs/requirements/001-pomodoro-queue/prd.html</code>（方案 1 卡片综合定义、外观三选一、14 任务数据、宠物动效与时间线逻辑）；五方案原稿见 <code class="c">docs/2026-11-15-island-options.html</code>。</li>
+      <li><b>本仓库待新增：</b>番茄队列领域模型、AI 估番茄（及 W4 声景建议）接口、原生 Swift Island + <code class="c">AVAudioEngine</code> Helper、暖墨暗色设计 Token。</li>
+    </ul>
+  </details>
+</section>
+
+<section>
+  <h2><span class="n">06</span>边界情况与状态行为表</h2>
+  <div class="tw">
+    <table class="tbl">
+      <thead><tr><th>边界场景</th><th>预期行为</th></tr></thead>
+      <tbody>
+        <tr><td>浏览器自动播放拦截 / 音频设备切换</td><td>点击开启时若 <code class="c">AudioContext.resume()</code> 被拒或设备断开，状态切为「声音被拦截」，声控区与 Island 出现重试入口；<b>番茄倒计时继续走，不报错弹窗阻断</b>。</td></tr>
+        <tr><td>休息段（短休 / 长休）声音切换</td><td>默认在进入休息前 160ms 平滑淡出至静音，不打扰休息；若用户主动勾选「休息极轻伴奏」，音量自动压低至设定的 20%，回到下一专注段再淡入恢复。</td></tr>
+        <tr><td>暂停 / 提前跳过 / 终止队列</td><td>暂停立即淡出停声，恢复专注自动续播；W4 模式下跳过当前任务时，若下一任务绑定了不同音色，180ms 交叉淡入淡出过渡；终止或完成最后一个番茄时彻底释放音轨。</td></tr>
+        <tr><td>W3 多轨滑块全部拉到 0%</td><td>总开关保持已开启但音频引擎自动进入静默节能态（停止振荡/节点输出），界面标注「所有音轨为 0%」，任意拖高一轨立即恢复出声。</td></tr>
+        <tr><td>收起主窗口 / 无刘海屏幕 / Web 端</td><td>收起主窗后声音与计时继续，菜单栏与 Island 显示实时微声波；在无刘海屏幕或浏览器访问 W5 时，自动回落为标题栏声控弹层与页面顶部迷你条，功能零缺失。</td></tr>
+        <tr><td>多标签页同时打开 Web 版</td><td>通过 <code class="c">BroadcastChannel</code> 协商单一音频播放权：新标签页主动点开声音时通知旧标签页淡出并显示「已由另一标签页接管」，杜绝重音叠播。</td></tr>
+        <tr><td>暗色模式切换与系统定时变暗</td><td>支持「跟随系统 / 暖纸浅色 / 暖墨深色」三态；遵循不自动抹除用户手动锁定原则——即使用户在浅色系统锁定了深色，晚上系统变深后再切回浅色时仍保持深色，直到用户手动选回「跟随系统」。</td></tr>
+        <tr><td>键盘与减少动效偏好</td><td><code class="c">Esc</code> 依次关闭当前打开的弹层/抽屉或收起固定的 Island；原生 <code class="c">&lt;input type="range"&gt;</code> 支持方向键微调音量；开启 <code class="c">prefers-reduced-motion</code> 时自动停用宠物跑动、声波条与雨滴/壁炉背景动效。</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">07</span>建议路线与实现前要验证的事</h2>
+  <div class="co"><b>推荐演进路线：</b>首版落地<b>「方案 1 暖墨暗色 + W1 标题栏声景弹层（含首页微氛围）+ Island 快捷静音」</b>，改动面最小且 100% 守住方案 1 卡片桌面的留白与专注感；验证日活音频使用率后，再按用户画像决定往 <b>W3（多轨混音）</b> 还是 <b>W4（AI 按任务配声景）</b> 深化；待桌面端原生 Island 稳定后再接入 <b>W5（刘海内直接调音量/切音色）</b>。</div>
+  <div class="cards">
+    <div class="card">
+      <h4>1. 确认白噪音首版选型（W1–W5）</h4>
+      <p>建议在上方演示里亲自走一遍「圈卡丢盒 → 开专注 → 开声 → 收起窗口 → 进休息」，重点对比 W1 的零侵入、W2 的常驻可见与 W3 的多轨叠音。</p>
+      <p class="def"><b>建议默认：</b>首版 W1，保留 W3/W4 数据结构扩展位。</p>
+    </div>
+    <div class="card">
+      <h4>2. 音源方案：实时合成 vs 内置短音频循环</h4>
+      <p>演示使用零体积 Web Audio 实时合成；正式版「白噪 / 粉噪」适合纯算法生成（零接缝），而「雨声 / 咖啡馆 / 壁炉 / 森林」建议内置 30–60 秒无缝压缩音频（Opus/AAC，单轨 &lt; 600KB），听感更逼真。</p>
+      <p class="def"><b>待验证：</b>桌面包体积预算与低功耗 CPU 占用实测。</p>
+    </div>
+    <div class="card">
+      <h4>3. 暗色模式对休息全屏的视觉约束</h4>
+      <p>当前暖墨深色下，休息全屏从暖褐渐变进一步压暗至深炭，并把角色头顶气泡改为暗底奶白字，避免夜晚进入休息瞬间白泡刺眼。</p>
+      <p class="def"><b>待验证：</b>在 OLED 外接屏与低亮度 MacBook 上核对夜间可读性。</p>
+    </div>
+    <div class="card">
+      <h4>4. 桌面端关窗驻留与耳机拔出中断</h4>
+      <p>需把 <code class="c">electrobun.config.ts</code> 的 <code class="c">exitOnLastWindowClosed</code> 调整为窗口隐藏，并在 Swift Helper 中监听 <code class="c">AVAudioSession</code> / CoreAudio 输出切换，耳机拔出时自动暂停白噪音避免公放。</p>
+      <p class="def"><b>待验证：</b>Mac 合盖休眠跨段后唤醒，确认音频不会补播已过时段。</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  设计整理，非实现完成声明。基线参考 <a href="../001-pomodoro-queue/prd.html">001-pomodoro-queue/prd.html</a>（方案 1 卡片综合 + 外观三选一）。角色动画为占位图形，白噪音为浏览器 Web Audio API 实时程序化合成。
+</footer>
+</div>
+
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const fmt = s => { s = Math.max(0, Math.ceil(s)); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
+const clk = sec => { const m = Math.floor(sec / 60) % 1440; return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+const k1clk = sec => (sec >= 86400 ? '次日 ' : '') + clk(sec);
+const dur = min => { min = Math.round(min); const h = Math.floor(min / 60), m = min % 60; return h ? (m ? `${h} 小时 ${m} 分` : `${h} 小时`) : `${m} 分钟`; };
+
+/* ===== 原方案 1 完整数据（14 项任务 + AI 估算 + W4 声景建议） ===== */
+const ALL = [
+  { id: 1, title: '写 Q4 复盘文档', ai: 3, why: '背景、数据、结论 3 节', aiSound: 'rain' },
+  { id: 2, title: '回复设计评审意见', ai: 1, why: '12 条评论', aiSound: 'cafe' },
+  { id: 3, title: '重构登录页表单校验', ai: 2, why: '5 个字段 + 自测', aiSound: 'pink' },
+  { id: 4, title: '读《深度工作》第 3 章', ai: 1, why: '约 30 页', aiSound: 'fire' },
+  { id: 5, title: '整理下周计划', ai: 1, why: '例行整理', aiSound: 'forest' },
+  { id: 6, title: '准备周会要讲的 3 页', ai: 1, why: '3 页幻灯片', aiSound: 'cafe' },
+  { id: 7, title: '修复导出 CSV 乱码', ai: 2, why: '复现、修复、回归', aiSound: 'pink' },
+  { id: 8, title: '给新同事写上手指南', ai: 2, why: '环境、流程、常见问题', aiSound: 'rain' },
+  { id: 9, title: '回复客户邮件', ai: 1, why: '4 封待回', aiSound: 'cafe' },
+  { id: 10, title: '整理报销单', ai: 1, why: '6 张发票', aiSound: 'white' },
+  { id: 11, title: '复习英语单词', ai: 1, why: '50 个词', aiSound: 'forest' },
+  { id: 12, title: '看竞品更新日志', ai: 1, why: '3 家产品', aiSound: 'cafe' },
+  { id: 13, title: '写订单模块的单元测试', ai: 2, why: '8 个用例', aiSound: 'pink' },
+  { id: 14, title: '订下周出差的车票酒店', ai: 1, why: '往返 + 2 晚', aiSound: 'white' },
+];
+const DEFAULT_TODOS = ALL.slice(0, 5);
+const COL = { 1: '#FF6E47', 2: '#F2A93B', 3: '#3FB58A', 4: '#5C8DF6', 5: '#A77BF3', 6: '#E86A9A', 7: '#2FA8C6', 8: '#8FB339', 9: '#D9822B', 10: '#7A6FF0', 11: '#C75BD3', 12: '#4FA36B', 13: '#E0564F', 14: '#5E7A99' };
+const PH = { f: '专注时段', short: '短休息', long: '长休息' };
+const RH0 = { f: 25, s: 5, l: 20, every: 4 };
+const PRE = {
+  std: { f: 25, s: 5, l: 20, every: 4, label: '标准 25 / 5' },
+  deep: { f: 50, s: 10, l: 30, every: 2, label: '长专注 50 / 10' },
+  sprint: { f: 15, s: 3, l: 15, every: 4, label: '短冲刺 15 / 3' },
+};
+const PETS = { tomato: '小番茄', dog: '小狗', cat: '小猫' };
+const T0 = 14 * 3600 + 5 * 60;
+const K1SAY = ['先别看屏幕了，看看远处。', '肩膀放松，深呼吸三次。', '你也倒杯水吧。'];
+
+/* ===== 白噪音音景定义与 W3 配方 ===== */
+const SOUNDS = [
+  { id: 'rain', name: '窗外轻雨', short: '雨声', sub: '柔和雨幕', color: '#58B4D1' },
+  { id: 'pink', name: '柔和粉噪', short: '粉噪', sub: '平衡屏蔽', color: '#E88AA4' },
+  { id: 'cafe', name: '暖灯咖啡馆', short: '咖啡馆', sub: '低语底噪', color: '#D49A5E' },
+  { id: 'fire', name: '木屋壁炉', short: '壁炉', sub: '温暖噼啪', color: '#FF7852' },
+  { id: 'forest', name: '松林微风', short: '森林风', sub: '舒缓气流', color: '#5AB88B' },
+  { id: 'white', name: '纯净白噪', short: '白噪', sub: '经典遮蔽', color: '#9DA5B4' },
+];
+const soundById = id => SOUNDS.find(s => s.id === id) || SOUNDS[0];
+const MIX_PRESETS = {
+  rainCafe: { name: '雨夜咖啡馆', desc: '雨声 65 + 咖啡馆 35', mix: { rain: 65, cafe: 35, fire: 0, pink: 0, forest: 0, white: 0 } },
+  deepStudy: { name: '深度书房', desc: '粉噪 50 + 雨声 30', mix: { rain: 30, cafe: 0, fire: 0, pink: 50, forest: 0, white: 0 } },
+  hearthNight: { name: '壁炉冬夜', desc: '壁炉 60 + 森林风 30', mix: { rain: 0, cafe: 0, fire: 60, pink: 0, forest: 30, white: 0 } },
+  pureShield: { name: '纯粹屏蔽', desc: '白噪 45 + 粉噪 35', mix: { rain: 0, cafe: 0, fire: 0, pink: 35, forest: 0, white: 45 } },
+};
+
+/* ===== 5 套围绕方案 1 的白噪音方案元数据 ===== */
+const WN_SCHEMES = [
+  {
+    id: 1, code: 'W1', name: '标题栏声景弹层', badge: '首版推荐',
+    one: '标题栏新增声景胶囊，点开选 6 种音色；首页场景联动轻氛围视效，零侵入方案 1 主画布。',
+    notes: [
+      '窗口右上角与「主题」「动效」并列一枚声景胶囊，点击展开同款手绘卡片弹层，选 6 音色、调音量与休息策略。',
+      '完全不改动方案 1 的 14 卡桌面、队列盒子和底部时间线；选「轻雨 / 壁炉 / 咖啡馆」时首页暖色场景同步浮现细腻氛围。',
+      '暖墨暗色模式下，弹层表面与卡片描边统一采用深咖 + 可可描边；休息全屏顶部胶囊提示当前已自动静音或 20% 伴奏。',
+      '最适合把方案 1 干净视觉放第一位的用户；唯一取舍是精调音量需要点开一次顶栏弹层。'
+    ],
+    trade: '对原方案 1 布局零侵入、发现门槛低、首页场景联动带来情绪价值；但调音比常驻卡片多一次点击。'
+  },
+  {
+    id: 2, code: 'W2', name: '专注页常驻声控卡', badge: '直触可见',
+    one: '专注运行页右侧常驻一张硬描边声控卡，波形、音色芯片和滑块抬眼即控，无需二次展开。',
+    notes: [
+      '进入专注后，主窗口右侧「接下来」上方固定出现声控卡：大开关、6 个快捷音色芯片和原生音量滑块。',
+      '首页场景右下角提供轻量「预选声景」胶囊；进入 2 步圈卡向导时声控自动退到标题栏，不干扰批量选任务。',
+      '暗色模式下声控卡与右侧队列卡片形成统一双卡层级，实时跳动声波条在暖墨底上清晰不抢眼。',
+      '最适合专注中经常根据工作强度微调音量的用户；取舍是右侧「接下来」任务预览由 4 行收紧到 2 行。'
+    ],
+    trade: '所见即所得、单步操作效率最高；但在 572px 高的窗口里，常驻卡会分走右侧待办预告的部分高度。'
+  },
+  {
+    id: 3, code: 'W3', name: '多轨分层混音台', badge: '自由叠音',
+    one: '标题栏打开右侧滑出混音抽屉，可同时叠加多条音轨独立调音量，内置 4 套氛围配方。',
+    notes: [
+      '点击标题栏「混音 · N 轨」从右侧滑出卡片抽屉：4 套一键声景配方 + 6 轨独立增益滑块 + 总音量。',
+      'Web Audio 引擎真实并行混合多条音轨（例如雨声 65% + 咖啡馆 35% + 壁炉 20%），拖滑块实时听出层次。',
+      '专注页主控区旁仅增加一枚可点击配方徽章（如「雨夜咖啡馆 · 2 轨」），不破坏方案 1 底部时间线。',
+      '最适合听单一白噪音容易疲劳的深度专注用户；取舍是产品复杂度与音频资源包体积高于单音方案。'
+    ],
+    trade: '沉浸感与可玩性最强、差异化明显；但首次上手信息密度较高，且需处理所有音轨归零的空态。'
+  },
+  {
+    id: 4, code: 'W4', name: '队列卡片语义绑声', badge: 'AI 联动',
+    one: '融入方案 1 第 2 步「AI 排番茄」：AI 按任务语义推荐声景，跨任务自动平滑 Crossfade 换音。',
+    notes: [
+      '在第 2 步 AI 估番茄时，每项任务旁自动带出推荐声景芯片（写复盘→雨声、重构代码→粉噪、读书→壁炉），点一下即可换。',
+      '右侧「这一轮的安排」新增队列声景策略切换：按任务自动换声 / 全队列统一音色 / 本轮静音。',
+      '专注运行时底部时间线图例同步标出声景标签；快进或跳过到下一任务时，声音 180ms 交叉淡入淡出无缝切换。',
+      '最适合把不同脑力任务串成队列的人；取舍是单次创建队列时多出一层决策，自由队列则回退到默认音色。'
+    ],
+    trade: '把白噪音深度嫁接到方案 1 的 AI 队列核心心智上；但对只想「一键开声」的轻度用户稍显复杂。'
+  },
+  {
+    id: 5, code: 'W5', name: '刘海 Island 声控中枢', badge: '桌面伴随',
+    one: '收起主窗后直接在 macOS Dynamic Island 里切音色、拖音量；无刘海或 Web 端自动降级标题栏。',
+    notes: [
+      '收起态 Island 右侧倒计时旁增加实时微声波；悬停或点击固定展开后，跑道下方直接内嵌音色芯片与音量条。',
+      '主窗口保持极简（仅在右上角保留一枚同步入口），点「模拟收起主窗」即可验证不切窗口直接调音。',
+      '点「模拟无刘海」可测试非刘海屏或浏览器访问时的优雅降级：自动切回主窗标题栏声控弹层。',
+      '最适合 90% 时间把 PomodoQ 收在后台的重度桌面多任务用户；取舍是需原生 Swift Helper 承接 Island 控件与焦点。'
+    ],
+    trade: '脱离主窗口后的声音控制体验最丝滑；但跨端工程成本最高，需实机验收隐藏主窗、多屏与键盘可达性。'
+  }
+];
+const NOTE_H = ['声音入口与形态', '与方案 1 的协同', '暗色与视觉细节', '适用与边界'];
+
+/* ===== 内联 SVG 图标 ===== */
+const TI = '<svg class="ti" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="9.2" r="6" fill="url(#tg)"/><path d="M8 4.6 4.6 3.2l2.5-.5L8 .6l.9 2.1 2.5.5z" fill="#3DDC68"/></svg>';
+const IC = {
+  play: '<svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M4.5 2.8v10.4L13 8z" fill="currentColor"/></svg>',
+  spark: '<svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M7 1.5l1.6 4.2L13 7.3 8.6 8.9 7 13.1 5.4 8.9 1 7.3l4.4-1.6zM12.8 10.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z" fill="currentColor"/></svg>',
+  check: '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.2l2.4 2.4 4.6-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  pause: '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z" fill="currentColor"/></svg>',
+  skip: '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 3l7 5-7 5zM11 3h2v10h-2z" fill="currentColor"/></svg>',
+  sun: '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><circle cx="8" cy="8" r="3.2" fill="currentColor"/><path d="M8 1.3v2M8 12.7v2M1.3 8h2M12.7 8h2M3.2 3.2l1.4 1.4M11.4 11.4l1.4 1.4M12.8 3.2l-1.4 1.4M4.6 11.4l-1.4 1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+  moon: '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M12.8 10.2A5.3 5.3 0 0 1 5.8 3.2a5.5 5.5 0 1 0 7 7z" fill="currentColor"/></svg>',
+  vol: '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M2.5 6h2.8L9 3v10L5.3 10H2.5z" fill="currentColor"/><path d="M11 5.5a3.5 3.5 0 0 1 0 5M12.8 3.8a6 6 0 0 1 0 8.4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>',
+  mute: '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M2.5 6h2.8L9 3v10L5.3 10H2.5z" fill="currentColor"/><path d="M11 6l3.5 4M14.5 6L11 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+  mix: '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 3v10M8 3v10M13 3v10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="3" cy="6" r="1.8" fill="currentColor"/><circle cx="8" cy="10.5" r="1.8" fill="currentColor"/><circle cx="13" cy="5" r="1.8" fill="currentColor"/></svg>',
+};
+const S_IC = {
+  rain: '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M4.5 9.5a3 3 0 1 1 .7-5.9 4 4 0 0 1 7.6 1.2 2.4 2.4 0 0 1-.4 4.7z" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 11.5l-1 2.5M8.5 11.5l-1 2.5M11.5 11.5l-1 2.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>',
+  pink: '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M1.5 9c1.4-4 2.6-4 4 0s2.6 4 4 0 2.6-4 5 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+  cafe: '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 6.5h8v4a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3z" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M11 7.5h1.5a1.5 1.5 0 0 1 0 3H11M5.5 4.2c0-1 .8-1.2.8-2M8.2 4.2c0-1 .8-1.2.8-2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>',
+  fire: '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M8.4 2c.2 2.4 3.6 3.5 3.6 6.8a4 4 0 1 1-8 0c0-2 1.2-3.4 2.1-4.3 0 1.3.8 1.9 1.3 2-.3-1.6.1-3.3 1-4.5z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>',
+  forest: '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M2 6h7a2 2 0 1 0-1.5-3.3M2 9.5h10a1.8 1.8 0 1 1-1.3 3M2 12.5h5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>',
+  white: '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M2.5 8v0M5 5.5v5M7.5 3.5v9M10 6v4M12.5 4.5v7M14.5 7.5v1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+};
+
+/* ===== 原方案 1 宠物动效 SVG（完全保留） ===== */
+const BODY = {
+  tomato: `<g class="pt"><g class="bdg">
+<line class="lg a" x1="27" y1="35" x2="27" y2="43" stroke="#E0512F" stroke-width="3.2" stroke-linecap="round"/>
+<line class="lg b" x1="37" y1="35" x2="37" y2="43" stroke="#E0512F" stroke-width="3.2" stroke-linecap="round"/>
+<ellipse class="pw" cx="25" cy="39.6" rx="4.2" ry="2" fill="#E0512F"/><ellipse class="pw" cx="39" cy="39.6" rx="4.2" ry="2" fill="#E0512F"/>
+<path class="ard" d="M17.5 26q-4.5 2.5-3.5 7.5M46.5 26q4.5 2.5 3.5 7.5" stroke="#E0512F" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<path class="aru" d="M18.5 20q-6-5-4.5-11.5M45.5 20q6-5 4.5-11.5" stroke="#E0512F" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<ellipse cx="32" cy="24" rx="16" ry="14.5" fill="url(#tg)"/>
+<ellipse cx="24.5" cy="16.5" rx="4.2" ry="2.3" fill="#fff" opacity=".38" transform="rotate(-28 24.5 16.5)"/>
+<path d="M32 11.5 24.5 8l5.3-1.2L32 1.5l2.2 5.3L39.5 8z" fill="#3DDC68"/>
+<ellipse class="ey" cx="27.5" cy="24" rx="1.7" ry="2.3" fill="#3A1A10"/><ellipse class="ey" cx="37.5" cy="24" rx="1.7" ry="2.3" fill="#3A1A10"/>
+<path d="M30 29.2q2.5 2.3 5 0" stroke="#3A1A10" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+<circle cx="23.5" cy="28.5" r="2.1" fill="#FF3B2F" opacity=".32"/><circle cx="41.5" cy="28.5" r="2.1" fill="#FF3B2F" opacity=".32"/>
+</g></g>`,
+  dog: `<g class="pt">
+<line class="lg b" x1="21.5" y1="32" x2="21.5" y2="43" stroke="#C4853A" stroke-width="4.2" stroke-linecap="round"/>
+<ellipse class="pwb" cx="19" cy="34.6" rx="5.5" ry="2.3" fill="#C4853A"/>
+<g class="bdg">
+<path class="tl" d="M16.5 26.5q-6.5-3-5-11" stroke="#E9A85A" stroke-width="4" fill="none" stroke-linecap="round"/>
+<line class="lg a lf" x1="39" y1="32" x2="39" y2="43" stroke="#C4853A" stroke-width="4.2" stroke-linecap="round"/>
+<rect x="13.5" y="20" width="33" height="15" rx="7.5" fill="#E9A85A"/>
+<path d="M22 34.3q9 1.4 17 0" stroke="#FFF2DC" stroke-width="2.2" fill="none" stroke-linecap="round" opacity=".85"/>
+<line class="lg b lf" x1="42" y1="32" x2="42" y2="43" stroke="#E9A85A" stroke-width="4.6" stroke-linecap="round"/>
+<ellipse class="pw" cx="50" cy="34.2" rx="6" ry="2.5" fill="#FFF2DC"/>
+<g class="hd">
+<path d="M42.5 23l6.5 4" stroke="#FF6E47" stroke-width="3" stroke-linecap="round"/>
+<circle cx="48" cy="17" r="9.5" fill="#E9A85A"/>
+<ellipse cx="55" cy="20.5" rx="6" ry="4.6" fill="#FFF2DC"/>
+<ellipse cx="59.4" cy="18.4" rx="2.1" ry="1.7" fill="#3A2415"/>
+<path d="M43.5 8.5q-6.5 2-4.5 12.5 5.5-.5 7.5-8.5z" fill="#C4853A"/>
+<ellipse class="ey" cx="50.5" cy="14.6" rx="1.5" ry="2.1" fill="#3A2415"/>
+<path d="M53 23q2.6 1.8 5 0" stroke="#3A2415" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+</g></g>
+<line class="lg a" x1="18.5" y1="32" x2="18.5" y2="43" stroke="#E9A85A" stroke-width="4.6" stroke-linecap="round"/>
+</g>`,
+  cat: `<g class="pt">
+<line class="lg b" x1="21" y1="32" x2="21" y2="43" stroke="#737C9C" stroke-width="3.4" stroke-linecap="round"/>
+<ellipse class="pwb" cx="19" cy="34.8" rx="5" ry="2.1" fill="#737C9C"/>
+<g class="bdg">
+<path class="tl" d="M16.5 27q-8-3-5.5-13 .8-3 3-2.2" stroke="#9AA3BF" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+<line class="lg a lf" x1="38.5" y1="32" x2="38.5" y2="43" stroke="#737C9C" stroke-width="3.4" stroke-linecap="round"/>
+<rect x="14" y="21" width="31" height="13.5" rx="6.75" fill="#9AA3BF"/>
+<path d="M24 21.8v3.8M29 21.3v4.4M34 21.8v3.8" stroke="#737C9C" stroke-width="1.7" stroke-linecap="round"/>
+<line class="lg b lf" x1="41" y1="32" x2="41" y2="43" stroke="#9AA3BF" stroke-width="3.8" stroke-linecap="round"/>
+<ellipse class="pw" cx="49" cy="34.4" rx="5.5" ry="2.2" fill="#EEF0F7"/>
+<g class="hd">
+<path d="M40 14.5l.6-10.5 7 6z" fill="#9AA3BF"/><path d="M48.5 9.5l6-6.5 1.8 9.5z" fill="#9AA3BF"/>
+<path d="M41.8 12l.4-5 3.4 3z" fill="#F3A6B0"/><path d="M50.8 9.3l3-3.3.9 4.8z" fill="#F3A6B0"/>
+<circle cx="47.5" cy="18" r="9" fill="#9AA3BF"/>
+<ellipse cx="52.8" cy="21.6" rx="4.8" ry="3.5" fill="#EEF0F7"/>
+<path d="M55 19.6h2.6l-1.3 1.7z" fill="#F3A6B0"/>
+<ellipse class="ey" cx="49.8" cy="16.4" rx="1.4" ry="2.1" fill="#262A3B"/>
+<path d="M54.8 23q1.5 1.3 3 0" stroke="#262A3B" stroke-width="1" fill="none" stroke-linecap="round"/>
+<path d="M56.5 21.5l5.5-1M56.5 22.8l5.5 1.2" stroke="#737C9C" stroke-width=".7" stroke-linecap="round"/>
+</g></g>
+<line class="lg a" x1="18.5" y1="32" x2="18.5" y2="43" stroke="#9AA3BF" stroke-width="3.8" stroke-linecap="round"/>
+</g>`,
+};
+const CUPDX = { tomato: -9, dog: 0, cat: -3 };
+const cupG = dx => `<g transform="translate(${dx} 0)" color="rgba(255,255,255,.75)">
+<path class="stm" d="M65 28q-2.2-2.6 0-5t0-5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+<path class="stm s2" d="M70.5 28q-2.2-2.6 0-5t0-5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+<path d="M73.5 34.5q5.5-.5 4.5 4-1 3.5-5.5 3" stroke="#fff" stroke-width="2" fill="none"/>
+<path d="M61 31.5h13l-1.6 12h-9.8z" fill="#fff" stroke="rgba(0,0,0,.2)" stroke-width=".6"/>
+<ellipse cx="67.5" cy="32" rx="6" ry="1.3" fill="#7A4A2A"/>
+<path d="M63.3 37.5h8.4" stroke="#FF6E47" stroke-width="2.4" stroke-linecap="round"/></g>`;
+const K1TOK = {
+  tomato: TI,
+  dog: '<svg class="ti" viewBox="0 0 16 16" aria-hidden="true"><g transform="rotate(-38 8 8)" fill="#F4E9D6"><rect x="3.6" y="6.4" width="8.8" height="3.2" rx="1.2"/><circle cx="3.3" cy="6.2" r="2"/><circle cx="3.3" cy="9.8" r="2"/><circle cx="12.7" cy="6.2" r="2"/><circle cx="12.7" cy="9.8" r="2"/></g></svg>',
+  cat: '<svg class="ti" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.2 8C3 4.6 7.6 4.2 10.6 8 7.6 11.8 3 11.4 1.2 8z" fill="#7FC8E8"/><path d="M10 8l4.6-3.4v6.8z" fill="#5AAED3"/><circle cx="4.2" cy="7.4" r=".9" fill="#16171B"/></svg>',
+};
+
+function pet(pose, h, kind, cls) {
+  kind = kind || S.pet;
+  const vw = pose === 'sip' ? 84 : 64;
+  const w = Math.round(h * vw / 48);
+  const anim = pose === 'walk' ? 'run walk' : pose;
+  return `<svg class="m m-${kind} ${anim}${cls ? ' ' + cls : ''}" viewBox="0 0 ${vw} 48" width="${w}" height="${h}" aria-hidden="true">${BODY[kind]}${pose === 'sip' ? cupG(CUPDX[kind]) : ''}</svg>`;
+}
+
+/* ===== 状态对象 ===== */
+const mqDark = window.matchMedia('(prefers-color-scheme: dark)');
+let initialDocTheme = 'system';
+try {
+  const saved = localStorage.getItem('pomodoq-s1-doc-theme');
+  if (saved === 'light' || saved === 'dark') initialDocTheme = saved;
+} catch (e) {}
+
+const S = {
+  wn: 1, pet: 'tomato', speed: 60,
+  docTheme: initialDocTheme,
+  appTheme: 'system',
+  stage: 'home', W: null, q: null, win: 'open', noIsland: false,
+  hover: false, pinned: false, peek: 0, bubble: null,
+  pop: null, // null | 'pet' | 'theme' | 'sound'
+  confirmEnd: false, anim: true,
+  clock: T0, last: null, rail: null, ovPh: null,
+  audio: {
+    enabled: false,
+    sound: 'rain',
+    volume: 45,
+    breakMode: 'mute', // 'mute' | 'duck'
+    mix: { rain: 65, cafe: 35, fire: 0, pink: 0, forest: 0, white: 0 },
+    mixPreset: 'rainCafe',
+    qMode: 'perTask', // W4: 'perTask' | 'uniform' | 'off'
+    qSound: 'rain',
+    previewUntil: 0,
+    error: false,
+  },
+};
+
+let TOK = 0;
+const todo = id => ALL.find(t => t.id === id);
+const cur = () => S.q && S.q.segs[S.q.idx];
+const nF = q => q.segs.filter(s => s.type === 'f').length;
+const nextF = () => S.q.segs.slice(S.q.idx + 1).find(s => s.type === 'f');
+const pz = () => (S.q && S.q.paused ? 'paused' : '');
+const log = h => { $('log').innerHTML = '事件：' + h; };
+const say = t => { S.bubble = { text: t, until: Date.now() + 3800 }; };
+const sysIsDark = () => mqDark.matches;
+const docIsDark = () => S.docTheme === 'dark' || (S.docTheme === 'system' && sysIsDark());
+const appIsDark = () => S.appTheme === 'dark' || (S.appTheme === 'system' && docIsDark());
+
+/* ===== Web Audio API 多轨程序化白噪音合成引擎（零外链、无接缝循环、平滑淡入淡出） ===== */
+const AudioEngine = (() => {
+  let ctx = null, master = null, nodes = {}, ready = false, closed = false;
+  function makeCrossfadedNoise(sr, secs, generator) {
+    const len = Math.round(sr * secs);
+    const fade = Math.round(sr * 0.12);
+    const raw = new Float32Array(len + fade);
+    generator(raw, sr);
+    const buf = ctx.createBuffer(1, len, sr);
+    const out = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) {
+      if (i < fade) {
+        const t = i / fade;
+        out[i] = raw[i] * t + raw[len + i] * (1 - t);
+      } else {
+        out[i] = raw[i];
+      }
+    }
+    return buf;
+  }
+  function buildTrack(id) {
+    const sr = ctx.sampleRate;
+    const gain = ctx.createGain();
+    gain.gain.value = 0;
+    gain.connect(master);
+    let src = ctx.createBufferSource();
+    src.loop = true;
+
+    if (id === 'white') {
+      src.buffer = makeCrossfadedNoise(sr, 4, a => {
+        for (let i = 0; i < a.length; i++) a[i] = (Math.random() * 2 - 1) * 0.35;
+      });
+      const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 3000;
+      const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 180;
+      src.connect(lp); lp.connect(hp); hp.connect(gain);
+    } else if (id === 'pink') {
+      src.buffer = makeCrossfadedNoise(sr, 4, a => {
+        let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+        for (let i = 0; i < a.length; i++) {
+          const w = Math.random() * 2 - 1;
+          b0 = 0.99886 * b0 + w * 0.0555179;
+          b1 = 0.99332 * b1 + w * 0.0750759;
+          b2 = 0.96900 * b2 + w * 0.1538520;
+          b3 = 0.86650 * b3 + w * 0.3104856;
+          b4 = 0.55000 * b4 + w * 0.5329522;
+          b5 = -0.7616 * b5 - w * 0.0168980;
+          a[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362) * 0.065;
+          b6 = w * 0.115926;
+        }
+      });
+      const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2200;
+      src.connect(lp); lp.connect(gain);
+    } else if (id === 'rain') {
+      src.buffer = makeCrossfadedNoise(sr, 5, (a, rate) => {
+        let b0 = 0, b1 = 0, b2 = 0, drop = 0;
+        for (let i = 0; i < a.length; i++) {
+          const w = Math.random() * 2 - 1;
+          b0 = 0.99 * b0 + w * 0.11;
+          b1 = 0.94 * b1 + w * 0.18;
+          b2 = 0.72 * b2 + w * 0.25;
+          if (Math.random() < 12 / rate) drop = (Math.random() * 0.5 + 0.3) * (Math.random() < 0.5 ? 1 : -1);
+          drop *= 0.992;
+          const mod = 0.85 + 0.15 * Math.sin((i / rate) * 1.4);
+          a[i] = ((b0 + b1 + b2) * 0.38 + drop * 0.35) * mod;
+        }
+      });
+      const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1150; bp.Q.value = 0.45;
+      src.connect(bp); bp.connect(gain);
+    } else if (id === 'cafe') {
+      src.buffer = makeCrossfadedNoise(sr, 6, (a, rate) => {
+        let brown = 0, mid = 0;
+        for (let i = 0; i < a.length; i++) {
+          const w = Math.random() * 2 - 1;
+          brown = (brown + 0.03 * w) / 1.03;
+          mid = 0.88 * mid + w * 0.12;
+          const t = i / rate;
+          const env = 0.72 + 0.18 * Math.sin(t * 2.1) + 0.1 * Math.sin(t * 5.7 + 1.1);
+          a[i] = (brown * 1.8 + mid * 0.28 * env) * 0.65;
+        }
+      });
+      const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 880;
+      const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 110;
+      src.connect(lp); lp.connect(hp); hp.connect(gain);
+    } else if (id === 'fire') {
+      src.buffer = makeCrossfadedNoise(sr, 5, (a, rate) => {
+        let brown = 0, crack = 0;
+        for (let i = 0; i < a.length; i++) {
+          const w = Math.random() * 2 - 1;
+          brown = (brown + 0.025 * w) / 1.025;
+          if (Math.random() < 7 / rate) crack = (Math.random() * 0.9 + 0.3) * (Math.random() < 0.5 ? 1 : -1);
+          crack *= 0.94;
+          a[i] = brown * 1.7 + crack * 0.28;
+        }
+      });
+      const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1600;
+      src.connect(lp); lp.connect(gain);
+    } else { // forest
+      src.buffer = makeCrossfadedNoise(sr, 5, a => {
+        let b0 = 0, b1 = 0;
+        for (let i = 0; i < a.length; i++) {
+          const w = Math.random() * 2 - 1;
+          b0 = 0.992 * b0 + w * 0.09;
+          b1 = 0.92 * b1 + w * 0.15;
+          a[i] = (b0 + b1) * 0.55;
+        }
+      });
+      const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 520; bp.Q.value = 1.1;
+      const lfo = ctx.createOscillator();
+      const lfoG = ctx.createGain();
+      lfo.frequency.value = 0.14;
+      lfoG.gain.value = 210;
+      lfo.connect(lfoG); lfoG.connect(bp.frequency);
+      lfo.start();
+      src.connect(bp); bp.connect(gain);
+    }
+    src.start();
+    return { src, gain };
+  }
+
+  function ensureFromGesture() {
+    if (closed) return false;
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) throw new Error('AudioContext unavailable');
+      if (!ctx || ctx.state === 'closed') {
+        ctx = new AC();
+        master = ctx.createGain();
+        master.gain.value = 0;
+        master.connect(ctx.destination);
+        nodes = {};
+        SOUNDS.forEach(s => { nodes[s.id] = buildTrack(s.id); });
+      }
+      if (ctx.state === 'suspended') {
+        ctx.resume().then(() => { ready = ctx.state === 'running'; sync(); }).catch(() => {
+          S.audio.error = true; sync(); syncAudioUI();
+        });
+      }
+      ready = ctx.state === 'running';
+      return true;
+    } catch (e) {
+      S.audio.error = true;
+      return false;
+    }
+  }
+
+  function computePlan() {
+    const a = S.audio;
+    if (a.error) return { state: 'blocked', gain: 0, tracks: {} };
+    if (!a.enabled) return { state: 'off', gain: 0, tracks: {} };
+    const vol = a.volume / 100;
+    const c = cur();
+    const inPreview = Date.now() < a.previewUntil;
+    const inFocus = !!(S.q && !S.q.paused && c && c.type === 'f');
+    const inBreak = !!(S.q && !S.q.paused && c && c.type !== 'f');
+    let tracks = {};
+    if (S.wn === 3) {
+      let sum = 0;
+      SOUNDS.forEach(s => { const v = (a.mix[s.id] || 0) / 100; tracks[s.id] = v; sum += v; });
+      if (sum <= 0.001) return { state: 'zeroMix', gain: 0, tracks };
+    } else if (S.wn === 4) {
+      if (a.qMode === 'off') return { state: 'off', gain: 0, tracks: {} };
+      const sid = (a.qMode === 'perTask' && c && c.type === 'f' && c.sound) ? c.sound : a.qSound;
+      tracks[sid] = 1;
+    } else {
+      tracks[a.sound] = 1;
+    }
+    if (vol <= 0.001) return { state: 'muted', gain: 0, tracks };
+    if (inFocus) return { state: 'playing', gain: vol * 0.34, tracks };
+    if (inBreak) {
+      if (a.breakMode === 'duck') return { state: 'ducked', gain: vol * 0.34 * 0.22, tracks };
+      return { state: 'breakMuted', gain: 0, tracks };
+    }
+    if (inPreview) return { state: 'preview', gain: vol * 0.3, tracks };
+    return { state: S.q && S.q.paused ? 'paused' : 'standby', gain: 0, tracks };
+  }
+
+  function sync() {
+    const plan = computePlan();
+    if (!ctx || ctx.state !== 'running') return plan;
+    const now = ctx.currentTime;
+    master.gain.setTargetAtTime(plan.gain, now, plan.gain > 0 ? 0.09 : 0.07);
+    SOUNDS.forEach(s => {
+      const n = nodes[s.id];
+      if (!n) return;
+      n.gain.gain.setTargetAtTime(plan.tracks[s.id] || 0, now, 0.09);
+    });
+    return plan;
+  }
+
+  function release() {
+    closed = true;
+    if (ctx && ctx.state !== 'closed') ctx.close().catch(() => {});
+  }
+
+  return { ensureFromGesture, sync, computePlan, release };
+})();
+
+window.addEventListener('pagehide', () => AudioEngine.release());
+
+function audioStatusText(st) {
+  return {
+    off: '已关闭',
+    standby: '已开启 · 进入专注自动播',
+    paused: '已暂停 · 恢复专注续播',
+    preview: '试听中（4 秒）',
+    playing: '专注播放中',
+    ducked: '休息极轻伴奏 (20%)',
+    breakMuted: '休息中 · 已自动静音',
+    muted: '音量为 0%',
+    zeroMix: '所有音轨均为 0%',
+    blocked: '声音被拦截 · 计时不受影响',
+  }[st] || '已关闭';
+}
+function isAudible(st) { return st === 'playing' || st === 'preview' || st === 'ducked'; }
+function activeMixCount() { return SOUNDS.filter(s => (S.audio.mix[s.id] || 0) > 0).length; }
+function activeSoundId() {
+  if (S.wn === 4) {
+    const c = cur();
+    if (S.audio.qMode === 'perTask' && c && c.type === 'f' && c.sound) return c.sound;
+    return S.audio.qSound;
+  }
+  if (S.wn === 3) {
+    let best = 'rain', max = 0;
+    SOUNDS.forEach(s => { if ((S.audio.mix[s.id] || 0) > max) { max = S.audio.mix[s.id]; best = s.id; } });
+    return best;
+  }
+  return S.audio.sound;
+}
+function activeSoundLabel() {
+  if (S.wn === 3) {
+    const cnt = activeMixCount();
+    const pre = MIX_PRESETS[S.audio.mixPreset];
+    return pre ? `${pre.name} · ${cnt} 轨` : `自定义混音 · ${cnt} 轨`;
+  }
+  return soundById(activeSoundId()).short;
+}
+const eqHtml = (st, cls = '') => `<span class="eq ${st === 'blocked' ? 'err' : isAudible(st) ? 'live' : 'dim'} ${cls}" aria-hidden="true"><i></i><i></i><i></i><i></i></span>`;
+
+/* ===== 队列引擎（原方案 1 规则完整保留 + W4 每段声景携带） ===== */
+const totalMin = segs => segs.reduce((a, s) => a + s.min, 0);
+function buildSegs(items, r) {
+  const segs = [], tot = items.reduce((a, i) => a + i.n, 0);
+  let no = 0;
+  items.forEach(it => {
+    for (let k = 1; k <= it.n; k++) {
+      no++;
+      segs.push({ type: 'f', min: r.f, title: it.title, todoId: it.id, sound: it.sound || todo(it.id).aiSound, k, of: it.n, no, st: 'pending' });
+      if (no < tot) { const long = no % r.every === 0; segs.push({ type: long ? 'long' : 'short', min: long ? r.l : r.s, st: 'pending' }); }
+    }
+  });
+  return segs;
+}
+function freeAhead(q, n) {
+  while (q.segs.length - 1 - q.idx < n) {
+    const last = q.segs[q.segs.length - 1];
+    if (last.type === 'f') { const long = last.no % q.r.every === 0; q.segs.push({ type: long ? 'long' : 'short', min: long ? q.r.l : q.r.s, st: 'pending' }); }
+    else { q.fc++; q.segs.push({ type: 'f', min: q.r.f, title: '自由专注', sound: S.audio.sound, no: q.fc, k: 1, of: 1, st: 'pending' }); }
+  }
+}
+const startLine = c => {
+  const base = S.q.mode === 'free' ? `开始第 ${c.no} 个番茄` : `开始：${c.title}${c.of > 1 ? ` ${c.k}/${c.of}` : ''}`;
+  if (S.wn === 4 && S.audio.enabled && S.audio.qMode === 'perTask' && c.sound) return `${base} · 声景「${soundById(c.sound).short}」`;
+  return base;
+};
+
+function startQueue(mode, items, r) {
+  const q = { mode, r: { ...r }, idx: 0, paused: false, fc: 1, t0: S.clock, doneF: 0, focusSec: 0 };
+  q.segs = mode === 'free' ? [{ type: 'f', min: r.f, title: '自由专注', sound: S.audio.sound, no: 1, k: 1, of: 1, st: 'pending' }] : buildSegs(items, r);
+  if (mode === 'free') freeAhead(q, 14);
+  q.segs[0].st = 'cur';
+  q.remain = q.segs[0].min * 60;
+  S.q = q; S.stage = 'run'; S.W = null; S.confirmEnd = false; S.last = null; S.pop = null; S.anim = true;
+  S.hover = false; S.pinned = false; S.peek = Date.now() + 2600;
+  S.audio.previewUntil = 0;
+  say(startLine(q.segs[0]));
+  AudioEngine.sync();
+}
+function finish(ended) {
+  const q = S.q;
+  S.last = { n: q.doneF, min: q.focusSec / 60, ended };
+  S.q = null; S.stage = 'home'; S.win = 'open'; S.confirmEnd = false; S.hover = false; S.pinned = false; S.bubble = null; S.anim = true;
+  S.audio.previewUntil = 0;
+  AudioEngine.sync();
+  log(ended ? `终止队列 → 回到首页 · 已完成 ${S.last.n} 个番茄保留在记录里，白噪音平滑淡出` : `最后一个番茄完成 → 队列结束回到首页 · 共 ${S.last.n} 个番茄，白噪音已停`);
+  render();
+}
+function advance(skipped) {
+  const q = S.q, c = q.segs[q.idx];
+  c.st = skipped ? 'skip' : 'done';
+  c.used = c.min * 60 - Math.max(0, q.remain);
+  if (c.type === 'f') { q.focusSec += c.used; if (!skipped) q.doneF++; }
+  if (q.mode === 'free') freeAhead(q, 14);
+  if (q.idx >= q.segs.length - 1) return finish(false);
+  q.idx++;
+  const n = q.segs[q.idx];
+  n.st = 'cur'; q.remain = n.min * 60; S.peek = 0; S.confirmEnd = false;
+  AudioEngine.sync();
+  if (n.type === 'f') {
+    S.peek = Date.now() + 2600;
+    say(startLine(n));
+    const sndNote = S.audio.enabled ? (S.wn === 4 && S.audio.qMode === 'perTask' ? ` · 声景平滑切换至「${soundById(n.sound).short}」` : ' · 白噪音淡入恢复') : '';
+    log(`${skipped ? '跳过' : PH[c.type] + '结束'} → 自动开始下一个番茄「${esc(n.title)}」${sndNote}`);
+  } else {
+    S.hover = false; S.pinned = false;
+    const brkNote = S.audio.enabled ? (S.audio.breakMode === 'duck' ? ' · 白噪音自动压低至 20%' : ' · 白噪音平滑淡出静音') : '';
+    log(`${skipped ? '跳过当前番茄' : '专注结束'} → 进入休息全屏（${PH[n.type]} ${n.min} 分钟）· ${PETS[S.pet]}走去喝咖啡${brkNote}`);
+  }
+  render();
+}
+function warn() {
+  S.peek = Date.now() + 3600;
+  say('还有 1 分钟，准备休息');
+  log('专注还剩 1 分钟 → 角色从刘海 Island 说「还有 1 分钟，准备休息」，Island 不展开打断操作');
+  renderIsl();
+}
+function togglePause() {
+  const q = S.q; if (!q) return;
+  q.paused = !q.paused;
+  AudioEngine.sync();
+  log(q.paused ? `暂停 → 倒计时停住，${PETS[S.pet]}停下来等你${S.audio.enabled ? '，白噪音平滑淡出' : ''}` : `继续 → 倒计时接着走${S.audio.enabled ? '，白噪音淡入恢复' : ''}`);
+  render();
+}
+function ff() {
+  const q = S.q; if (!q) { log('还没有队列。先在屏幕里创建队列，或点「直接跳到 → 专注进行中」'); return; }
+  q.paused = false; q.remain = 0.2;
+}
+function defaultQueue() {
+  S.clock = T0;
+  startQueue('smart', DEFAULT_TODOS.map(t => ({ id: t.id, title: t.title, n: t.ai, sound: t.aiSound })), RH0);
+  S.peek = 0; S.bubble = null;
+}
+function jump(k) {
+  S.pop = null; S.win = 'open';
+  if (k === 'home') { S.q = null; S.W = null; S.stage = 'home'; S.last = null; S.clock = T0; S.anim = true; AudioEngine.sync(); log('回到首页：暖色/暖墨大场景 + 「直接开始 / 按任务智能排番茄」双入口'); return render(); }
+  if (k === 'wiz') { S.q = null; S.clock = T0; AudioEngine.sync(); return openWiz(); }
+  defaultQueue();
+  const q = S.q;
+  if (k === 'focus') { q.remain = 18 * 60 + 40; S.clock += 380; log('专注进行中：鼠标移到刘海展开 Island；点标题栏按钮试听白噪音或切暖墨暗色'); }
+  if (k === 'warn') { q.remain = 64; S.clock += 25 * 60 - 64; log('还剩 1 分多钟：马上触发刘海气泡提醒「还有 1 分钟，准备休息」'); }
+  if (k === 'break') { q.remain = 0; S.clock += 25 * 60; advance(false); return; }
+  AudioEngine.sync();
+  render();
+}
+function resetAll() {
+  S.q = null; S.W = null; S.stage = 'home'; S.last = null; S.win = 'open'; S.noIsland = false;
+  S.clock = T0; S.hover = false; S.pinned = false; S.peek = 0; S.bubble = null; S.pop = null; S.confirmEnd = false; S.anim = true;
+  S.audio.enabled = false; S.audio.error = false; S.audio.previewUntil = 0;
+  AudioEngine.sync();
+  log('重置演示：回到今天 14:05，声音已关闭');
+  render();
+}
+
+/* ===== 向导（方案 1：14 张任务卡框选丢盒 → AI 估番茄 + W4 声景绑定） ===== */
+function openWiz() {
+  const W = { tok: ++TOK, step: 0, pick: {}, est: {}, pend: {}, sound: {}, order: ALL.map(t => t.id), sel: {}, r: { ...RH0 }, just: null, back: null, landed: null, fly: false };
+  ALL.forEach(t => { W.sound[t.id] = t.aiSound; });
+  S.W = W; S.stage = 'wiz'; S.anim = true; S.pop = null; S.last = null;
+  log('进入方案 1 创建步骤 → 14 张任务卡铺在桌面上：按住鼠标拖过卡片一次圈中多张（拖到边缘自动滚动），再拖进或点按钮丢进「今日队列」盒子');
+  render();
+}
+function estimate(ids, base, gap) {
+  const W = S.W, tok = W.tok;
+  let k = 0;
+  ids.forEach(id => {
+    if (W.est[id] != null || W.pend[id]) return;
+    W.pend[id] = true;
+    setTimeout(() => {
+      if (!S.W || S.W.tok !== tok) return;
+      W.est[id] = todo(id).ai; W.pend[id] = false; W.just = id;
+      renderWin();
+      W.just = null;
+    }, base + gap * k++);
+  });
+}
+const pickedIds = W => W.order.filter(id => W.pick[id]);
+const itemsOf = W => pickedIds(W).map(id => ({ id, title: todo(id).title, n: W.est[id] || 1, sound: W.sound[id] || todo(id).aiSound }));
+const allReady = W => pickedIds(W).every(id => W.est[id] != null);
+function plan(W, readyOnly) {
+  const it = itemsOf(W).filter(i => !readyOnly || W.est[i.id] != null);
+  const segs = buildSegs(it, W.r), tot = totalMin(segs), nf = segs.filter(s => s.type === 'f').length;
+  return { it, segs, tot, nf, end: S.clock + tot * 60, focus: nf * W.r.f, rest: tot - nf * W.r.f };
+}
+function wizStart() {
+  const W = S.W, it = itemsOf(W);
+  if (!it.length) return;
+  if (S.wn === 4 && S.audio.qMode !== 'off' && S.audio.enabled) AudioEngine.ensureFromGesture();
+  startQueue('smart', it, W.r);
+  log(`开始专注 → ${nF(S.q)} 个番茄排好了，倒计时同步出现在刘海 Island · 预计 ${k1clk(S.q.t0 + totalMin(S.q.segs) * 60)} 结束`);
+  render();
+}
+
+/* ===== 共享视图部件 ===== */
+const optFree = () => `<button class="opt pri" data-act="free"><span class="ic">${IC.play}</span><span><b>直接开始</b><small>自由队列 · 专注 25 分、休息 5 分，一直循环到你停</small></span></button>`;
+const optSmart = () => `<button class="opt" data-act="smart"><span class="ic">${IC.spark}</span><span><b>按任务智能排番茄</b><small>从今日 ${ALL.length} 项任务里圈卡丢盒，AI 估每项要几个番茄</small></span></button>`;
+const banner = () => `<div class="banner anim">${TI}<span><b>队列${S.last.ended ? '已终止' : '完成'}</b> · 完成 ${S.last.n} 个番茄 · 专注 ${dur(S.last.min)}</span></div>`;
+const stepper = (names, at) => `<div class="stpr">${names.map((n, i) => `${i ? '<u></u>' : ''}<span class="${i === at ? 'on' : i < at ? 'dn' : ''}"><i>${i < at ? '✓' : i + 1}</i>${n}</span>`).join('')}</div>`;
+const estUI = (W, id) => (W.est[id] == null ? '<span class="shim">AI 估算中…</span>' : `<span class="nb"><button class="mini" data-act="wn:${id}:-1">−</button><b>${W.est[id]} ${TI}</b><button class="mini" data-act="wn:${id}:1">+</button></span>`);
+const whyUI = (W, id) => (W.est[id] == null ? '' : W.est[id] === todo(id).ai ? `<small><span class="aitag">${IC.spark}AI 估</span> ${todo(id).why}</small>` : `<small>你改成了 ${W.est[id]} 个 · AI 原估 ${todo(id).ai} 个</small>`);
+const preUI = r => `<div class="chips">${Object.keys(PRE).map(k => { const p = PRE[k]; return `<button class="chip${p.f === r.f && p.s === r.s && p.l === r.l && p.every === r.every ? ' on' : ''}" data-act="wpre:${k}">${p.label}</button>`; }).join('')}</div>`;
+const pbar = segs => `<div class="pbar">${segs.map(s => `<i class="${s.type === 'f' ? 'f' : s.type}" style="flex:${s.min}${s.type === 'f' && s.todoId ? ';background:' + COL[s.todoId] : ''}"></i>`).join('')}</div>`;
+const ctl = () => `<div class="ctl"><button class="wbtn pri" data-act="pause">${S.q.paused ? IC.play + '继续' : IC.pause + '暂停'}</button><button class="wbtn" data-act="skip">${IC.skip}跳过</button></div>`;
+const endBtn = () => (S.confirmEnd ? `<span class="endc">确定终止？已完成的番茄会保留<button class="wbtn sm dng" data-act="endYes">终止</button><button class="wbtn sm" data-act="endNo">再想想</button></span>` : `<button class="wbtn sm dng" data-act="end">终止队列</button>`);
+const cTitle = c => (c.type === 'f' ? esc(c.title) : PH[c.type]);
+const cSub = c => { const q = S.q; if (c.type !== 'f') { const n = nextF(); return n ? `结束后自动开始：${esc(n.title)}` : '队列的最后一段'; } return q.mode === 'free' ? `第 ${c.no} 个番茄 · 自由队列` : `${c.of > 1 ? `这项的第 ${c.k} / ${c.of} 个 · ` : ''}队列第 ${c.no} / ${nF(q)} 个`; };
+const tagOf = c => `<span class="tag ${c.type === 'f' ? '' : c.type}">${S.q.paused ? '已暂停' : PH[c.type]}</span>`;
+
+function nextList(max) {
+  const q = S.q, rows = [];
+  let i = q.idx + 1;
+  for (; i < q.segs.length && rows.length < max; i++) {
+    const s = q.segs[i];
+    const sndTag = (S.wn === 4 && s.type === 'f' && s.sound && S.audio.qMode === 'perTask') ? ` · ${soundById(s.sound).short}` : '';
+    rows.push(s.type === 'f'
+      ? `<div class="qr"><span class="st">${TI}</span><span class="tt">${esc(s.title)}${s.of > 1 ? ` <span class="mt">${s.k}/${s.of}</span>` : ''}</span><span class="mt">${s.min} 分${sndTag}</span></div>`
+      : `<div class="qr ${s.type}"><span class="st">·</span><span class="tt">${PH[s.type]}</span><span class="mt">${s.min} 分</span></div>`);
+  }
+  if (q.mode === 'free') rows.push('<div class="qr more">自由队列一直循环，直到你终止</div>');
+  else if (!rows.length) rows.push('<div class="qr more">这是最后一个番茄</div>');
+  else { const left = q.segs.slice(i).filter(s => s.type === 'f').length; if (left) rows.push(`<div class="qr more">后面还有 ${left} 个番茄</div>`); }
+  return rows.join('');
+}
+
+/* ===== 顶部标题栏（含主题按钮、宠物按钮、及对应方案的白噪音入口） ===== */
+function tbar() {
+  const st = AudioEngine.computePlan().state;
+  const dark = appIsDark();
+  const themeLbl = S.appTheme === 'system' ? '随系统' : (dark ? '暖墨深' : '暖纸浅');
+  let sndBtn = '';
+  const liveCls = st === 'blocked' ? ' snd-err' : (S.audio.enabled ? ' snd-live' : '');
+  if (S.wn === 1) {
+    sndBtn = `<button class="tool${liveCls}${S.pop === 'sound' ? ' on' : ''}" data-act="pop:sound" title="白噪音音景面板">${S.audio.enabled ? eqHtml(st) : IC.mute}<span>${S.audio.enabled ? `${activeSoundLabel()} ${S.audio.volume}%` : '声景 · 关'}</span></button>`;
+  } else if (S.wn === 2) {
+    sndBtn = `<button class="tool${liveCls}" data-act="toggleSound" title="快捷开关白噪音">${S.audio.enabled ? eqHtml(st) : IC.mute}<span>${S.audio.enabled ? `${activeSoundLabel()} · 开` : '白噪音 · 关'}</span></button>`;
+  } else if (S.wn === 3) {
+    sndBtn = `<button class="tool${liveCls}${S.pop === 'sound' ? ' on' : ''}" data-act="pop:sound" title="打开多轨混音台">${S.audio.enabled ? eqHtml(st) : IC.mix}<span>${S.audio.enabled ? `混音 · ${activeMixCount()} 轨` : '混音台'}</span></button>`;
+  } else if (S.wn === 4) {
+    const lbl = S.audio.qMode === 'off' ? '本轮静音' : (S.audio.enabled ? `${activeSoundLabel()} · ${S.audio.qMode === 'perTask' ? '随任务' : '统一'}` : '队列声景');
+    sndBtn = `<button class="tool${liveCls}${S.pop === 'sound' ? ' on' : ''}" data-act="pop:sound" title="队列白噪音设定">${S.audio.enabled ? eqHtml(st) : IC.vol}<span>${lbl}</span></button>`;
+  } else if (S.wn === 5) {
+    const lbl = S.noIsland ? (S.audio.enabled ? `声控 · ${activeSoundLabel()}` : '窗口声控') : (S.audio.enabled ? `刘海声控 · ${activeSoundLabel()}` : '刘海声控');
+    sndBtn = `<button class="tool${liveCls}${S.pop === 'sound' ? ' on' : ''}" data-act="pop:sound" title="同步打开声控面板（无刘海回落入口）">${S.audio.enabled ? eqHtml(st) : IC.vol}<span>${lbl}</span></button>`;
+  }
+  return `<div class="tb">
+    <div class="lights"><i></i><i title="收起到 Dock" data-act="min"></i><i></i></div>
+    <div class="ttl">PomodoQ</div>
+    <div class="tb-r">
+      ${sndBtn}
+      <button class="tool${S.pop === 'theme' ? ' on' : ''}" data-act="pop:theme" title="切换应用主题">${dark ? IC.moon : IC.sun}<span>${themeLbl}</span></button>
+      <button class="tool${S.pop === 'pet' ? ' on' : ''}" data-act="pop:pet" title="切换动效模板">${pet('idle', 17)}<span>${PETS[S.pet]}</span></button>
+    </div>
+  </div>`;
+}
+
+/* ===== 弹层渲染：宠物 / 主题 / W1&W4&W5 声景面板 / W3 多轨混音抽屉 ===== */
+function renderPopover() {
+  if (!S.pop) return '';
+  if (S.pop === 'pet') {
+    const sub = { tomato: '默认', dog: '跑 · 喝咖啡 · 拉伸', cat: '跑 · 喝咖啡 · 伸懒腰' };
+    return `<div class="pop pp" role="dialog" aria-label="动效模板"><h5>动效模板<button data-act="pop:close" aria-label="关闭">×</button></h5><p class="psub">专注时它在刘海里跑，休息时它在整块屏幕上走去喝咖啡。</p><div class="ppg">${Object.keys(PETS).map(k => `<button class="ppc${S.pet === k ? ' on' : ''}" data-set="pet:${k}"><div class="pv">${pet('run', 40, k)}</div>${PETS[k]}<small>${sub[k]}</small></button>`).join('')}</div></div>`;
+  }
+  if (S.pop === 'theme') {
+    const sysLbl = docIsDark() ? '当前深色' : '当前浅色';
+    const opts = [
+      { id: 'system', name: '跟随系统', desc: `自动匹配外观（${sysLbl}）`, sw: 'linear-gradient(135deg,#FFF4E3 50%,#1D1713 50%)' },
+      { id: 'light', name: '暖纸浅色', desc: '原方案 1 暖奶油纸面与深棕描边', sw: '#FFF4E3' },
+      { id: 'dark', name: '暖墨深色', desc: '低眩光深咖纸面、星月场景与暗化气泡', sw: '#1D1713' },
+    ];
+    return `<div class="pop pop-theme" role="dialog" aria-label="应用外观主题"><h5>应用主题<button data-act="pop:close" aria-label="关闭">×</button></h5><p class="psub">可独立于系统外观锁定浅色或暖墨深色。</p><div class="tp-list">${opts.map(o => `<button class="tp-opt${S.appTheme === o.id ? ' on' : ''}" data-set="appTheme:${o.id}"><span>${o.name}<small>${o.desc}</small></span><i class="tp-sw" style="background:${o.sw}"></i></button>`).join('')}</div></div>`;
+  }
+  if (S.pop === 'sound') {
+    const plan = AudioEngine.computePlan();
+    if (S.wn === 3) {
+      return `<div class="mdraw" role="dialog" aria-label="多轨分层混音台">
+        <h5><span>${IC.mix} 多轨声景混音台</span><button data-act="pop:close" aria-label="关闭">×</button></h5>
+        ${plan.state === 'blocked' ? `<div class="serr"><span>音频被浏览器拦截</span><button class="wbtn xs pri" data-act="retryAudio">重试开启</button></div>` : ''}
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+          <span style="font-size:12px;color:var(--w-mut)">${eqHtml(plan.state)} <span data-ast>${audioStatusText(plan.state)}</span></span>
+          <button class="wbtn xs${S.audio.enabled ? '' : ' pri'}" data-act="toggleSound">${S.audio.enabled ? '关闭声音' : '开启混音'}</button>
+        </div>
+        <div class="mpres">${Object.entries(MIX_PRESETS).map(([k, p]) => `<button class="mpre${S.audio.mixPreset === k ? ' on' : ''}" data-act="mixPre:${k}">${p.name}<small>${p.desc}</small></button>`).join('')}</div>
+        <div class="mtracks">${SOUNDS.map(s => {
+          const v = S.audio.mix[s.id] || 0;
+          return `<div class="mtrk${v > 0 ? ' act' : ''}" data-mtrk="${s.id}"><span class="tn" style="color:${v > 0 ? s.color : 'inherit'}">${S_IC[s.id]}${s.short}</span><input class="sl" type="range" min="0" max="100" step="1" value="${v}" style="--control-value:${v};--sl-fill:${s.color}" data-mix="${s.id}" aria-label="${s.name}音量" aria-valuetext="${v}%"><output data-mo="${s.id}">${v}%</output></div>`;
+        }).join('')}</div>
+        <div class="sbar" style="margin:0"><label for="mVol">总音量</label><input id="mVol" class="sl" type="range" min="0" max="100" step="1" value="${S.audio.volume}" style="--control-value:${S.audio.volume}" data-mvol aria-valuetext="${S.audio.volume}%"><output data-vo>${S.audio.volume}%</output></div>
+        <div class="sfoot"><span>休息段：${S.audio.breakMode === 'mute' ? '自动静音' : '渐弱 20%'}</span><button class="wbtn xs" data-act="toggleBrkMode">切换休息策略</button></div>
+      </div>`;
+    }
+    const curS = activeSoundId();
+    const title = S.wn === 4 ? '队列白噪音控制' : S.wn === 5 ? (S.noIsland ? '窗口声控（无刘海回落）' : '声景控制（与刘海同步）') : '白噪音 · 声景面板';
+    return `<div class="pop spop" role="dialog" aria-label="${title}">
+      <h5><span>${title}</span><button data-act="pop:close" aria-label="关闭">×</button></h5>
+      <p class="psub">${S.wn === 1 ? '开启后在专注段平滑淡入，首页场景附带轻氛围视效。' : S.wn === 4 ? '按任务自动换声时，此处显示当前活跃音色；也可覆盖总开关与音量。' : '桌面收起时优先用刘海 Island 控音，此处保持同一份状态。'}</p>
+      ${plan.state === 'blocked' ? `<div class="serr"><span>声音被系统或浏览器拦截</span><button class="wbtn xs pri" data-act="retryAudio">重试</button></div>` : ''}
+      <div class="sgrid">${SOUNDS.map(s => `<button class="scard${curS === s.id ? ' on' : ''}" data-act="pickSound:${s.id}"><span style="color:${s.color}">${S_IC[s.id]}</span><span>${s.short}</span><small>${s.sub}</small></button>`).join('')}</div>
+      <div class="sbar"><label for="pVol">音量</label><input id="pVol" class="sl" type="range" min="0" max="100" step="1" value="${S.audio.volume}" style="--control-value:${S.audio.volume}" data-mvol aria-valuetext="${S.audio.volume}%"><output data-vo>${S.audio.volume}%</output></div>
+      <div class="sfoot">
+        <span style="display:inline-flex;align-items:center;gap:6px">${eqHtml(plan.state)} <span data-ast>${audioStatusText(plan.state)}</span></span>
+        <div style="display:flex;gap:6px">
+          <button class="wbtn xs" data-act="toggleBrkMode" title="切换休息段音频策略">${S.audio.breakMode === 'mute' ? '休息静音' : '休息 20%'}</button>
+          <button class="wbtn xs${S.audio.enabled ? '' : ' pri'}" data-act="toggleSound">${S.audio.enabled ? '关闭' : '开启声音'}</button>
+        </div>
+      </div>
+    </div>`;
+  }
+  return '';
+}
+
+/* ===== 首页场景氛围视觉层（W1 突出展示，开启声音时浮现对应自然氛围） ===== */
+function ambienceLayer() {
+  if (!S.audio.enabled || S.audio.error) return '';
+  if (S.wn === 4 && S.audio.qMode === 'off') return '';
+  const sid = activeSoundId();
+  if (sid === 'rain') {
+    const drops = [8, 16, 25, 34, 43, 52, 64, 73, 82, 91].map((l, i) => `<i style="left:${l}%;animation-delay:${-(i * 0.17).toFixed(2)}s;animation-duration:${(0.88 + (i % 3) * 0.14).toFixed(2)}s"></i>`).join('');
+    return `<div class="amb amb-rain">${drops}</div>`;
+  }
+  if (sid === 'fire') return '<div class="amb amb-fire"></div>';
+  if (sid === 'forest') {
+    return `<div class="amb amb-forest"><i style="top:22%;left:12%;width:84px"></i><i style="top:42%;left:36%;width:110px;animation-delay:-1.3s"></i><i style="top:58%;left:18%;width:72px;animation-delay:-2.5s"></i></div>`;
+  }
+  if (sid === 'cafe') {
+    return `<div class="amb amb-cafe"><i style="left:49%"></i><i style="left:58%;animation-delay:-1.1s"></i><i style="left:66%;animation-delay:-2.1s"></i></div>`;
+  }
+  return '<div class="amb"><i class="amb-wave"></i><i class="amb-wave" style="animation-delay:-1.6s"></i></div>';
+}
+
+/* ===== 底部时间线轨道（原方案 1 完整保留 + W4 声景标注） ===== */
+function railPanel(blocks, right, pose, legend) {
+  const R = S.rail, pos = s => (s - R.t0) / (R.span * 60) * 100;
+  let h = '';
+  blocks.forEach(b => { h += `<i class="${b.cls}" style="left:${pos(b.start).toFixed(2)}%;width:${(b.min / R.span * 100).toFixed(2)}%${b.col ? ';background:' + b.col : ''}"></i>`; });
+  for (let t = Math.ceil(R.t0 / 3600) * 3600; t <= R.t0 + R.span * 60; t += 3600) h += `<u style="left:${pos(t).toFixed(2)}%">${clk(t)}</u>`;
+  h += `<b class="now" data-clk style="left:${clamp(pos(S.clock), 0, 100).toFixed(2)}%"><span>${pet(pose, 28, null, pz())}</span></b>`;
+  return `<div class="rl"><div class="rl-h"><span>今天的时间线</span><span>${right}</span></div><div class="rail">${h}</div><div class="rl-l">${legend}</div></div>`;
+}
+function railWin(q) {
+  let t0 = Math.floor(q.t0 / 3600) * 3600, span = 300;
+  if (q.mode === 'smart') { const end = S.clock + q.remain + q.segs.slice(q.idx + 1).reduce((a, s) => a + s.min * 60, 0); span = Math.max(300, Math.ceil((end - t0) / 3600) * 60); }
+  else while (S.clock > t0 + span * 60 * .8) t0 += 7200;
+  return { t0, span };
+}
+function runBlocks(q) {
+  const R = S.rail, lo = R.t0, hi = R.t0 + R.span * 60, out = [], c = q.segs[q.idx];
+  const col = s => (s.type === 'f' && s.todoId ? COL[s.todoId] : '');
+  const tc = S.clock - (c.min * 60 - q.remain);
+  let tb = tc;
+  for (let i = q.idx - 1; i >= 0; i--) {
+    const s = q.segs[i], u = s.used != null ? s.used : s.min * 60;
+    tb -= u;
+    const a = Math.max(tb, lo), b = Math.min(tb + u, hi);
+    if (b - a > 30) out.unshift({ cls: (s.type === 'f' ? 'f' : s.type) + ' done', start: a, min: (b - a) / 60, col: col(s) });
+  }
+  let tf = tc;
+  for (let i = q.idx; i < q.segs.length && tf < hi; i++) {
+    const s = q.segs[i], a = Math.max(tf, lo), b = Math.min(tf + s.min * 60, hi);
+    if (b > a) out.push({ cls: s.type === 'f' ? 'f' : s.type, start: a, min: (b - a) / 60, col: col(s) });
+    tf += s.min * 60;
+  }
+  return out;
+}
+const LEG_FREE = '<span><i style="background:var(--focus)"></i>专注</span><span><i style="background:var(--break)"></i>短休息</span><span><i style="background:var(--long)"></i>长休息</span>';
+
+/* ===== 方案 1 视图（整合 5 套白噪音方案与暗色模式） ===== */
+const View = {
+  home() {
+    const st = AudioEngine.computePlan().state;
+    const badgeLabel = S.wn === 3
+      ? (S.audio.enabled ? `混音：${activeSoundLabel()}` : '配一套多轨混音')
+      : (S.audio.enabled ? `${activeSoundLabel()} · ${audioStatusText(st)}` : '试听白噪音');
+    const badgeAct = (S.wn === 1 || S.wn === 3 || S.wn === 4 || S.wn === 5) ? 'pop:sound' : 'toggleSound';
+    return `<div class="s4g">
+      <div class="scene anim">
+        <div class="night-sky" aria-hidden="true">
+          <div class="moon"></div>
+          <i style="left:68%;top:18%"></i><i style="left:75%;top:32%"></i><i style="left:82%;top:22%"></i><i style="left:52%;top:16%"></i><i style="left:60%;top:28%"></i>
+        </div>
+        ${ambienceLayer()}
+        <div class="tm">
+          <div class="s4time">25:00</div>
+          <div class="ph">未开始 · 选一种方式开始</div>
+        </div>
+        <i class="gl"></i><i class="dash"></i>
+        <div class="sp">${pet('idle', 124)}</div>
+        <button class="scene-badge${S.audio.enabled ? ' live' : ''}" data-act="${badgeAct}">${S.audio.enabled ? eqHtml(st) : IC.vol}<span>${badgeLabel}</span></button>
+      </div>
+      ${S.last ? banner() : ''}
+      <div class="anim d1">
+        <p class="cap">创建 PomodoQ</p>
+        <div class="s4row">${optFree()}${optSmart()}</div>
+      </div>
+    </div>`;
+  },
+  wiz() {
+    const W = S.W, steps = ['圈中任务丢进盒子', S.wn === 4 ? 'AI 排番茄与声景' : 'AI 排番茄并开始'], pk = pickedIds(W);
+    W.sel = W.sel || {};
+    if (W.step === 0) {
+      const tilt = [-1.6, 1.2, -.9, 1.5, -1.2, .8];
+      const pile = W.order.filter(id => !W.pick[id]), nSel = pile.filter(id => W.sel[id]).length;
+      const landed = W.landed || [];
+      return `<div class="s4g">
+        <div class="s4wh">${stepper(steps, 0)}<span>已丢进 <b style="color:var(--w-fg)">${pk.length}</b> / ${W.order.length} 张</span></div>
+        <div class="k1pick">
+          <div class="k1desk">
+            <div class="k1q"><h3>今天做哪几项？</h3><p>按住鼠标拖过卡片，一次圈中多张（也可以一张张点）。圈好后点按钮，或把圈中的卡片拖进右边的盒子。</p></div>
+            ${pile.length ? `<div class="k1sc" data-sc="k1pile"><div class="k1grid">${pile.map((id, n) => `<button class="k1c${W.sel[id] ? ' on' : ''}${id === W.back ? ' in' : ''}" data-k="${id}" data-act="ksel:${id}" style="--r:${tilt[n % 6]}deg"><span class="k1h"><span>今日任务</span><i class="k1k">${IC.check}</i></span><b>${esc(todo(id).title)}</b></button>`).join('')}</div></div>` : `<div class="k1done">${pet('idle', 64)}<p>都丢进去了。<br>想拿出来，点盒子里卡片上的 ×。</p></div>`}
+            <div class="k1acts">
+              <span>${pile.length ? `<a data-act="kall:1">全部圈中</a> · <a data-act="kall:0">取消圈中</a>` : ''}</span>
+              <button class="wbtn${nSel ? ' pri' : ''}" data-act="kthrow"${nSel ? '' : ' disabled'}${pile.length ? '' : ' style="visibility:hidden"'}>${nSel ? `把圈中的 ${nSel} 张丢进盒子 →` : '先圈中几张卡片'}</button>
+            </div>
+          </div>
+          <div class="k1box${pk.length ? '' : ' emp'}">
+            <div class="k1bh"><b>今日队列</b><span>${pk.length} 项${pk.length > 7 ? ' · 可滚动' : ''}</span></div>
+            ${pk.length ? `<div class="k1bl" data-sc="k1box">${pk.map((id, n) => `<div class="k1j${landed.includes(id) ? ' new' : ''}" style="--r:${tilt[(n + 2) % 6]}deg;--d:${Math.min(landed.indexOf(id), 6) * 70}ms"><span>${esc(todo(id).title)}</span><button class="k1x" data-act="kout:${id}" title="拿出来，今天不做">×</button></div>`).join('')}</div>` : `<div class="k1be">${pet('idle', 44)}<b>把任务卡丢进来</b><small>把圈中的卡片拖过来，<br>或点「丢进盒子」按钮。<br>留在桌面上的今天不做。</small></div>`}
+          </div>
+        </div>
+        <div class="s4wf">
+          <button class="wbtn sm" data-act="wcancel">取消</button>
+          <span>${pk.length ? '盒子里的任务，下一步交给 AI 估每项要几个番茄' : pile.length > 6 ? `桌面上还有 ${pile.length} 张，往下滚能看到全部` : `桌面上还有 ${pile.length} 张`}</span>
+          <button class="wbtn${pk.length && !nSel ? ' pri' : ''}" data-act="wnext"${pk.length ? '' : ' disabled'}>${IC.spark}让 AI 排番茄</button>
+        </div>
+      </div>`;
+    }
+    const ready = allReady(W), P = plan(W, true), got = pk.filter(id => W.est[id] != null).length;
+    const w4Box = S.wn === 4 ? `<div class="w4-box">
+      <div class="w4-hd"><span>本轮队列声景策略</span><span>${S.audio.qMode === 'off' ? '静音' : (S.audio.enabled ? '已开启' : '开跑后可开')}</span></div>
+      <div class="chips">
+        <button class="chip${S.audio.qMode === 'perTask' ? ' on' : ''}" data-act="qMode:perTask">按任务换声</button>
+        <button class="chip${S.audio.qMode === 'uniform' ? ' on' : ''}" data-act="qMode:uniform">统一 ${soundById(S.audio.qSound).short}</button>
+        <button class="chip${S.audio.qMode === 'off' ? ' on' : ''}" data-act="qMode:off">本轮静音</button>
+      </div>
+    </div>` : '';
+    return `<div class="s4g">
+      <div class="s4wh">${stepper(steps, 1)}<span>${ready ? `${pk.length} 项 · ${P.nf} 个番茄` : `AI 估算中 ${got} / ${pk.length}`}</span></div>
+      <div class="s4cols k1cols">
+        <div class="ord" data-sc="k1ord">
+          <div class="k1ai${ready ? ' ok' : ''}">${IC.spark}<span>${ready ? (S.wn === 4 ? `AI 排好了 ${P.nf} 个番茄并配好任务声景，点每行音景胶囊可换。` : `AI 排好了，共 ${P.nf} 个番茄。不合适可以加减，或调顺序。`) : 'AI 正在逐项估算每个任务要几个番茄…'}</span>${ready ? '<a data-act="wreset">恢复 AI 的估计</a>' : ''}</div>
+          ${pk.map((id, i) => {
+            const sChip = (S.wn === 4 && W.est[id] != null) ? `<button class="tchip" data-act="wSound:${id}" title="点击切换该任务的绑定声景" style="border-color:${soundById(W.sound[id]).color}">${soundById(W.sound[id]).short} ↻</button>` : '';
+            return `<div class="ordr${W.est[id] == null ? ' wait' : ''}${id === W.just ? ' pop' : ''}"><span class="no">${i + 1}</span><span class="tt">${esc(todo(id).title)}${sChip}${W.est[id] == null ? '<small>等 AI 估…</small>' : whyUI(W, id)}</span>${estUI(W, id)}<span class="mv"><button class="mini" data-act="wmv:${id}:-1"${i ? '' : ' disabled'}>↑</button><button class="mini" data-act="wmv:${id}:1"${i < pk.length - 1 ? '' : ' disabled'}>↓</button></span></div>`;
+          }).join('')}
+        </div>
+        <div class="s4sum">
+          <p class="cap" style="margin:0">这一轮的安排</p>
+          ${P.nf ? pbar(P.segs) : '<div class="pbar"><i class="k1gh" style="flex:1"></i></div>'}
+          <div class="pleg" style="margin:0"><span>${clk(S.clock)} 开始</span><span>${ready ? k1clk(P.end) + ' 结束' : '… 结束'}</span></div>
+          ${preUI(W.r)}
+          ${w4Box}
+          <div class="suml" style="margin:0">${ready ? `专注 <b>${dur(P.focus)}</b> · 休息 ${dur(P.rest)}` : 'AI 估完后，这里显示总时长和结束时间'}</div>
+        </div>
+      </div>
+      <div class="s4wf"><button class="wbtn" data-act="wback">重新选任务</button><button class="wbtn pri" data-act="wstart"${ready ? '' : ' disabled'}>开始专注</button></div>
+    </div>`;
+  },
+  run(c) {
+    const q = S.q;
+    const plan = AudioEngine.computePlan();
+    S.rail = railWin(q);
+    const end = S.clock + q.remain + q.segs.slice(q.idx + 1).reduce((a, s) => a + s.min * 60, 0);
+    const seen = {};
+    const lg = q.mode === 'free' ? [] : q.segs.filter(s => s.type === 'f' && !seen[s.todoId] && (seen[s.todoId] = 1)).map(s => `<span><i style="background:${COL[s.todoId]}"></i>${esc(s.title)} · ${s.of}${S.wn === 4 && S.audio.qMode === 'perTask' && s.sound ? ` (${soundById(s.sound).short})` : ''}</span>`);
+    const legend = q.mode === 'free' ? LEG_FREE : lg.slice(0, 4).join('') + (lg.length > 4 ? `<span>等 ${lg.length} 项</span>` : '');
+
+    let heroExtra = '';
+    if (S.wn === 3) {
+      heroExtra = `<button class="w4-pill" data-act="pop:sound">${S.audio.enabled ? eqHtml(plan.state) : IC.mix}<span>${S.audio.enabled ? `当前混音：${activeSoundLabel()} · ${S.audio.volume}%` : '打开多轨混音台（叠加雨声/咖啡馆/壁炉）'}</span></button>`;
+    } else if (S.wn === 4) {
+      const sid = activeSoundId();
+      const sObj = soundById(sid);
+      heroExtra = `<button class="w4-pill" data-act="toggleSound">${S.audio.enabled ? eqHtml(plan.state) : IC.mute}<span>${S.audio.qMode === 'off' ? '本轮队列设定为静音' : `${S.audio.qMode === 'perTask' ? '本任务声景' : '全队列声景'}：${sObj.name} · ${S.audio.enabled ? audioStatusText(plan.state) : '点击开启'}`}</span></button>`;
+    }
+
+    let rightCol = '';
+    if (S.wn === 2) {
+      const sid = S.audio.sound;
+      rightCol = `<div class="k1rcol">
+        <div class="wn2">
+          <div class="wn2-hd">
+            <b>${eqHtml(plan.state)} 白噪音 · <span data-ast style="font-weight:500;color:var(--w-mut);font-size:11.5px">${audioStatusText(plan.state)}</span></b>
+            ${plan.state === 'blocked' ? `<button class="wbtn xs pri" data-act="retryAudio">重试</button>` : `<button class="wbtn xs${S.audio.enabled ? '' : ' pri'}" data-act="toggleSound">${S.audio.enabled ? '关闭' : '开启'}</button>`}
+          </div>
+          <div class="wn2-chips">${SOUNDS.map(s => `<button class="${sid === s.id ? 'on' : ''}" data-act="pickSound:${s.id}">${s.short}</button>`).join('')}</div>
+          <div class="wn2-vol"><span>音量</span><input class="sl" type="range" min="0" max="100" step="1" value="${S.audio.volume}" style="--control-value:${S.audio.volume}" data-mvol aria-label="白噪音音量" aria-valuetext="${S.audio.volume}%"><output data-vo>${S.audio.volume}%</output></div>
+        </div>
+        <div class="k1next"><p class="cap">接下来</p>${nextList(2)}</div>
+      </div>`;
+    } else {
+      rightCol = `<div class="k1next"><p class="cap">接下来</p>${nextList(4)}</div>`;
+    }
+
+    return `<div class="k1run">
+      <div class="k1top">
+        <div class="k1hero">
+          <div class="ph">${tagOf(c)}${cSub(c)}</div>
+          <div class="s4time" data-t="rem">${fmt(q.remain)}</div>
+          <div class="s4task">${cTitle(c)}</div>
+          <div class="k1ctl">${ctl()}${endBtn()}</div>
+          ${heroExtra}
+        </div>
+        ${rightCol}
+      </div>
+      ${railPanel(runBlocks(q), q.mode === 'free' ? `自由队列 · 已完成 ${q.doneF} 个番茄` : `预计 ${k1clk(end)} 结束 · 已完成 ${q.doneF} / ${nF(q)}`, c.type === 'f' ? 'run' : 'sip', legend)}
+    </div>`;
+  },
+  isl(open, c) {
+    const brk = c.type !== 'f', q = S.q;
+    const plan = AudioEngine.computePlan();
+    const wingSnd = S.audio.enabled ? eqHtml(plan.state) : '';
+    const w = `<div class="wing l">${pet(brk ? 'sip' : 'run', 20, null, pz())}${brk ? '' : `<small>${c.no}${q.mode === 'smart' ? ' / ' + nF(q) : ''}</small>`}</div>
+      <div class="wing r">${wingSnd}<span data-t="rem">${fmt(q.remain)}</span></div>
+      <div class="edge"><i data-bar></i></div>`;
+    if (!open) return { w: S.audio.enabled ? 390 : 372, h: 36, html: w, x: S.bubble && !brk ? `<div class="bub">${esc(S.bubble.text)}</div>` : '' };
+    const headRight = c.type === 'f' ? (S.bubble && Date.now() < S.peek ? esc(S.bubble.text) : q.mode === 'smart' ? `第 ${c.no} / ${nF(q)} 个番茄` : `第 ${c.no} 个番茄 · 自由队列`) : `下一个：${nextF() ? esc(nextF().title) : '—'}`;
+    const head = `<div class="ix-h"><span><b>${q.paused ? '已暂停' : PH[c.type]}</b> · ${headRight}</span><span>${S.audio.enabled ? `${eqHtml(plan.state)} ${activeSoundLabel()}` : '声音关'}</span></div>`;
+    if (brk) {
+      return {
+        w: 440, h: 148,
+        html: w + `<div class="ix">${head}<div class="ix-t"><div class="ix-name">${pet('sip', 30)}<span>休息中，起来走走</span></div><div class="ix-time" data-t="rem">${fmt(q.remain)}</div></div><div class="ix-bar"><i data-bar></i></div><div class="ix-b"><button class="ib${S.audio.breakMode === 'duck' && S.audio.enabled ? ' snd-on' : ''}" data-act="toggleBrkMode">${S.audio.breakMode === 'mute' ? '休息静音中（点此开极轻声）' : '休息 20% 伴奏中'}</button><button class="ib" data-act="openWin">打开窗口</button></div></div>`
+      };
+    }
+    const sndBtnCls = plan.state === 'blocked' ? ' snd-err' : (S.audio.enabled ? ' snd-on' : '');
+    const sndBtnTxt = plan.state === 'blocked' ? '重试声音' : (S.audio.enabled ? `${eqHtml(plan.state)} 静音` : '开白噪音');
+    const sndAct = plan.state === 'blocked' ? 'retryAudio' : 'toggleSound';
+    const w5Deck = S.wn === 5 ? `<div class="ix-w5">
+      <div class="ix-w5-row"><span style="flex:1">刘海声控中枢 · <span data-ast>${audioStatusText(plan.state)}</span></span><button class="ib${sndBtnCls}" style="flex:0;padding:3px 10px" data-act="${sndAct}">${S.audio.enabled ? '关声' : '开声'}</button></div>
+      <div class="ix-w5-chips">${SOUNDS.map(s => `<button class="${S.audio.sound === s.id ? 'on' : ''}" data-act="pickSound:${s.id}">${s.short}</button>`).join('')}</div>
+      <div class="ix-w5-vol"><span>音量</span><input class="sl" type="range" min="0" max="100" step="1" value="${S.audio.volume}" style="--control-value:${S.audio.volume}" data-mvol aria-label="刘海音量" aria-valuetext="${S.audio.volume}%"><output data-vo>${S.audio.volume}%</output></div>
+    </div>` : '';
+    const btns = S.wn === 5
+      ? `<div class="ix-b"><button class="ib pri" data-act="pause">${q.paused ? '继续' : '暂停'}</button><button class="ib" data-act="skip">跳过</button><button class="ib" data-act="openWin">打开窗口</button></div>`
+      : `<div class="ix-b"><button class="ib pri" data-act="pause">${q.paused ? '继续' : '暂停'}</button><button class="ib" data-act="skip">跳过</button><button class="ib${sndBtnCls}" data-act="${sndAct}">${sndBtnTxt}</button><button class="ib" data-act="openWin">打开窗口</button></div>`;
+    return {
+      w: S.wn === 5 ? 496 : 482,
+      h: S.wn === 5 ? 314 : 216,
+      html: w + `<div class="ix">${head}<div class="ix-t"><div class="ix-name"><span>${cTitle(c)}</span></div><div class="ix-time" data-t="rem">${fmt(q.remain)}</div></div><div class="trk"><i data-bar></i><span class="tp" data-px>${pet('run', 30, null, pz())}</span><em><svg width="10" height="13" viewBox="0 0 10 13"><path d="M1 0v13" stroke="currentColor" stroke-width="1.4"/><path d="M1 1h8L7 3.5 9 6H1z" fill="currentColor"/></svg></em></div>${btns}${w5Deck}</div>`
+    };
+  },
+  ov(c) {
+    const sc = 110 / 48, dx = CUPDX[S.pet];
+    const q = S.q, fs = q.segs.filter(s => s.type === 'f');
+    const show = q.mode === 'free' ? fs.filter(s => s.no <= q.doneF + 3).slice(-12) : fs;
+    const row = `<div class="o5row">${show.map(s => `<i class="${s.st === 'done' ? 'd' : ''}">${s.st === 'done' ? K1TOK[S.pet] : ''}</i>`).join('')}</div>`;
+    const n = nextF();
+    const st = AudioEngine.computePlan().state;
+    const brkPill = S.audio.enabled
+      ? `<button class="ov-snd" data-act="toggleBrkMode">${eqHtml(st)} ${S.audio.breakMode === 'mute' ? '白噪音已自动静音 · 点此切换极轻 20%' : '休息极轻伴奏 (20%) · 点此切为静音'}</button>`
+      : `<span class="ov-snd" style="cursor:default;opacity:.65">白噪音未开启</span>`;
+    return `<div class="ov o2${appIsDark() ? ' dk' : ''}">
+      <div class="osub"><span>${PH[c.type]} ${c.min} 分钟</span>${brkPill}</div>
+      <div class="otime" data-t="rem">${fmt(q.remain)}</div>
+      <div class="o2trk">
+        <svg class="desk" width="84" height="74" viewBox="0 0 84 74" aria-hidden="true"><rect x="27" y="16" width="32" height="21" rx="3" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2.5"/><path d="M20 41h46" stroke="rgba(255,255,255,.55)" stroke-width="3" stroke-linecap="round"/><path d="M6 46h72M13 46v28M71 46v28" stroke="rgba(255,255,255,.34)" stroke-width="3" stroke-linecap="round"/></svg>
+        <div class="k1say" id="wsay"></div>
+        <div class="walker" id="walker"></div>
+        <svg class="scup" id="scup" style="left:${Math.round(600 + (58 + dx) * sc)}px" viewBox="58 12 24 36" width="${Math.round(24 * sc)}" height="${Math.round(36 * sc)}" aria-hidden="true">${cupG(0)}</svg>
+      </div>
+      <div class="o2ph"><span>① 起身，走去倒杯咖啡</span><span>② 喝一口，看看远处</span><span>③ 走回座位</span></div>
+      ${row}
+      <div class="ov-f"><span>${n ? `休息结束后自动开始：${esc(n.title)}` : ''}</span><button class="hold" data-hold><i></i><span>按住 3 秒结束整个队列</span></button></div>
+    </div>`;
+  },
+  paintOv(p, c) {
+    if (c.type === 'f') return;
+    const w = $('walker'); if (!w) return;
+    const X0 = 96, X1 = 600, ph = p < .4 ? 0 : p < .6 ? 1 : 2;
+    const x = ph === 0 ? X0 + (X1 - X0) * (p / .4) : ph === 1 ? X1 : X1 - (X1 - X0) * ((p - .6) / .4);
+    if (S.ovPh !== ph) {
+      S.ovPh = ph;
+      w.innerHTML = pet(ph === 1 ? 'sip' : 'walk', 110);
+      w.classList.toggle('flip', ph === 2);
+      const scup = $('scup'); if (scup) scup.style.visibility = ph === 1 ? 'hidden' : '';
+      document.querySelectorAll('.o2ph span').forEach((e, i) => e.classList.toggle('on', i === ph));
+    }
+    w.style.left = x.toFixed(1) + 'px';
+    const e = $('wsay');
+    if (e) {
+      e.style.left = (x + 55).toFixed(1) + 'px';
+      const t = S.ovPh === 0 ? '起来走走，我去倒杯咖啡。' : S.ovPh === 2 ? '差不多了，走回座位吧。' : K1SAY[Math.floor(Date.now() / 3400) % K1SAY.length];
+      if (e.textContent !== t) e.textContent = t;
+    }
+  }
+};
+
+/* ===== 渲染引擎 ===== */
+let galKey = '', ovKey = '';
+function applyDocTheme() {
+  const root = document.documentElement;
+  const meta = document.querySelector('meta[name="color-scheme"]');
+  if (S.docTheme === 'system') {
+    root.removeAttribute('data-theme');
+    if (meta) meta.content = 'light dark';
+    try { localStorage.removeItem('pomodoq-s1-doc-theme'); } catch (e) {}
+  } else {
+    root.setAttribute('data-theme', S.docTheme);
+    if (meta) meta.content = S.docTheme;
+    try { localStorage.setItem('pomodoq-s1-doc-theme', S.docTheme); } catch (e) {}
+  }
+}
+
+function renderChrome() {
+  const sc = WN_SCHEMES[S.wn - 1];
+  $('ovw').innerHTML = WN_SCHEMES.map(s => `<button class="oc${s.id === S.wn ? ' on' : ''}" data-set="wn:${s.id}" data-go="1"><span class="no"><span>${s.code} · 方案 ${s.id}</span><span class="badge">${s.badge}</span></span><h3>${s.name}</h3><p>${s.one}</p></button>`).join('');
+  $('tabs').innerHTML = WN_SCHEMES.map(s => `<button class="tab${s.id === S.wn ? ' on' : ''}" role="tab" aria-selected="${s.id === S.wn}" data-set="wn:${s.id}"><b>${s.code}</b>${s.name}</button>`).join('');
+  document.querySelectorAll('.seg[data-group]').forEach(g => {
+    const k = g.dataset.group;
+    g.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.set === k + ':' + S[k]));
+  });
+  $('btnMin').classList.toggle('on', S.win === 'min');
+  $('btnMin').textContent = S.win === 'min' ? '恢复主窗口' : '模拟收起主窗';
+  $('btnNoIsl').classList.toggle('on', S.noIsland);
+  $('btnNoIsl').textContent = S.noIsland ? '恢复模拟刘海' : '模拟无刘海';
+  $('btnErr').classList.toggle('on', S.audio.error);
+  $('notes').innerHTML = sc.notes.map((n, i) => `<div class="note"><h4>${NOTE_H[i]}</h4><p>${n}</p></div>`).join('');
+  $('trade').innerHTML = `<b>${sc.code} · ${sc.name} 的取舍：</b>${sc.trade}`;
+  if (galKey !== S.pet) {
+    galKey = S.pet;
+    const tag = { tomato: '默认', dog: '可选', cat: '可选' };
+    $('gal').innerHTML = Object.keys(PETS).map(k => `<div class="gc${k === S.pet ? ' on' : ''}" data-set="pet:${k}"><h4>${PETS[k]}<small>${k === S.pet ? '当前使用' : tag[k]}</small></h4><div class="gi"><span>${pet('run', 22, k)}</span><i></i><span>18:40</span></div><div class="gp"><div>${pet('run', 54, k)}<span>专注 · 跑动</span></div><div>${pet('sip', 54, k)}<span>休息 · 喝咖啡</span></div><div>${pet('stretch', 54, k)}<span>休息 · 拉伸</span></div></div></div>`).join('');
+  }
+  applyDocTheme();
+}
+
+function renderWin() {
+  const el = $('win'), c = cur();
+  el.className = 'win' + (appIsDark() ? ' dark' : '') + (S.win === 'min' ? ' min' : '');
+  const keep = {};
+  el.querySelectorAll('[data-sc]').forEach(n => { keep[n.dataset.sc] = n.scrollTop; });
+  const body = S.stage === 'wiz' && S.W ? View.wiz() : S.stage === 'run' && c ? View.run(c) : View.home();
+  el.innerHTML = tbar() + `<div class="wb${S.anim ? ' fresh' : ''}">${body}${renderPopover()}</div>`;
+  S.anim = false;
+  el.querySelectorAll('[data-sc]').forEach(n => { if (keep[n.dataset.sc]) n.scrollTop = keep[n.dataset.sc]; });
+  const pp = el.querySelector('.k1cols .ordr.pop');
+  if (pp) { const o = pp.parentNode, bot = pp.offsetTop + pp.offsetHeight + 8; if (bot > o.scrollTop + o.clientHeight) o.scrollTop = bot - o.clientHeight; }
+  $('minHint').style.display = S.win === 'min' ? '' : 'none';
+  $('notch').classList.toggle('off', S.noIsland);
+  syncMenuBarAudio();
+  paint();
+}
+
+function renderIsl() {
+  const el = $('isl'), q = S.q;
+  if (!q || S.noIsland) { el.style.display = 'none'; $('islIn').innerHTML = ''; $('islX').innerHTML = ''; return; }
+  const c = cur(), brk = c.type !== 'f';
+  const open = S.hover || S.pinned;
+  const r = View.isl(open, c);
+  el.style.display = '';
+  el.className = 'isl' + (open ? ' open' : '') + (brk ? ' brk' : '') + (q.paused ? ' pz' : '');
+  el.style.width = r.w + 'px'; el.style.height = r.h + 'px';
+  el.style.setProperty('--acc', brk ? (c.type === 'long' ? 'var(--long)' : 'var(--break)') : 'var(--focus)');
+  $('islIn').innerHTML = r.html;
+  $('islX').innerHTML = r.x || '';
+  paint();
+}
+
+function renderOv() {
+  const q = S.q, c = cur(), on = !!c && c.type !== 'f';
+  if (q && !q.uid) q.uid = ++TOK;
+  const key = on ? [S.pet, q.uid, q.idx, appIsDark() ? 'd' : 'l', S.audio.enabled ? S.audio.breakMode : 'off'].join(':') : '';
+  if (key === ovKey) return;
+  ovKey = key; S.ovPh = null;
+  $('ov').innerHTML = on ? View.ov(c) : '';
+  paint();
+}
+
+function syncMenuBarAudio() {
+  const mb = $('mbSnd');
+  const st = AudioEngine.computePlan().state;
+  if (S.audio.enabled || st === 'blocked') {
+    mb.style.display = '';
+    mb.innerHTML = `${eqHtml(st)}<span>${st === 'blocked' ? '音频异常' : `${activeSoundLabel()} ${S.audio.volume}%`}</span>`;
+  } else {
+    mb.style.display = 'none';
+  }
+}
+
+/* 滑块拖动时的轻量同步：不重绘整棵 DOM，避免打断指针或焦点 */
+function syncAudioUI() {
+  const plan = AudioEngine.sync();
+  const txt = audioStatusText(plan.state);
+  document.querySelectorAll('[data-ast]').forEach(n => { n.textContent = txt; });
+  document.querySelectorAll('[data-vo]').forEach(n => { n.textContent = S.audio.volume + '%'; });
+  document.querySelectorAll('[data-mvol]').forEach(n => {
+    if (document.activeElement !== n) n.value = S.audio.volume;
+    n.style.setProperty('--control-value', S.audio.volume);
+    n.setAttribute('aria-valuetext', S.audio.volume + '%');
+  });
+  syncMenuBarAudio();
+}
+
+function paint() {
+  const q = S.q, root = $('scr');
+  $('clock').textContent = '周日 ' + clk(S.clock);
+  if (S.rail) {
+    const x = clamp((S.clock - S.rail.t0) / (S.rail.span * 60) * 100, 0, 100).toFixed(2) + '%';
+    root.querySelectorAll('[data-clk]').forEach(e => { e.style.left = x; });
+  }
+  if (!q) return;
+  const c = cur(), p = clamp(1 - q.remain / (c.min * 60), 0, 1), t = fmt(q.remain), pc = (p * 100).toFixed(2) + '%';
+  root.querySelectorAll('[data-t="rem"]').forEach(e => { if (e.textContent !== t) e.textContent = t; });
+  root.querySelectorAll('[data-bar]').forEach(e => { e.style.width = pc; });
+  root.querySelectorAll('[data-px]').forEach(e => { e.style.left = pc; });
+  View.paintOv(p, c);
+  if (q.mode === 'free' && S.stage === 'run' && S.rail && S.clock > S.rail.t0 + S.rail.span * 60 * .8) renderWin();
+}
+function render() { renderChrome(); renderWin(); renderIsl(); renderOv(); }
+
+/* ===== 主循环 ===== */
+let lastT = performance.now();
+function tick() {
+  const now = performance.now(), real = Math.min(.5, (now - lastT) / 1000);
+  lastT = now;
+  const q = S.q;
+  let dirtyIsl = false;
+  if (S.peek && Date.now() > S.peek) { S.peek = 0; dirtyIsl = true; }
+  if (S.bubble && Date.now() > S.bubble.until) { S.bubble = null; dirtyIsl = true; }
+  if (S.audio.previewUntil && Date.now() > S.audio.previewUntil) {
+    S.audio.previewUntil = 0;
+    AudioEngine.sync();
+    syncAudioUI();
+    renderWin();
+  }
+  if (q && !q.paused) {
+    const c = q.segs[q.idx];
+    let sp = S.speed;
+    if (sp > 1) { if (c.type !== 'f') sp = Math.min(sp, Math.max(1, c.min * 5)); else if (q.remain <= 61) sp = Math.min(sp, 8); }
+    let dt = real * sp;
+    const before = q.remain;
+    if (c.type === 'f' && before > 60 && before - dt < 60) dt = before - 60;
+    q.remain -= dt; S.clock += dt;
+    if (c.type === 'f' && before > 60 && q.remain <= 60 && c.min > 2) { warn(); dirtyIsl = false; }
+    if (q.remain <= 0) { advance(false); return; }
+  }
+  if (dirtyIsl) renderIsl();
+  paint();
+}
+
+/* ===== 操作与白噪音交互 ===== */
+function triggerPreviewIfIdle() {
+  if (!S.q || S.q.paused) S.audio.previewUntil = Date.now() + 4000;
+}
+function setOpt(k, v, go) {
+  if (k === 'wn') {
+    v = +v;
+    if (v !== S.wn) {
+      S.wn = v; S.pop = null; S.bubble = null; S.peek = 0;
+      const sc = WN_SCHEMES[v - 1];
+      AudioEngine.sync();
+      log(`切到 <b>${sc.code} · ${sc.name}</b>（队列进度、暗色设置与声音状态全部保留）`);
+      render();
+    }
+    if (go) $('demo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+  if (k === 'pet') {
+    if (v === S.pet) return;
+    S.pet = v;
+    log(`动效模板换成 <b>${PETS[v]}</b> → Island、主窗口、休息全屏打卡格同步切换`);
+    return render();
+  }
+  if (k === 'speed') {
+    S.speed = +v;
+    log(`演示速度 ${v}×${+v > 1 ? '（休息和最后 1 分钟自动放慢，白噪音按正常语速播放）' : '（真实速度）'}`);
+    return renderChrome();
+  }
+  if (k === 'docTheme') {
+    S.docTheme = v;
+    log(`页面与系统外观切为 <b>${v === 'system' ? '跟随系统' : v === 'dark' ? '深色' : '浅色'}</b>${S.appTheme === 'system' ? ' → 应用窗口同步切换' : '（应用窗口当前独立锁定）'}`);
+    return render();
+  }
+  if (k === 'appTheme') {
+    S.appTheme = v; S.pop = null;
+    log(`应用内主题切为 <b>${v === 'system' ? '跟随系统' : v === 'dark' ? '暖墨深色' : '暖纸浅色'}</b> → color-scheme: ${appIsDark() ? 'only dark' : 'only light'}`);
+    return render();
+  }
+}
+
+function act(name, a, b) {
+  const W = S.W;
+  switch (name) {
+    case 'free':
+      startQueue('free', null, RH0);
+      log('点「直接开始」→ 自由队列立刻开始（25/5 循环）· 倒计时出现在刘海 Island' + (S.audio.enabled ? '，白噪音平滑淡入' : ''));
+      return render();
+    case 'smart': return openWiz();
+    case 'pause': return togglePause();
+    case 'skip': if (S.q) advance(true); return;
+    case 'end': S.confirmEnd = true; return renderWin();
+    case 'endNo': S.confirmEnd = false; return renderWin();
+    case 'endYes': if (S.q) finish(true); return;
+    case 'openWin': S.win = 'open'; S.pinned = false; S.hover = false; log('从 Island 打开主窗口'); render(); return;
+    case 'min': S.win = 'min'; S.pop = null; log(S.q ? '收起主窗口 → 倒计时与白噪音留在后台和刘海 Island；点 Dock 番茄图标恢复' : '收起主窗口；点 Dock 番茄图标恢复'); return render();
+    case 'toggleMin': return act(S.win === 'min' ? 'dock' : 'min');
+    case 'dock': S.win = 'open'; log('从 Dock 恢复 PomodoQ 主窗口'); return render();
+    case 'toggleNoIsl':
+      S.noIsland = !S.noIsland;
+      log(S.noIsland ? '模拟无刘海屏幕 / Web 端 → 刘海隐藏，W5 自动降级为主窗口标题栏「窗口声控」' : '恢复模拟 macOS 刘海 Island');
+      return render();
+    case 'pop':
+      if (a === 'close' || S.pop === a) S.pop = null;
+      else {
+        S.pop = a;
+        if (a === 'sound') log(`打开 ${WN_SCHEMES[S.wn - 1].code} 白噪音面板`);
+        if (a === 'theme') log('打开应用主题弹层 → 可独立切换 跟随系统 / 暖纸浅色 / 暖墨深色');
+        if (a === 'pet') log('打开动效模板选择器');
+      }
+      return renderWin();
+    case 'toggleSound':
+      S.audio.error = false;
+      S.audio.enabled = !S.audio.enabled;
+      if (S.audio.enabled) {
+        if (S.wn === 4 && S.audio.qMode === 'off') S.audio.qMode = 'perTask';
+        AudioEngine.ensureFromGesture();
+        triggerPreviewIfIdle();
+        AudioEngine.sync();
+        log(`开启白噪音 → <b>${activeSoundLabel()}</b>（音量 ${S.audio.volume}%）${S.q && !S.q.paused && cur().type === 'f' ? '，专注中平滑淡入' : '，试听 4 秒后待命，进入专注自动续播'}`);
+      } else {
+        S.audio.previewUntil = 0;
+        AudioEngine.sync();
+        log('关闭白噪音 → 140ms 平滑淡出，番茄队列不受影响');
+      }
+      return render();
+    case 'pickSound':
+      S.audio.error = false;
+      S.audio.sound = a;
+      if (S.wn === 4) { S.audio.qSound = a; if (S.audio.qMode === 'off') S.audio.qMode = 'uniform'; }
+      S.audio.enabled = true;
+      AudioEngine.ensureFromGesture();
+      triggerPreviewIfIdle();
+      AudioEngine.sync();
+      log(`切换白噪音音景 → <b>${soundById(a).name}</b>（${soundById(a).sub}）${S.wn === 1 && S.stage === 'home' ? ' · 首页场景已联动氛围视效' : ''}`);
+      return render();
+    case 'mixPre': {
+      const pre = MIX_PRESETS[a]; if (!pre) return;
+      S.audio.error = false;
+      S.audio.mixPreset = a;
+      S.audio.mix = { ...pre.mix };
+      S.audio.enabled = true;
+      AudioEngine.ensureFromGesture();
+      triggerPreviewIfIdle();
+      AudioEngine.sync();
+      log(`应用 W3 多轨配方「<b>${pre.name}</b>」（${pre.desc}）→ Web Audio 多路实时混音`);
+      return render();
+    }
+    case 'qMode':
+      S.audio.qMode = a;
+      if (a !== 'off') { S.audio.enabled = true; AudioEngine.ensureFromGesture(); triggerPreviewIfIdle(); }
+      AudioEngine.sync();
+      log(`W4 队列声景策略切换为：<b>${a === 'perTask' ? '按任务自动换声（跨任务 Crossfade）' : a === 'uniform' ? '全队列统一声景' : '本轮静音'}</b>`);
+      return render();
+    case 'toggleBrkMode':
+      S.audio.breakMode = S.audio.breakMode === 'mute' ? 'duck' : 'mute';
+      AudioEngine.sync();
+      log(`休息段音频策略改为：<b>${S.audio.breakMode === 'mute' ? '休息自动静音（推荐）' : '休息渐弱至 20% 轻伴奏'}</b>`);
+      return render();
+    case 'simErr':
+      S.audio.error = !S.audio.error;
+      if (S.audio.error) S.audio.enabled = true;
+      AudioEngine.sync();
+      log(S.audio.error ? '模拟浏览器/系统拦截音频 → 声音停止并在声控区与 Island 显示重试入口，<b>番茄计时照常运行</b>' : '已解除音频拦截模拟');
+      return render();
+    case 'retryAudio':
+      S.audio.error = false; S.audio.enabled = true;
+      AudioEngine.ensureFromGesture();
+      triggerPreviewIfIdle();
+      AudioEngine.sync();
+      log('用户点击重试 → 重新请求 AudioContext.resume() 成功，计时位置无缝保留');
+      return render();
+    case 'jump': S.hover = false; S.pinned = false; return jump(a);
+    case 'ff': return ff();
+    case 'reset': return resetAll();
+  }
+  if (!W) return;
+  const id = +a, pk = pickedIds(W);
+  switch (name) {
+    case 'ksel':
+      if (W.fly || W.pick[id]) return;
+      W.sel[id] = !W.sel[id]; W.back = null;
+      log(W.sel[id] ? `圈中「${esc(todo(id).title)}」→ 可以继续圈选多张，再一起丢进盒子` : `取消圈中「${esc(todo(id).title)}」`);
+      return renderWin();
+    case 'kall':
+      if (W.fly) return;
+      W.back = null; W.sel = {};
+      if (a === '1') W.order.forEach(i => { if (!W.pick[i]) W.sel[i] = true; });
+      log(a === '1' ? '全部圈中 → 桌面卡片已全选' : '取消圈中');
+      return renderWin();
+    case 'kthrow': {
+      const ids = W.order.filter(i => W.sel[i] && !W.pick[i]);
+      if (W.fly || W.step !== 0 || !ids.length) return;
+      return kThrow(ids);
+    }
+    case 'kout':
+      if (W.fly) return;
+      W.pick[id] = false; W.back = id; W.landed = null;
+      log(`把「${esc(todo(id).title)}」从盒子里拿出来 → 回到桌面`);
+      renderWin();
+      {
+        const el = document.querySelector(`.k1sc [data-k="${id}"]`), sc = el && el.closest('.k1sc');
+        if (sc) { const top = el.offsetTop - 10, bot = el.offsetTop + el.offsetHeight + 10; if (top < sc.scrollTop) sc.scrollTop = top; else if (bot > sc.scrollTop + sc.clientHeight) sc.scrollTop = bot - sc.clientHeight; }
+      }
+      return;
+    case 'wn':
+      if (W.est[id] == null) return;
+      W.est[id] = clamp(W.est[id] + (+b), 1, 6);
+      log(`手动把「${esc(todo(id).title)}」改成 ${W.est[id]} 个番茄（AI 原估 ${todo(id).ai} 个）`);
+      return renderWin();
+    case 'wSound': {
+      const idx = SOUNDS.findIndex(s => s.id === W.sound[id]);
+      const nxt = SOUNDS[(idx + 1) % SOUNDS.length];
+      W.sound[id] = nxt.id;
+      log(`将「${esc(todo(id).title)}」的绑定声景改为 <b>${nxt.name}</b>（跑到该任务时自动 Crossfade）`);
+      return renderWin();
+    }
+    case 'wreset':
+      W.order.forEach(i => { if (W.est[i] != null) W.est[i] = todo(i).ai; W.sound[i] = todo(i).aiSound; });
+      log('恢复 AI 的番茄与声景建议');
+      return renderWin();
+    case 'wpre': {
+      const p = PRE[a];
+      Object.assign(W.r, { f: p.f, s: p.s, l: p.l, every: p.every });
+      log(`选预设「${p.label}」→ 预览和结束时间同步更新`);
+      return renderWin();
+    }
+    case 'wback': W.step = 0; S.anim = true; return renderWin();
+    case 'wcancel': S.W = null; S.stage = 'home'; S.anim = true; log('取消创建 → 回到首页'); return render();
+    case 'wstart': return wizStart();
+    case 'wnext':
+      if (W.step !== 0 || !pk.length) return;
+      W.step = 1; estimate(pk, 450, Math.min(480, Math.round(3200 / pk.length))); W.sel = {}; W.back = null; W.landed = null;
+      log(`盒子里有 ${pk.length} 项 → AI 逐项估算番茄数${S.wn === 4 ? '并推荐任务声景' : ''}，估好一项亮一项`);
+      S.anim = true;
+      return renderWin();
+    case 'wmv': {
+      const i = pk.indexOf(id), j = i + (+b);
+      if (i < 0 || j < 0 || j >= pk.length) return;
+      const x = W.order.indexOf(pk[i]), y = W.order.indexOf(pk[j]);
+      W.order[x] = pk[j]; W.order[y] = pk[i];
+      log(`把「${esc(todo(id).title)}」${+b < 0 ? '上移' : '下移'}一位`);
+      return renderWin();
+    }
+  }
+}
+
+/* ===== 方案 1 物理抛卡入盒 & 框选自动滚（原文档完整保留） ===== */
+function kLift(ids) {
+  const pick = document.querySelector('.k1pick'), sc = document.querySelector('.k1sc');
+  if (!pick || !sc) return [];
+  const p = pick.getBoundingClientRect(), v = sc.getBoundingClientRect(), k = p.width / pick.offsetWidth || 1;
+  const out = [];
+  ids.forEach(id => {
+    const el = sc.querySelector(`[data-k="${id}"]`);
+    if (!el) return;
+    const r = el.getBoundingClientRect(), w = el.offsetWidth, h = el.offsetHeight;
+    const off = r.bottom < v.top + 6 || r.top > v.bottom - 6;
+    const cx = r.left + r.width / 2, cy = clamp(r.top + r.height / 2, v.top + 24 * k, v.bottom - 24 * k);
+    const c = el.cloneNode(true);
+    c.removeAttribute('data-act'); c.removeAttribute('data-k');
+    c.className = 'k1c on k1fly';
+    Object.assign(c.style, { left: (cx - p.left) / k - w / 2 + 'px', top: (cy - p.top) / k - h / 2 + 'px', width: w + 'px', height: h + 'px' });
+    c._off = off; c._tx = 0; c._ty = 0; c._id = id;
+    pick.appendChild(c);
+    el.classList.add('gone');
+    out.push(c);
+  });
+  return out;
+}
+function kThrow(ids, lifted) {
+  const W = S.W, tok = W.tok, box = document.querySelector('.k1box'), pick = document.querySelector('.k1pick');
+  const done = () => {
+    if (!S.W || S.W.tok !== tok) return;
+    ids.forEach(i => { W.pick[i] = true; delete W.sel[i]; });
+    W.fly = false; W.back = null; W.landed = ids.slice();
+    log(ids.length > 1 ? `${ids.length} 张卡片一起丢进「今日队列」盒子 → 盒子里现在有 ${pickedIds(W).length} 项` : `「${esc(todo(ids[0]).title)}」丢进「今日队列」盒子 → 盒子里现在有 ${pickedIds(W).length} 项`);
+    renderWin();
+    const bl = document.querySelector('.k1bl');
+    if (bl) bl.scrollTop = bl.scrollHeight;
+  };
+  if (!box || !pick) return done();
+  W.fly = true;
+  const els = lifted || kLift(ids), n = els.length;
+  const gap = n > 6 ? Math.max(34, Math.round(480 / n)) : 80, dur1 = 400;
+  const k = pick.getBoundingClientRect().width / pick.offsetWidth || 1, b = box.getBoundingClientRect();
+  const bx = b.left + b.width / 2, by = b.top + b.height / 2;
+  els.forEach((el, i) => {
+    const r = el.getBoundingClientRect(), tx = el._tx || 0, ty = el._ty || 0;
+    const dx = tx + (bx - (r.left + r.width / 2)) / k, dy = ty + (by - (r.top + r.height / 2)) / k;
+    const rot = i % 2 ? -1 : 1;
+    el.style.zIndex = 12 + i;
+    el.animate([
+      { transform: `translate(${tx}px,${ty}px) rotate(${rot * 3}deg)`, opacity: el._off ? 0 : 1 },
+      { transform: `translate(${tx + (dx - tx) * .55}px,${ty + (dy - ty) * .55 - 54}px) rotate(${rot * 14}deg) scale(.82)`, opacity: 1, offset: .55 },
+      { transform: `translate(${dx}px,${dy}px) rotate(${rot * 26}deg) scale(.2)`, opacity: .1 },
+    ], { duration: dur1, delay: i * gap, easing: 'cubic-bezier(.45,0,.75,1)', fill: 'both' });
+    setTimeout(() => { box.classList.remove('bump'); void box.offsetWidth; box.classList.add('bump'); }, i * gap + dur1 - 40);
+  });
+  setTimeout(done, Math.max(0, n - 1) * gap + dur1 + 60);
+}
+let KD = null, eatUntil = 0;
+document.addEventListener('click', e => { if (performance.now() < eatUntil) { eatUntil = 0; e.stopPropagation(); e.preventDefault(); } }, true);
+document.addEventListener('pointerdown', e => {
+  const W = S.W;
+  if (S.stage !== 'wiz' || !W || W.step !== 0 || W.fly || e.button) return;
+  const desk = e.target.closest('.k1desk');
+  if (!desk || e.target.closest('.k1acts') || e.target.closest('.pop') || e.target.closest('.mdraw')) return;
+  const k = desk.getBoundingClientRect().width / desk.offsetWidth || 1, sc = desk.querySelector('.k1sc'), v = sc && sc.getBoundingClientRect();
+  if (sc && e.target === sc && sc.offsetWidth > sc.clientWidth && e.clientX >= v.right - (sc.offsetWidth - sc.clientWidth) * k - 1) return;
+  const hit = e.target.closest('.k1c'), card = hit && W.sel[+hit.dataset.k] ? hit : null;
+  KD = { desk, sc, card, id: card ? +card.dataset.k : 0, x: e.clientX, y: e.clientY, px: e.clientX, py: e.clientY, k, on: false, base: { ...W.sel }, cur: { ...W.sel }, over: false, s0: sc ? sc.scrollTop : 0, inSc: !!(sc && e.clientY >= v.top && e.clientY <= v.bottom), sp: 0, raf: 0 };
+});
+function kMarq(d) {
+  const o = d.desk.getBoundingClientRect(), v = d.sc ? d.sc.getBoundingClientRect() : o;
+  const ay = d.inSc ? d.y - (d.sc.scrollTop - d.s0) * d.k : d.y;
+  const ex = clamp(d.px, o.left, o.right), ey = clamp(d.py, o.top, o.bottom);
+  const x0 = Math.min(d.x, ex), x1 = Math.max(d.x, ex), y0 = Math.min(ay, ey), y1 = Math.max(ay, ey);
+  const sy = d.inSc ? clamp(ay, v.top, v.bottom) : ay, vy0 = Math.min(sy, ey), vy1 = Math.max(sy, ey);
+  Object.assign(d.mq.style, { left: (x0 - o.left) / d.k + 'px', top: (vy0 - o.top) / d.k + 'px', width: (x1 - x0) / d.k + 'px', height: (vy1 - vy0) / d.k + 'px' });
+  d.cur = { ...d.base };
+  d.desk.querySelectorAll('.k1c').forEach(el => {
+    const r = el.getBoundingClientRect(), id = +el.dataset.k;
+    const hit = d.base[id] || (r.left < x1 && r.right > x0 && r.top < y1 && r.bottom > y0);
+    if (hit) d.cur[id] = true;
+    el.classList.toggle('on', !!hit);
+  });
+}
+function kAuto(d) {
+  d.raf = 0;
+  if (KD !== d || !d.mq || !d.sp || !d.sc) return;
+  const before = d.sc.scrollTop;
+  d.sc.scrollTop = before + d.sp;
+  if (d.sc.scrollTop !== before) kMarq(d);
+  d.raf = requestAnimationFrame(() => kAuto(d));
+}
+document.addEventListener('scroll', e => { if (KD && KD.mq && e.target === KD.sc) kMarq(KD); }, true);
+document.addEventListener('pointermove', e => {
+  if (!KD) return;
+  const W = S.W, d = KD;
+  if (!W) { KD = null; return; }
+  d.px = e.clientX; d.py = e.clientY;
+  const dx = (e.clientX - d.x) / d.k, dy = (e.clientY - d.y) / d.k;
+  if (!d.on) {
+    if (Math.hypot(dx, dy) < 6) return;
+    d.on = true;
+    if (d.card) {
+      const ids = W.order.filter(i => W.sel[i] && !W.pick[i]);
+      d.els = kLift(ids);
+      d.grab = d.els.find(c => c._id === d.id) || d.els[0];
+      const c = d.grab.getBoundingClientRect();
+      d.els.forEach(el => {
+        const r = el.getBoundingClientRect();
+        el._ox = (c.left + c.width / 2 - r.left - r.width / 2) / d.k * .86;
+        el._oy = (c.top + c.height / 2 - r.top - r.height / 2) / d.k * .86;
+        el.classList.add('drag');
+      });
+      d.grab.style.zIndex = 20;
+    } else {
+      d.mq = document.createElement('div');
+      d.mq.className = 'k1mq';
+      d.desk.appendChild(d.mq);
+    }
+  }
+  e.preventDefault();
+  if (d.card) {
+    d.els.forEach((el, i) => {
+      el._tx = dx + el._ox; el._ty = dy + el._oy;
+      el.style.transform = `translate(${el._tx}px,${el._ty}px) rotate(${el === d.grab ? -3 : i % 2 ? 5 : -6}deg)`;
+    });
+    const box = document.querySelector('.k1box'), b = box.getBoundingClientRect();
+    d.over = e.clientX >= b.left && e.clientX <= b.right && e.clientY >= b.top && e.clientY <= b.bottom;
+    box.classList.toggle('over', d.over);
+  } else {
+    kMarq(d);
+    d.sp = 0;
+    if (d.sc && d.sc.scrollHeight > d.sc.clientHeight) {
+      const v = d.sc.getBoundingClientRect(), edge = 30 * d.k;
+      if (e.clientY > v.bottom - edge) d.sp = Math.min(16, 2 + (e.clientY - (v.bottom - edge)) / d.k * .3);
+      else if (e.clientY < v.top + edge) d.sp = -Math.min(16, 2 + (v.top + edge - e.clientY) / d.k * .3);
+    }
+    if (d.sp && !d.raf) d.raf = requestAnimationFrame(() => kAuto(d));
+  }
+});
+const kUp = e => {
+  if (!KD) return;
+  const d = KD, W = S.W;
+  KD = null;
+  if (d.raf) cancelAnimationFrame(d.raf);
+  if (!d.on || !W) return;
+  eatUntil = performance.now() + 80;
+  W.back = null;
+  if (d.card) {
+    const ids = d.els.map(c => c._id);
+    document.querySelector('.k1box').classList.remove('over');
+    if (d.over && e.type === 'pointerup' && ids.length) { d.els.forEach(c => c.classList.remove('drag')); return kThrow(ids, d.els); }
+    log(`拖着 ${ids.length} 张卡片没放进盒子 → 回到桌面，仍保持圈中`);
+    return renderWin();
+  }
+  W.sel = d.cur;
+  const n = Object.keys(W.sel).length;
+  log(n ? `按住鼠标拖过卡片 → 圈中 ${n} 张，点「丢进盒子」或直接拖进右边盒子` : '拖了一下，但没有圈到卡片');
+  renderWin();
+};
+document.addEventListener('pointerup', kUp);
+document.addEventListener('pointercancel', kUp);
+
+/* ===== 滑块实时 input 事件委托（无 DOM 重建，60fps 跟手） ===== */
+document.addEventListener('input', e => {
+  const el = e.target;
+  if (el.matches('[data-mvol]')) {
+    S.audio.volume = +el.value;
+    S.audio.error = false;
+    if (!S.audio.enabled && S.audio.volume > 0) {
+      S.audio.enabled = true;
+      AudioEngine.ensureFromGesture();
+      triggerPreviewIfIdle();
+    } else if (S.audio.enabled) {
+      AudioEngine.ensureFromGesture();
+    }
+    syncAudioUI();
+  } else if (el.matches('[data-mix]')) {
+    const sid = el.dataset.mix;
+    const val = +el.value;
+    S.audio.mix[sid] = val;
+    S.audio.mixPreset = 'custom';
+    S.audio.error = false;
+    if (val > 0 && !S.audio.enabled) S.audio.enabled = true;
+    AudioEngine.ensureFromGesture();
+    triggerPreviewIfIdle();
+    el.style.setProperty('--control-value', val);
+    el.setAttribute('aria-valuetext', val + '%');
+    const out = document.querySelector(`[data-mo="${sid}"]`);
+    if (out) out.textContent = val + '%';
+    const row = document.querySelector(`[data-mtrk="${sid}"]`);
+    if (row) row.classList.toggle('act', val > 0);
+    document.querySelectorAll('.mpre.on').forEach(b => b.classList.remove('on'));
+    syncAudioUI();
+  }
+});
+
+/* ===== 全局点击、刘海悬停、键盘、3 秒长按 ===== */
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-act],[data-set]');
+  if (t) {
+    if (t.disabled) return;
+    if (t.dataset.act) { const p = t.dataset.act.split(':'); act(p[0], p[1], p[2]); }
+    else { const p = t.dataset.set.split(':'); setOpt(p[0], p[1], t.dataset.go); }
+    return;
+  }
+  if (e.target.closest('#isl') && S.q) {
+    if (e.target.closest('input,button')) return;
+    S.pinned = !S.pinned;
+    if (!S.pinned) S.hover = false;
+    log(S.pinned ? '点刘海 → Island 固定展开，再点一次或按 Esc 收起' : 'Island 收起，回到刘海两侧小尺寸');
+    renderIsl();
+    return;
+  }
+  if (S.pop && !e.target.closest('.pop,.mdraw,.tool,.scene-badge,.w4-pill')) {
+    S.pop = null;
+    renderWin();
+  }
+});
+
+const islEl = $('isl');
+islEl.addEventListener('mouseenter', () => { if (!S.hover && S.q) { S.hover = true; renderIsl(); } });
+islEl.addEventListener('mouseleave', () => { if (S.hover) { S.hover = false; renderIsl(); } });
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (S.pop) { S.pop = null; renderWin(); }
+    else if (S.pinned) { S.pinned = false; renderIsl(); }
+  }
+});
+
+/* 监听系统配色切换与跨标签页 storage 同步（遵循 dark-mode / dark-mode-toggle 指南） */
+mqDark.addEventListener('change', () => { if (S.docTheme === 'system' || S.appTheme === 'system') render(); });
+window.addEventListener('storage', e => {
+  if (e.key === 'pomodoq-s1-doc-theme') {
+    S.docTheme = (e.newValue === 'light' || e.newValue === 'dark') ? e.newValue : 'system';
+    render();
+  }
+});
+
+let holdT = 0;
+const holdEnd = () => { clearTimeout(holdT); document.querySelectorAll('[data-hold].on').forEach(h => h.classList.remove('on')); };
+document.addEventListener('pointerdown', e => {
+  const h = e.target.closest('[data-hold]');
+  if (!h) return;
+  h.classList.add('on');
+  clearTimeout(holdT);
+  holdT = setTimeout(() => { holdEnd(); if (S.q) finish(true); }, 3000);
+});
+document.addEventListener('pointerup', holdEnd);
+document.addEventListener('pointercancel', holdEnd);
+document.addEventListener('pointerout', e => {
+  const h = e.target.closest && e.target.closest('[data-hold]');
+  if (h && !(e.relatedTarget && h.contains(e.relatedTarget))) holdEnd();
+});
+
+const vp = $('vp');
+const fit = () => vp.style.setProperty('--s', (vp.clientWidth / 1120).toFixed(4));
+if (window.ResizeObserver) new ResizeObserver(fit).observe(vp);
+window.addEventListener('resize', fit);
+fit();
+render();
+setInterval(tick, 100);
+window.__demo = { S, jump, act, setOpt, ff, render, AudioEngine };
+})();
+</script>
+</body>
+</html>

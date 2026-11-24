@@ -79,8 +79,9 @@ The Web production launcher at `apps/web/server.ts` also runs directly on Node.j
 - `server.ts` serves existing files with long-lived caching for `assets/`, returns 404 for missing paths with a file extension, falls back to `index.html` for page paths, and answers `/_health`.
 - The App Dockerfile builds, then runs `pnpm --filter @uni-stack/app deploy --prod --legacy /prod/app`. Only `hono` and `@hono/node-server` are production dependencies; everything bundled into `dist` is a development dependency, so the image carries no frontend packages.
 - `VITE_*` values are compiled in. Rebuild the App to change `VITE_APP_URL` or any other client value.
-- Same-origin variant: when `VITE_APP_URL` points under `VITE_WEB_URL` (for example `https://example.com/app`), `apps/web/server.ts` serves the App's `dist/web` at that path before its own static files and the Start handler, with the same caching and 404 rules. The Web Dockerfile conditionally builds the App using a raw URL prefix check, so use consistent URL spellings at build time. `apps/web` depends on `@uni-stack/app` so `pnpm deploy` ships the build. One App build serves one address; see the [current architecture](../docs/desktop-plan-c-product-app.md) for deployment constraints.
+- Same-origin variant: when `VITE_APP_URL` points under `VITE_WEB_URL` (for example `https://example.com/app`), `apps/web/server.ts` serves the App's `dist/web` at that path before its own static files and the Start handler, with the same caching and 404 rules. The Web Dockerfile conditionally builds the App using a raw URL prefix check, so use consistent URL spellings at build time. `apps/web` depends on `@uni-stack/app` so `pnpm deploy` ships the build. One App build serves one address.
 - In development, Web's Vite proxies that path to the App dev server on `:3002` (HMR included), and the App dev server leaves `VITE_APP_URL`'s port to Web.
+- Not yet verified: both deployment variants in Docker, and the Clerk session shared between Web and App on a real production domain. No external gateway setup exists in the repository.
 
 ## Validation
 

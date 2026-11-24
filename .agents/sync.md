@@ -1,6 +1,6 @@
 # Sync (Query Collections)
 
-Postgres, through `packages/db`, is the source of truth. Clients hold rows in TanStack DB collections: a query collection that reads and writes through oRPC, which desktop caches in SQLite; and, on desktop before sign-in, a local collection persisted to SQLite. The server pushes "changed" signals over an oRPC event stream; there is no separate sync service. The comparison that led here is in [docs/show-me-sync-options-claude.html](../docs/show-me-sync-options-claude.html); the push design is in [docs/show-me-push-and-host-split-2026-11-05-claude.html](../docs/show-me-push-and-host-split-2026-11-05-claude.html).
+Postgres, through `packages/db`, is the source of truth. Clients hold rows in TanStack DB collections: a query collection that reads and writes through oRPC, which desktop caches in SQLite; and, on desktop before sign-in, a local collection persisted to SQLite. The server pushes "changed" signals over an oRPC event stream; there is no separate sync service. An earlier Electric-based design (commit `1f8affc`) was replaced in commit `5a14e26`.
 
 ## Server
 
